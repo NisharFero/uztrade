@@ -1,0 +1,101 @@
+[
+  {
+    "file": "kz-phytosanitary-certificate.jpg",
+    "source": "477 · Phytosanitary certificate of the exporter's country (filled, Kazakhstan)",
+    "docType": "phytosanitary_certificate",
+    "expect": {
+      "destination_country": { "normalized": "UZ" },
+      "place_of_origin": { "normalized": "KZ" },
+      "point_of_entry": { "contains": "янгиюль" },
+      "botanical_name": { "contains": "triticum" },
+      "quantity": { "normalized": 68.75 },
+      "treatment": { "contains": "фумигац" },
+      "chemical": { "contains": "фосфин" },
+      "issue_date": { "normalized": "2021-03-02" }
+    }
+  },
+  {
+    "file": "td1-customs-declaration.jpg",
+    "source": "325 · Export customs declaration (filled TD1)",
+    "docType": "customs_declaration",
+    "expect": {
+      "hs_code": { "normalized": "4407119000" },
+      "delivery_terms": { "normalized": "DAP" }
+    }
+  },
+  {
+    "file": "airport-prepayment-invoice.jpg",
+    "source": "540 · Invoice for prepayment for cargo handling (filled, redacted customer)",
+    "docType": "invoice_for_payment",
+    "expect": {
+      "supplier": { "contains": "karimov" },
+      "supplier_inn": { "normalized": "200640719" },
+      "vat_rate": { "contains": "15" }
+    }
+  },
+  {
+    "file": "gu12-application.jpg",
+    "source": "325 · Application for cargo transportation GU-12 (filled)",
+    "docType": "cargo_transport_application",
+    "expect": {
+      "tonnes": { "normalized": 120 },
+      "wagons": { "contains": "2" },
+      "destination_station": { "contains": "бишкек" },
+      "etsng": { "contains": "591042" }
+    }
+  },
+  {
+    "file": "offer-agreement.jpg",
+    "source": "325 · Offer agreement for phytosanitary certificate (Uzbek)",
+    "docType": "offer_agreement",
+    "expect": {
+      "agreement_no": { "contains": "21140001089" },
+      "agreement_date": { "normalized": "2021-03-16" },
+      "amount": { "normalized": 245000 }
+    }
+  },
+  {
+    "file": "import-railway-bill-smgs.jpg",
+    "source": "477 · Import railway bill, SMGS (filled, handwriting and stamps)",
+    "docType": "railway_bill",
+    "expect": {
+      "departure_station": { "contains": "шымкент" },
+      "destination_station": { "contains": "раустан" },
+      "places": { "contains": "1360" },
+      "weight": { "normalized": 68 }
+    }
+  },
+  {
+    "file": "food-test-report.jpg",
+    "source": "477 · Food test report (Russian protocol)",
+    "docType": "food_test_report",
+    "expect": {
+      "protocol_no": { "contains": "64222" },
+      "protocol_date": { "normalized": "2017-06-20" },
+      "sample": { "contains": "подсолнечное" }
+    }
+  },
+  {
+    "file": "synthetic-invoice-a4.png",
+    "source": "SYNTHETIC · commercial invoice in the specimen's bilingual layout, rendered at A4 300 dpi by bench_resolution.py (not a published specimen)",
+    "docType": "commercial_invoice",
+    "expect": {
+      "invoice_no": { "contains": "inv-2026/0457" },
+      "invoice_date": { "normalized": "2026-09-12" },
+      "seller": { "contains": "samarkand" },
+      "buyer": { "contains": "московский" },
+      "goods": { "contains": "black tea" },
+      "hs_code": { "contains": "0902" },
+      "quantity": { "normalized": 60 },
+      "total_value": { "normalized": 192000 },
+      "currency": { "normalized": "USD" },
+      "incoterms": { "normalized": "FCA" }
+    }
+  },
+  { "file": "blank-commercial-invoice.jpg", "source": "306/325/868 · Commercial invoice template (blank)", "docType": "commercial_invoice", "blank": true },
+  { "file": "blank-packing-list.jpg", "source": "477 · Packing list template (blank)", "docType": "packing_list", "blank": true },
+  { "file": "blank-power-of-attorney.jpg", "source": "325 · Power of attorney form (blank)", "docType": "power_of_attorney", "blank": true },
+  { "file": "blank-air-waybill.jpg", "source": "540 · IATA air waybill (blank)", "docType": "air_waybill", "blank": true },
+  { "file": "blank-smgs.jpg", "source": "325 · SMGS consignment note layout (blank)", "docType": "railway_bill", "blank": true },
+  { "file": "blank-certificate-of-origin-ct1.jpg", "source": "325 · Certificate of origin CT-1 specimen (blank)", "docType": "certificate_of_origin", "blank": true }
+]

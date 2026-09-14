@@ -1,0 +1,182 @@
+{
+  "procedureId": "868",
+  "title": "Export of tea by train — demo scenario",
+  "note": "Fictional demo data. Every company, person, number, amount and stamp is invented; nothing here is a real document.",
+  "shipment": {
+    "query": "Export 60 t of black tea from Tashkent to Moscow by train",
+    "goods": "Black tea",
+    "hs": "0902 40 000 0",
+    "netKg": "60 000",
+    "grossKg": "61 200",
+    "cartons": "2400",
+    "wagons": ["52814467", "52814475"],
+    "seals": ["UZ 118201", "UZ 118202"],
+    "departureStation": "Tashkent-Tovarny",
+    "destinationStation": "Moscow-Tovarnaya",
+    "borderStations": "Keles, Sary-Agash",
+    "valueUsd": "192 000.00",
+    "incoterms": "FCA Tashkent",
+    "contractNo": "UZ-2026/118",
+    "contractDate": "01.08.2026",
+    "invoiceNo": "INV-2026/0457",
+    "invoiceDate": "12.09.2026",
+    "dispatchNo": "77120045"
+  },
+  "parties": {
+    "exporter": {
+      "name": "OOO \"Samarkand Choy\"",
+      "address": "Samarkand, Registan street 12, Uzbekistan",
+      "tin": "301245678",
+      "manager": "Dilshod Rakhimov",
+      "phone": "+998 90 123 45 67",
+      "email": "export@samarkand-choy.demo",
+      "bank": "Demo Bank JSCB, account 20208000900123456001, MFO 00444"
+    },
+    "buyer": { "name": "OOO \"Moskovsky Chai\"", "address": "Moscow, Tverskaya street 7, Russia" },
+    "representative": { "name": "Bekzod Nurmatov", "passport": "AB 7654321" }
+  },
+  "values": {
+    "Tax Identification Number of the organization or individual": "301245678",
+    "Personal identification number of an individual": "31503850210045",
+    "Bank details": "Demo Bank JSCB, account 20208000900123456001, MFO 00444",
+    "Name of the organization": "OOO \"Samarkand Choy\"",
+    "Full name of an organization's manager": "Dilshod Rakhimov",
+    "Contact phone number": "+998 90 123 45 67",
+    "Agency region": "Samarkand region",
+    "Payment sum": "245 000 UZS",
+    "Email": "export@samarkand-choy.demo",
+    "Type of organization (business entity, budgetary)": "Business entity",
+    "Cost on the contract": "1 120 000 UZS",
+    "Quantity of transport units": "2"
+  },
+  "documents": [
+    {
+      "id": "contract", "file": "01-foreign-trade-contract.png", "template": "contract", "title": "Foreign trade contract",
+      "docType": "trade_contract", "labels": ["Electronic copy of foreign trade contract", "Foreign economic activity contract", "Supply contract"],
+      "steps": [1, 7], "output": false,
+      "fields": { "contract_no": "UZ-2026/118", "contract_date": "01.08.2026", "seller": "OOO \"Samarkand Choy\"", "buyer": "OOO \"Moskovsky Chai\"", "incoterms": "FCA Tashkent", "goods": "Black tea", "quantity": "60 000 kg", "total_value": "192 000.00 USD" }
+    },
+    {
+      "id": "passport", "file": "02-passport.png", "template": "passport", "title": "Passport (demo, fictional person)",
+      "docType": "passport", "labels": ["Passport"], "steps": [6, 8, 9, 12, 16, 22, 23, 28, 32, 33, 44], "output": false,
+      "fields": { "full_name": "RAKHIMOV DILSHOD", "passport_no": "AD 1234567", "expiry": "14.03.2031" }
+    },
+    {
+      "id": "poa", "file": "03-power-of-attorney.png", "template": "poa", "title": "Power of attorney",
+      "docType": "power_of_attorney", "labels": ["Power of attorney", "Power of attorney for Transportation Unit", "Power of attorney for railway station"],
+      "steps": [6, 8, 22, 23, 25, 32, 44], "output": false,
+      "fields": { "poa_no": "17", "issue_date": "02.09.2026", "representative": "Bekzod Nurmatov", "passport": "AB 7654321", "valid_until": "31.12.2026" }
+    },
+    { "id": "agreement-tc", "file": "04-agreement-technological-center.png", "template": "letter", "title": "Agreement with Technological center", "docType": null, "labels": ["Agreement with Technological center"], "steps": [4], "output": false, "fields": {} },
+    {
+      "id": "receipt-4", "file": "05-receipt-step-04.png", "template": "receipt", "title": "Receipt — railway services prepayment (step 4)",
+      "docType": "receipt_of_payment", "labels": ["Receipt of payment"], "steps": [4], "output": true,
+      "fields": { "receipt_no": "R-2026-0412", "payer": "OOO \"Samarkand Choy\"", "payer_inn": "301245678", "recipient": "JSC Uzbekistan Temir Yo'llari", "payment_type": "Prepayment for railway services", "amount": "18 400 000", "date": "05.09.2026" }
+    },
+    {
+      "id": "invoice-forwarder", "file": "06-invoice-forwarder-step-08.png", "template": "invoice_for_payment", "title": "Invoice for payment — freight forwarder (step 8)",
+      "docType": "invoice_for_payment", "labels": ["Invoice for payment"], "steps": [8], "output": true,
+      "fields": { "invoice_no": "FW-2026/311", "invoice_date": "06.09.2026", "contract_no": "FWD-44", "supplier": "OOO \"Demo Forwarding\"", "supplier_inn": "302987654", "customer": "OOO \"Samarkand Choy\"", "vat_rate": "12", "total": "2 350 000" }
+    },
+    { "id": "agreement-rail", "file": "07-agreement-railway-services.png", "template": "letter", "title": "Agreement on railway transportation services", "docType": null, "labels": ["Agreement on railway transportation services"], "steps": [9, 10], "output": false, "fields": {} },
+    {
+      "id": "receipt-9", "file": "08-receipt-step-09.png", "template": "receipt", "title": "Receipt — forwarder and code assignment (step 9)",
+      "docType": "receipt_of_payment", "labels": ["Receipt of payment"], "steps": [9], "output": true,
+      "fields": { "receipt_no": "R-2026-0419", "payer": "OOO \"Samarkand Choy\"", "payer_inn": "301245678", "recipient": "OOO \"Demo Forwarding\"", "payment_type": "Code assignment and forwarder service", "amount": "2 350 000", "date": "07.09.2026" }
+    },
+    {
+      "id": "offer-internal-phyto", "file": "09-offer-internal-phyto-step-11.png", "template": "offer", "title": "Offer agreement — internal phytosanitary certificate (step 11)",
+      "docType": "offer_agreement", "labels": ["Offer agreement for internal phytosanitary certificate"], "steps": [11], "output": true,
+      "fields": { "agreement_no": "26140004512", "agreement_date": "07.09.2026", "service": "Issuance of internal phytosanitary certificate", "units": "1", "amount": "245 000" }
+    },
+    {
+      "id": "receipt-12", "file": "10-receipt-step-12.png", "template": "receipt", "title": "Receipt — internal phytosanitary certificate (step 12)",
+      "docType": "receipt_of_payment", "labels": ["Receipt of payment"], "steps": [12], "output": true,
+      "fields": { "receipt_no": "R-2026-0427", "payer": "OOO \"Samarkand Choy\"", "payer_inn": "301245678", "recipient": "Agency of Plant Quarantine and Protection", "payment_type": "Internal phytosanitary certificate", "amount": "245 000", "date": "08.09.2026" }
+    },
+    {
+      "id": "offer-fumigation", "file": "11-offer-fumigation-step-15.png", "template": "offer", "title": "Offer agreement — fumigation (optional step 15)",
+      "docType": "offer_agreement", "labels": ["Fumigation offer agreement"], "steps": [15], "output": true,
+      "fields": { "agreement_no": "26140004533", "agreement_date": "08.09.2026", "service": "Fumigation of goods", "units": "2", "amount": "1 120 000" }
+    },
+    {
+      "id": "receipt-16", "file": "12-receipt-step-16.png", "template": "receipt", "title": "Receipt — fumigation (optional step 16)",
+      "docType": "receipt_of_payment", "labels": ["Receipt of payment"], "steps": [16], "output": true,
+      "fields": { "receipt_no": "R-2026-0431", "payer": "OOO \"Samarkand Choy\"", "payer_inn": "301245678", "recipient": "Agency of Plant Quarantine and Protection", "payment_type": "Fumigation", "amount": "1 120 000", "date": "09.09.2026" }
+    },
+    { "id": "application-specific", "file": "13-application-specific-conditions.png", "template": "letter", "title": "Application for good transportation on specific conditions", "docType": null, "labels": ["Application for good transportation on specific conditions"], "steps": [19], "output": false, "fields": {} },
+    {
+      "id": "gu12", "file": "14-application-gu12.png", "template": "gu12", "title": "Application for cargo transportation GU-12",
+      "docType": "cargo_transport_application", "labels": ["Application for cargo transportation GU-12"], "steps": [20], "output": false,
+      "fields": { "shipper": "OOO \"Samarkand Choy\"", "departure_station": "Tashkent-Tovarny", "cargo": "Black tea in cartons", "etsng": "214095", "destination_station": "Moscow-Tovarnaya", "consignee": "OOO \"Moskovsky Chai\"", "tonnes": "60", "wagons": "2" }
+    },
+    { "id": "application-approval", "file": "15-application-approval-of-transportation.png", "template": "letter", "title": "Application for obtaining approval of cargo transportation", "docType": null, "labels": ["Application for obtaining approval of cargo transportation"], "steps": [20], "output": false, "fields": {} },
+    { "id": "iran-letter", "file": "16-iran-approval-letter-not-applicable.png", "template": "letter", "title": "Islamic Republic of Iran approval letter", "docType": null, "labels": ["Islamic Republic of Iran approval letter"], "steps": [20], "output": false, "fields": {}, "body": "This shipment runs Tashkent – Keles – Sary-Agash – Moscow through Kazakhstan. No Iranian transit is involved; section 5 of the procedure lists this letter for routes via Iran." },
+    { "id": "letterhead", "file": "17-application-on-letterhead.png", "template": "letter", "title": "Application on letterhead", "docType": null, "labels": ["Application on letterhead"], "steps": [22], "output": false, "fields": {} },
+    { "id": "letterhead-own", "file": "18-application-on-letterhead-own-wagons.png", "template": "letter", "title": "Application on letterhead (own wagons)", "docType": null, "labels": ["Application on letterhead (own wagons)"], "steps": [22], "output": false, "fields": {}, "body": "The shipment uses 2 covered wagons of the railway's inventory fleet; no own wagons are involved." },
+    { "id": "letterhead-allotment", "file": "19-application-allotment-of-wagons.png", "template": "letter", "title": "Application on letterhead for allotment of wagons", "docType": null, "labels": ["Application on letterhead for allotment of wagons"], "steps": [23], "output": false, "fields": {} },
+    { "id": "funds-certificate", "file": "20-certificate-availability-of-funds.png", "template": "letter", "title": "Certificate on availability of funds at client's account", "docType": null, "labels": ["Certificate on availability of funds at client's account"], "steps": [23], "output": false, "fields": {}, "body": "Demo Bank JSCB confirms that account 20208000900123456001 of OOO \"Samarkand Choy\" holds sufficient funds for the railway charges of this shipment." },
+    {
+      "id": "commercial-invoice", "file": "21-commercial-invoice.png", "template": "commercial_invoice", "title": "Commercial invoice",
+      "docType": "commercial_invoice", "labels": ["Commercial invoice"], "steps": [26, 34, 35, 36, 41, 44, 46], "output": false,
+      "fields": { "invoice_no": "INV-2026/0457", "invoice_date": "12.09.2026", "seller": "OOO \"Samarkand Choy\"", "buyer": "OOO \"Moskovsky Chai\"", "goods": "Black tea", "hs_code": "0902 40 000 0", "origin_country": "Uzbekistan", "quantity": "60 000 kg", "gross_weight": "61 200 kg", "total_value": "192 000.00", "currency": "USD", "contract_no": "UZ-2026/118", "incoterms": "FCA Tashkent", "transport_doc": "SMGS 77120045" }
+    },
+    {
+      "id": "smgs", "file": "22-export-railway-bill-smgs-step-26.png", "template": "smgs", "title": "Export railway bill (SMGS) — step 26",
+      "docType": "railway_bill", "labels": ["Export railway bill (SMGS)"], "steps": [26], "output": true,
+      "fields": { "dispatch_no": "77120045", "sender": "OOO \"Samarkand Choy\"", "consignee": "OOO \"Moskovsky Chai\"", "departure_station": "Tashkent-Tovarny", "destination_station": "Moscow-Tovarnaya", "border_stations": "Keles, Sary-Agash", "wagon_no": "52814467, 52814475", "cargo": "Black tea", "packaging": "Cartons", "places": "2400", "weight": "60 000 kg", "seals": "UZ 118201, UZ 118202", "documents_attached": "Commercial invoice, phytosanitary certificate, certificate of origin" }
+    },
+    {
+      "id": "offer-phyto", "file": "23-offer-phyto-certificate-step-27.png", "template": "offer", "title": "Offer agreement — phytosanitary certificate (step 27)",
+      "docType": "offer_agreement", "labels": ["Offer agreement for phytosanitary certificate"], "steps": [27], "output": true,
+      "fields": { "agreement_no": "26140004561", "agreement_date": "10.09.2026", "service": "Issuance of phytosanitary certificate", "units": "2", "amount": "490 000" }
+    },
+    {
+      "id": "receipt-28", "file": "24-receipt-step-28.png", "template": "receipt", "title": "Receipt — phytosanitary certificate (step 28)",
+      "docType": "receipt_of_payment", "labels": ["Receipt of payment"], "steps": [28], "output": true,
+      "fields": { "receipt_no": "R-2026-0448", "payer": "OOO \"Samarkand Choy\"", "payer_inn": "301245678", "recipient": "Agency of Plant Quarantine and Protection", "payment_type": "Phytosanitary certificate", "amount": "490 000", "date": "10.09.2026" }
+    },
+    { "id": "online-phyto-application", "file": "25-online-application-phytosanitary.png", "template": "letter", "title": "Online application for phytosanitary certificate", "docType": null, "labels": ["Online application for phytosanitary certificate"], "steps": [29], "output": false, "fields": {} },
+    {
+      "id": "phyto", "file": "26-phytosanitary-certificate-step-31.png", "template": "phyto", "title": "Phytosanitary certificate — step 31",
+      "docType": "phytosanitary_certificate", "labels": ["Phytosanitary certificate"], "steps": [31], "output": true,
+      "fields": { "cert_no": "UZ-EX 2026/004512", "exporter": "OOO \"Samarkand Choy\"", "consignee": "OOO \"Moskovsky Chai\"", "destination_country": "Russia", "point_of_entry": "Keles – Sary-Agash", "place_of_origin": "Uzbekistan", "produce": "Black tea", "botanical_name": "Camellia sinensis", "quantity": "60 000 kg", "treatment": "Not required", "issue_date": "12.09.2026" }
+    },
+    {
+      "id": "invoice-prepayment", "file": "27-invoice-prepayment-uzbekexpertiza-step-33.png", "template": "invoice_for_payment", "title": "Invoice for prepayment — Uzbekexpertiza (step 33)",
+      "docType": "invoice_for_payment", "labels": ["Invoice for prepayment"], "steps": [33], "output": false,
+      "fields": { "invoice_no": "UE-2026/1187", "invoice_date": "11.09.2026", "contract_no": "UE-S-2026/904", "supplier": "Uzbekexpertiza JSC (demo)", "supplier_inn": "200933140", "customer": "OOO \"Samarkand Choy\"", "vat_rate": "12", "total": "780 000" }
+    },
+    {
+      "id": "receipt-33", "file": "28-receipt-step-33.png", "template": "receipt", "title": "Receipt — certificate of origin (step 33)",
+      "docType": "receipt_of_payment", "labels": ["Receipt of payment"], "steps": [33], "output": true,
+      "fields": { "receipt_no": "R-2026-0455", "payer": "OOO \"Samarkand Choy\"", "payer_inn": "301245678", "recipient": "Uzbekexpertiza JSC (demo)", "payment_type": "Certificate of origin", "amount": "780 000", "date": "11.09.2026" }
+    },
+    { "id": "coo-application", "file": "29-application-certificate-of-origin.png", "template": "letter", "title": "Application for obtaining of Certificate of origin for exported goods", "docType": null, "labels": ["Application for obtaining of Certificate of origin for exported goods"], "steps": [34], "output": false, "fields": {} },
+    { "id": "land-plot", "file": "30-document-right-to-use-land-plot.png", "template": "letter", "title": "Document confirming the exporter's right to use a land plot", "docType": null, "labels": ["Any document confirming the exporter's right to use a land plot"], "steps": [34, 35, 36], "output": false, "fields": {}, "body": "Lease of tea blending and packing premises, Samarkand, Registan street 12, cadastral no. DEMO-12-0457, valid until 31.12.2030." },
+    { "id": "purchase-proof", "file": "31-document-purchase-of-agricultural-products.png", "template": "letter", "title": "Document confirming purchase of agricultural products", "docType": null, "labels": ["Any document confirming purchase of agricultural products"], "steps": [34, 35, 36], "output": false, "fields": {}, "body": "Purchase of 62 t of black tea leaf under supply agreement DEMO-SUP-77 dated 15.07.2026; delivered to the Samarkand packing premises." },
+    { "id": "online-coo-application", "file": "32-online-application-certificate-of-origin.png", "template": "letter", "title": "Online application for certificate of origin", "docType": null, "labels": ["Online application for certificate of origin"], "steps": [35, 36], "output": false, "fields": {} },
+    {
+      "id": "coo", "file": "33-certificate-of-origin-ct1-step-39.png", "template": "ct1", "title": "Certificate of origin, form CT-1 — step 39",
+      "docType": "certificate_of_origin", "labels": ["Certificate of origin"], "steps": [39], "output": true,
+      "fields": { "cert_no": "UZ 0457811", "exporter": "OOO \"Samarkand Choy\"", "consignee": "OOO \"Moskovsky Chai\"", "transport_route": "Rail, Tashkent – Keles – Sary-Agash – Moscow", "goods": "Black tea, 2400 cartons", "weight": "61 200 kg", "invoice_ref": "INV-2026/0457, 12.09.2026", "exported_to": "Russia" }
+    },
+    {
+      "id": "receipt-42", "file": "34-receipt-customs-fee-step-42.png", "template": "receipt", "title": "Receipt — customs fee (step 42)",
+      "docType": "receipt_of_payment", "labels": ["Receipt of payment"], "steps": [42], "output": true,
+      "fields": { "receipt_no": "R-2026-0466", "payer": "OOO \"Samarkand Choy\"", "payer_inn": "301245678", "recipient": "State Customs Committee (demo)", "payment_type": "Customs clearance fee", "amount": "1 500 000", "date": "13.09.2026" }
+    },
+    {
+      "id": "smgs-stamped", "file": "35-railway-bill-stamped-by-customs-step-46.png", "template": "smgs", "stamp": "customs", "title": "Export railway bill stamped by customs inspector — step 46",
+      "docType": "railway_bill", "labels": ["Export railway bill stamped by customs inspector"], "steps": [46], "output": true,
+      "fields": { "dispatch_no": "77120045", "sender": "OOO \"Samarkand Choy\"", "consignee": "OOO \"Moskovsky Chai\"", "departure_station": "Tashkent-Tovarny", "destination_station": "Moscow-Tovarnaya", "wagon_no": "52814467, 52814475", "cargo": "Black tea", "weight": "60 000 kg" }
+    },
+    { "id": "wagon-handover", "file": "36-application-wagon-handover.png", "template": "letter", "title": "Application for wagon handover", "docType": null, "labels": ["Application for wagon handover"], "steps": [47], "output": false, "fields": {} },
+    { "id": "package", "file": "37-package-of-documents-cover.png", "template": "letter", "title": "Package of documents", "docType": null, "labels": ["Package of documents"], "steps": [48], "output": false, "fields": {}, "body": "Enclosed: export railway bill (SMGS) 77120045, commercial invoice INV-2026/0457, phytosanitary certificate UZ-EX 2026/004512, certificate of origin CT-1 UZ 0457811, export customs declaration." },
+    {
+      "id": "smgs-duplicate", "file": "38-railway-bill-duplicate-datestamp-step-48.png", "template": "smgs", "stamp": "datestamp", "title": "Duplicate of railway bill with datestamp — step 48",
+      "docType": "railway_bill", "labels": ["Duplicate of railway bill with datestamp"], "steps": [48], "output": true,
+      "fields": { "dispatch_no": "77120045", "sender": "OOO \"Samarkand Choy\"", "consignee": "OOO \"Moskovsky Chai\"", "departure_station": "Tashkent-Tovarny", "destination_station": "Moscow-Tovarnaya", "wagon_no": "52814467, 52814475", "cargo": "Black tea", "weight": "60 000 kg" }
+    }
+  ]
+}

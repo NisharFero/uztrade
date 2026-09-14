@@ -1,0 +1,48 @@
+{
+  "name": "uztrade-web",
+  "version": "0.1.0",
+  "private": true,
+  "engines": {
+    "node": ">=22.13.0"
+  },
+  "scripts": {
+    "dev": "vinext dev",
+    "build": "vinext build",
+    "start": "vinext start",
+    "test": "npm run build && npm run test:unit && node --import ./tests/register-loader.mjs --test tests/rendered-html.test.mjs",
+    "test:unit": "tsx --test tests/workflow-domain.test.ts tests/backend-seed.test.ts tests/d1-batching.test.ts tests/dag-projection.test.ts tests/block-progress.test.ts tests/procedure-classification.test.ts tests/orchestrator.test.ts tests/agent-tasks.test.ts tests/shipment-plan.test.ts tests/intake-actions.test.ts tests/requirements.test.ts tests/document-specs.test.ts tests/intake-agent.test.ts tests/compliance-risk.test.ts tests/intake-conversation.test.ts tests/docai.test.ts tests/step-assistant.test.ts tests/risk-values.test.ts tests/demo-pack.test.ts tests/upfront.test.ts",
+    "data:build": "node scripts/build-procedures.mjs",
+    "lint": "eslint . --ignore-pattern dist --ignore-pattern .next",
+    "db:generate": "drizzle-kit generate",
+    "eval:docai": "tsx scripts/eval-docai.ts"
+  },
+  "dependencies": {
+    "@langchain/core": "^1.2.10",
+    "@langchain/langgraph": "^1.4.14",
+    "drizzle-orm": "0.45.2",
+    "next": "16.2.6",
+    "react": "19.2.6",
+    "react-dom": "19.2.6",
+    "zod": "^4.6.1"
+  },
+  "devDependencies": {
+    "@cloudflare/vite-plugin": "1.37.1",
+    "@tailwindcss/postcss": "4.2.1",
+    "@types/node": "22.19.19",
+    "@types/react": "19.2.14",
+    "@types/react-dom": "19.2.3",
+    "@vitejs/plugin-react": "6.0.2",
+    "@vitejs/plugin-rsc": "0.5.26",
+    "drizzle-kit": "0.31.10",
+    "eslint": "9.39.4",
+    "eslint-config-next": "16.2.6",
+    "react-server-dom-webpack": "19.2.6",
+    "tailwindcss": "4.2.1",
+    "tsx": "^4.23.13",
+    "typescript": "5.9.3",
+    "vinext": "0.0.50",
+    "vite": "8.0.13",
+    "wrangler": "4.92.0"
+  },
+  "type": "module"
+}

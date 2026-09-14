@@ -1,0 +1,2407 @@
+{
+ "306": {
+  "steps": [
+   {
+    "num": 1,
+    "title": "Register foreign trade contract in UEISFTO",
+    "inputs": [
+     "Electronic digital signature",
+     "Electronic copy of foreign trade contract"
+    ]
+   },
+   {
+    "num": 2,
+    "title": "Conclude online agreement with Technological Center and contract with Regional railway junction",
+    "inputs": [
+     "Electronic digital signature",
+     "One ID account"
+    ]
+   },
+   {
+    "num": 3,
+    "title": "Obtain cost calculation for railway services",
+    "inputs": [
+     "Electronic digital signature",
+     "One ID account"
+    ]
+   },
+   {
+    "num": 4,
+    "title": "Prepay for railway services (dried fruits)",
+    "inputs": [
+     "Invoice for payment for railway services",
+     "Agreement with Technological center",
+     "For physical payment",
+     "Physical presence",
+     "For online payment (without necessity to visit a bank)",
+     "Online banking account"
+    ]
+   },
+   {
+    "num": 5,
+    "title": "Generate electronic certificate for railway station",
+    "inputs": [
+     "Electronic digital signature"
+    ]
+   },
+   {
+    "num": 6,
+    "title": "Obtain approval for loading and unloading",
+    "inputs": [
+     "Physical presence",
+     "Passport",
+     "Power of attorney"
+    ]
+   },
+   {
+    "num": 7,
+    "title": "Request for freight transportation by railway",
+    "inputs": [
+     "Foreign economic activity contract",
+     "Supply contract"
+    ]
+   },
+   {
+    "num": 8,
+    "title": "Contract with freight forwarder",
+    "inputs": [
+     "Passport",
+     "Power of attorney",
+     "Tax Identification Number of the organization or individual",
+     "Personal identification number of an individual",
+     "Bank details"
+    ]
+   },
+   {
+    "num": 9,
+    "title": "Pay for code assignment and freight forwarder service",
+    "inputs": [
+     "Invoice for payment",
+     "Agreement on railway transportation services",
+     "For physical payment",
+     "Physical presence",
+     "Passport",
+     "For online payment (without necessity to visit a bank)",
+     "Online banking account"
+    ]
+   },
+   {
+    "num": 10,
+    "title": "Obtain code notification",
+    "inputs": [
+     "Receipt of payment",
+     "Agreement on railway transportation services"
+    ]
+   },
+   {
+    "num": 11,
+    "title": "Apply for good transportation on specific conditions",
+    "inputs": [
+     "Application for good transportation on specific conditions"
+    ]
+   },
+   {
+    "num": 12,
+    "title": "Apply for freight transportation by railway",
+    "inputs": [
+     "For submitting application by emails mpo@uzrailway.uz, mpo1@uzrailway.uz, mpo2@uzrailway.uz",
+     "Application for cargo transportation GU-12",
+     "Application for obtaining approval of cargo transportation",
+     "Islamic Republic of Iran approval letter",
+     "For submitting application physically",
+     "Application for cargo transportation GU-12",
+     "Application for obtaining approval of cargo transportation",
+     "Islamic Republic of Iran approval letter"
+    ]
+   },
+   {
+    "num": 13,
+    "title": "Obtain approval for freight transportation by railway",
+    "inputs": [
+     "Availability by phone"
+    ]
+   },
+   {
+    "num": 14,
+    "title": "Obtain order for wagon supply",
+    "inputs": [
+     "For submitting application by emails mpo@uzrailway.uz, mpo1@uzrailway.uz, mpo2@uzrailway.uz",
+     "Application on letterhead",
+     "Application on letterhead (own wagons)",
+     "Code notification from the forwarder that concluded the contract with JSC \"Uzbekistan railways\"",
+     "For submitting application physically",
+     "Power of attorney for Transportation Unit",
+     "Passport",
+     "Application on letterhead",
+     "Application on letterhead (own wagons)",
+     "Code notification from the forwarder that concluded the contract with JSC \"Uzbekistan railways\""
+    ]
+   },
+   {
+    "num": 15,
+    "title": "Obtain offer agreement",
+    "inputs": [
+     "Internet access",
+     "Data required to complete offer agreement",
+     "Tax Identification Number of the organization or individual",
+     "Name of the organization",
+     "Full name of an organization's manager",
+     "Contact phone number",
+     "Agency region",
+     "Payment sum"
+    ]
+   },
+   {
+    "num": 16,
+    "title": "Pay for internal phytosanitary certificate",
+    "inputs": [
+     "Offer agreement for internal phytosanitary certificate",
+     "For physical payment",
+     "Physical presence",
+     "Passport",
+     "For online payment (without necessity to visit a bank)",
+     "Online banking account"
+    ]
+   },
+   {
+    "num": 17,
+    "title": "Apply for internal phytosanitary certificate",
+    "inputs": [
+     "To access the platform",
+     "One ID account",
+     "Contact phone number",
+     "Email"
+    ]
+   },
+   {
+    "num": 18,
+    "title": "Undergo phytosanitary inspection",
+    "inputs": [
+     "Physical presence"
+    ]
+   },
+   {
+    "num": 19,
+    "title": "Obtain offer agreement for fumigation",
+    "inputs": [
+     "Internet access",
+     "Data required to complete offer agreement",
+     "Tax Identification Number of the organization or individual",
+     "Name of the organization",
+     "Full name of an organization's manager",
+     "Type of organization (business entity, budgetary)",
+     "Contact phone number",
+     "Agency region",
+     "Cost on the contract"
+    ]
+   },
+   {
+    "num": 20,
+    "title": "Pay for fumigation",
+    "inputs": [
+     "Fumigation offer agreement",
+     "For physical payment",
+     "Physical presence",
+     "Passport",
+     "For online payment (without necessity to visit a bank)",
+     "Online banking account"
+    ]
+   },
+   {
+    "num": 21,
+    "title": "Undergo fumigation",
+    "inputs": [
+     "Physical presence"
+    ]
+   },
+   {
+    "num": 22,
+    "title": "Obtain internal phytosanitary certificate",
+    "inputs": [
+     "One ID account",
+     "Contact phone number",
+     "Email"
+    ]
+   },
+   {
+    "num": 23,
+    "title": "Conclude contract for services",
+    "inputs": [
+     "Physical presence",
+     "Passport",
+     "Power of attorney"
+    ]
+   },
+   {
+    "num": 24,
+    "title": "Pay for certificate of origin",
+    "inputs": [
+     "Invoice for prepayment",
+     "For physical payment",
+     "Physical presence",
+     "Passport",
+     "For online payment (without necessity to visit a bank)",
+     "Online banking account"
+    ]
+   },
+   {
+    "num": 25,
+    "title": "Apply for certificate of origin",
+    "inputs": [
+     "Application for obtaining of Certificate of origin for exported goods",
+     "Application for obtaining of Certificate of origin for exported goods",
+     "Commercial invoice",
+     "Any document confirming the exporter's right to use a land plot",
+     "Any document confirming purchase of agricultural products"
+    ]
+   },
+   {
+    "num": 26,
+    "title": "Apply for certificate of origin via Uzbekexpertiza service portal",
+    "inputs": [
+     "Electronic digital signature",
+     "One ID account",
+     "Online application for certificate of origin",
+     "Commercial invoice",
+     "Any document confirming the exporter's right to use a land plot",
+     "Any document confirming purchase of agricultural products"
+    ]
+   },
+   {
+    "num": 27,
+    "title": "Apply for certificate of origin via Single Window",
+    "inputs": [
+     "Electronic digital signature",
+     "Online application for certificate of origin",
+     "Commercial invoice",
+     "Any document confirming the exporter's right to use a land plot",
+     "Any document confirming purchase of agricultural products"
+    ]
+   },
+   {
+    "num": 28,
+    "title": "Assessment of application",
+    "inputs": [
+     "Physical presence"
+    ]
+   },
+   {
+    "num": 29,
+    "title": "Undergo expertise of goods",
+    "inputs": [
+     "Physical presence"
+    ]
+   },
+   {
+    "num": 30,
+    "title": "Obtain certificate of origin",
+    "inputs": [
+     "Physical presence"
+    ]
+   },
+   {
+    "num": 31,
+    "title": "Obtain expert conclusion",
+    "inputs": [
+     "Physical presence"
+    ]
+   },
+   {
+    "num": 32,
+    "title": "Apply for allotment of wagons",
+    "inputs": [
+     "Physical presence",
+     "Application on letterhead for allotment of wagons",
+     "Order for wagon supply for loading",
+     "Certificate on availability of funds at client's account",
+     "Passport",
+     "Power of attorney for railway station",
+     "Certificate on passing examination"
+    ]
+   },
+   {
+    "num": 33,
+    "title": "Obtain wagons for loading",
+    "inputs": [
+     "Physical presence"
+    ]
+   },
+   {
+    "num": 34,
+    "title": "Loading",
+    "inputs": [
+     "Physical presence",
+     "Power of attorney"
+    ]
+   },
+   {
+    "num": 35,
+    "title": "Obtain railway bill of lading",
+    "inputs": [
+     "Commercial invoice"
+    ]
+   },
+   {
+    "num": 36,
+    "title": "Obtain offer agreement",
+    "inputs": [
+     "Electronic digital signature",
+     "Data required to complete offer agreement",
+     "Tax Identification Number of the organization or individual",
+     "Name of the organization",
+     "Full name of an organization's manager",
+     "Type of organization (business entity, budgetary)",
+     "Contact phone number",
+     "Agency region",
+     "Payment sum",
+     "Quantity of transport units"
+    ]
+   },
+   {
+    "num": 37,
+    "title": "Pay for phytosanitary certificate",
+    "inputs": [
+     "Offer agreement for phytosanitary certificate",
+     "For physical payment",
+     "Physical presence",
+     "Passport",
+     "For online payment (without necessity to visit a bank)",
+     "Online banking account"
+    ]
+   },
+   {
+    "num": 38,
+    "title": "Apply for phytosanitary certificate",
+    "inputs": [
+     "Electronic digital signature",
+     "Online application for phytosanitary certificate"
+    ]
+   },
+   {
+    "num": 39,
+    "title": "Undergo phytosanitary inspection",
+    "inputs": [
+     "Physical presence"
+    ]
+   },
+   {
+    "num": 40,
+    "title": "Obtain phytosanitary certificate",
+    "inputs": [
+     "Physical presence"
+    ]
+   },
+   {
+    "num": 41,
+    "title": "Create export customs declaration",
+    "inputs": [
+     "Electronic digital signature",
+     "Identification number of foreign trade contract",
+     "Commercial invoice",
+     "Export railway bill (SMGS)",
+     "Documents that are not obligatory to submit for export declaration",
+     "Phytosanitary certificate",
+     "Certificate of origin",
+     "Certificate of origin form A",
+     "Certificate of origin General form"
+    ]
+   },
+   {
+    "num": 42,
+    "title": "Pay for customs fee",
+    "inputs": [
+     "Bank details of territorial customs departments",
+     "For physical payment",
+     "Physical presence",
+     "For online payment (without necessity to visit a bank)",
+     "Online banking account"
+    ]
+   },
+   {
+    "num": 43,
+    "title": "Submit export customs declaration",
+    "inputs": [
+     "Electronic digital signature",
+     "Electronic form of customs declaration"
+    ]
+   },
+   {
+    "num": 44,
+    "title": "Undergo customs inspection in red corridor",
+    "inputs": [
+     "Export customs declaration",
+     "Export railway bill (SMGS)",
+     "Commercial invoice",
+     "Physical presence",
+     "Passport",
+     "Power of attorney"
+    ]
+   },
+   {
+    "num": 45,
+    "title": "Obtain export customs declaration",
+    "inputs": [
+     "Electronic digital signature"
+    ]
+   },
+   {
+    "num": 46,
+    "title": "Obtain stamps on shipping documents",
+    "inputs": [
+     "Physical presence",
+     "Export railway bill (SMGS)",
+     "Commercial invoice",
+     "Export customs declaration"
+    ]
+   },
+   {
+    "num": 47,
+    "title": "Close memo of handover specialist",
+    "inputs": [
+     "Physical presence",
+     "Application for wagon handover"
+    ]
+   },
+   {
+    "num": 48,
+    "title": "Dispatch freight",
+    "inputs": [
+     "Export railway bill (SMGS)",
+     "Package of documents"
+    ]
+   }
+  ]
+ },
+ "325": {
+  "steps": [
+   {
+    "num": 1,
+    "title": "Register foreign trade contract in UEISFTO",
+    "inputs": [
+     "Electronic digital signature",
+     "Electronic copy of foreign trade contract"
+    ]
+   },
+   {
+    "num": 2,
+    "title": "Conclude online agreement with Technological Center and contract with Regional railway junction",
+    "inputs": [
+     "Electronic digital signature",
+     "One ID account"
+    ]
+   },
+   {
+    "num": 3,
+    "title": "Obtain cost calculation for railway services",
+    "inputs": [
+     "Electronic digital signature",
+     "One ID account"
+    ]
+   },
+   {
+    "num": 4,
+    "title": "Prepay for railway services (tomatoes)",
+    "inputs": [
+     "Invoice for payment for railway services",
+     "Agreement with Technological center",
+     "For physical payment",
+     "Physical presence",
+     "For online payment (without necessity to visit a bank)",
+     "Online banking account"
+    ]
+   },
+   {
+    "num": 5,
+    "title": "Generate electronic certificate for railway station",
+    "inputs": [
+     "Electronic digital signature"
+    ]
+   },
+   {
+    "num": 6,
+    "title": "Obtain approval for loading and unloading",
+    "inputs": [
+     "Physical presence",
+     "Passport",
+     "Power of attorney"
+    ]
+   },
+   {
+    "num": 7,
+    "title": "Request for freight transportation by railway",
+    "inputs": [
+     "Foreign economic activity contract",
+     "Supply contract"
+    ]
+   },
+   {
+    "num": 8,
+    "title": "Contract with freight forwarder",
+    "inputs": [
+     "Passport",
+     "Power of attorney",
+     "Tax Identification Number of the organization or individual",
+     "Personal identification number of an individual",
+     "Bank details"
+    ]
+   },
+   {
+    "num": 9,
+    "title": "Pay for code assignment and freight forwarder service",
+    "inputs": [
+     "Invoice for payment",
+     "Agreement on railway transportation services",
+     "For physical payment",
+     "Physical presence",
+     "Passport",
+     "For online payment (without necessity to visit a bank)",
+     "Online banking account"
+    ]
+   },
+   {
+    "num": 10,
+    "title": "Obtain code notification",
+    "inputs": [
+     "Receipt of payment",
+     "Agreement on railway transportation services"
+    ]
+   },
+   {
+    "num": 11,
+    "title": "Apply for good transportation on specific conditions",
+    "inputs": [
+     "Application for good transportation on specific conditions"
+    ]
+   },
+   {
+    "num": 12,
+    "title": "Apply for freight transportation by railway",
+    "inputs": [
+     "For submitting application by emails mpo@uzrailway.uz, mpo1@uzrailway.uz, mpo2@uzrailway.uz",
+     "Application for cargo transportation GU-12",
+     "Application for obtaining approval of cargo transportation",
+     "Islamic Republic of Iran approval letter",
+     "For submitting application physically",
+     "Application for cargo transportation GU-12",
+     "Application for obtaining approval of cargo transportation",
+     "Islamic Republic of Iran approval letter"
+    ]
+   },
+   {
+    "num": 13,
+    "title": "Obtain approval for freight transportation by railway",
+    "inputs": [
+     "Availability by phone"
+    ]
+   },
+   {
+    "num": 14,
+    "title": "Obtain order for wagon supply",
+    "inputs": [
+     "For submitting application by emails mpo@uzrailway.uz, mpo1@uzrailway.uz, mpo2@uzrailway.uz",
+     "Application on letterhead",
+     "Application on letterhead (own wagons)",
+     "Code notification from the forwarder that concluded the contract with JSC \"Uzbekistan railways\"",
+     "For submitting application physically",
+     "Power of attorney for Transportation Unit",
+     "Passport",
+     "Application on letterhead",
+     "Application on letterhead (own wagons)",
+     "Code notification from the forwarder that concluded the contract with JSC \"Uzbekistan railways\""
+    ]
+   },
+   {
+    "num": 15,
+    "title": "Obtain offer agreement",
+    "inputs": [
+     "Internet access",
+     "Data required to complete offer agreement",
+     "Tax Identification Number of the organization or individual",
+     "Name of the organization",
+     "Full name of an organization's manager",
+     "Contact phone number",
+     "Agency region",
+     "Payment sum"
+    ]
+   },
+   {
+    "num": 16,
+    "title": "Pay for internal phytosanitary certificate",
+    "inputs": [
+     "Offer agreement for internal phytosanitary certificate",
+     "For physical payment",
+     "Physical presence",
+     "Passport",
+     "For online payment (without necessity to visit a bank)",
+     "Online banking account"
+    ]
+   },
+   {
+    "num": 17,
+    "title": "Apply for internal phytosanitary certificate",
+    "inputs": [
+     "To access the platform",
+     "One ID account",
+     "Contact phone number",
+     "Email"
+    ]
+   },
+   {
+    "num": 18,
+    "title": "Undergo phytosanitary inspection",
+    "inputs": [
+     "Physical presence"
+    ]
+   },
+   {
+    "num": 19,
+    "title": "Obtain offer agreement for fumigation",
+    "inputs": [
+     "Internet access",
+     "Data required to complete offer agreement",
+     "Tax Identification Number of the organization or individual",
+     "Name of the organization",
+     "Full name of an organization's manager",
+     "Type of organization (business entity, budgetary)",
+     "Contact phone number",
+     "Agency region",
+     "Cost on the contract"
+    ]
+   },
+   {
+    "num": 20,
+    "title": "Pay for fumigation",
+    "inputs": [
+     "Fumigation offer agreement",
+     "For physical payment",
+     "Physical presence",
+     "Passport",
+     "For online payment (without necessity to visit a bank)",
+     "Online banking account"
+    ]
+   },
+   {
+    "num": 21,
+    "title": "Undergo fumigation",
+    "inputs": [
+     "Physical presence"
+    ]
+   },
+   {
+    "num": 22,
+    "title": "Obtain internal phytosanitary certificate",
+    "inputs": [
+     "One ID account",
+     "Contact phone number",
+     "Email"
+    ]
+   },
+   {
+    "num": 23,
+    "title": "Conclude contract for services",
+    "inputs": [
+     "Physical presence",
+     "Passport",
+     "Power of attorney"
+    ]
+   },
+   {
+    "num": 24,
+    "title": "Pay for certificate of origin",
+    "inputs": [
+     "Invoice for prepayment",
+     "For physical payment",
+     "Physical presence",
+     "Passport",
+     "For online payment (without necessity to visit a bank)",
+     "Online banking account"
+    ]
+   },
+   {
+    "num": 25,
+    "title": "Apply for certificate of origin",
+    "inputs": [
+     "Application for obtaining of Certificate of origin for exported goods",
+     "Application for obtaining of Certificate of origin for exported goods",
+     "Commercial invoice",
+     "Any document confirming the exporter's right to use a land plot",
+     "Any document confirming purchase of agricultural products"
+    ]
+   },
+   {
+    "num": 26,
+    "title": "Apply for certificate of origin via Uzbekexpertiza service portal",
+    "inputs": [
+     "Electronic digital signature",
+     "One ID account",
+     "Online application for certificate of origin",
+     "Commercial invoice",
+     "Any document confirming the exporter's right to use a land plot",
+     "Any document confirming purchase of agricultural products"
+    ]
+   },
+   {
+    "num": 27,
+    "title": "Apply for certificate of origin via Single Window",
+    "inputs": [
+     "Electronic digital signature",
+     "Online application for certificate of origin",
+     "Commercial invoice",
+     "Any document confirming the exporter's right to use a land plot",
+     "Any document confirming purchase of agricultural products"
+    ]
+   },
+   {
+    "num": 28,
+    "title": "Assessment of application",
+    "inputs": [
+     "Physical presence"
+    ]
+   },
+   {
+    "num": 29,
+    "title": "Undergo expertise of goods",
+    "inputs": [
+     "Physical presence"
+    ]
+   },
+   {
+    "num": 30,
+    "title": "Obtain certificate of origin",
+    "inputs": [
+     "Physical presence"
+    ]
+   },
+   {
+    "num": 31,
+    "title": "Obtain expert conclusion",
+    "inputs": [
+     "Physical presence"
+    ]
+   },
+   {
+    "num": 32,
+    "title": "Obtain offer agreement",
+    "inputs": [
+     "Electronic digital signature",
+     "Data required to complete offer agreement",
+     "Tax Identification Number of the organization or individual",
+     "Name of the organization",
+     "Full name of an organization's manager",
+     "Type of organization (business entity, budgetary)",
+     "Contact phone number",
+     "Agency region",
+     "Payment sum",
+     "Quantity of transport units"
+    ]
+   },
+   {
+    "num": 33,
+    "title": "Pay for phytosanitary certificate",
+    "inputs": [
+     "Offer agreement for phytosanitary certificate",
+     "For physical payment",
+     "Physical presence",
+     "Passport",
+     "For online payment (without necessity to visit a bank)",
+     "Online banking account"
+    ]
+   },
+   {
+    "num": 34,
+    "title": "Apply for phytosanitary certificate",
+    "inputs": [
+     "Electronic digital signature",
+     "Online application for phytosanitary certificate"
+    ]
+   },
+   {
+    "num": 35,
+    "title": "Undergo phytosanitary inspection",
+    "inputs": [
+     "Physical presence"
+    ]
+   },
+   {
+    "num": 36,
+    "title": "Obtain phytosanitary certificate",
+    "inputs": [
+     "Physical presence"
+    ]
+   },
+   {
+    "num": 37,
+    "title": "Apply for allotment of wagons",
+    "inputs": [
+     "Physical presence",
+     "Application on letterhead for allotment of wagons",
+     "Order for wagon supply for loading",
+     "Certificate on availability of funds at client's account",
+     "Passport",
+     "Power of attorney for railway station",
+     "Certificate on passing examination"
+    ]
+   },
+   {
+    "num": 38,
+    "title": "Obtain wagons for loading",
+    "inputs": [
+     "Physical presence"
+    ]
+   },
+   {
+    "num": 39,
+    "title": "Loading",
+    "inputs": [
+     "Physical presence",
+     "Power of attorney"
+    ]
+   },
+   {
+    "num": 40,
+    "title": "Obtain railway bill of lading",
+    "inputs": [
+     "Commercial invoice"
+    ]
+   },
+   {
+    "num": 41,
+    "title": "Create export customs declaration",
+    "inputs": [
+     "Electronic digital signature",
+     "Identification number of foreign trade contract",
+     "Commercial invoice",
+     "Export railway bill (SMGS)",
+     "Documents that are not obligatory to submit for export declaration",
+     "Phytosanitary certificate",
+     "Certificate of origin",
+     "Certificate of origin form A",
+     "Certificate of origin General form"
+    ]
+   },
+   {
+    "num": 42,
+    "title": "Pay for customs fee",
+    "inputs": [
+     "Bank details of territorial customs departments",
+     "For physical payment",
+     "Physical presence",
+     "For online payment (without necessity to visit a bank)",
+     "Online banking account"
+    ]
+   },
+   {
+    "num": 43,
+    "title": "Submit export customs declaration",
+    "inputs": [
+     "Electronic digital signature",
+     "Electronic form of customs declaration"
+    ]
+   },
+   {
+    "num": 44,
+    "title": "Undergo customs inspection in red corridor",
+    "inputs": [
+     "Export customs declaration",
+     "Export railway bill (SMGS)",
+     "Commercial invoice",
+     "Physical presence",
+     "Passport",
+     "Power of attorney"
+    ]
+   },
+   {
+    "num": 45,
+    "title": "Obtain export customs declaration",
+    "inputs": [
+     "Electronic digital signature"
+    ]
+   },
+   {
+    "num": 46,
+    "title": "Obtain stamps on shipping documents",
+    "inputs": [
+     "Physical presence",
+     "Export railway bill (SMGS)",
+     "Commercial invoice",
+     "Export customs declaration"
+    ]
+   },
+   {
+    "num": 47,
+    "title": "Close memo of handover specialist",
+    "inputs": [
+     "Physical presence",
+     "Application for wagon handover"
+    ]
+   },
+   {
+    "num": 48,
+    "title": "Dispatch freight",
+    "inputs": [
+     "Export railway bill (SMGS)",
+     "Package of documents"
+    ]
+   }
+  ]
+ },
+ "477": {
+  "steps": [
+   {
+    "num": 1,
+    "title": "Obtain offer agreement",
+    "inputs": [
+     "Internet access",
+     "Data required to complete offer agreement",
+     "Tax Identification Number of the organization or individual",
+     "Name of the organization",
+     "Full name of an organization's manager",
+     "Type of organization (business entity, budgetary)",
+     "Contact phone number",
+     "Amount of consignment"
+    ]
+   },
+   {
+    "num": 2,
+    "title": "Pay for quarantine permit",
+    "inputs": [
+     "Offer agreement for quarantine permit",
+     "For physical payment",
+     "Physical presence",
+     "Passport",
+     "For online payment (without necessity to visit a bank)",
+     "Online banking account"
+    ]
+   },
+   {
+    "num": 3,
+    "title": "Apply for quarantine permit",
+    "inputs": [
+     "Electronic digital signature",
+     "Quarantine permit application",
+     "Data required to complete application",
+     "Information about applicant",
+     "Information about importer",
+     "Information about exporter",
+     "General information",
+     "Information about product"
+    ]
+   },
+   {
+    "num": 4,
+    "title": "Obtain quarantine permit",
+    "inputs": [
+     "Electronic digital signature"
+    ]
+   },
+   {
+    "num": 5,
+    "title": "Register foreign trade contract in UEISFTO",
+    "inputs": [
+     "Electronic digital signature",
+     "Electronic copy of foreign trade contract"
+    ]
+   },
+   {
+    "num": 6,
+    "title": "Conclude online agreement with Technological Center and contract with Regional railway junction",
+    "inputs": [
+     "Electronic digital signature",
+     "One ID account"
+    ]
+   },
+   {
+    "num": 7,
+    "title": "Obtain cost calculation for railway services",
+    "inputs": [
+     "Electronic digital signature",
+     "One ID account"
+    ]
+   },
+   {
+    "num": 8,
+    "title": "Prepay for railway services (for green tea)",
+    "inputs": [
+     "Invoice for payment for railway services",
+     "Agreement with Technological center",
+     "For physical payment",
+     "Physical presence",
+     "For online payment (without necessity to visit a bank)",
+     "Online banking account"
+    ]
+   },
+   {
+    "num": 9,
+    "title": "Generate electronic certificate for railway station",
+    "inputs": [
+     "Electronic digital signature"
+    ]
+   },
+   {
+    "num": 10,
+    "title": "Obtain approval for loading and unloading",
+    "inputs": [
+     "Physical presence",
+     "Passport",
+     "Power of attorney"
+    ]
+   },
+   {
+    "num": 11,
+    "title": "Contract customs warehouse",
+    "inputs": [
+     "Physical presence",
+     "Passport",
+     "Power of attorney",
+     "Certificate of state registration"
+    ]
+   },
+   {
+    "num": 12,
+    "title": "Prepay for customs warehouse services",
+    "inputs": [
+     "Invoice for payment",
+     "For physical payment",
+     "Physical presence",
+     "For online payment (without necessity to visit a bank)",
+     "Online banking account"
+    ]
+   },
+   {
+    "num": 13,
+    "title": "Obtain authorization of customs warehouse",
+    "inputs": [
+     "Guiding letter (template)",
+     "Letter to railway station"
+    ]
+   },
+   {
+    "num": 14,
+    "title": "Obtain information on freight arrival",
+    "inputs": [
+     "Availability by phone"
+    ]
+   },
+   {
+    "num": 15,
+    "title": "Submit guiding letter",
+    "inputs": [
+     "Guiding letter",
+     "Letter to railway station"
+    ]
+   },
+   {
+    "num": 16,
+    "title": "Obtain package of documents",
+    "inputs": [
+     "Guiding letter",
+     "Certificate on availability of funds at client's account",
+     "Passport",
+     "Power of attorney for railway station"
+    ]
+   },
+   {
+    "num": 17,
+    "title": "Obtain confirmation on cargo delivery to Customs post of destination",
+    "inputs": [
+     "Import railway bill",
+     "Commercial invoice",
+     "Packing list"
+    ]
+   },
+   {
+    "num": 18,
+    "title": "Apply for preliminary visual inspection",
+    "inputs": [
+     "Electronic application for preliminary visual inspection",
+     "Documents required to fill the Application",
+     "Application for preliminary visual inspection",
+     "Warehouse license number",
+     "Import railway bill",
+     "Commercial invoice"
+    ]
+   },
+   {
+    "num": 19,
+    "title": "Preliminary visual inspection",
+    "inputs": [
+     "Physical presence",
+     "Power of attorney",
+     "Physical presence",
+     "Physical presence",
+     "Required documents",
+     "Import railway bill",
+     "Commercial invoice",
+     "Packing list",
+     "Application for preliminary visual inspection"
+    ]
+   },
+   {
+    "num": 20,
+    "title": "Create cargo customs declaration",
+    "inputs": [
+     "Electronic digital signature",
+     "Documents requried to complete declaration",
+     "Commercial invoice",
+     "Import railway bill",
+     "Contract for customs warehouse services",
+     "Passport",
+     "Power of attorney",
+     "Application for preliminary visual inspection"
+    ]
+   },
+   {
+    "num": 21,
+    "title": "Submit customs declaration",
+    "inputs": [
+     "Electronic digital signature",
+     "Electronic form of customs declaration"
+    ]
+   },
+   {
+    "num": 22,
+    "title": "Undergo customs inspection in red corridor",
+    "inputs": [
+     "Cargo customs declaration (IM70)",
+     "Import railway bill",
+     "Commercial invoice",
+     "Physical presence",
+     "Passport",
+     "Power of attorney"
+    ]
+   },
+   {
+    "num": 23,
+    "title": "Obtain customs declaration",
+    "inputs": [
+     "Electronic digital signature"
+    ]
+   },
+   {
+    "num": 24,
+    "title": "Obtain wagons for unloading",
+    "inputs": [
+     "Physical presence"
+    ]
+   },
+   {
+    "num": 25,
+    "title": "Arrange cargo unloading",
+    "inputs": [
+     "Physical presence",
+     "Power of attorney",
+     "Certificate on passing examination"
+    ]
+   },
+   {
+    "num": 26,
+    "title": "Place cargo at customs warehouse (train)",
+    "inputs": [
+     "Import railway bill",
+     "Commercial invoice",
+     "Packing list",
+     "Cargo customs declaration (IM70)",
+     "Cargo delivery control book (railway)"
+    ]
+   },
+   {
+    "num": 27,
+    "title": "Obtain offer agreement",
+    "inputs": [
+     "Electronic digital signature",
+     "Data required to complete offer agreement",
+     "Tax Identification Number of the organization or individual",
+     "Name of the organization",
+     "Full name of an organization's manager",
+     "Type of organization (business entity, budgetary)",
+     "Contact phone number",
+     "Amount of consignment"
+    ]
+   },
+   {
+    "num": 28,
+    "title": "Pay for transport unit opening act",
+    "inputs": [
+     "Offer agreement for transport unit opening act",
+     "For physical payment",
+     "Physical presence",
+     "Passport",
+     "For online payment (without necessity to visit a bank)",
+     "Online banking account"
+    ]
+   },
+   {
+    "num": 29,
+    "title": "Apply for quarantine inspection act and transport unit opening act",
+    "inputs": [
+     "Electronic digital signature",
+     "Online application for quarantine inspection certificate",
+     "Quarantine permit",
+     "Phytosanitary certificate of the exporter's country",
+     "Data required to complete application",
+     "Information about applicant",
+     "Information about importer",
+     "Information about exporter",
+     "General information",
+     "Information about product"
+    ]
+   },
+   {
+    "num": 30,
+    "title": "Undergo quarantine inspection",
+    "inputs": [
+     "Physical presence",
+     "Physical presence",
+     "Phytosanitary certificate of the exporter's country",
+     "Quarantine permit"
+    ]
+   },
+   {
+    "num": 31,
+    "title": "Obtain offer agreement for fumigation",
+    "inputs": [
+     "Internet access",
+     "Data required to complete offer agreement",
+     "Tax Identification Number of the organization or individual",
+     "Name of the organization",
+     "Full name of an organization's manager",
+     "Type of organization (business entity, budgetary)",
+     "Contact phone number",
+     "Agency region",
+     "Cost on the contract"
+    ]
+   },
+   {
+    "num": 32,
+    "title": "Pay for fumigation",
+    "inputs": [
+     "Fumigation offer agreement",
+     "For physical payment",
+     "Physical presence",
+     "Passport",
+     "For online payment (without necessity to visit a bank)",
+     "Online banking account"
+    ]
+   },
+   {
+    "num": 33,
+    "title": "Undergo fumigation",
+    "inputs": [
+     "Physical presence"
+    ]
+   },
+   {
+    "num": 34,
+    "title": "Obtain quarantine inspection act",
+    "inputs": [
+     "Electronic digital signature"
+    ]
+   },
+   {
+    "num": 35,
+    "title": "Hand over empty wagons",
+    "inputs": [
+     "Physical presence",
+     "Application for wagon handover"
+    ]
+   },
+   {
+    "num": 36,
+    "title": "Arrange return of empty wagons",
+    "inputs": [
+     "Physical presence",
+     "Application for returning empty wagons",
+     "Instruction on completing railway bill",
+     "Export railway bill (SMGS)"
+    ]
+   },
+   {
+    "num": 37,
+    "title": "Finalize mutual settlements with railway station",
+    "inputs": [
+     "Physical presence",
+     "Import railway bill"
+    ]
+   },
+   {
+    "num": 38,
+    "title": "Obtain offer agreement",
+    "inputs": [
+     "Electronic digital signature",
+     "Bank details"
+    ]
+   },
+   {
+    "num": 39,
+    "title": "Apply for sanitary-epidemiological conclusion",
+    "inputs": [
+     "Electronic digital signature",
+     "Food test report from international accredited laboratories",
+     "Online application for sanitary-epidemiologocal conclusion",
+     "Data required to complete application",
+     "Information about applicant",
+     "Information about importer",
+     "Information about exporter",
+     "Supplier information",
+     "Payment information",
+     "General information",
+     "Information about product"
+    ]
+   },
+   {
+    "num": 40,
+    "title": "Select products samples",
+    "inputs": [
+     "Physical presence",
+     "Power of attorney"
+    ]
+   },
+   {
+    "num": 41,
+    "title": "Submit product samples for laboratory tests",
+    "inputs": [
+     "Physical presence",
+     "Product sampling label"
+    ]
+   },
+   {
+    "num": 42,
+    "title": "Obtain invoice for payment",
+    "inputs": [
+     "Product sampling label",
+     "Electronic digital signature"
+    ]
+   },
+   {
+    "num": 43,
+    "title": "Pay for sanitary-epidemiological conclusion",
+    "inputs": [
+     "Invoice for payment",
+     "Offer agreement for sanitary-epidemiological conclusion",
+     "For physical payment",
+     "Physical presence",
+     "Passport",
+     "For online payment (without necessity to visit a bank)",
+     "Online banking account"
+    ]
+   },
+   {
+    "num": 44,
+    "title": "Obtain sanitary-epidemiological conclusion",
+    "inputs": [
+     "Electronic digital signature"
+    ]
+   },
+   {
+    "num": 45,
+    "title": "Create import customs declaration",
+    "inputs": [
+     "Electronic digital signature",
+     "Documents required to complete declaration",
+     "Import railway bill",
+     "Commercial invoice",
+     "Identification number of foreign trade contract",
+     "Export declaration of the exporter's country",
+     "Certificates and permits",
+     "Certificate of origin of the exporter's country",
+     "Quarantine permit",
+     "Sanitary-epidemiological conclusion"
+    ]
+   },
+   {
+    "num": 46,
+    "title": "Pay Customs Payments And Taxes (General step)",
+    "inputs": [
+     "Bank details of territorial customs departments",
+     "Online banking account"
+    ]
+   },
+   {
+    "num": 47,
+    "title": "Submit import customs declaration",
+    "inputs": [
+     "Electronic digital signature",
+     "Electronic form of customs declaration"
+    ]
+   },
+   {
+    "num": 48,
+    "title": "Undergo customs inspection in red corridor",
+    "inputs": [
+     "Import customs declaration",
+     "Import railway bill",
+     "Commercial invoice",
+     "Physical presence",
+     "Passport",
+     "Power of attorney"
+    ]
+   },
+   {
+    "num": 49,
+    "title": "Obtain import customs declaration",
+    "inputs": [
+     "Electronic digital signature"
+    ]
+   },
+   {
+    "num": 50,
+    "title": "Obtain invoice for customs warehouse services",
+    "inputs": [
+     "Import customs declaration",
+     "Physical presence",
+     "Passport",
+     "Power of attorney"
+    ]
+   },
+   {
+    "num": 51,
+    "title": "Pay for customs warehouse services",
+    "inputs": [
+     "Invoice for payment",
+     "For physical payment",
+     "Physical presence",
+     "For online payment (without necessity to visit a bank)",
+     "Online banking account"
+    ]
+   },
+   {
+    "num": 52,
+    "title": "Obtain permit for exit",
+    "inputs": [
+     "Receipt of payment",
+     "Import customs declaration",
+     "Physical presence",
+     "Passport",
+     "Power of attorney"
+    ]
+   },
+   {
+    "num": 53,
+    "title": "Departure from customs warehouse",
+    "inputs": [
+     "Exit pass",
+     "Physical presence"
+    ]
+   }
+  ]
+ },
+ "540": {
+  "steps": [
+   {
+    "num": 1,
+    "title": "Register foreign trade contract in UEISFTO",
+    "inputs": [
+     "Electronic digital signature",
+     "Electronic copy of foreign trade contract"
+    ]
+   },
+   {
+    "num": 2,
+    "title": "Contract with cargo sales agent",
+    "inputs": [
+     "Guarantees and fees",
+     "Bank details"
+    ]
+   },
+   {
+    "num": 3,
+    "title": "Submit shipper's letter of instruction",
+    "inputs": [
+     "Commercial invoice",
+     "Packing list"
+    ]
+   },
+   {
+    "num": 4,
+    "title": "Pay for transportation service",
+    "inputs": [
+     "Invoice for payment",
+     "For physical payment",
+     "Physical presence",
+     "For online payment (without necessity to visit a bank)",
+     "Online banking account"
+    ]
+   },
+   {
+    "num": 5,
+    "title": "Obtain air waybill",
+    "inputs": [
+     "Shipper's letter of instruction",
+     "Bank payment receipt"
+    ]
+   },
+   {
+    "num": 6,
+    "title": "Contract with airport for cargo handling",
+    "inputs": [
+     "Physical presence",
+     "Certificate of state registration",
+     "Stamp"
+    ]
+   },
+   {
+    "num": 7,
+    "title": "Obtain signed contract with airport for cargo handling",
+    "inputs": [
+     "Physical presence",
+     "Power of attorney"
+    ]
+   },
+   {
+    "num": 8,
+    "title": "Obtain invoice for prepayment",
+    "inputs": [
+     "Contract for handling and storage of cargo",
+     "Air waybill"
+    ]
+   },
+   {
+    "num": 9,
+    "title": "Prepay for handling and storage of cargo",
+    "inputs": [
+     "Invoice for prepayment for cargo handling",
+     "For physical payment",
+     "Physical presence",
+     "For online payment (without necessity to visit a bank)",
+     "Online banking account"
+    ]
+   },
+   {
+    "num": 10,
+    "title": "Obtain offer agreement",
+    "inputs": [
+     "Internet access",
+     "Data required to complete offer agreement",
+     "Tax Identification Number of the organization or individual",
+     "Name of the organization",
+     "Full name of an organization's manager",
+     "Contact phone number",
+     "Agency region",
+     "Payment sum"
+    ]
+   },
+   {
+    "num": 11,
+    "title": "Pay for internal phytosanitary certificate",
+    "inputs": [
+     "Offer agreement for internal phytosanitary certificate",
+     "For physical payment",
+     "Physical presence",
+     "Passport",
+     "For online payment (without necessity to visit a bank)",
+     "Online banking account"
+    ]
+   },
+   {
+    "num": 12,
+    "title": "Apply for internal phytosanitary certificate",
+    "inputs": [
+     "To access the platform",
+     "One ID account",
+     "Contact phone number",
+     "Email"
+    ]
+   },
+   {
+    "num": 13,
+    "title": "Undergo phytosanitary inspection",
+    "inputs": [
+     "Physical presence"
+    ]
+   },
+   {
+    "num": 14,
+    "title": "Obtain offer agreement for fumigation",
+    "inputs": [
+     "Internet access",
+     "Data required to complete offer agreement",
+     "Tax Identification Number of the organization or individual",
+     "Name of the organization",
+     "Full name of an organization's manager",
+     "Type of organization (business entity, budgetary)",
+     "Contact phone number",
+     "Agency region",
+     "Cost on the contract"
+    ]
+   },
+   {
+    "num": 15,
+    "title": "Pay for fumigation",
+    "inputs": [
+     "Fumigation offer agreement",
+     "For physical payment",
+     "Physical presence",
+     "Passport",
+     "For online payment (without necessity to visit a bank)",
+     "Online banking account"
+    ]
+   },
+   {
+    "num": 16,
+    "title": "Undergo fumigation",
+    "inputs": [
+     "Physical presence"
+    ]
+   },
+   {
+    "num": 17,
+    "title": "Obtain internal phytosanitary certificate",
+    "inputs": [
+     "One ID account",
+     "Contact phone number",
+     "Email"
+    ]
+   },
+   {
+    "num": 18,
+    "title": "Obtain offer agreement",
+    "inputs": [
+     "Electronic digital signature",
+     "Data required to complete offer agreement",
+     "Tax Identification Number of the organization or individual",
+     "Name of the organization",
+     "Full name of an organization's manager",
+     "Type of organization (business entity, budgetary)",
+     "Contact phone number",
+     "Agency region",
+     "Payment sum",
+     "Quantity of transport units"
+    ]
+   },
+   {
+    "num": 19,
+    "title": "Pay for phytosanitary certificate",
+    "inputs": [
+     "Offer agreement for phytosanitary certificate",
+     "For physical payment",
+     "Physical presence",
+     "Passport",
+     "For online payment (without necessity to visit a bank)",
+     "Online banking account"
+    ]
+   },
+   {
+    "num": 20,
+    "title": "Apply for phytosanitary certificate",
+    "inputs": [
+     "Electronic digital signature",
+     "Online application for phytosanitary certificate"
+    ]
+   },
+   {
+    "num": 21,
+    "title": "Undergo phytosanitary inspection",
+    "inputs": [
+     "Physical presence"
+    ]
+   },
+   {
+    "num": 22,
+    "title": "Obtain phytosanitary certificate",
+    "inputs": [
+     "Physical presence"
+    ]
+   },
+   {
+    "num": 23,
+    "title": "Conclude contract for services",
+    "inputs": [
+     "Physical presence",
+     "Passport",
+     "Power of attorney"
+    ]
+   },
+   {
+    "num": 24,
+    "title": "Pay for certificate of origin",
+    "inputs": [
+     "Invoice for prepayment",
+     "For physical payment",
+     "Physical presence",
+     "Passport",
+     "For online payment (without necessity to visit a bank)",
+     "Online banking account"
+    ]
+   },
+   {
+    "num": 25,
+    "title": "Apply for certificate of origin",
+    "inputs": [
+     "Application for obtaining of Certificate of origin for exported goods",
+     "Application for obtaining of Certificate of origin for exported goods",
+     "Commercial invoice",
+     "Any document confirming the exporter's right to use a land plot",
+     "Any document confirming purchase of agricultural products"
+    ]
+   },
+   {
+    "num": 26,
+    "title": "Apply for certificate of origin via Uzbekexpertiza service portal",
+    "inputs": [
+     "Electronic digital signature",
+     "One ID account",
+     "Online application for certificate of origin",
+     "Commercial invoice",
+     "Any document confirming the exporter's right to use a land plot",
+     "Any document confirming purchase of agricultural products"
+    ]
+   },
+   {
+    "num": 27,
+    "title": "Apply for certificate of origin via Single Window",
+    "inputs": [
+     "Electronic digital signature",
+     "Online application for certificate of origin",
+     "Commercial invoice",
+     "Any document confirming the exporter's right to use a land plot",
+     "Any document confirming purchase of agricultural products"
+    ]
+   },
+   {
+    "num": 28,
+    "title": "Assessment of application",
+    "inputs": [
+     "Physical presence"
+    ]
+   },
+   {
+    "num": 29,
+    "title": "Undergo expertise of goods",
+    "inputs": [
+     "Physical presence"
+    ]
+   },
+   {
+    "num": 30,
+    "title": "Obtain certificate of origin",
+    "inputs": [
+     "Physical presence"
+    ]
+   },
+   {
+    "num": 31,
+    "title": "Obtain expert conclusion",
+    "inputs": [
+     "Physical presence"
+    ]
+   },
+   {
+    "num": 32,
+    "title": "Put cargo under customs control",
+    "inputs": [
+     "Shipper's letter of instruction",
+     "Physical presence",
+     "Power of attorney"
+    ]
+   },
+   {
+    "num": 33,
+    "title": "Apply for permission to airport's cargo warehouse",
+    "inputs": [
+     "Air waybill",
+     "Shipper's letter of instruction",
+     "Passport",
+     "Vehicle registration certificate",
+     "Commercial invoice"
+    ]
+   },
+   {
+    "num": 34,
+    "title": "Obtain the pass to airport's cargo warehouse",
+    "inputs": [
+     "Physical presence",
+     "Passport",
+     "Vehicle registration certificate"
+    ]
+   },
+   {
+    "num": 35,
+    "title": "Undergo vehicle inspection at airport's Checkpoint",
+    "inputs": [
+     "Physical presence",
+     "Vehicle entrance permit"
+    ]
+   },
+   {
+    "num": 36,
+    "title": "Undergo phytosanitary control at airport",
+    "inputs": [
+     "Phytosanitary certificate"
+    ]
+   },
+   {
+    "num": 37,
+    "title": "Undergo cargo weight and visual inspection",
+    "inputs": [
+     "Air waybill"
+    ]
+   },
+   {
+    "num": 38,
+    "title": "Undergo control for hidden dangerous goods",
+    "inputs": [
+     "Air waybill"
+    ]
+   },
+   {
+    "num": 39,
+    "title": "Create export customs declaration",
+    "inputs": [
+     "Electronic digital signature",
+     "Documents required to complete declaration",
+     "Identification number of foreign trade contract",
+     "Commercial invoice",
+     "Air waybill",
+     "Documents that are not obligatory to submit for export declaration",
+     "Phytosanitary certificate",
+     "Certificate of origin",
+     "Certificate of origin form A",
+     "Certificate of origin General form"
+    ]
+   },
+   {
+    "num": 40,
+    "title": "Pay for customs fee",
+    "inputs": [
+     "Bank details of territorial customs departments",
+     "For physical payment",
+     "Physical presence",
+     "For online payment (without necessity to visit a bank)",
+     "Online banking account"
+    ]
+   },
+   {
+    "num": 41,
+    "title": "Submit export customs declaration",
+    "inputs": [
+     "Electronic digital signature",
+     "Electronic form of customs declaration"
+    ]
+   },
+   {
+    "num": 42,
+    "title": "Undergo customs inspection in red corridor",
+    "inputs": [
+     "Export customs declaration",
+     "Air waybill",
+     "Commercial invoice",
+     "Physical presence",
+     "Passport",
+     "Power of attorney"
+    ]
+   },
+   {
+    "num": 43,
+    "title": "Obtain export customs declaration",
+    "inputs": [
+     "Electronic digital signature"
+    ]
+   },
+   {
+    "num": 44,
+    "title": "Complete mutual settlements with airport",
+    "inputs": [
+     "Air waybill",
+     "Contract for handling and storage of cargo"
+    ]
+   },
+   {
+    "num": 45,
+    "title": "Obtain customs approval to release cargo",
+    "inputs": [
+     "Air waybill",
+     "Commercial invoice"
+    ]
+   },
+   {
+    "num": 46,
+    "title": "Undergo air security inspection",
+    "inputs": [
+     "Air waybill",
+     "Physical presence"
+    ]
+   },
+   {
+    "num": 47,
+    "title": "Hand over cargo for dispatch",
+    "inputs": [
+     "Air waybill",
+     "Package of documents"
+    ]
+   }
+  ]
+ },
+ "868": {
+  "steps": [
+   {
+    "num": 1,
+    "title": "Register foreign trade contract in UEISFTO",
+    "inputs": [
+     "Electronic digital signature",
+     "Electronic copy of foreign trade contract"
+    ]
+   },
+   {
+    "num": 2,
+    "title": "Conclude online agreement with Technological Center and contract with Regional railway junction",
+    "inputs": [
+     "Electronic digital signature",
+     "One ID account"
+    ]
+   },
+   {
+    "num": 3,
+    "title": "Obtain cost calculation for railway services",
+    "inputs": [
+     "Electronic digital signature",
+     "One ID account"
+    ]
+   },
+   {
+    "num": 4,
+    "title": "Prepay for railway services (General)",
+    "inputs": [
+     "Invoice for payment for railway services",
+     "Agreement with Technological center",
+     "For physical payment",
+     "Physical presence",
+     "For online payment (without necessity to visit a bank)",
+     "Online banking account"
+    ]
+   },
+   {
+    "num": 5,
+    "title": "Generate electronic certificate for railway station",
+    "inputs": [
+     "Electronic digital signature"
+    ]
+   },
+   {
+    "num": 6,
+    "title": "Obtain approval for loading and unloading",
+    "inputs": [
+     "Physical presence",
+     "Passport",
+     "Power of attorney"
+    ]
+   },
+   {
+    "num": 7,
+    "title": "Request for freight transportation by railway",
+    "inputs": [
+     "Foreign economic activity contract",
+     "Supply contract"
+    ]
+   },
+   {
+    "num": 8,
+    "title": "Contract with freight forwarder",
+    "inputs": [
+     "Passport",
+     "Power of attorney",
+     "Tax Identification Number of the organization or individual",
+     "Personal identification number of an individual",
+     "Bank details"
+    ]
+   },
+   {
+    "num": 9,
+    "title": "Pay for code assignment and freight forwarder service",
+    "inputs": [
+     "Invoice for payment",
+     "Agreement on railway transportation services",
+     "For physical payment",
+     "Physical presence",
+     "Passport",
+     "For online payment (without necessity to visit a bank)",
+     "Online banking account"
+    ]
+   },
+   {
+    "num": 10,
+    "title": "Obtain code notification",
+    "inputs": [
+     "Receipt of payment",
+     "Agreement on railway transportation services"
+    ]
+   },
+   {
+    "num": 11,
+    "title": "Obtain offer agreement",
+    "inputs": [
+     "Internet access",
+     "Data required to complete offer agreement",
+     "Tax Identification Number of the organization or individual",
+     "Name of the organization",
+     "Full name of an organization's manager",
+     "Contact phone number",
+     "Agency region",
+     "Payment sum"
+    ]
+   },
+   {
+    "num": 12,
+    "title": "Pay for internal phytosanitary certificate",
+    "inputs": [
+     "Offer agreement for internal phytosanitary certificate",
+     "For physical payment",
+     "Physical presence",
+     "Passport",
+     "For online payment (without necessity to visit a bank)",
+     "Online banking account"
+    ]
+   },
+   {
+    "num": 13,
+    "title": "Apply for internal phytosanitary certificate",
+    "inputs": [
+     "To access the platform",
+     "One ID account",
+     "Contact phone number",
+     "Email"
+    ]
+   },
+   {
+    "num": 14,
+    "title": "Undergo phytosanitary inspection",
+    "inputs": [
+     "Physical presence"
+    ]
+   },
+   {
+    "num": 15,
+    "title": "Obtain offer agreement for fumigation",
+    "inputs": [
+     "Internet access",
+     "Data required to complete offer agreement",
+     "Tax Identification Number of the organization or individual",
+     "Name of the organization",
+     "Full name of an organization's manager",
+     "Type of organization (business entity, budgetary)",
+     "Contact phone number",
+     "Agency region",
+     "Cost on the contract"
+    ]
+   },
+   {
+    "num": 16,
+    "title": "Pay for fumigation",
+    "inputs": [
+     "Fumigation offer agreement",
+     "For physical payment",
+     "Physical presence",
+     "Passport",
+     "For online payment (without necessity to visit a bank)",
+     "Online banking account"
+    ]
+   },
+   {
+    "num": 17,
+    "title": "Undergo fumigation",
+    "inputs": [
+     "Physical presence"
+    ]
+   },
+   {
+    "num": 18,
+    "title": "Obtain internal phytosanitary certificate",
+    "inputs": [
+     "One ID account",
+     "Contact phone number",
+     "Email"
+    ]
+   },
+   {
+    "num": 19,
+    "title": "Apply for good transportation on specific conditions",
+    "inputs": [
+     "Application for good transportation on specific conditions"
+    ]
+   },
+   {
+    "num": 20,
+    "title": "Apply for freight transportation by railway",
+    "inputs": [
+     "For submitting application by emails mpo@uzrailway.uz, mpo1@uzrailway.uz, mpo2@uzrailway.uz",
+     "Application for cargo transportation GU-12",
+     "Application for obtaining approval of cargo transportation",
+     "Islamic Republic of Iran approval letter",
+     "For submitting application physically",
+     "Application for cargo transportation GU-12",
+     "Application for obtaining approval of cargo transportation",
+     "Islamic Republic of Iran approval letter"
+    ]
+   },
+   {
+    "num": 21,
+    "title": "Obtain approval for freight transportation by railway",
+    "inputs": [
+     "Availability by phone"
+    ]
+   },
+   {
+    "num": 22,
+    "title": "Obtain order for wagon supply",
+    "inputs": [
+     "For submitting application by emails mpo@uzrailway.uz, mpo1@uzrailway.uz, mpo2@uzrailway.uz",
+     "Application on letterhead",
+     "Application on letterhead (own wagons)",
+     "Code notification from the forwarder that concluded the contract with JSC \"Uzbekistan railways\"",
+     "For submitting application physically",
+     "Power of attorney for Transportation Unit",
+     "Passport",
+     "Application on letterhead",
+     "Application on letterhead (own wagons)",
+     "Code notification from the forwarder that concluded the contract with JSC \"Uzbekistan railways\""
+    ]
+   },
+   {
+    "num": 23,
+    "title": "Apply for allotment of wagons",
+    "inputs": [
+     "Physical presence",
+     "Application on letterhead for allotment of wagons",
+     "Order for wagon supply for loading",
+     "Certificate on availability of funds at client's account",
+     "Passport",
+     "Power of attorney for railway station",
+     "Certificate on passing examination"
+    ]
+   },
+   {
+    "num": 24,
+    "title": "Obtain wagons for loading",
+    "inputs": [
+     "Physical presence"
+    ]
+   },
+   {
+    "num": 25,
+    "title": "Loading",
+    "inputs": [
+     "Physical presence",
+     "Power of attorney"
+    ]
+   },
+   {
+    "num": 26,
+    "title": "Obtain railway bill of lading",
+    "inputs": [
+     "Commercial invoice"
+    ]
+   },
+   {
+    "num": 27,
+    "title": "Obtain offer agreement",
+    "inputs": [
+     "Electronic digital signature",
+     "Data required to complete offer agreement",
+     "Tax Identification Number of the organization or individual",
+     "Name of the organization",
+     "Full name of an organization's manager",
+     "Type of organization (business entity, budgetary)",
+     "Contact phone number",
+     "Agency region",
+     "Payment sum",
+     "Quantity of transport units"
+    ]
+   },
+   {
+    "num": 28,
+    "title": "Pay for phytosanitary certificate",
+    "inputs": [
+     "Offer agreement for phytosanitary certificate",
+     "For physical payment",
+     "Physical presence",
+     "Passport",
+     "For online payment (without necessity to visit a bank)",
+     "Online banking account"
+    ]
+   },
+   {
+    "num": 29,
+    "title": "Apply for phytosanitary certificate",
+    "inputs": [
+     "Electronic digital signature",
+     "Online application for phytosanitary certificate"
+    ]
+   },
+   {
+    "num": 30,
+    "title": "Undergo phytosanitary inspection",
+    "inputs": [
+     "Physical presence"
+    ]
+   },
+   {
+    "num": 31,
+    "title": "Obtain phytosanitary certificate",
+    "inputs": [
+     "Physical presence"
+    ]
+   },
+   {
+    "num": 32,
+    "title": "Conclude contract for services",
+    "inputs": [
+     "Physical presence",
+     "Passport",
+     "Power of attorney"
+    ]
+   },
+   {
+    "num": 33,
+    "title": "Pay for certificate of origin",
+    "inputs": [
+     "Invoice for prepayment",
+     "For physical payment",
+     "Physical presence",
+     "Passport",
+     "For online payment (without necessity to visit a bank)",
+     "Online banking account"
+    ]
+   },
+   {
+    "num": 34,
+    "title": "Apply for certificate of origin",
+    "inputs": [
+     "Application for obtaining of Certificate of origin for exported goods",
+     "Application for obtaining of Certificate of origin for exported goods",
+     "Commercial invoice",
+     "Any document confirming the exporter's right to use a land plot",
+     "Any document confirming purchase of agricultural products"
+    ]
+   },
+   {
+    "num": 35,
+    "title": "Apply for certificate of origin via Uzbekexpertiza service portal",
+    "inputs": [
+     "Electronic digital signature",
+     "One ID account",
+     "Online application for certificate of origin",
+     "Commercial invoice",
+     "Any document confirming the exporter's right to use a land plot",
+     "Any document confirming purchase of agricultural products"
+    ]
+   },
+   {
+    "num": 36,
+    "title": "Apply for certificate of origin via Single Window",
+    "inputs": [
+     "Electronic digital signature",
+     "Online application for certificate of origin",
+     "Commercial invoice",
+     "Any document confirming the exporter's right to use a land plot",
+     "Any document confirming purchase of agricultural products"
+    ]
+   },
+   {
+    "num": 37,
+    "title": "Assessment of application",
+    "inputs": [
+     "Physical presence"
+    ]
+   },
+   {
+    "num": 38,
+    "title": "Undergo expertise of goods",
+    "inputs": [
+     "Physical presence"
+    ]
+   },
+   {
+    "num": 39,
+    "title": "Obtain certificate of origin",
+    "inputs": [
+     "Physical presence"
+    ]
+   },
+   {
+    "num": 40,
+    "title": "Obtain expert conclusion",
+    "inputs": [
+     "Physical presence"
+    ]
+   },
+   {
+    "num": 41,
+    "title": "Create export customs declaration",
+    "inputs": [
+     "Electronic digital signature",
+     "Identification number of foreign trade contract",
+     "Commercial invoice",
+     "Export railway bill (SMGS)",
+     "Documents that are not obligatory to submit for export declaration",
+     "Phytosanitary certificate",
+     "Certificate of origin",
+     "Certificate of origin form A",
+     "Certificate of origin General form"
+    ]
+   },
+   {
+    "num": 42,
+    "title": "Pay for customs fee",
+    "inputs": [
+     "Bank details of territorial customs departments",
+     "For physical payment",
+     "Physical presence",
+     "For online payment (without necessity to visit a bank)",
+     "Online banking account"
+    ]
+   },
+   {
+    "num": 43,
+    "title": "Submit export customs declaration",
+    "inputs": [
+     "Electronic digital signature",
+     "Electronic form of customs declaration"
+    ]
+   },
+   {
+    "num": 44,
+    "title": "Undergo customs inspection in red corridor",
+    "inputs": [
+     "Export customs declaration",
+     "Export railway bill (SMGS)",
+     "Commercial invoice",
+     "Physical presence",
+     "Passport",
+     "Power of attorney"
+    ]
+   },
+   {
+    "num": 45,
+    "title": "Obtain export customs declaration",
+    "inputs": [
+     "Electronic digital signature"
+    ]
+   },
+   {
+    "num": 46,
+    "title": "Obtain stamps on shipping documents",
+    "inputs": [
+     "Physical presence",
+     "Export railway bill (SMGS)",
+     "Commercial invoice",
+     "Export customs declaration"
+    ]
+   },
+   {
+    "num": 47,
+    "title": "Close memo of handover specialist",
+    "inputs": [
+     "Physical presence",
+     "Application for wagon handover"
+    ]
+   },
+   {
+    "num": 48,
+    "title": "Dispatch freight",
+    "inputs": [
+     "Export railway bill (SMGS)",
+     "Package of documents"
+    ]
+   }
+  ]
+ }
+}

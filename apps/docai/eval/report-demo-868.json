@@ -1,0 +1,2585 @@
+{
+  "totals": {
+    "expected": 160,
+    "correct": 97,
+    "correctAccepted": 76,
+    "correctReview": 21,
+    "wrongAccepted": 35,
+    "notFound": 1,
+    "blankFields": 0,
+    "blankAccepted": 0,
+    "blankReview": 0
+  },
+  "report": [
+    {
+      "file": "../../../web/public/demo/868/01-foreign-trade-contract.png",
+      "source": "DEMO · Foreign trade contract",
+      "docType": "trade_contract",
+      "expect": {
+        "contract_no": {
+          "contains": "UZ-2026/118"
+        },
+        "contract_date": {
+          "contains": "01.08.2026"
+        },
+        "seller": {
+          "contains": "OOO Samarkand Choy"
+        },
+        "buyer": {
+          "contains": "OOO Moskovsky Chai"
+        },
+        "incoterms": {
+          "contains": "FCA Tashkent"
+        },
+        "goods": {
+          "contains": "Black tea"
+        },
+        "quantity": {
+          "contains": "60 000 kg"
+        },
+        "total_value": {
+          "contains": "192 000.00 USD"
+        }
+      },
+      "seconds": 38.3,
+      "detectedType": "trade_contract",
+      "typeMatches": true,
+      "fields": [
+        {
+          "key": "contract_no",
+          "expected": {
+            "contains": "UZ-2026/118"
+          },
+          "value": "Ng UZ-2026/118",
+          "normalized": "Ng UZ-2026/118",
+          "confidence": 1,
+          "status": "accepted",
+          "correct": true
+        },
+        {
+          "key": "contract_date",
+          "expected": {
+            "contains": "01.08.2026"
+          },
+          "value": "01.08.2026",
+          "normalized": "2026-08-01",
+          "confidence": 0.99,
+          "status": "accepted",
+          "correct": true
+        },
+        {
+          "key": "seller",
+          "expected": {
+            "contains": "OOO Samarkand Choy"
+          },
+          "value": "Dilshod Rakhimov,",
+          "normalized": "Dilshod Rakhimov,",
+          "confidence": 1,
+          "status": "accepted",
+          "correct": false
+        },
+        {
+          "key": "buyer",
+          "expected": {
+            "contains": "OOO Moskovsky Chai"
+          },
+          "value": "I. Sokolova;",
+          "normalized": "I. Sokolova;",
+          "confidence": 0.77,
+          "status": "review",
+          "correct": false
+        },
+        {
+          "key": "incoterms",
+          "expected": {
+            "contains": "FCA Tashkent"
+          },
+          "value": "FCA Tashkent (Incoterms 2020).",
+          "normalized": "FCA",
+          "confidence": 0.98,
+          "status": "accepted",
+          "correct": true
+        },
+        {
+          "key": "goods",
+          "expected": {
+            "contains": "Black tea"
+          },
+          "value": "black tea",
+          "normalized": "black tea",
+          "confidence": 0.85,
+          "status": "accepted",
+          "correct": true
+        },
+        {
+          "key": "quantity",
+          "expected": {
+            "contains": "60 000 kg"
+          },
+          "value": "60 00О kg",
+          "normalized": 60,
+          "confidence": 0.99,
+          "status": "accepted",
+          "correct": false
+        },
+        {
+          "key": "total_value",
+          "expected": {
+            "contains": "192 000.00 USD"
+          },
+          "value": "192 000.0О USD",
+          "normalized": 192000,
+          "confidence": 0.99,
+          "status": "accepted",
+          "correct": false
+        }
+      ],
+      "ocrSegments": [
+        36
+      ]
+    },
+    {
+      "file": "../../../web/public/demo/868/02-passport.png",
+      "source": "DEMO · Passport (demo, fictional person)",
+      "docType": "passport",
+      "expect": {
+        "full_name": {
+          "contains": "RAKHIMOV DILSHOD"
+        },
+        "passport_no": {
+          "contains": "AD 1234567"
+        },
+        "expiry": {
+          "contains": "14.03.2031"
+        }
+      },
+      "seconds": 38.4,
+      "detectedType": "passport",
+      "typeMatches": true,
+      "fields": [
+        {
+          "key": "full_name",
+          "expected": {
+            "contains": "RAKHIMOV DILSHOD"
+          },
+          "value": "RAKHIMOV",
+          "normalized": "RAKHIMOV",
+          "confidence": 0.46,
+          "status": "missing",
+          "correct": false
+        },
+        {
+          "key": "passport_no",
+          "expected": {
+            "contains": "AD 1234567"
+          },
+          "value": "AD 1234567",
+          "normalized": "AD 1234567",
+          "confidence": 0.88,
+          "status": "accepted",
+          "correct": true
+        },
+        {
+          "key": "expiry",
+          "expected": {
+            "contains": "14.03.2031"
+          },
+          "value": "14.03.2031",
+          "normalized": "2031-03-14",
+          "confidence": 0.99,
+          "status": "accepted",
+          "correct": true
+        }
+      ],
+      "ocrSegments": [
+        29
+      ]
+    },
+    {
+      "file": "../../../web/public/demo/868/03-power-of-attorney.png",
+      "source": "DEMO · Power of attorney",
+      "docType": "power_of_attorney",
+      "expect": {
+        "poa_no": {
+          "contains": "17"
+        },
+        "issue_date": {
+          "contains": "02.09.2026"
+        },
+        "representative": {
+          "contains": "Bekzod Nurmatov"
+        },
+        "passport": {
+          "contains": "AB 7654321"
+        },
+        "valid_until": {
+          "contains": "31.12.2026"
+        }
+      },
+      "seconds": 20.6,
+      "detectedType": "power_of_attorney",
+      "typeMatches": true,
+      "fields": [
+        {
+          "key": "poa_no",
+          "expected": {
+            "contains": "17"
+          },
+          "value": "Ng 17",
+          "normalized": "Ng 17",
+          "confidence": 0.66,
+          "status": "review",
+          "correct": true
+        },
+        {
+          "key": "issue_date",
+          "expected": {
+            "contains": "02.09.2026"
+          },
+          "value": "02.09.2026",
+          "normalized": "2026-09-02",
+          "confidence": 0.99,
+          "status": "accepted",
+          "correct": true
+        },
+        {
+          "key": "representative",
+          "expected": {
+            "contains": "Bekzod Nurmatov"
+          },
+          "value": "Bekzod Nurmatov",
+          "normalized": "Bekzod Nurmatov",
+          "confidence": 1,
+          "status": "accepted",
+          "correct": true
+        },
+        {
+          "key": "passport",
+          "expected": {
+            "contains": "AB 7654321"
+          },
+          "value": "AB 7654321",
+          "normalized": "AB 7654321",
+          "confidence": 0.85,
+          "status": "accepted",
+          "correct": true
+        },
+        {
+          "key": "valid_until",
+          "expected": {
+            "contains": "31.12.2026"
+          },
+          "value": "31.12.2026",
+          "normalized": "2026-12-31",
+          "confidence": 0.99,
+          "status": "accepted",
+          "correct": true
+        }
+      ],
+      "ocrSegments": [
+        28
+      ]
+    },
+    {
+      "file": "../../../web/public/demo/868/05-receipt-step-04.png",
+      "source": "DEMO · Receipt — railway services prepayment (step 4)",
+      "docType": "receipt_of_payment",
+      "expect": {
+        "receipt_no": {
+          "contains": "R-2026-0412"
+        },
+        "payer": {
+          "contains": "OOO Samarkand Choy"
+        },
+        "payer_inn": {
+          "contains": "301245678"
+        },
+        "recipient": {
+          "contains": "JSC Uzbekistan Temir Yollari"
+        },
+        "payment_type": {
+          "contains": "Prepayment for railway services"
+        },
+        "amount": {
+          "contains": "18 400 000"
+        },
+        "date": {
+          "contains": "05.09.2026"
+        }
+      },
+      "seconds": 21.5,
+      "detectedType": "receipt_of_payment",
+      "typeMatches": true,
+      "fields": [
+        {
+          "key": "receipt_no",
+          "expected": {
+            "contains": "R-2026-0412"
+          },
+          "value": "Ng R-2026-0412",
+          "normalized": "Ng R-2026-0412",
+          "confidence": 0.86,
+          "status": "accepted",
+          "correct": true
+        },
+        {
+          "key": "payer",
+          "expected": {
+            "contains": "OOO Samarkand Choy"
+          },
+          "value": "\"Samarkand Choy\"",
+          "normalized": "\"Samarkand Choy\"",
+          "confidence": 1,
+          "status": "accepted",
+          "correct": false
+        },
+        {
+          "key": "payer_inn",
+          "expected": {
+            "contains": "301245678"
+          },
+          "value": "301245678",
+          "normalized": "301245678",
+          "confidence": 0.99,
+          "status": "accepted",
+          "correct": true
+        },
+        {
+          "key": "recipient",
+          "expected": {
+            "contains": "JSC Uzbekistan Temir Yollari"
+          },
+          "value": "JSC Uzbekistan Temir Yo'llari",
+          "normalized": "JSC Uzbekistan Temir Yo'llari",
+          "confidence": 0.94,
+          "status": "accepted",
+          "correct": true
+        },
+        {
+          "key": "payment_type",
+          "expected": {
+            "contains": "Prepayment for railway services"
+          },
+          "value": "Prepayment for railway services",
+          "normalized": "Prepayment for railway services",
+          "confidence": 0.71,
+          "status": "review",
+          "correct": true
+        },
+        {
+          "key": "amount",
+          "expected": {
+            "contains": "18 400 000"
+          },
+          "value": "18 400 00О UZS",
+          "normalized": 18400000,
+          "confidence": 0.76,
+          "status": "review",
+          "correct": false
+        },
+        {
+          "key": "date",
+          "expected": {
+            "contains": "05.09.2026"
+          },
+          "value": "05.09.2026",
+          "normalized": "2026-09-05",
+          "confidence": 0.99,
+          "status": "accepted",
+          "correct": true
+        }
+      ],
+      "ocrSegments": [
+        31
+      ]
+    },
+    {
+      "file": "../../../web/public/demo/868/06-invoice-forwarder-step-08.png",
+      "source": "DEMO · Invoice for payment — freight forwarder (step 8)",
+      "docType": "invoice_for_payment",
+      "expect": {
+        "invoice_no": {
+          "contains": "FW-2026/311"
+        },
+        "invoice_date": {
+          "contains": "06.09.2026"
+        },
+        "contract_no": {
+          "contains": "FWD-44"
+        },
+        "supplier": {
+          "contains": "OOO Demo Forwarding"
+        },
+        "supplier_inn": {
+          "contains": "302987654"
+        },
+        "customer": {
+          "contains": "OOO Samarkand Choy"
+        },
+        "vat_rate": {
+          "contains": "12"
+        },
+        "total": {
+          "contains": "2 350 000"
+        }
+      },
+      "seconds": 18.9,
+      "detectedType": "invoice_for_payment",
+      "typeMatches": true,
+      "fields": [
+        {
+          "key": "invoice_no",
+          "expected": {
+            "contains": "FW-2026/311"
+          },
+          "value": "302987654",
+          "normalized": "302987654",
+          "confidence": 0.17,
+          "status": "missing",
+          "correct": false
+        },
+        {
+          "key": "invoice_date",
+          "expected": {
+            "contains": "06.09.2026"
+          },
+          "value": "Date: 06.09.2026",
+          "normalized": "2026-09-06",
+          "confidence": 0.68,
+          "status": "review",
+          "correct": true
+        },
+        {
+          "key": "contract_no",
+          "expected": {
+            "contains": "FWD-44"
+          },
+          "value": "FWD-44",
+          "normalized": "FWD-44",
+          "confidence": 1,
+          "status": "accepted",
+          "correct": true
+        },
+        {
+          "key": "supplier",
+          "expected": {
+            "contains": "OOO Demo Forwarding"
+          },
+          "value": "\"Demo Forwarding'",
+          "normalized": "\"Demo Forwarding'",
+          "confidence": 0.59,
+          "status": "review",
+          "correct": false
+        },
+        {
+          "key": "supplier_inn",
+          "expected": {
+            "contains": "302987654"
+          },
+          "value": "302987654",
+          "normalized": "302987654",
+          "confidence": 0.99,
+          "status": "accepted",
+          "correct": true
+        },
+        {
+          "key": "customer",
+          "expected": {
+            "contains": "OOO Samarkand Choy"
+          },
+          "value": "\"Samarkand Choy\"",
+          "normalized": "\"Samarkand Choy\"",
+          "confidence": 0.61,
+          "status": "review",
+          "correct": false
+        },
+        {
+          "key": "vat_rate",
+          "expected": {
+            "contains": "12"
+          },
+          "value": "12%",
+          "normalized": "12%",
+          "confidence": 1,
+          "status": "accepted",
+          "correct": true
+        },
+        {
+          "key": "total",
+          "expected": {
+            "contains": "2 350 000"
+          },
+          "value": "2 350 000 UZS",
+          "normalized": 2350000,
+          "confidence": 0.99,
+          "status": "accepted",
+          "correct": true
+        }
+      ],
+      "ocrSegments": [
+        29
+      ]
+    },
+    {
+      "file": "../../../web/public/demo/868/08-receipt-step-09.png",
+      "source": "DEMO · Receipt — forwarder and code assignment (step 9)",
+      "docType": "receipt_of_payment",
+      "expect": {
+        "receipt_no": {
+          "contains": "R-2026-0419"
+        },
+        "payer": {
+          "contains": "OOO Samarkand Choy"
+        },
+        "payer_inn": {
+          "contains": "301245678"
+        },
+        "recipient": {
+          "contains": "OOO Demo Forwarding"
+        },
+        "payment_type": {
+          "contains": "Code assignment and forwarder service"
+        },
+        "amount": {
+          "contains": "2 350 000"
+        },
+        "date": {
+          "contains": "07.09.2026"
+        }
+      },
+      "seconds": 18.1,
+      "detectedType": "receipt_of_payment",
+      "typeMatches": true,
+      "fields": [
+        {
+          "key": "receipt_no",
+          "expected": {
+            "contains": "R-2026-0419"
+          },
+          "value": "Ng R-2026-0419",
+          "normalized": "Ng R-2026-0419",
+          "confidence": 0.99,
+          "status": "accepted",
+          "correct": true
+        },
+        {
+          "key": "payer",
+          "expected": {
+            "contains": "OOO Samarkand Choy"
+          },
+          "value": "\"Samarkand Choy\"",
+          "normalized": "\"Samarkand Choy\"",
+          "confidence": 1,
+          "status": "accepted",
+          "correct": false
+        },
+        {
+          "key": "payer_inn",
+          "expected": {
+            "contains": "301245678"
+          },
+          "value": "301245678",
+          "normalized": "301245678",
+          "confidence": 0.99,
+          "status": "accepted",
+          "correct": true
+        },
+        {
+          "key": "recipient",
+          "expected": {
+            "contains": "OOO Demo Forwarding"
+          },
+          "value": "Recipient: ООО \"Demo Forwarding'",
+          "normalized": "Recipient: ООО \"Demo Forwarding'",
+          "confidence": 0.61,
+          "status": "review",
+          "correct": false
+        },
+        {
+          "key": "payment_type",
+          "expected": {
+            "contains": "Code assignment and forwarder service"
+          },
+          "value": "DEMO",
+          "normalized": "DEMO",
+          "confidence": 1,
+          "status": "accepted",
+          "correct": false
+        },
+        {
+          "key": "amount",
+          "expected": {
+            "contains": "2 350 000"
+          },
+          "value": "2 350",
+          "normalized": 2350,
+          "confidence": 0.61,
+          "status": "review",
+          "correct": false
+        },
+        {
+          "key": "date",
+          "expected": {
+            "contains": "07.09.2026"
+          },
+          "value": "07.09.2026",
+          "normalized": "2026-09-07",
+          "confidence": 0.99,
+          "status": "accepted",
+          "correct": true
+        }
+      ],
+      "ocrSegments": [
+        31
+      ]
+    },
+    {
+      "file": "../../../web/public/demo/868/09-offer-internal-phyto-step-11.png",
+      "source": "DEMO · Offer agreement — internal phytosanitary certificate (step 11)",
+      "docType": "offer_agreement",
+      "expect": {
+        "agreement_no": {
+          "contains": "26140004512"
+        },
+        "agreement_date": {
+          "contains": "07.09.2026"
+        },
+        "amount": {
+          "contains": "245 000"
+        }
+      },
+      "seconds": 18.5,
+      "detectedType": "offer_agreement",
+      "typeMatches": true,
+      "fields": [
+        {
+          "key": "agreement_no",
+          "expected": {
+            "contains": "26140004512"
+          },
+          "value": "26140004512",
+          "normalized": "26140004512",
+          "confidence": 0.04,
+          "status": "missing",
+          "correct": true
+        },
+        {
+          "key": "agreement_date",
+          "expected": {
+            "contains": "07.09.2026"
+          },
+          "value": "07.09.2026",
+          "normalized": "2026-09-07",
+          "confidence": 0,
+          "status": "missing",
+          "correct": true
+        },
+        {
+          "key": "amount",
+          "expected": {
+            "contains": "245 000"
+          },
+          "value": "26140004512",
+          "normalized": 26140004512,
+          "confidence": 0.62,
+          "status": "review",
+          "correct": false
+        }
+      ],
+      "ocrSegments": [
+        28
+      ]
+    },
+    {
+      "file": "../../../web/public/demo/868/10-receipt-step-12.png",
+      "source": "DEMO · Receipt — internal phytosanitary certificate (step 12)",
+      "docType": "receipt_of_payment",
+      "expect": {
+        "receipt_no": {
+          "contains": "R-2026-0427"
+        },
+        "payer": {
+          "contains": "OOO Samarkand Choy"
+        },
+        "payer_inn": {
+          "contains": "301245678"
+        },
+        "recipient": {
+          "contains": "Agency of Plant Quarantine and Protection"
+        },
+        "payment_type": {
+          "contains": "Internal phytosanitary certificate"
+        },
+        "amount": {
+          "contains": "245 000"
+        },
+        "date": {
+          "contains": "08.09.2026"
+        }
+      },
+      "seconds": 18,
+      "detectedType": "receipt_of_payment",
+      "typeMatches": true,
+      "fields": [
+        {
+          "key": "receipt_no",
+          "expected": {
+            "contains": "R-2026-0427"
+          },
+          "value": "R-2026-0427",
+          "normalized": "R-2026-0427",
+          "confidence": 0.98,
+          "status": "accepted",
+          "correct": true
+        },
+        {
+          "key": "payer",
+          "expected": {
+            "contains": "OOO Samarkand Choy"
+          },
+          "value": "\"Samarkand Choy\"",
+          "normalized": "\"Samarkand Choy\"",
+          "confidence": 1,
+          "status": "accepted",
+          "correct": false
+        },
+        {
+          "key": "payer_inn",
+          "expected": {
+            "contains": "301245678"
+          },
+          "value": "301245678",
+          "normalized": "301245678",
+          "confidence": 0.99,
+          "status": "accepted",
+          "correct": true
+        },
+        {
+          "key": "recipient",
+          "expected": {
+            "contains": "Agency of Plant Quarantine and Protection"
+          },
+          "value": "Agency of Plant Quarantine and Protection",
+          "normalized": "Agency of Plant Quarantine and Protection",
+          "confidence": 1,
+          "status": "accepted",
+          "correct": true
+        },
+        {
+          "key": "payment_type",
+          "expected": {
+            "contains": "Internal phytosanitary certificate"
+          },
+          "value": "DEMO",
+          "normalized": "DEMO",
+          "confidence": 0.89,
+          "status": "accepted",
+          "correct": false
+        },
+        {
+          "key": "amount",
+          "expected": {
+            "contains": "245 000"
+          },
+          "value": "245 000 UZS",
+          "normalized": 245000,
+          "confidence": 0.75,
+          "status": "review",
+          "correct": true
+        },
+        {
+          "key": "date",
+          "expected": {
+            "contains": "08.09.2026"
+          },
+          "value": "08.09.2026",
+          "normalized": "2026-09-08",
+          "confidence": 0.99,
+          "status": "accepted",
+          "correct": true
+        }
+      ],
+      "ocrSegments": [
+        31
+      ]
+    },
+    {
+      "file": "../../../web/public/demo/868/11-offer-fumigation-step-15.png",
+      "source": "DEMO · Offer agreement — fumigation (optional step 15)",
+      "docType": "offer_agreement",
+      "expect": {
+        "agreement_no": {
+          "contains": "26140004533"
+        },
+        "agreement_date": {
+          "contains": "08.09.2026"
+        },
+        "amount": {
+          "contains": "1 120 000"
+        }
+      },
+      "seconds": 17,
+      "detectedType": "offer_agreement",
+      "typeMatches": true,
+      "fields": [
+        {
+          "key": "agreement_no",
+          "expected": {
+            "contains": "26140004533"
+          },
+          "value": "26140004533",
+          "normalized": "26140004533",
+          "confidence": 0,
+          "status": "missing",
+          "correct": true
+        },
+        {
+          "key": "agreement_date",
+          "expected": {
+            "contains": "08.09.2026"
+          },
+          "value": "08.09.2026",
+          "normalized": "2026-09-08",
+          "confidence": 0,
+          "status": "missing",
+          "correct": true
+        },
+        {
+          "key": "amount",
+          "expected": {
+            "contains": "1 120 000"
+          },
+          "value": "120 000 UZS",
+          "normalized": 120000,
+          "confidence": 0.55,
+          "status": "review",
+          "correct": false
+        }
+      ],
+      "ocrSegments": [
+        27
+      ]
+    },
+    {
+      "file": "../../../web/public/demo/868/12-receipt-step-16.png",
+      "source": "DEMO · Receipt — fumigation (optional step 16)",
+      "docType": "receipt_of_payment",
+      "expect": {
+        "receipt_no": {
+          "contains": "R-2026-0431"
+        },
+        "payer": {
+          "contains": "OOO Samarkand Choy"
+        },
+        "payer_inn": {
+          "contains": "301245678"
+        },
+        "recipient": {
+          "contains": "Agency of Plant Quarantine and Protection"
+        },
+        "payment_type": {
+          "contains": "Fumigation"
+        },
+        "amount": {
+          "contains": "1 120 000"
+        },
+        "date": {
+          "contains": "09.09.2026"
+        }
+      },
+      "seconds": 19,
+      "detectedType": "receipt_of_payment",
+      "typeMatches": true,
+      "fields": [
+        {
+          "key": "receipt_no",
+          "expected": {
+            "contains": "R-2026-0431"
+          },
+          "value": "R-2026-0431",
+          "normalized": "R-2026-0431",
+          "confidence": 0.98,
+          "status": "accepted",
+          "correct": true
+        },
+        {
+          "key": "payer",
+          "expected": {
+            "contains": "OOO Samarkand Choy"
+          },
+          "value": "\"Samarkand Choy\"",
+          "normalized": "\"Samarkand Choy\"",
+          "confidence": 1,
+          "status": "accepted",
+          "correct": false
+        },
+        {
+          "key": "payer_inn",
+          "expected": {
+            "contains": "301245678"
+          },
+          "value": "301245678",
+          "normalized": "301245678",
+          "confidence": 0.99,
+          "status": "accepted",
+          "correct": true
+        },
+        {
+          "key": "recipient",
+          "expected": {
+            "contains": "Agency of Plant Quarantine and Protection"
+          },
+          "value": "Agency of Plant Quarantine and Protection",
+          "normalized": "Agency of Plant Quarantine and Protection",
+          "confidence": 1,
+          "status": "accepted",
+          "correct": true
+        },
+        {
+          "key": "payment_type",
+          "expected": {
+            "contains": "Fumigation"
+          },
+          "value": "DEMO",
+          "normalized": "DEMO",
+          "confidence": 0.98,
+          "status": "accepted",
+          "correct": false
+        },
+        {
+          "key": "amount",
+          "expected": {
+            "contains": "1 120 000"
+          },
+          "value": "1 120 000 UZS",
+          "normalized": 1120000,
+          "confidence": 0.99,
+          "status": "accepted",
+          "correct": true
+        },
+        {
+          "key": "date",
+          "expected": {
+            "contains": "09.09.2026"
+          },
+          "value": "09.09.2026",
+          "normalized": "2026-09-09",
+          "confidence": 0.99,
+          "status": "accepted",
+          "correct": true
+        }
+      ],
+      "ocrSegments": [
+        31
+      ]
+    },
+    {
+      "file": "../../../web/public/demo/868/14-application-gu12.png",
+      "source": "DEMO · Application for cargo transportation GU-12",
+      "docType": "cargo_transport_application",
+      "expect": {
+        "shipper": {
+          "contains": "OOO Samarkand Choy"
+        },
+        "departure_station": {
+          "contains": "Tashkent-Tovarny"
+        },
+        "cargo": {
+          "contains": "Black tea in cartons"
+        },
+        "etsng": {
+          "contains": "214095"
+        },
+        "destination_station": {
+          "contains": "Moscow-Tovarnaya"
+        },
+        "consignee": {
+          "contains": "OOO Moskovsky Chai"
+        },
+        "tonnes": {
+          "contains": "60"
+        },
+        "wagons": {
+          "contains": "2"
+        }
+      },
+      "seconds": 21.5,
+      "detectedType": "cargo_transport_application",
+      "typeMatches": true,
+      "fields": [
+        {
+          "key": "shipper",
+          "expected": {
+            "contains": "OOO Samarkand Choy"
+          },
+          "value": "OОО \"Samarkand Choy\" , Samarkand",
+          "normalized": "OОО \"Samarkand Choy\" , Samarkand",
+          "confidence": 0.37,
+          "status": "missing",
+          "correct": false
+        },
+        {
+          "key": "departure_station",
+          "expected": {
+            "contains": "Tashkent-Tovarny"
+          },
+          "value": "Moscow-Tovarnaya",
+          "normalized": "Moscow-Tovarnaya",
+          "confidence": 1,
+          "status": "accepted",
+          "correct": false
+        },
+        {
+          "key": "cargo",
+          "expected": {
+            "contains": "Black tea in cartons"
+          },
+          "value": "Black tea in cartons",
+          "normalized": "Black tea in cartons",
+          "confidence": 0.44,
+          "status": "missing",
+          "correct": true
+        },
+        {
+          "key": "etsng",
+          "expected": {
+            "contains": "214095"
+          },
+          "value": "214095",
+          "normalized": "214095",
+          "confidence": 0.59,
+          "status": "review",
+          "correct": true
+        },
+        {
+          "key": "destination_station",
+          "expected": {
+            "contains": "Moscow-Tovarnaya"
+          },
+          "value": "Moscow-Tovarnaya",
+          "normalized": "Moscow-Tovarnaya",
+          "confidence": 0.55,
+          "status": "review",
+          "correct": true
+        },
+        {
+          "key": "consignee",
+          "expected": {
+            "contains": "OOO Moskovsky Chai"
+          },
+          "value": "OОО \"Moskovsky Chai'",
+          "normalized": "OОО \"Moskovsky Chai'",
+          "confidence": 0.4,
+          "status": "missing",
+          "correct": false
+        },
+        {
+          "key": "tonnes",
+          "expected": {
+            "contains": "60"
+          },
+          "value": "60",
+          "normalized": 60,
+          "confidence": 0.55,
+          "status": "review",
+          "correct": true
+        },
+        {
+          "key": "wagons",
+          "expected": {
+            "contains": "2"
+          },
+          "value": "2",
+          "normalized": "2",
+          "confidence": 0.55,
+          "status": "review",
+          "correct": true
+        }
+      ],
+      "ocrSegments": [
+        29
+      ]
+    },
+    {
+      "file": "../../../web/public/demo/868/21-commercial-invoice.png",
+      "source": "DEMO · Commercial invoice",
+      "docType": "commercial_invoice",
+      "expect": {
+        "invoice_no": {
+          "contains": "INV-2026/0457"
+        },
+        "invoice_date": {
+          "contains": "12.09.2026"
+        },
+        "seller": {
+          "contains": "OOO Samarkand Choy"
+        },
+        "buyer": {
+          "contains": "OOO Moskovsky Chai"
+        },
+        "goods": {
+          "contains": "Black tea"
+        },
+        "hs_code": {
+          "contains": "0902 40 000 0"
+        },
+        "origin_country": {
+          "contains": "Uzbekistan"
+        },
+        "quantity": {
+          "contains": "60 000 kg"
+        },
+        "gross_weight": {
+          "contains": "61 200 kg"
+        },
+        "total_value": {
+          "contains": "192 000.00"
+        },
+        "currency": {
+          "contains": "USD"
+        },
+        "contract_no": {
+          "contains": "UZ-2026/118"
+        },
+        "incoterms": {
+          "contains": "FCA Tashkent"
+        },
+        "transport_doc": {
+          "contains": "SMGS 77120045"
+        }
+      },
+      "seconds": 48.4,
+      "detectedType": "railway_bill",
+      "typeMatches": false,
+      "fields": [
+        {
+          "key": "invoice_no",
+          "expected": {
+            "contains": "INV-2026/0457"
+          },
+          "value": "INV-2026/0457",
+          "normalized": "INV-2026/0457",
+          "confidence": 0.94,
+          "status": "accepted",
+          "correct": true
+        },
+        {
+          "key": "invoice_date",
+          "expected": {
+            "contains": "12.09.2026"
+          },
+          "value": "12.09.2026",
+          "normalized": "2026-09-12",
+          "confidence": 0.99,
+          "status": "accepted",
+          "correct": true
+        },
+        {
+          "key": "seller",
+          "expected": {
+            "contains": "OOO Samarkand Choy"
+          },
+          "value": "\"Samarkand Choy\"",
+          "normalized": "\"Samarkand Choy\"",
+          "confidence": 0.79,
+          "status": "review",
+          "correct": false
+        },
+        {
+          "key": "buyer",
+          "expected": {
+            "contains": "OOO Moskovsky Chai"
+          },
+          "value": null,
+          "normalized": null,
+          "confidence": 0,
+          "status": "missing",
+          "correct": false
+        },
+        {
+          "key": "goods",
+          "expected": {
+            "contains": "Black tea"
+          },
+          "value": "Black tea",
+          "normalized": "Black tea",
+          "confidence": 0.96,
+          "status": "accepted",
+          "correct": true
+        },
+        {
+          "key": "hs_code",
+          "expected": {
+            "contains": "0902 40 000 0"
+          },
+          "value": "0902",
+          "normalized": "0902",
+          "confidence": 0.98,
+          "status": "accepted",
+          "correct": false
+        },
+        {
+          "key": "origin_country",
+          "expected": {
+            "contains": "Uzbekistan"
+          },
+          "value": "Uzbekistan",
+          "normalized": "UZ",
+          "confidence": 0.99,
+          "status": "accepted",
+          "correct": true
+        },
+        {
+          "key": "quantity",
+          "expected": {
+            "contains": "60 000 kg"
+          },
+          "value": "60 000 kg",
+          "normalized": 60,
+          "confidence": 0.99,
+          "status": "accepted",
+          "correct": true
+        },
+        {
+          "key": "gross_weight",
+          "expected": {
+            "contains": "61 200 kg"
+          },
+          "value": "61 200 kg",
+          "normalized": 61.2,
+          "confidence": 0.99,
+          "status": "accepted",
+          "correct": true
+        },
+        {
+          "key": "total_value",
+          "expected": {
+            "contains": "192 000.00"
+          },
+          "value": "192 00О.00",
+          "normalized": 192000,
+          "confidence": 0.72,
+          "status": "review",
+          "correct": false
+        },
+        {
+          "key": "currency",
+          "expected": {
+            "contains": "USD"
+          },
+          "value": "USD",
+          "normalized": "USD",
+          "confidence": 0.99,
+          "status": "accepted",
+          "correct": true
+        },
+        {
+          "key": "contract_no",
+          "expected": {
+            "contains": "UZ-2026/118"
+          },
+          "value": "UZ-2026/118",
+          "normalized": "UZ-2026/118",
+          "confidence": 1,
+          "status": "accepted",
+          "correct": true
+        },
+        {
+          "key": "incoterms",
+          "expected": {
+            "contains": "FCA Tashkent"
+          },
+          "value": "): FCA",
+          "normalized": "FCA",
+          "confidence": 0.68,
+          "status": "review",
+          "correct": false
+        },
+        {
+          "key": "transport_doc",
+          "expected": {
+            "contains": "SMGS 77120045"
+          },
+          "value": "Ng: SMGS 77120045",
+          "normalized": "Ng: SMGS 77120045",
+          "confidence": 0.51,
+          "status": "review",
+          "correct": true
+        }
+      ],
+      "ocrSegments": [
+        36
+      ]
+    },
+    {
+      "file": "../../../web/public/demo/868/22-export-railway-bill-smgs-step-26.png",
+      "source": "DEMO · Export railway bill (SMGS) — step 26",
+      "docType": "railway_bill",
+      "expect": {
+        "dispatch_no": {
+          "contains": "77120045"
+        },
+        "sender": {
+          "contains": "OOO Samarkand Choy"
+        },
+        "consignee": {
+          "contains": "OOO Moskovsky Chai"
+        },
+        "departure_station": {
+          "contains": "Tashkent-Tovarny"
+        },
+        "destination_station": {
+          "contains": "Moscow-Tovarnaya"
+        },
+        "border_stations": {
+          "contains": "Keles"
+        },
+        "wagon_no": {
+          "contains": "52814467"
+        },
+        "cargo": {
+          "contains": "Black tea"
+        },
+        "packaging": {
+          "contains": "Cartons"
+        },
+        "places": {
+          "contains": "2400"
+        },
+        "weight": {
+          "contains": "60 000 kg"
+        },
+        "seals": {
+          "contains": "UZ 118201"
+        },
+        "documents_attached": {
+          "contains": "Commercial invoice"
+        }
+      },
+      "seconds": 26.3,
+      "detectedType": "railway_bill",
+      "typeMatches": true,
+      "fields": [
+        {
+          "key": "dispatch_no",
+          "expected": {
+            "contains": "77120045"
+          },
+          "value": "52814467,52814475",
+          "normalized": "52814467,52814475",
+          "confidence": 0.32,
+          "status": "missing",
+          "correct": false
+        },
+        {
+          "key": "sender",
+          "expected": {
+            "contains": "OOO Samarkand Choy"
+          },
+          "value": "\"Samarkand Choy\"",
+          "normalized": "\"Samarkand Choy\"",
+          "confidence": 0.96,
+          "status": "accepted",
+          "correct": false
+        },
+        {
+          "key": "consignee",
+          "expected": {
+            "contains": "OOO Moskovsky Chai"
+          },
+          "value": "Consignee",
+          "normalized": "Consignee",
+          "confidence": 0.7,
+          "status": "review",
+          "correct": false
+        },
+        {
+          "key": "departure_station",
+          "expected": {
+            "contains": "Tashkent-Tovarny"
+          },
+          "value": "Tashkent-Tovarny",
+          "normalized": "Tashkent-Tovarny",
+          "confidence": 0.99,
+          "status": "accepted",
+          "correct": true
+        },
+        {
+          "key": "destination_station",
+          "expected": {
+            "contains": "Moscow-Tovarnaya"
+          },
+          "value": "Moscow-Tovarnaya",
+          "normalized": "Moscow-Tovarnaya",
+          "confidence": 0.99,
+          "status": "accepted",
+          "correct": true
+        },
+        {
+          "key": "border_stations",
+          "expected": {
+            "contains": "Keles"
+          },
+          "value": "Keles; Sary-Agash",
+          "normalized": "Keles; Sary-Agash",
+          "confidence": 0.99,
+          "status": "accepted",
+          "correct": true
+        },
+        {
+          "key": "wagon_no",
+          "expected": {
+            "contains": "52814467"
+          },
+          "value": "52814467,52814475",
+          "normalized": "52814467,52814475",
+          "confidence": 0.81,
+          "status": "accepted",
+          "correct": true
+        },
+        {
+          "key": "cargo",
+          "expected": {
+            "contains": "Black tea"
+          },
+          "value": "Name of cargo",
+          "normalized": "Name of cargo",
+          "confidence": 0.67,
+          "status": "review",
+          "correct": false
+        },
+        {
+          "key": "packaging",
+          "expected": {
+            "contains": "Cartons"
+          },
+          "value": "Cartons",
+          "normalized": "Cartons",
+          "confidence": 0.99,
+          "status": "accepted",
+          "correct": true
+        },
+        {
+          "key": "places",
+          "expected": {
+            "contains": "2400"
+          },
+          "value": "2400",
+          "normalized": "2400",
+          "confidence": 0.99,
+          "status": "accepted",
+          "correct": true
+        },
+        {
+          "key": "weight",
+          "expected": {
+            "contains": "60 000 kg"
+          },
+          "value": "60",
+          "normalized": 60,
+          "confidence": 0.86,
+          "status": "accepted",
+          "correct": false
+        },
+        {
+          "key": "seals",
+          "expected": {
+            "contains": "UZ 118201"
+          },
+          "value": "Seals",
+          "normalized": "Seals",
+          "confidence": 0.7,
+          "status": "review",
+          "correct": false
+        },
+        {
+          "key": "documents_attached",
+          "expected": {
+            "contains": "Commercial invoice"
+          },
+          "value": "Commercial invoice; phytosanitary certificate; certificate of origin",
+          "normalized": "Commercial invoice; phytosanitary certificate; certificate of origin",
+          "confidence": 0.98,
+          "status": "accepted",
+          "correct": true
+        }
+      ],
+      "ocrSegments": [
+        49
+      ]
+    },
+    {
+      "file": "../../../web/public/demo/868/23-offer-phyto-certificate-step-27.png",
+      "source": "DEMO · Offer agreement — phytosanitary certificate (step 27)",
+      "docType": "offer_agreement",
+      "expect": {
+        "agreement_no": {
+          "contains": "26140004561"
+        },
+        "agreement_date": {
+          "contains": "10.09.2026"
+        },
+        "amount": {
+          "contains": "490 000"
+        }
+      },
+      "seconds": 18.3,
+      "detectedType": "offer_agreement",
+      "typeMatches": true,
+      "fields": [
+        {
+          "key": "agreement_no",
+          "expected": {
+            "contains": "26140004561"
+          },
+          "value": "26140004561",
+          "normalized": "26140004561",
+          "confidence": 0.16,
+          "status": "missing",
+          "correct": true
+        },
+        {
+          "key": "agreement_date",
+          "expected": {
+            "contains": "10.09.2026"
+          },
+          "value": "10.09.2026",
+          "normalized": "2026-09-10",
+          "confidence": 0,
+          "status": "missing",
+          "correct": true
+        },
+        {
+          "key": "amount",
+          "expected": {
+            "contains": "490 000"
+          },
+          "value": "490 000 UZS",
+          "normalized": 490000,
+          "confidence": 0.72,
+          "status": "review",
+          "correct": true
+        }
+      ],
+      "ocrSegments": [
+        28
+      ]
+    },
+    {
+      "file": "../../../web/public/demo/868/24-receipt-step-28.png",
+      "source": "DEMO · Receipt — phytosanitary certificate (step 28)",
+      "docType": "receipt_of_payment",
+      "expect": {
+        "receipt_no": {
+          "contains": "R-2026-0448"
+        },
+        "payer": {
+          "contains": "OOO Samarkand Choy"
+        },
+        "payer_inn": {
+          "contains": "301245678"
+        },
+        "recipient": {
+          "contains": "Agency of Plant Quarantine and Protection"
+        },
+        "payment_type": {
+          "contains": "Phytosanitary certificate"
+        },
+        "amount": {
+          "contains": "490 000"
+        },
+        "date": {
+          "contains": "10.09.2026"
+        }
+      },
+      "seconds": 18,
+      "detectedType": "receipt_of_payment",
+      "typeMatches": true,
+      "fields": [
+        {
+          "key": "receipt_no",
+          "expected": {
+            "contains": "R-2026-0448"
+          },
+          "value": "R-2026-0448",
+          "normalized": "R-2026-0448",
+          "confidence": 0.92,
+          "status": "accepted",
+          "correct": true
+        },
+        {
+          "key": "payer",
+          "expected": {
+            "contains": "OOO Samarkand Choy"
+          },
+          "value": "\"Samarkand Choy\"",
+          "normalized": "\"Samarkand Choy\"",
+          "confidence": 1,
+          "status": "accepted",
+          "correct": false
+        },
+        {
+          "key": "payer_inn",
+          "expected": {
+            "contains": "301245678"
+          },
+          "value": "301245678",
+          "normalized": "301245678",
+          "confidence": 0.99,
+          "status": "accepted",
+          "correct": true
+        },
+        {
+          "key": "recipient",
+          "expected": {
+            "contains": "Agency of Plant Quarantine and Protection"
+          },
+          "value": "Agency of Plant Quarantine and Protection",
+          "normalized": "Agency of Plant Quarantine and Protection",
+          "confidence": 1,
+          "status": "accepted",
+          "correct": true
+        },
+        {
+          "key": "payment_type",
+          "expected": {
+            "contains": "Phytosanitary certificate"
+          },
+          "value": "DEMO",
+          "normalized": "DEMO",
+          "confidence": 0.94,
+          "status": "accepted",
+          "correct": false
+        },
+        {
+          "key": "amount",
+          "expected": {
+            "contains": "490 000"
+          },
+          "value": "490 00О",
+          "normalized": 490000,
+          "confidence": 0.99,
+          "status": "accepted",
+          "correct": false
+        },
+        {
+          "key": "date",
+          "expected": {
+            "contains": "10.09.2026"
+          },
+          "value": "10.09.2026",
+          "normalized": "2026-09-10",
+          "confidence": 0.82,
+          "status": "accepted",
+          "correct": true
+        }
+      ],
+      "ocrSegments": [
+        31
+      ]
+    },
+    {
+      "file": "../../../web/public/demo/868/26-phytosanitary-certificate-step-31.png",
+      "source": "DEMO · Phytosanitary certificate — step 31",
+      "docType": "phytosanitary_certificate",
+      "expect": {
+        "cert_no": {
+          "contains": "UZ-EX 2026/004512"
+        },
+        "exporter": {
+          "contains": "OOO Samarkand Choy"
+        },
+        "consignee": {
+          "contains": "OOO Moskovsky Chai"
+        },
+        "destination_country": {
+          "contains": "Russia"
+        },
+        "point_of_entry": {
+          "contains": "Keles – Sary-Agash"
+        },
+        "place_of_origin": {
+          "contains": "Uzbekistan"
+        },
+        "produce": {
+          "contains": "Black tea"
+        },
+        "botanical_name": {
+          "contains": "Camellia sinensis"
+        },
+        "quantity": {
+          "contains": "60 000 kg"
+        },
+        "treatment": {
+          "contains": "Not required"
+        },
+        "issue_date": {
+          "contains": "12.09.2026"
+        }
+      },
+      "seconds": 26.5,
+      "detectedType": "phytosanitary_certificate",
+      "typeMatches": true,
+      "fields": [
+        {
+          "key": "cert_no",
+          "expected": {
+            "contains": "UZ-EX 2026/004512"
+          },
+          "value": "2026/004512",
+          "normalized": "2026/004512",
+          "confidence": 0.7,
+          "status": "review",
+          "correct": false
+        },
+        {
+          "key": "exporter",
+          "expected": {
+            "contains": "OOO Samarkand Choy"
+          },
+          "value": "\"Samarkand Choy\"",
+          "normalized": "\"Samarkand Choy\"",
+          "confidence": 1,
+          "status": "accepted",
+          "correct": false
+        },
+        {
+          "key": "consignee",
+          "expected": {
+            "contains": "OOO Moskovsky Chai"
+          },
+          "value": "\"Moskovsky Chai'",
+          "normalized": "\"Moskovsky Chai'",
+          "confidence": 1,
+          "status": "accepted",
+          "correct": false
+        },
+        {
+          "key": "destination_country",
+          "expected": {
+            "contains": "Russia"
+          },
+          "value": "Russia",
+          "normalized": "RU",
+          "confidence": 0.99,
+          "status": "accepted",
+          "correct": true
+        },
+        {
+          "key": "point_of_entry",
+          "expected": {
+            "contains": "Keles – Sary-Agash"
+          },
+          "value": "Keles Sary-Agash",
+          "normalized": "Keles Sary-Agash",
+          "confidence": 1,
+          "status": "accepted",
+          "correct": false
+        },
+        {
+          "key": "place_of_origin",
+          "expected": {
+            "contains": "Uzbekistan"
+          },
+          "value": "Uzbekistan",
+          "normalized": "UZ",
+          "confidence": 0.99,
+          "status": "accepted",
+          "correct": true
+        },
+        {
+          "key": "produce",
+          "expected": {
+            "contains": "Black tea"
+          },
+          "value": "Black tea",
+          "normalized": "Black tea",
+          "confidence": 0.99,
+          "status": "accepted",
+          "correct": true
+        },
+        {
+          "key": "botanical_name",
+          "expected": {
+            "contains": "Camellia sinensis"
+          },
+          "value": "Camellia sinensis",
+          "normalized": "Camellia sinensis",
+          "confidence": 0.99,
+          "status": "accepted",
+          "correct": true
+        },
+        {
+          "key": "quantity",
+          "expected": {
+            "contains": "60 000 kg"
+          },
+          "value": "60 00О kg",
+          "normalized": 60,
+          "confidence": 0.99,
+          "status": "accepted",
+          "correct": false
+        },
+        {
+          "key": "treatment",
+          "expected": {
+            "contains": "Not required"
+          },
+          "value": "Not required",
+          "normalized": "Not required",
+          "confidence": 0.55,
+          "status": "review",
+          "correct": true
+        },
+        {
+          "key": "issue_date",
+          "expected": {
+            "contains": "12.09.2026"
+          },
+          "value": "12.09.2026",
+          "normalized": "2026-09-12",
+          "confidence": 0.89,
+          "status": "accepted",
+          "correct": true
+        }
+      ],
+      "ocrSegments": [
+        51
+      ]
+    },
+    {
+      "file": "../../../web/public/demo/868/27-invoice-prepayment-uzbekexpertiza-step-33.png",
+      "source": "DEMO · Invoice for prepayment — Uzbekexpertiza (step 33)",
+      "docType": "invoice_for_payment",
+      "expect": {
+        "invoice_no": {
+          "contains": "UE-2026/1187"
+        },
+        "invoice_date": {
+          "contains": "11.09.2026"
+        },
+        "contract_no": {
+          "contains": "UE-S-2026/904"
+        },
+        "supplier": {
+          "contains": "Uzbekexpertiza JSC (demo)"
+        },
+        "supplier_inn": {
+          "contains": "200933140"
+        },
+        "customer": {
+          "contains": "OOO Samarkand Choy"
+        },
+        "vat_rate": {
+          "contains": "12"
+        },
+        "total": {
+          "contains": "780 000"
+        }
+      },
+      "seconds": 19.4,
+      "detectedType": "invoice_for_payment",
+      "typeMatches": true,
+      "fields": [
+        {
+          "key": "invoice_no",
+          "expected": {
+            "contains": "UE-2026/1187"
+          },
+          "value": "200933140",
+          "normalized": "200933140",
+          "confidence": 0.05,
+          "status": "missing",
+          "correct": false
+        },
+        {
+          "key": "invoice_date",
+          "expected": {
+            "contains": "11.09.2026"
+          },
+          "value": "11.09.2026",
+          "normalized": "2026-09-11",
+          "confidence": 0.95,
+          "status": "accepted",
+          "correct": true
+        },
+        {
+          "key": "contract_no",
+          "expected": {
+            "contains": "UE-S-2026/904"
+          },
+          "value": "UE-S-2026/904",
+          "normalized": "UE-S-2026/904",
+          "confidence": 1,
+          "status": "accepted",
+          "correct": true
+        },
+        {
+          "key": "supplier",
+          "expected": {
+            "contains": "Uzbekexpertiza JSC (demo)"
+          },
+          "value": "Uzbekexpertiza",
+          "normalized": "Uzbekexpertiza",
+          "confidence": 0.99,
+          "status": "accepted",
+          "correct": false
+        },
+        {
+          "key": "supplier_inn",
+          "expected": {
+            "contains": "200933140"
+          },
+          "value": "200933140",
+          "normalized": "200933140",
+          "confidence": 0.99,
+          "status": "accepted",
+          "correct": true
+        },
+        {
+          "key": "customer",
+          "expected": {
+            "contains": "OOO Samarkand Choy"
+          },
+          "value": "\"Samarkand Choy\"",
+          "normalized": "\"Samarkand Choy\"",
+          "confidence": 0.98,
+          "status": "accepted",
+          "correct": false
+        },
+        {
+          "key": "vat_rate",
+          "expected": {
+            "contains": "12"
+          },
+          "value": "12%",
+          "normalized": "12%",
+          "confidence": 1,
+          "status": "accepted",
+          "correct": true
+        },
+        {
+          "key": "total",
+          "expected": {
+            "contains": "780 000"
+          },
+          "value": "780 000 UZS",
+          "normalized": 780000,
+          "confidence": 0.99,
+          "status": "accepted",
+          "correct": true
+        }
+      ],
+      "ocrSegments": [
+        29
+      ]
+    },
+    {
+      "file": "../../../web/public/demo/868/28-receipt-step-33.png",
+      "source": "DEMO · Receipt — certificate of origin (step 33)",
+      "docType": "receipt_of_payment",
+      "expect": {
+        "receipt_no": {
+          "contains": "R-2026-0455"
+        },
+        "payer": {
+          "contains": "OOO Samarkand Choy"
+        },
+        "payer_inn": {
+          "contains": "301245678"
+        },
+        "recipient": {
+          "contains": "Uzbekexpertiza JSC (demo)"
+        },
+        "payment_type": {
+          "contains": "Certificate of origin"
+        },
+        "amount": {
+          "contains": "780 000"
+        },
+        "date": {
+          "contains": "11.09.2026"
+        }
+      },
+      "seconds": 18.9,
+      "detectedType": "receipt_of_payment",
+      "typeMatches": true,
+      "fields": [
+        {
+          "key": "receipt_no",
+          "expected": {
+            "contains": "R-2026-0455"
+          },
+          "value": "R-2026-0455",
+          "normalized": "R-2026-0455",
+          "confidence": 1,
+          "status": "accepted",
+          "correct": true
+        },
+        {
+          "key": "payer",
+          "expected": {
+            "contains": "OOO Samarkand Choy"
+          },
+          "value": "\"Samarkand Choy\"",
+          "normalized": "\"Samarkand Choy\"",
+          "confidence": 1,
+          "status": "accepted",
+          "correct": false
+        },
+        {
+          "key": "payer_inn",
+          "expected": {
+            "contains": "301245678"
+          },
+          "value": "301245678",
+          "normalized": "301245678",
+          "confidence": 0.99,
+          "status": "accepted",
+          "correct": true
+        },
+        {
+          "key": "recipient",
+          "expected": {
+            "contains": "Uzbekexpertiza JSC (demo)"
+          },
+          "value": "Uzbekexpertiza JSC",
+          "normalized": "Uzbekexpertiza JSC",
+          "confidence": 0.86,
+          "status": "accepted",
+          "correct": false
+        },
+        {
+          "key": "payment_type",
+          "expected": {
+            "contains": "Certificate of origin"
+          },
+          "value": "DEMO",
+          "normalized": "DEMO",
+          "confidence": 0.97,
+          "status": "accepted",
+          "correct": false
+        },
+        {
+          "key": "amount",
+          "expected": {
+            "contains": "780 000"
+          },
+          "value": "780 00О",
+          "normalized": 780000,
+          "confidence": 0.99,
+          "status": "accepted",
+          "correct": false
+        },
+        {
+          "key": "date",
+          "expected": {
+            "contains": "11.09.2026"
+          },
+          "value": "11.09.2026",
+          "normalized": "2026-09-11",
+          "confidence": 0.75,
+          "status": "review",
+          "correct": true
+        }
+      ],
+      "ocrSegments": [
+        31
+      ]
+    },
+    {
+      "file": "../../../web/public/demo/868/33-certificate-of-origin-ct1-step-39.png",
+      "source": "DEMO · Certificate of origin, form CT-1 — step 39",
+      "docType": "certificate_of_origin",
+      "expect": {
+        "cert_no": {
+          "contains": "UZ 0457811"
+        },
+        "exporter": {
+          "contains": "OOO Samarkand Choy"
+        },
+        "consignee": {
+          "contains": "OOO Moskovsky Chai"
+        },
+        "transport_route": {
+          "contains": "Rail"
+        },
+        "goods": {
+          "contains": "Black tea"
+        },
+        "weight": {
+          "contains": "61 200 kg"
+        },
+        "invoice_ref": {
+          "contains": "INV-2026/0457"
+        },
+        "exported_to": {
+          "contains": "Russia"
+        }
+      },
+      "seconds": 24.2,
+      "detectedType": "certificate_of_origin",
+      "typeMatches": true,
+      "fields": [
+        {
+          "key": "cert_no",
+          "expected": {
+            "contains": "UZ 0457811"
+          },
+          "value": "CT-1",
+          "normalized": "CT-1",
+          "confidence": 0.35,
+          "status": "missing",
+          "correct": false
+        },
+        {
+          "key": "exporter",
+          "expected": {
+            "contains": "OOO Samarkand Choy"
+          },
+          "value": "\"Samarkand Choy\"",
+          "normalized": "\"Samarkand Choy\"",
+          "confidence": 0.98,
+          "status": "accepted",
+          "correct": false
+        },
+        {
+          "key": "consignee",
+          "expected": {
+            "contains": "OOO Moskovsky Chai"
+          },
+          "value": "OОО \"Moskovsky Chai'",
+          "normalized": "OОО \"Moskovsky Chai'",
+          "confidence": 0.96,
+          "status": "accepted",
+          "correct": false
+        },
+        {
+          "key": "transport_route",
+          "expected": {
+            "contains": "Rail"
+          },
+          "value": "Rail,",
+          "normalized": "Rail,",
+          "confidence": 1,
+          "status": "accepted",
+          "correct": true
+        },
+        {
+          "key": "goods",
+          "expected": {
+            "contains": "Black tea"
+          },
+          "value": "Black tea, 2400 cartons",
+          "normalized": "Black tea, 2400 cartons",
+          "confidence": 0.99,
+          "status": "accepted",
+          "correct": true
+        },
+        {
+          "key": "weight",
+          "expected": {
+            "contains": "61 200 kg"
+          },
+          "value": "61 200 kg",
+          "normalized": 61.2,
+          "confidence": 0.99,
+          "status": "accepted",
+          "correct": true
+        },
+        {
+          "key": "invoice_ref",
+          "expected": {
+            "contains": "INV-2026/0457"
+          },
+          "value": "INV-2026/0457, 12.09.2026",
+          "normalized": "INV-2026/0457, 12.09.2026",
+          "confidence": 0.96,
+          "status": "accepted",
+          "correct": true
+        },
+        {
+          "key": "exported_to",
+          "expected": {
+            "contains": "Russia"
+          },
+          "value": "Russia",
+          "normalized": "RU",
+          "confidence": 0.99,
+          "status": "accepted",
+          "correct": true
+        }
+      ],
+      "ocrSegments": [
+        42
+      ]
+    },
+    {
+      "file": "../../../web/public/demo/868/34-receipt-customs-fee-step-42.png",
+      "source": "DEMO · Receipt — customs fee (step 42)",
+      "docType": "receipt_of_payment",
+      "expect": {
+        "receipt_no": {
+          "contains": "R-2026-0466"
+        },
+        "payer": {
+          "contains": "OOO Samarkand Choy"
+        },
+        "payer_inn": {
+          "contains": "301245678"
+        },
+        "recipient": {
+          "contains": "State Customs Committee (demo)"
+        },
+        "payment_type": {
+          "contains": "Customs clearance fee"
+        },
+        "amount": {
+          "contains": "1 500 000"
+        },
+        "date": {
+          "contains": "13.09.2026"
+        }
+      },
+      "seconds": 25.1,
+      "detectedType": "receipt_of_payment",
+      "typeMatches": true,
+      "fields": [
+        {
+          "key": "receipt_no",
+          "expected": {
+            "contains": "R-2026-0466"
+          },
+          "value": "R-2026-0466",
+          "normalized": "R-2026-0466",
+          "confidence": 0.99,
+          "status": "accepted",
+          "correct": true
+        },
+        {
+          "key": "payer",
+          "expected": {
+            "contains": "OOO Samarkand Choy"
+          },
+          "value": "\"Samarkand Choy\"",
+          "normalized": "\"Samarkand Choy\"",
+          "confidence": 1,
+          "status": "accepted",
+          "correct": false
+        },
+        {
+          "key": "payer_inn",
+          "expected": {
+            "contains": "301245678"
+          },
+          "value": "301245678",
+          "normalized": "301245678",
+          "confidence": 0.99,
+          "status": "accepted",
+          "correct": true
+        },
+        {
+          "key": "recipient",
+          "expected": {
+            "contains": "State Customs Committee (demo)"
+          },
+          "value": "State Customs Committee (demo)",
+          "normalized": "State Customs Committee (demo)",
+          "confidence": 0.98,
+          "status": "accepted",
+          "correct": true
+        },
+        {
+          "key": "payment_type",
+          "expected": {
+            "contains": "Customs clearance fee"
+          },
+          "value": "DEMO",
+          "normalized": "DEMO",
+          "confidence": 1,
+          "status": "accepted",
+          "correct": false
+        },
+        {
+          "key": "amount",
+          "expected": {
+            "contains": "1 500 000"
+          },
+          "value": "1 500",
+          "normalized": 1500,
+          "confidence": 0.91,
+          "status": "accepted",
+          "correct": false
+        },
+        {
+          "key": "date",
+          "expected": {
+            "contains": "13.09.2026"
+          },
+          "value": "13.09.2026",
+          "normalized": "2026-09-13",
+          "confidence": 0.99,
+          "status": "accepted",
+          "correct": true
+        }
+      ],
+      "ocrSegments": [
+        31
+      ]
+    },
+    {
+      "file": "../../../web/public/demo/868/35-railway-bill-stamped-by-customs-step-46.png",
+      "source": "DEMO · Export railway bill stamped by customs inspector — step 46",
+      "docType": "railway_bill",
+      "expect": {
+        "dispatch_no": {
+          "contains": "77120045"
+        },
+        "sender": {
+          "contains": "OOO Samarkand Choy"
+        },
+        "consignee": {
+          "contains": "OOO Moskovsky Chai"
+        },
+        "departure_station": {
+          "contains": "Tashkent-Tovarny"
+        },
+        "destination_station": {
+          "contains": "Moscow-Tovarnaya"
+        },
+        "wagon_no": {
+          "contains": "52814467"
+        },
+        "cargo": {
+          "contains": "Black tea"
+        },
+        "weight": {
+          "contains": "60 000 kg"
+        }
+      },
+      "seconds": 23.7,
+      "detectedType": "railway_bill",
+      "typeMatches": true,
+      "fields": [
+        {
+          "key": "dispatch_no",
+          "expected": {
+            "contains": "77120045"
+          },
+          "value": "52814467,52814475",
+          "normalized": "52814467,52814475",
+          "confidence": 0.06,
+          "status": "missing",
+          "correct": false
+        },
+        {
+          "key": "sender",
+          "expected": {
+            "contains": "OOO Samarkand Choy"
+          },
+          "value": "Sender",
+          "normalized": "Sender",
+          "confidence": 0.7,
+          "status": "review",
+          "correct": false
+        },
+        {
+          "key": "consignee",
+          "expected": {
+            "contains": "OOO Moskovsky Chai"
+          },
+          "value": "Consignee",
+          "normalized": "Consignee",
+          "confidence": 0.7,
+          "status": "review",
+          "correct": false
+        },
+        {
+          "key": "departure_station",
+          "expected": {
+            "contains": "Tashkent-Tovarny"
+          },
+          "value": "Tashkent-Tovarny",
+          "normalized": "Tashkent-Tovarny",
+          "confidence": 0.99,
+          "status": "accepted",
+          "correct": true
+        },
+        {
+          "key": "destination_station",
+          "expected": {
+            "contains": "Moscow-Tovarnaya"
+          },
+          "value": "Moscow-Tovarnaya",
+          "normalized": "Moscow-Tovarnaya",
+          "confidence": 0.99,
+          "status": "accepted",
+          "correct": true
+        },
+        {
+          "key": "wagon_no",
+          "expected": {
+            "contains": "52814467"
+          },
+          "value": "52814467,52814475",
+          "normalized": "52814467,52814475",
+          "confidence": 0.7,
+          "status": "review",
+          "correct": true
+        },
+        {
+          "key": "cargo",
+          "expected": {
+            "contains": "Black tea"
+          },
+          "value": "Black tea",
+          "normalized": "Black tea",
+          "confidence": 0.99,
+          "status": "accepted",
+          "correct": true
+        },
+        {
+          "key": "weight",
+          "expected": {
+            "contains": "60 000 kg"
+          },
+          "value": "60",
+          "normalized": 60,
+          "confidence": 1,
+          "status": "accepted",
+          "correct": false
+        }
+      ],
+      "ocrSegments": [
+        38
+      ]
+    },
+    {
+      "file": "../../../web/public/demo/868/38-railway-bill-duplicate-datestamp-step-48.png",
+      "source": "DEMO · Duplicate of railway bill with datestamp — step 48",
+      "docType": "railway_bill",
+      "expect": {
+        "dispatch_no": {
+          "contains": "77120045"
+        },
+        "sender": {
+          "contains": "OOO Samarkand Choy"
+        },
+        "consignee": {
+          "contains": "OOO Moskovsky Chai"
+        },
+        "departure_station": {
+          "contains": "Tashkent-Tovarny"
+        },
+        "destination_station": {
+          "contains": "Moscow-Tovarnaya"
+        },
+        "wagon_no": {
+          "contains": "52814467"
+        },
+        "cargo": {
+          "contains": "Black tea"
+        },
+        "weight": {
+          "contains": "60 000 kg"
+        }
+      },
+      "seconds": 24.1,
+      "detectedType": "railway_bill",
+      "typeMatches": true,
+      "fields": [
+        {
+          "key": "dispatch_no",
+          "expected": {
+            "contains": "77120045"
+          },
+          "value": "52814467,52814475",
+          "normalized": "52814467,52814475",
+          "confidence": 0.51,
+          "status": "review",
+          "correct": false
+        },
+        {
+          "key": "sender",
+          "expected": {
+            "contains": "OOO Samarkand Choy"
+          },
+          "value": "\"Samarkand Choy\"",
+          "normalized": "\"Samarkand Choy\"",
+          "confidence": 1,
+          "status": "accepted",
+          "correct": false
+        },
+        {
+          "key": "consignee",
+          "expected": {
+            "contains": "OOO Moskovsky Chai"
+          },
+          "value": "Consignee",
+          "normalized": "Consignee",
+          "confidence": 0.7,
+          "status": "review",
+          "correct": false
+        },
+        {
+          "key": "departure_station",
+          "expected": {
+            "contains": "Tashkent-Tovarny"
+          },
+          "value": "Tashkent-Tovarny",
+          "normalized": "Tashkent-Tovarny",
+          "confidence": 0.99,
+          "status": "accepted",
+          "correct": true
+        },
+        {
+          "key": "destination_station",
+          "expected": {
+            "contains": "Moscow-Tovarnaya"
+          },
+          "value": "Moscow-Tovarnaya",
+          "normalized": "Moscow-Tovarnaya",
+          "confidence": 0.99,
+          "status": "accepted",
+          "correct": true
+        },
+        {
+          "key": "wagon_no",
+          "expected": {
+            "contains": "52814467"
+          },
+          "value": "52814467,52814475",
+          "normalized": "52814467,52814475",
+          "confidence": 0.75,
+          "status": "review",
+          "correct": true
+        },
+        {
+          "key": "cargo",
+          "expected": {
+            "contains": "Black tea"
+          },
+          "value": "Black tea",
+          "normalized": "Black tea",
+          "confidence": 0.95,
+          "status": "accepted",
+          "correct": true
+        },
+        {
+          "key": "weight",
+          "expected": {
+            "contains": "60 000 kg"
+          },
+          "value": "60",
+          "normalized": 60,
+          "confidence": 1,
+          "status": "accepted",
+          "correct": false
+        }
+      ],
+      "ocrSegments": [
+        33
+      ]
+    }
+  ]
+}

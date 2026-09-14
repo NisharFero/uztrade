@@ -1,0 +1,21 @@
+# secrets
+.env
+.env.*
+*.pem
+
+# dependencies and environments
+node_modules/
+.venv/
+__pycache__/
+
+# model and tool caches
+apps/docai/.cache/
+.playwright-cli/
+
+# build output and local runtime state
+apps/web/dist/
+apps/web/.vinext/
+apps/web/.wrangler/
+apps/web/.next/
+apps/web/tsconfig.tsbuildinfo
+apps/web/next-env.d.ts

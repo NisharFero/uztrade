@@ -1,0 +1,731 @@
+{
+  "totals": {
+    "expected": 37,
+    "correct": 11,
+    "correctAccepted": 6,
+    "correctReview": 5,
+    "wrongAccepted": 0,
+    "notFound": 18,
+    "blankFields": 63,
+    "blankAccepted": 0,
+    "blankReview": 0
+  },
+  "report": [
+    {
+      "file": "kz-phytosanitary-certificate.jpg",
+      "source": "477 · Phytosanitary certificate of the exporter's country (filled, Kazakhstan)",
+      "docType": "phytosanitary_certificate",
+      "expect": {
+        "destination_country": {
+          "normalized": "UZ"
+        },
+        "place_of_origin": {
+          "normalized": "KZ"
+        },
+        "point_of_entry": {
+          "contains": "янгиюль"
+        },
+        "botanical_name": {
+          "contains": "triticum"
+        },
+        "quantity": {
+          "normalized": 68.75
+        },
+        "treatment": {
+          "contains": "фумигац"
+        },
+        "chemical": {
+          "contains": "фосфин"
+        },
+        "issue_date": {
+          "normalized": "2021-03-02"
+        }
+      },
+      "seconds": 19.4,
+      "detectedType": null,
+      "typeMatches": true,
+      "fields": [
+        {
+          "key": "destination_country",
+          "expected": {
+            "normalized": "UZ"
+          },
+          "value": null,
+          "normalized": null,
+          "confidence": 0,
+          "status": "missing",
+          "correct": false
+        },
+        {
+          "key": "place_of_origin",
+          "expected": {
+            "normalized": "KZ"
+          },
+          "value": null,
+          "normalized": null,
+          "confidence": 0,
+          "status": "missing",
+          "correct": false
+        },
+        {
+          "key": "point_of_entry",
+          "expected": {
+            "contains": "янгиюль"
+          },
+          "value": null,
+          "normalized": null,
+          "confidence": 0,
+          "status": "missing",
+          "correct": false
+        },
+        {
+          "key": "botanical_name",
+          "expected": {
+            "contains": "triticum"
+          },
+          "value": null,
+          "normalized": null,
+          "confidence": 0,
+          "status": "missing",
+          "correct": false
+        },
+        {
+          "key": "quantity",
+          "expected": {
+            "normalized": 68.75
+          },
+          "value": null,
+          "normalized": null,
+          "confidence": 0,
+          "status": "missing",
+          "correct": false
+        },
+        {
+          "key": "treatment",
+          "expected": {
+            "contains": "фумигац"
+          },
+          "value": null,
+          "normalized": null,
+          "confidence": 0,
+          "status": "missing",
+          "correct": false
+        },
+        {
+          "key": "chemical",
+          "expected": {
+            "contains": "фосфин"
+          },
+          "value": null,
+          "normalized": null,
+          "confidence": 0,
+          "status": "missing",
+          "correct": false
+        },
+        {
+          "key": "issue_date",
+          "expected": {
+            "normalized": "2021-03-02"
+          },
+          "value": null,
+          "normalized": null,
+          "confidence": 0,
+          "status": "missing",
+          "correct": false
+        }
+      ],
+      "ocrSegments": [
+        76
+      ]
+    },
+    {
+      "file": "td1-customs-declaration.jpg",
+      "source": "325 · Export customs declaration (filled TD1)",
+      "docType": "customs_declaration",
+      "expect": {
+        "hs_code": {
+          "normalized": "4407119000"
+        },
+        "delivery_terms": {
+          "normalized": "DAP"
+        }
+      },
+      "seconds": 9.3,
+      "detectedType": null,
+      "typeMatches": true,
+      "fields": [
+        {
+          "key": "hs_code",
+          "expected": {
+            "normalized": "4407119000"
+          },
+          "value": null,
+          "normalized": null,
+          "confidence": 0,
+          "status": "missing",
+          "correct": false
+        },
+        {
+          "key": "delivery_terms",
+          "expected": {
+            "normalized": "DAP"
+          },
+          "value": null,
+          "normalized": null,
+          "confidence": 0,
+          "status": "missing",
+          "correct": false
+        }
+      ],
+      "ocrSegments": [
+        46
+      ]
+    },
+    {
+      "file": "airport-prepayment-invoice.jpg",
+      "source": "540 · Invoice for prepayment for cargo handling (filled, redacted customer)",
+      "docType": "invoice_for_payment",
+      "expect": {
+        "supplier": {
+          "contains": "karimov"
+        },
+        "supplier_inn": {
+          "normalized": "200640719"
+        },
+        "vat_rate": {
+          "contains": "15"
+        }
+      },
+      "seconds": 24.3,
+      "detectedType": "invoice_for_payment",
+      "typeMatches": true,
+      "fields": [
+        {
+          "key": "supplier",
+          "expected": {
+            "contains": "karimov"
+          },
+          "value": null,
+          "normalized": null,
+          "confidence": 0,
+          "status": "missing",
+          "correct": false
+        },
+        {
+          "key": "supplier_inn",
+          "expected": {
+            "normalized": "200640719"
+          },
+          "value": "200640719",
+          "normalized": "200640719",
+          "confidence": 0.7,
+          "status": "review",
+          "correct": true
+        },
+        {
+          "key": "vat_rate",
+          "expected": {
+            "contains": "15"
+          },
+          "value": "326070005176",
+          "normalized": "326070005176",
+          "confidence": 0.21,
+          "status": "missing",
+          "correct": false
+        }
+      ],
+      "ocrSegments": [
+        65
+      ]
+    },
+    {
+      "file": "gu12-application.jpg",
+      "source": "325 · Application for cargo transportation GU-12 (filled)",
+      "docType": "cargo_transport_application",
+      "expect": {
+        "tonnes": {
+          "normalized": 120
+        },
+        "wagons": {
+          "contains": "2"
+        },
+        "destination_station": {
+          "contains": "бишкек"
+        },
+        "etsng": {
+          "contains": "591042"
+        }
+      },
+      "seconds": 15,
+      "detectedType": null,
+      "typeMatches": true,
+      "fields": [
+        {
+          "key": "tonnes",
+          "expected": {
+            "normalized": 120
+          },
+          "value": null,
+          "normalized": null,
+          "confidence": 0,
+          "status": "missing",
+          "correct": false
+        },
+        {
+          "key": "wagons",
+          "expected": {
+            "contains": "2"
+          },
+          "value": null,
+          "normalized": null,
+          "confidence": 0,
+          "status": "missing",
+          "correct": false
+        },
+        {
+          "key": "destination_station",
+          "expected": {
+            "contains": "бишкек"
+          },
+          "value": null,
+          "normalized": null,
+          "confidence": 0,
+          "status": "missing",
+          "correct": false
+        },
+        {
+          "key": "etsng",
+          "expected": {
+            "contains": "591042"
+          },
+          "value": null,
+          "normalized": null,
+          "confidence": 0,
+          "status": "missing",
+          "correct": false
+        }
+      ],
+      "ocrSegments": [
+        60
+      ]
+    },
+    {
+      "file": "offer-agreement.jpg",
+      "source": "325 · Offer agreement for phytosanitary certificate (Uzbek)",
+      "docType": "offer_agreement",
+      "expect": {
+        "agreement_no": {
+          "contains": "21140001089"
+        },
+        "agreement_date": {
+          "normalized": "2021-03-16"
+        },
+        "amount": {
+          "normalized": 245000
+        }
+      },
+      "seconds": 24.6,
+      "detectedType": null,
+      "typeMatches": true,
+      "fields": [
+        {
+          "key": "agreement_no",
+          "expected": {
+            "contains": "21140001089"
+          },
+          "value": null,
+          "normalized": null,
+          "confidence": 0,
+          "status": "missing",
+          "correct": false
+        },
+        {
+          "key": "agreement_date",
+          "expected": {
+            "normalized": "2021-03-16"
+          },
+          "value": null,
+          "normalized": null,
+          "confidence": 0,
+          "status": "missing",
+          "correct": false
+        },
+        {
+          "key": "amount",
+          "expected": {
+            "normalized": 245000
+          },
+          "value": null,
+          "normalized": null,
+          "confidence": 0,
+          "status": "missing",
+          "correct": false
+        }
+      ],
+      "ocrSegments": [
+        72
+      ]
+    },
+    {
+      "file": "import-railway-bill-smgs.jpg",
+      "source": "477 · Import railway bill, SMGS (filled, handwriting and stamps)",
+      "docType": "railway_bill",
+      "expect": {
+        "departure_station": {
+          "contains": "шымкент"
+        },
+        "destination_station": {
+          "contains": "раустан"
+        },
+        "places": {
+          "contains": "1360"
+        },
+        "weight": {
+          "normalized": 68
+        }
+      },
+      "seconds": 40.2,
+      "detectedType": null,
+      "typeMatches": true,
+      "fields": [
+        {
+          "key": "departure_station",
+          "expected": {
+            "contains": "шымкент"
+          },
+          "value": "JUiul",
+          "normalized": "JUiul",
+          "confidence": 0,
+          "status": "missing",
+          "correct": false
+        },
+        {
+          "key": "destination_station",
+          "expected": {
+            "contains": "раустан"
+          },
+          "value": "JUiul",
+          "normalized": "JUiul",
+          "confidence": 0.04,
+          "status": "missing",
+          "correct": false
+        },
+        {
+          "key": "places",
+          "expected": {
+            "contains": "1360"
+          },
+          "value": "27",
+          "normalized": "27",
+          "confidence": 0.46,
+          "status": "missing",
+          "correct": false
+        },
+        {
+          "key": "weight",
+          "expected": {
+            "normalized": 68
+          },
+          "value": "6202",
+          "normalized": 6.202,
+          "confidence": 0.5,
+          "status": "missing",
+          "correct": false
+        }
+      ],
+      "ocrSegments": [
+        78
+      ]
+    },
+    {
+      "file": "food-test-report.jpg",
+      "source": "477 · Food test report (Russian protocol)",
+      "docType": "food_test_report",
+      "expect": {
+        "protocol_no": {
+          "contains": "64222"
+        },
+        "protocol_date": {
+          "normalized": "2017-06-20"
+        },
+        "sample": {
+          "contains": "подсолнечное"
+        }
+      },
+      "seconds": 75.1,
+      "detectedType": null,
+      "typeMatches": true,
+      "fields": [
+        {
+          "key": "protocol_no",
+          "expected": {
+            "contains": "64222"
+          },
+          "value": "5805 580",
+          "normalized": "5805 580",
+          "confidence": 0,
+          "status": "missing",
+          "correct": false
+        },
+        {
+          "key": "protocol_date",
+          "expected": {
+            "normalized": "2017-06-20"
+          },
+          "value": "06.06.2017",
+          "normalized": "2017-06-06",
+          "confidence": 0,
+          "status": "missing",
+          "correct": false
+        },
+        {
+          "key": "sample",
+          "expected": {
+            "contains": "подсолнечное"
+          },
+          "value": "1,0",
+          "normalized": "1,0",
+          "confidence": 0,
+          "status": "missing",
+          "correct": false
+        }
+      ],
+      "ocrSegments": [
+        138
+      ]
+    },
+    {
+      "file": "synthetic-invoice-a4.png",
+      "source": "SYNTHETIC · commercial invoice in the specimen's bilingual layout, rendered at A4 300 dpi by bench_resolution.py (not a published specimen)",
+      "docType": "commercial_invoice",
+      "expect": {
+        "invoice_no": {
+          "contains": "inv-2026/0457"
+        },
+        "invoice_date": {
+          "normalized": "2026-09-12"
+        },
+        "seller": {
+          "contains": "samarkand"
+        },
+        "buyer": {
+          "contains": "московский"
+        },
+        "goods": {
+          "contains": "black tea"
+        },
+        "hs_code": {
+          "contains": "0902"
+        },
+        "quantity": {
+          "normalized": 60
+        },
+        "total_value": {
+          "normalized": 192000
+        },
+        "currency": {
+          "normalized": "USD"
+        },
+        "incoterms": {
+          "normalized": "FCA"
+        }
+      },
+      "seconds": 70.1,
+      "detectedType": "railway_bill",
+      "typeMatches": false,
+      "fields": [
+        {
+          "key": "invoice_no",
+          "expected": {
+            "contains": "inv-2026/0457"
+          },
+          "value": "INV-2026/0457",
+          "normalized": "INV-2026/0457",
+          "confidence": 0.79,
+          "status": "review",
+          "correct": true
+        },
+        {
+          "key": "invoice_date",
+          "expected": {
+            "normalized": "2026-09-12"
+          },
+          "value": "12.09.2026",
+          "normalized": "2026-09-12",
+          "confidence": 0.99,
+          "status": "accepted",
+          "correct": true
+        },
+        {
+          "key": "seller",
+          "expected": {
+            "contains": "samarkand"
+          },
+          "value": "\"Samarkand Choy\"",
+          "normalized": "\"Samarkand Choy\"",
+          "confidence": 0.8,
+          "status": "accepted",
+          "correct": true
+        },
+        {
+          "key": "buyer",
+          "expected": {
+            "contains": "московский"
+          },
+          "value": "ООО \"Московский Чай'",
+          "normalized": "ООО \"Московский Чай'",
+          "confidence": 0.47,
+          "status": "missing",
+          "correct": true
+        },
+        {
+          "key": "goods",
+          "expected": {
+            "contains": "black tea"
+          },
+          "value": "Black tea",
+          "normalized": "Black tea",
+          "confidence": 0.99,
+          "status": "accepted",
+          "correct": true
+        },
+        {
+          "key": "hs_code",
+          "expected": {
+            "contains": "0902"
+          },
+          "value": "0902",
+          "normalized": "0902",
+          "confidence": 0.66,
+          "status": "review",
+          "correct": true
+        },
+        {
+          "key": "quantity",
+          "expected": {
+            "normalized": 60
+          },
+          "value": "60 000 kg",
+          "normalized": 60,
+          "confidence": 0.99,
+          "status": "accepted",
+          "correct": true
+        },
+        {
+          "key": "total_value",
+          "expected": {
+            "normalized": 192000
+          },
+          "value": "192 000.00",
+          "normalized": 192000,
+          "confidence": 0.99,
+          "status": "accepted",
+          "correct": true
+        },
+        {
+          "key": "currency",
+          "expected": {
+            "normalized": "USD"
+          },
+          "value": "USD",
+          "normalized": "USD",
+          "confidence": 0.99,
+          "status": "accepted",
+          "correct": true
+        },
+        {
+          "key": "incoterms",
+          "expected": {
+            "normalized": "FCA"
+          },
+          "value": "): FCA Tashkent",
+          "normalized": "FCA",
+          "confidence": 0.68,
+          "status": "review",
+          "correct": true
+        }
+      ],
+      "ocrSegments": [
+        26
+      ]
+    },
+    {
+      "file": "blank-commercial-invoice.jpg",
+      "source": "306/325/868 · Commercial invoice template (blank)",
+      "docType": "commercial_invoice",
+      "blank": true,
+      "seconds": 20.9,
+      "detectedType": null,
+      "typeMatches": true,
+      "fields": [],
+      "ocrSegments": [
+        115
+      ]
+    },
+    {
+      "file": "blank-packing-list.jpg",
+      "source": "477 · Packing list template (blank)",
+      "docType": "packing_list",
+      "blank": true,
+      "seconds": 9,
+      "detectedType": null,
+      "typeMatches": true,
+      "fields": [],
+      "ocrSegments": [
+        40
+      ]
+    },
+    {
+      "file": "blank-power-of-attorney.jpg",
+      "source": "325 · Power of attorney form (blank)",
+      "docType": "power_of_attorney",
+      "blank": true,
+      "seconds": 12.7,
+      "detectedType": null,
+      "typeMatches": true,
+      "fields": [],
+      "ocrSegments": [
+        44
+      ]
+    },
+    {
+      "file": "blank-air-waybill.jpg",
+      "source": "540 · IATA air waybill (blank)",
+      "docType": "air_waybill",
+      "blank": true,
+      "seconds": 5.2,
+      "detectedType": null,
+      "typeMatches": true,
+      "fields": [],
+      "ocrSegments": [
+        11
+      ]
+    },
+    {
+      "file": "blank-smgs.jpg",
+      "source": "325 · SMGS consignment note layout (blank)",
+      "docType": "railway_bill",
+      "blank": true,
+      "seconds": 8.8,
+      "detectedType": null,
+      "typeMatches": true,
+      "fields": [],
+      "ocrSegments": [
+        41
+      ]
+    },
+    {
+      "file": "blank-certificate-of-origin-ct1.jpg",
+      "source": "325 · Certificate of origin CT-1 specimen (blank)",
+      "docType": "certificate_of_origin",
+      "blank": true,
+      "seconds": 5.1,
+      "detectedType": null,
+      "typeMatches": true,
+      "fields": [],
+      "ocrSegments": [
+        8
+      ]
+    }
+  ]
+}

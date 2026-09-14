@@ -1,0 +1,1 @@
+ALTER TABLE `cases` ADD `document_state` text DEFAULT '{}' NOT NULL;
