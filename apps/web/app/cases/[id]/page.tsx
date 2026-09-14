@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import CaseBoard from "../../../components/workflow/case-board";
 import StepAssistant from "../../../components/chat/step-assistant";
+import RememberCase from "../../../components/cases/remember-case";
 import { PROCEDURES } from "../../../modules/procedures/data/procedures.generated";
 import { getCase } from "../../../modules/cases/store";
 import { parseDocumentState } from "../../../modules/documents/checklist";
@@ -51,6 +52,7 @@ export default async function CasePage({ params }: { params: Promise<{ id: strin
         </p>
       </header>
 
+      <RememberCase caseId={found.id} />
       <StepAssistant caseId={found.id} />
 
       {/* Remounts after each step so the workflow below reflects it. */}

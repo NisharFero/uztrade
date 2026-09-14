@@ -6,7 +6,7 @@ import Dag from "../../../components/workflow/dag";
 import { Icon } from "../../../components/icons";
 import { PROCEDURES } from "../../../modules/procedures/data/procedures.generated";
 import type { ShipmentFacts } from "../../../modules/workflow/domain";
-import { latestCaseFor } from "../../../modules/cases/active-case";
+import { latestCaseFor } from "../../../modules/cases/current-case";
 import { getCase } from "../../../modules/cases/store";
 import { parseDocumentState } from "../../../modules/documents/checklist";
 import { getPersistedWorkflowDag } from "../../../modules/workflow/service";

@@ -3,17 +3,13 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { demoFor, demoForNeed } from "../../modules/demo/demo";
+import { demoFor } from "../../modules/demo/demo";
 import type { AssistantView } from "../../modules/steps/assistant";
-import type { UpfrontItem } from "../../modules/steps/upfront";
-import type { DocumentRecord } from "../../modules/steps/ledger";
 import type { Need, StepView } from "../../modules/steps/next";
-
-type Act = (key: string, payload: Record<string, unknown>) => void;
-type Upload = (need: Need, stepNum: number, file: File) => void;
+import type { UpfrontItem } from "../../modules/steps/upfront";
+import NeedsForm, { type Act, type Upload } from "./needs-form";
 
 const LANE_LABEL: Record<string, string> = { user: "You", agent: "Agent", physical: "At the goods" };
-const MARK: Record<string, string> = { have: "✓", missing: "", review: "!", waiting: "…" };
 
 function duration(hours: number): string {
   if (hours < 1) return "<1h";
@@ -52,8 +48,7 @@ export default function StepAssistant({
         if (response.ok) {
           setView(body);
           onStatus?.(body.status);
-        }
-        else setError(body.error ?? "Could not load the case");
+        } else setError(body.error ?? "Could not load the case");
       })
       .catch((e) => live && setError(e instanceof Error ? e.message : "Network error"));
     return () => {
@@ -122,6 +117,7 @@ export default function StepAssistant({
 
   const { kpis, next } = view;
   const hasDemo = Boolean(demoFor(view.procedureId));
+  const formProps = { procedureId: view.procedureId, caseId, busy, onAct: act, onUpload: upload };
   return (
     <section className="assistant" aria-label="Step assistant">
       <div className="assistant-head">
@@ -185,14 +181,12 @@ export default function StepAssistant({
       {view.status === "completed" ? (
         <p className="opened-note">Every step is complete — you can start a new case.</p>
       ) : next ? (
-        <NextStep step={next} procedureId={view.procedureId} caseId={caseId} busy={busy} onAct={act} onUpload={upload} />
+        <NextStep step={next} {...formProps} />
       ) : (
         <p className="needs-empty">Nothing is waiting on you — the agent is working.</p>
       )}
 
-      {view.status !== "completed" ? (
-        <Upfront view={view} caseId={caseId} busy={busy} onAct={act} onUpload={upload} />
-      ) : null}
+      {view.status !== "completed" ? <Upfront view={view} {...formProps} /> : null}
 
       {view.parallel.length ? (
         <p className="assistant-parallel">
@@ -214,24 +208,93 @@ export default function StepAssistant({
   );
 }
 
+type FormProps = { procedureId: string; caseId: string; busy: string | null; onAct: Act; onUpload: Upload };
+
+function NextStep({ step, ...form }: FormProps & { step: StepView }) {
+  const chosen = step.variants.find((v) => v.chosen);
+  return (
+    <article className="assistant-step" data-lane={step.lane} aria-label={`Step ${step.stepNum}`}>
+      <p className="assistant-step-meta">
+        <span className="assistant-lane" data-lane={step.lane}>
+          {LANE_LABEL[step.lane] ?? step.lane}
+        </span>
+        Step {step.stepNum} · {step.blockName}
+      </p>
+      <h3>{step.title}</h3>
+      <p className="assistant-step-where">
+        {step.actionLabel} · {step.entity}
+        {step.where ? ` · ${step.where}` : ""}
+        {step.output ? ` · produces: ${step.output}` : ""}
+      </p>
+      {step.paused ? (
+        <p className="assistant-paused">Agent paused — it runs by itself as soon as the items below are provided.</p>
+      ) : (
+        <p className="assistant-help">{step.agentHelp}</p>
+      )}
+
+      <NeedsForm needs={step.needs} stepNum={step.stepNum} {...form} />
+
+      {step.variants.length ? (
+        <div className="assistant-variants">
+          <p className="wf-detail-h">Choose how</p>
+          <div className="query-clarify-options">
+            {step.variants.map((v) => (
+              <button
+                key={v.label}
+                type="button"
+                className="prompt"
+                data-chosen={v.chosen || undefined}
+                disabled={Boolean(form.busy)}
+                onClick={() => void form.onAct(`variant:${step.stepNum}`, { action: "variant", stepNum: step.stepNum, label: "channel", value: v.label })}
+              >
+                {v.label}
+              </button>
+            ))}
+          </div>
+          {chosen ? <NeedsForm needs={chosen.needs} stepNum={step.stepNum} {...form} /> : null}
+        </div>
+      ) : null}
+
+      <div className="assistant-actions">
+        {step.lane === "agent" ? (
+          <p className="needs-meta">{step.ready ? "Everything is here — the agent is running this step." : `Waiting for: ${step.blocking.join("; ")}`}</p>
+        ) : (
+          <>
+            <button
+              type="button"
+              className="intake-create"
+              disabled={!step.ready || Boolean(form.busy)}
+              onClick={() => void form.onAct(`complete:${step.stepNum}`, { action: "complete", stepNum: step.stepNum })}
+            >
+              {form.busy === `complete:${step.stepNum}` ? "Completing…" : `Complete step ${step.stepNum}`}
+            </button>
+            {!step.ready ? <p className="needs-meta">Still needed: {step.blocking.join("; ")}</p> : null}
+          </>
+        )}
+      </div>
+    </article>
+  );
+}
+
 /* Before you start: everything that no earlier step produces and you already
  * hold. Given once at the start (step 0), it fills every later step that needs
  * it, so the agent runs those steps without stopping to ask. */
-function Upfront({ view, caseId, busy, onAct, onUpload }: { view: AssistantView; caseId: string; busy: string | null; onAct: Act; onUpload: Upload }) {
+function Upfront({ view, ...form }: FormProps & { view: AssistantView }) {
   const { items, later } = view.upfront;
   if (!items.length) return null;
   const have = items.filter((i) => i.status === "have").length;
-  const step = { stepNum: 0 } as StepView;
+  // Values and documents are shared across the case, so anything the current
+  // step already asks for is filled there - don't ask for it twice.
+  const inStep = new Set([...(view.next?.needs ?? []), ...(view.next?.variants.flatMap((v) => v.needs) ?? [])].map((n) => n.label));
+  const rest = items.filter((i) => !inStep.has(i.label));
+  const skipped = items.length - rest.length;
   return (
     <details className="assistant-upfront" open={have < items.length && view.kpis.completed < 3}>
       <summary>
         <strong>Before you start</strong> · {have}/{items.length} given upfront — fills later steps automatically
+        {skipped ? <span className="needs-meta"> · {skipped} of them in the current step above</span> : null}
       </summary>
-      <ul className="assistant-needs">
-        {items.map((item) => (
-          <NeedRow key={item.label} need={needOfUpfront(item)} step={step} procedureId={view.procedureId} caseId={caseId} busy={busy} onAct={onAct} onUpload={onUpload} />
-        ))}
-      </ul>
+      <NeedsForm needs={rest.map(needOfUpfront)} stepNum={0} {...form} />
       {later.length ? (
         <details className="assistant-later">
           <summary>Given at their step, and why ({later.length})</summary>
@@ -264,262 +327,4 @@ function needOfUpfront(item: UpfrontItem): Need {
     autoFilled: false,
     output: false,
   };
-}
-
-type RowProps = { step: StepView; procedureId: string; caseId: string; busy: string | null; onAct: Act; onUpload: Upload };
-
-function NextStep({ step, procedureId, caseId, busy, onAct, onUpload }: RowProps) {
-  const chosen = step.variants.find((v) => v.chosen);
-  const rowProps = { step, procedureId, caseId, busy, onAct, onUpload };
-  return (
-    <article className="assistant-step" data-lane={step.lane} aria-label={`Step ${step.stepNum}`}>
-      <p className="assistant-step-meta">
-        <span className="assistant-lane" data-lane={step.lane}>
-          {LANE_LABEL[step.lane] ?? step.lane}
-        </span>
-        Step {step.stepNum} · {step.blockName}
-      </p>
-      <h3>{step.title}</h3>
-      <p className="assistant-step-where">
-        {step.actionLabel} · {step.entity}
-        {step.where ? ` · ${step.where}` : ""}
-        {step.output ? ` · produces: ${step.output}` : ""}
-      </p>
-      {step.paused ? (
-        <p className="assistant-paused">Agent paused — it runs by itself as soon as the items below are provided.</p>
-      ) : (
-        <p className="assistant-help">{step.agentHelp}</p>
-      )}
-
-      <ul className="assistant-needs">
-        {step.needs.map((need) => (
-          <NeedRow key={need.id} need={need} {...rowProps} />
-        ))}
-      </ul>
-
-      {step.variants.length ? (
-        <div className="assistant-variants">
-          <p className="wf-detail-h">Choose how</p>
-          <div className="query-clarify-options">
-            {step.variants.map((v) => (
-              <button
-                key={v.label}
-                type="button"
-                className="prompt"
-                data-chosen={v.chosen || undefined}
-                disabled={Boolean(busy)}
-                onClick={() => onAct(`variant:${step.stepNum}`, { action: "variant", stepNum: step.stepNum, label: "channel", value: v.label })}
-              >
-                {v.label}
-              </button>
-            ))}
-          </div>
-          {chosen ? (
-            <ul className="assistant-needs">
-              {chosen.needs.map((need) => (
-                <NeedRow key={need.id} need={need} {...rowProps} />
-              ))}
-            </ul>
-          ) : null}
-        </div>
-      ) : null}
-
-      <div className="assistant-actions">
-        {step.lane === "agent" ? (
-          <p className="needs-meta">{step.ready ? "Everything is here — the agent is running this step." : `Waiting for: ${step.blocking.join("; ")}`}</p>
-        ) : (
-          <>
-            <button
-              type="button"
-              className="intake-create"
-              disabled={!step.ready || Boolean(busy)}
-              onClick={() => onAct(`complete:${step.stepNum}`, { action: "complete", stepNum: step.stepNum })}
-            >
-              {busy === `complete:${step.stepNum}` ? "Completing…" : `Complete step ${step.stepNum}`}
-            </button>
-            {!step.ready ? <p className="needs-meta">Still needed: {step.blocking.join("; ")}</p> : null}
-          </>
-        )}
-      </div>
-    </article>
-  );
-}
-
-function NeedRow({ need, step, procedureId, caseId, busy, onAct, onUpload }: RowProps & { need: Need }) {
-  const [draft, setDraft] = useState(need.value ?? "");
-  const uploading = busy === `upload:${need.id}`;
-  // Once a document is uploaded the next move is confirming its fields, not uploading it again.
-  const demo = need.status === "have" || need.document ? null : demoForNeed(procedureId, need, step.stepNum);
-
-  const useDemoDocument = async () => {
-    if (demo?.kind !== "document") return;
-    const blob = await (await fetch(demo.url)).blob();
-    onUpload(need, step.stepNum, new File([blob], demo.document.file, { type: blob.type || "image/png" }));
-  };
-
-  return (
-    <li className="assistant-need" data-status={need.status} data-kind={need.kind}>
-      <span className="assistant-need-mark" aria-label={need.status}>
-        {MARK[need.status]}
-      </span>
-      <div className="assistant-need-body">
-        <p>
-          <strong>{need.label}</strong>
-          {need.optional ? <em> · optional</em> : null}
-          {need.output ? <em> · this step&rsquo;s output</em> : null}
-        </p>
-        <p className="needs-meta">{need.detail}</p>
-
-        {need.kind === "value" ? (
-          <form
-            className="assistant-inline"
-            onSubmit={(event) => {
-              event.preventDefault();
-              if (draft.trim()) onAct(`value:${need.id}`, { action: "value", stepNum: step.stepNum, label: need.label, value: draft.trim() });
-            }}
-          >
-            <input value={draft} onChange={(event) => setDraft(event.target.value)} aria-label={need.label} placeholder={need.label} />
-            <button type="submit" className="prompt" disabled={Boolean(busy) || !draft.trim()}>
-              {need.status === "have" ? "Update" : "Save"}
-            </button>
-            {demo?.kind === "value" ? (
-              <button
-                type="button"
-                className="prompt assistant-demo"
-                disabled={Boolean(busy)}
-                title={`Demo value: ${demo.value}`}
-                onClick={() => {
-                  setDraft(demo.value);
-                  onAct(`value:${need.id}`, { action: "value", stepNum: step.stepNum, label: need.label, value: demo.value });
-                }}
-              >
-                Use demo value
-              </button>
-            ) : null}
-          </form>
-        ) : null}
-
-        {need.kind === "confirm" && need.status !== "have" ? (
-          <button
-            type="button"
-            className="prompt"
-            disabled={Boolean(busy)}
-            onClick={() => onAct(`confirm:${need.id}`, { action: "confirm", stepNum: step.stepNum, label: need.label, value: "yes" })}
-          >
-            Confirm
-          </button>
-        ) : null}
-
-        {need.kind === "document" && need.status !== "have" ? (
-          <div className="assistant-inline">
-            <label className="prompt assistant-upload" data-busy={uploading || undefined}>
-              {uploading ? "Reading document…" : need.document ? "Upload again" : "Upload document"}
-              <input
-                type="file"
-                accept="image/*,.pdf"
-                disabled={Boolean(busy)}
-                aria-label={`Upload ${need.label}`}
-                onChange={(event) => {
-                  const file = event.target.files?.[0];
-                  if (file) onUpload(need, step.stepNum, file);
-                  event.target.value = "";
-                }}
-              />
-            </label>
-            {demo?.kind === "document" ? (
-              <>
-                <button type="button" className="prompt assistant-demo" disabled={Boolean(busy)} onClick={useDemoDocument} title={demo.document.title}>
-                  Use demo document
-                </button>
-                <a className="needs-meta" href={demo.url} target="_blank" rel="noreferrer">
-                  view demo
-                </a>
-              </>
-            ) : null}
-            {!need.docType && !need.document ? (
-              <button
-                type="button"
-                className="prompt"
-                disabled={Boolean(busy)}
-                onClick={() => onAct(`confirm:${need.id}`, { action: "confirm", stepNum: step.stepNum, label: need.label, value: "provided" })}
-              >
-                Confirm provided
-              </button>
-            ) : null}
-          </div>
-        ) : null}
-        {uploading ? <p className="needs-meta">OCR and the layout model are reading it — up to about a minute on this machine&rsquo;s CPU.</p> : null}
-        {need.kind === "document" && need.document && need.status !== "have" ? (
-          <DocumentReview doc={need.document} caseId={caseId} busy={busy} onAct={onAct} />
-        ) : null}
-      </div>
-    </li>
-  );
-}
-
-function DocumentReview({ doc, caseId, busy, onAct }: { doc: DocumentRecord; caseId: string; busy: string | null; onAct: Act }) {
-  const [edits, setEdits] = useState<Record<string, string>>({});
-  const key = `doc:${doc.docId}`;
-  return (
-    <div className="doc-review">
-      <p className="needs-meta">
-        {doc.fileName}
-        {doc.r2Key ? (
-          <>
-            {" · "}
-            <a href={`/api/cases/${caseId}/documents/${doc.docId}/file`} target="_blank" rel="noreferrer">
-              open original
-            </a>
-          </>
-        ) : null}
-        {doc.pages ? ` · ${doc.pages} page${doc.pages > 1 ? "s" : ""}` : ""}
-        {doc.timingsMs ? ` · read in ${(doc.timingsMs / 1000).toFixed(1)} s` : ""}
-      </p>
-      {doc.parseError ? <p className="assistant-paused">{doc.parseError} Fill in the fields below instead.</p> : null}
-      {!doc.typeMatches && doc.detectedType ? (
-        <p className="assistant-paused">This looks like a {doc.detectedType.replace(/_/g, " ")}. Upload the right document, or correct and confirm it.</p>
-      ) : null}
-      {doc.fields.length ? (
-        <div className="doc-fields-wrap">
-          <table className="doc-fields">
-            <tbody>
-              {doc.fields.map((f) => (
-                <tr key={f.key} data-status={f.status}>
-                  <th scope="row">
-                    {f.label}
-                    {f.required ? " *" : ""}
-                  </th>
-                  <td>
-                    <input aria-label={f.label} defaultValue={f.value ?? ""} onChange={(event) => setEdits((prev) => ({ ...prev, [f.key]: event.target.value }))} />
-                  </td>
-                  <td>
-                    <span className="doc-conf" data-status={f.status}>
-                      {f.status === "confirmed" ? "confirmed" : f.value ? `${Math.round(f.confidence * 100)}% · ${f.status}` : "not found"}
-                    </span>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      ) : null}
-      {doc.checks.length ? (
-        <ul className="doc-checks">
-          {doc.checks.map((c) => (
-            <li key={c.check} data-status={c.status}>
-              <strong>{c.check}:</strong> {c.detail}
-            </li>
-          ))}
-        </ul>
-      ) : null}
-      <button
-        type="button"
-        className="prompt"
-        disabled={Boolean(busy)}
-        onClick={() => onAct(key, { action: "confirm-document", docId: doc.docId, corrections: edits, confirmAll: true })}
-      >
-        {busy === key ? "Saving…" : "Confirm fields"}
-      </button>
-    </div>
-  );
 }

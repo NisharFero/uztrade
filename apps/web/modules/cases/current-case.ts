@@ -1,5 +1,6 @@
-/* One user, one case at a time. The dashboard chat always shows the active
- * case's current step; a new case can only be opened once it is complete. */
+/* Which case the dashboard shows below the chat. Several cases can run at once;
+ * the dashboard follows the one you checked last - created in the chat or
+ * opened in Cases & Shipments (remembered in a cookie, see last-case.ts). */
 
 import { desc, eq, ne } from "drizzle-orm";
 import { getDb } from "../../db";
@@ -21,11 +22,18 @@ const summary = (row: typeof cases.$inferSelect): CaseSummary => ({
   query: row.query,
 });
 
-/** The case still in progress, if any. */
-export async function activeCase(): Promise<CaseSummary | null> {
+/** The case checked last; if it's gone, the most recently updated open case,
+ *  else the newest case. */
+export async function currentCase(lastCaseId?: string | null): Promise<CaseSummary | null> {
   const d = await db();
-  const [row] = await d.select().from(cases).where(ne(cases.status, "complete")).orderBy(desc(cases.createdAt), desc(cases.id)).limit(1);
-  return row ? summary(row) : null;
+  if (lastCaseId) {
+    const [row] = await d.select().from(cases).where(eq(cases.id, lastCaseId)).limit(1);
+    if (row) return summary(row);
+  }
+  const [open] = await d.select().from(cases).where(ne(cases.status, "complete")).orderBy(desc(cases.updatedAt), desc(cases.id)).limit(1);
+  if (open) return summary(open);
+  const [newest] = await d.select().from(cases).orderBy(desc(cases.createdAt), desc(cases.id)).limit(1);
+  return newest ? summary(newest) : null;
 }
 
 /** The most recent case for a procedure - active or complete - whose workflow the procedure page shows. */

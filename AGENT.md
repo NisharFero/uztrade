@@ -361,12 +361,14 @@ source is block-level, so step-level edges would have to be invented.
 ### One case at a time, FAQ, export/import slot, upfront inputs (added 2026-09-13)
 Spec: `Docs/superpowers/specs/2026-09-13-single-case-faq-upfront-design.md`.
 
-- **One user, one case.** `modules/cases/active-case.ts` (`activeCase`, `latestCaseFor`,
-  `resetAllCases`). The dashboard loads the open case and the chat is its
-  current step; the composer is disabled until it is complete, and
-  `POST /api/intake {confirm:true}` returns 409 while one is open.
-  `POST /api/admin/reset {"confirm":"delete all cases"}` deletes every case
-  table row and the R2 `cases/` prefix (users, entities, procedures kept).
+- **Several cases, dashboard follows the last one checked** (2026-09-14, replaces
+  the one-case-at-a-time rule). The chat has a "+" for a new case & shipment;
+  below it is the current step of the case checked last - created in the chat
+  or opened at `/cases/[id]` (`components/cases/remember-case.tsx` sets the
+  `uztrade_last_case` cookie, `modules/cases/last-case.ts`). `app/page.tsx`
+  reads it and `currentCase()` (`modules/cases/current-case.ts`) falls back to
+  the latest open case. `POST /api/admin/reset {"confirm":"delete all cases"}`
+  deletes every case table row and the R2 `cases/` prefix.
 - **Intake order:** What → Export/Import → How → How much → From/To. Only
   published directions are offered (dried fruit and fresh produce are export
   only, so it's stated); a route that contradicts the chosen direction asks again.
@@ -395,7 +397,7 @@ apps/web/
                        classify, shipment-plan, data/countries.ts
     workflow/          domain, orchestrator, specialists, repository (+ d1-repository,
                        d1-batching), service, dag-projection
-    cases/             store, active-case, orchestration, block-progress
+    cases/             store, current-case, last-case, orchestration, block-progress
     steps/             ledger, next, upfront, kpis, assistant, service, context
     documents/         specs, checklist (block completeness), agent-tasks, docai/
     compliance/        compliance, risk

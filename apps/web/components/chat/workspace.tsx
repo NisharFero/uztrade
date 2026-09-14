@@ -4,7 +4,8 @@ import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
 import StepAssistant from "./step-assistant";
 import { Icon } from "../icons";
-import type { CaseSummary } from "../../modules/cases/active-case";
+import type { CaseSummary } from "../../modules/cases/current-case";
+import { rememberCase } from "../../modules/cases/last-case";
 import type { IntakeTurn } from "../../modules/intake/conversation";
 import type { Slot } from "../../modules/intake/draft";
 
@@ -16,7 +17,7 @@ type Supported = {
   direction: string;
 };
 
-type Opened = { caseId: string; title: string; planSummary?: string };
+type Shown = { caseId: string; title: string; planSummary?: string };
 
 type Phase = { kind: "idle" } | { kind: "pending" } | { kind: "error"; message: string };
 
@@ -37,18 +38,19 @@ const SLOT_PROMPT: Record<Slot, string> = {
 
 const DEFAULT_QUERY = "I want to move tea";
 
-/** Intake conversation: what -> export/import -> how -> how much -> from/to,
- *  each checked against the published procedures and the country list, then a
- *  confirm card. One case at a time: while a case is open the chat is its
- *  current step, and the whole workflow lives on the procedure page. Anything
+/** The dashboard: the chat on top - "+" starts another case & shipment, and the
+ *  intake asks what -> export/import -> how -> how much -> from/to before a
+ *  confirm card - and below it the current step of the case checked last (the
+ *  one just created, or the one last opened in Cases & Shipments). Anything
  *  that isn't a shipment goes to the FAQ. */
-export default function Workspace({ supported, active }: { supported: Supported[]; active: CaseSummary | null }) {
+export default function Workspace({ supported, current }: { supported: Supported[]; current: CaseSummary | null }) {
   const router = useRouter();
-  const [query, setQuery] = useState(active ? "" : DEFAULT_QUERY);
+  const [query, setQuery] = useState(current ? "" : DEFAULT_QUERY);
   const [phase, setPhase] = useState<Phase>({ kind: "idle" });
   const [turn, setTurn] = useState<IntakeTurn | null>(null);
-  const [opened, setOpened] = useState<Opened | null>(active ? { caseId: active.id, title: active.title } : null);
-  const [finished, setFinished] = useState(false);
+  const [shown, setShown] = useState<Shown | null>(current ? { caseId: current.id, title: current.title } : null);
+  // Suggestions show for a new shipment: with no case yet, or after "+".
+  const [composing, setComposing] = useState(!current);
   const input = useRef<HTMLTextAreaElement>(null);
   const pending = phase.kind === "pending";
 
@@ -66,21 +68,16 @@ export default function Workspace({ supported, active }: { supported: Supported[
   const send = async (text?: string) => {
     const message = (text ?? query).trim();
     if (!message || pending) return;
-    if (opened && !finished) {
-      setPhase({ kind: "error", message: `Case ${opened.caseId} is still open — complete it before starting another shipment.` });
-      return;
-    }
     setPhase({ kind: "pending" });
     try {
-      const current = turn && turn.status !== "declined" ? turn : null;
-      const next = (await post({ message, draft: current?.draft ?? null, expecting: current?.slot ?? null })) as IntakeTurn;
+      const active = turn && turn.status !== "declined" ? turn : null;
+      const next = (await post({ message, draft: active?.draft ?? null, expecting: active?.slot ?? null })) as IntakeTurn;
       if (next.status === "declined") {
         router.push(`/faq?q=${encodeURIComponent(message)}`);
         return;
       }
       setTurn(next);
-      setOpened(null);
-      setFinished(false);
+      setComposing(true);
       setQuery("");
       setPhase({ kind: "idle" });
     } catch (error) {
@@ -99,8 +96,10 @@ export default function Workspace({ supported, active }: { supported: Supported[
         setPhase({ kind: "idle" });
         return;
       }
-      setOpened({ caseId: body.caseId, title: body.title ?? "", planSummary: body.planSummary });
+      rememberCase(body.caseId);
+      setShown({ caseId: body.caseId, title: body.title ?? "", planSummary: body.planSummary });
       setTurn(null);
+      setComposing(false);
       setPhase({ kind: "idle" });
     } catch (error) {
       setPhase({ kind: "error", message: error instanceof Error ? error.message : "Network error" });
@@ -113,9 +112,12 @@ export default function Workspace({ supported, active }: { supported: Supported[
     input.current?.focus();
   };
 
-  const startOver = () => {
+  /** "+" and "Start over": a fresh shipment conversation. The case below stays. */
+  const newShipment = () => {
     setTurn(null);
     setQuery("");
+    setComposing(true);
+    setPhase({ kind: "idle" });
     input.current?.focus();
   };
 
@@ -124,21 +126,26 @@ export default function Workspace({ supported, active }: { supported: Supported[
   return (
     <>
       <section className="chat-panel command-surface" aria-label="Trade query">
-        <div className="chat-copy">
-          <p>
-            <span className="head-icon" data-tint="violet">
-              {Icon.sparkle}
-            </span>
-            AI trade assistant
-          </p>
-          <h2>{opened ? "Work through the case, one step at a time" : "Describe the goods you want to move"}</h2>
+        <div className="chat-head">
+          <div className="chat-copy">
+            <p>
+              <span className="head-icon" data-tint="violet">
+                {Icon.sparkle}
+              </span>
+              AI trade assistant
+            </p>
+            <h2>{asking ? "New case & shipment" : "Describe the goods you want to move"}</h2>
+          </div>
+          <button type="button" className="chat-new" onClick={newShipment} aria-label="New case & shipment" title="New case & shipment">
+            +
+          </button>
         </div>
 
         {asking ? (
           <div className="intake-card" aria-label="Shipment so far">
             <div className="intake-card-head">
               <span className="wf-detail-h">Shipment so far</span>
-              <button type="button" className="intake-link" onClick={startOver}>
+              <button type="button" className="intake-link" onClick={newShipment}>
                 Start over
               </button>
             </div>
@@ -203,16 +210,6 @@ export default function Workspace({ supported, active }: { supported: Supported[
           </div>
         ) : null}
 
-        {opened ? (
-          <>
-            <p className="opened-note">
-              <span className="head-icon">{Icon.check}</span>
-              {opened.planSummary ? `Opened case ${opened.caseId} — ${opened.title}. ${opened.planSummary}` : `Case ${opened.caseId} — ${opened.title} is open.`}
-            </p>
-            <StepAssistant key={opened.caseId} caseId={opened.caseId} compact onStatus={(status) => setFinished(status === "completed")} />
-          </>
-        ) : null}
-
         <form
           className="query-box"
           onSubmit={(event) => {
@@ -229,16 +226,7 @@ export default function Workspace({ supported, active }: { supported: Supported[
               name="trade-query"
               ref={input}
               value={query}
-              placeholder={
-                asking?.slot
-                  ? `Answer: ${SLOT_PROMPT[asking.slot]}…`
-                  : opened && !finished
-                    ? `Case ${opened.caseId} is open — finish it to start another shipment`
-                    : opened
-                      ? "Start another shipment, e.g. I want to move tea"
-                      : "e.g. I want to move tea"
-              }
-              disabled={Boolean(opened && !finished)}
+              placeholder={asking?.slot ? `Answer: ${SLOT_PROMPT[asking.slot]}…` : "Describe a shipment, e.g. I want to move tea"}
               onChange={(event) => setQuery(event.target.value)}
               onKeyDown={(event) => {
                 if (event.key === "Enter" && !event.shiftKey) {
@@ -260,21 +248,28 @@ export default function Workspace({ supported, active }: { supported: Supported[
           </p>
         ) : null}
 
-        {!asking && !opened ? (
+        {composing && !asking ? (
           <div className="quick-prompts" aria-label="Supported procedures">
             {supported.map((s) => (
-              <button
-                type="button"
-                className="prompt"
-                key={s.id}
-                onClick={() => setQuery(`I want to ${s.direction} ${s.goods} by ${s.mode}`)}
-              >
+              <button type="button" className="prompt" key={s.id} onClick={() => setQuery(`I want to ${s.direction} ${s.goods} by ${s.mode}`)}>
                 {s.title}
               </button>
             ))}
           </div>
         ) : null}
       </section>
+
+      {shown ? (
+        <section className="current-case" aria-label="Current step">
+          {shown.planSummary ? (
+            <p className="opened-note">
+              <span className="head-icon">{Icon.check}</span>
+              Opened case {shown.caseId} — {shown.title}. {shown.planSummary}
+            </p>
+          ) : null}
+          <StepAssistant key={shown.caseId} caseId={shown.caseId} compact />
+        </section>
+      ) : null}
     </>
   );
 }

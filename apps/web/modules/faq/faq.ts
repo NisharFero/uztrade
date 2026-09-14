@@ -55,11 +55,12 @@ export const FAQ: FaqEntry[] = [
     keywords: ["start", "begin", "create", "open", "new", "case", "how"],
   },
   {
-    id: "one-case",
-    question: "Why can't I open a second case?",
+    id: "several-cases",
+    question: "Can I run more than one case?",
     answer: [
-      "Only one case runs at a time. Its current step always stays in the chat, and a new case can be opened once it's complete.",
+      "Yes. Press + in the chat to start another case & shipment. Below the chat the dashboard shows the current step of the case you checked last — the one you just created, or the one you last opened in Cases & Shipments.",
     ],
+    link: { href: "/cases", label: "Open Cases & Shipments" },
     keywords: ["second", "another", "new", "case", "parallel", "blocked", "two", "multiple"],
   },
   {

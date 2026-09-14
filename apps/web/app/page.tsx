@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
+import { cookies } from "next/headers";
 import Workspace from "../components/chat/workspace";
+import { currentCase, type CaseSummary } from "../modules/cases/current-case";
+import { LAST_CASE_COOKIE } from "../modules/cases/last-case";
 import { PROCEDURE_IDS, PROCEDURES } from "../modules/procedures/data/procedures.generated";
-import { activeCase, type CaseSummary } from "../modules/cases/active-case";
 
 export const metadata: Metadata = {
   title: "UzTrade Trade Agent",
@@ -20,12 +22,14 @@ export default async function Home() {
     direction: PROCEDURES[id].direction,
   }));
 
-  // One case at a time: while it's open, the chat is its current step.
-  let open: CaseSummary | null = null;
+  // Below the chat: the current step of the case checked last - created here
+  // or opened in Cases & Shipments.
+  let current: CaseSummary | null = null;
   try {
-    open = await activeCase();
+    const last = (await cookies()).get(LAST_CASE_COOKIE)?.value;
+    current = await currentCase(last ? decodeURIComponent(last) : null);
   } catch {
-    open = null;
+    current = null; // no database - just the chat
   }
 
   return (
@@ -35,7 +39,7 @@ export default async function Home() {
         <h1>Ask UzTrade</h1>
       </header>
 
-      <Workspace supported={supported} active={open} />
+      <Workspace supported={supported} current={current} />
     </>
   );
 }

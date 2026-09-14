@@ -6,7 +6,7 @@ import { converse, evaluate } from "../../../modules/intake/conversation";
 import { parseDraft, type Slot } from "../../../modules/intake/draft";
 import { buildStepPlan } from "../../../modules/intake/plan";
 
-const SLOTS: Slot[] = ["commodity", "mode", "quantity", "route"];
+const SLOTS: Slot[] = ["commodity", "direction", "mode", "quantity", "route"];
 
 /** One intake turn. `{message, draft, expecting}` answers the current question;
  *  `{draft, confirm: true}` re-validates the draft and, only if every detail
@@ -19,16 +19,6 @@ export async function POST(request: Request) {
     if (body.confirm === true) {
       const turn = evaluate(draft);
       if (turn.status !== "confirm" || !turn.summary) return Response.json(turn);
-
-      // One case at a time: the open one has to be completed first.
-      const { activeCase } = await import("../../../modules/cases/active-case");
-      const open = await activeCase();
-      if (open) {
-        return Response.json(
-          { ...turn, error: `Case ${open.id} (${open.title}) is still open — complete it before starting another.`, activeCaseId: open.id },
-          { status: 409 },
-        );
-      }
 
       const summary = turn.summary;
       const facts: ShipmentFacts = {
