@@ -58,16 +58,16 @@ open questions — see §6.
 ## 3. What was built
 
 ### Data foundation
-- `apps/web/scripts/build-procedures.mjs` → `app/data/procedures.generated.ts`
+- `apps/web/scripts/build-procedures.mjs` → `modules/procedures/data/procedures.generated.ts`
   (4,779 lines, committed). Regenerate with `npm run data:build`.
 - **The `.docx` files were deliberately not re-parsed.** They are 2–7 MB each
   and the structure — blocks, `dependsOn` edges, `estDuration` ranges,
   `dependencyReason` prose, per-step entity/channel/output — had already been
-  extracted into `scripts/dag-data.json`. Re-parsing would have been slower and
+  extracted into `scripts/data/dag-data.json`. Re-parsing would have been slower and
   strictly worse.
 
 ### The delegation model — the heart of it
-`app/data/delegation.ts`. `performedBy` is blank on **226 of 244 steps**, so
+`modules/procedures/delegation.ts`. `performedBy` is blank on **226 of 244 steps**, so
 the executor is derived. Three questions, in order:
 
 1. **Does the goods have to be there?** In-person + a physical verb
@@ -108,12 +108,12 @@ detail lives in a per-node lane-mix bar and per-step badges.
 ### The three agents
 | Agent | File | What it actually does |
 |---|---|---|
-| **Document Intelligence** | `lib/document-intelligence.ts`, `lib/agent-tasks.ts` | Tracks each block's declared step outputs and **verifies them itself** as soon as the producing step completes — persisted via `provide-output`, never asked of the trader. The server still refuses to complete a block with a required output outstanding (HTTP 409); the case board satisfies it by verifying the block's documents first. Panel lists every document by block: unticked / spinner / tick. |
-| **Compliance & Risk** | `lib/compliance.ts`, `lib/agent-tasks.ts` | HS heading suggestion and risk flags derived from what the procedure requires. Runs by itself at case open — no confirm button — then checks each customs filing/fee step. **No duty rate is shown**: without Uzbekistan's tariff schedule any % would be invented, so `CAPABILITY_GAPS` states the gap instead. |
+| **Document Intelligence** | `lib/document-intelligence.ts`, `modules/documents/agent-tasks.ts` | Tracks each block's declared step outputs and **verifies them itself** as soon as the producing step completes — persisted via `provide-output`, never asked of the trader. The server still refuses to complete a block with a required output outstanding (HTTP 409); the case board satisfies it by verifying the block's documents first. Panel lists every document by block: unticked / spinner / tick. |
+| **Compliance & Risk** | `modules/compliance/compliance.ts`, `modules/documents/agent-tasks.ts` | HS heading suggestion and risk flags derived from what the procedure requires. Runs by itself at case open — no confirm button — then checks each customs filing/fee step. **No duty rate is shown**: without Uzbekistan's tariff schedule any % would be invented, so `CAPABILITY_GAPS` states the gap instead. |
 | **Orchestrator** | `data/delegation.ts` + `lib/dag.ts` | Assigns each block its lane *and states why*; readiness rule gates scheduling — a block is Ready only when **every** dependency is done. |
 
 ### Shipment plan — quantity and distance
-`lib/shipment-plan.ts` (pure, tested in `tests/shipment-plan.test.ts`). The
+`modules/intake/shipment-plan.ts` (pure, tested in `tests/unit/intake/shipment-plan.test.ts`). The
 published procedures cover the paperwork for one consignment and stop at
 dispatch; a casual query ("export 60 tonnes of tea from Tashkent to Moscow")
 now drives:
@@ -129,14 +129,14 @@ now drives:
   250–450 km/day + 12–36 h per border; air 750 km/h + handling.
 - **Mode when unstated.** Tea export exists by air (540) and train (868); with
   no mode in the query the load picks it (`chooseModeByLoad` in
-  `lib/classify.ts`) — ≥2 t → train, smaller and far → air. A stated mode is
+  `modules/intake/classify.ts`) — ≥2 t → train, smaller and far → air. A stated mode is
   never overridden. The LLM prompt was told a missing mode is fine, and a
   refusal on a mode-less query falls back to the rules.
 - **Surface.** `components/shipment-plan.tsx`, above the workflow on the case
   page and under the chat. Every figure is labelled a planning assumption.
 
 ### Aligned with the architecture brief (small, deliberate changes)
-- **Intake never silently guesses** (`settleMatch` in `lib/classify.ts`). The
+- **Intake never silently guesses** (`settleMatch` in `modules/intake/classify.ts`). The
   classifier proposes; the trader's words are checked: a stated direction/mode
   no procedure covers is refused plainly; if two directions still fit, ONE
   question is asked with answer chips; if two modes fit, the load decides, or
@@ -163,7 +163,7 @@ now drives:
   actions: `complete` (runs the completeness gate first) and `provide-output`.
 
 ### LLM classification
-`lib/classify.ts` — Groq, OpenAI-wire-compatible, model `openai/gpt-oss-20b`.
+`modules/intake/classify.ts` — Groq, OpenAI-wire-compatible, model `openai/gpt-oss-20b`.
 The returned id is **validated against the five known procedures** before use;
 the model is never trusted raw. A deterministic keyword matcher remains as
 fallback so the app works with no key and stays testable in CI.
@@ -177,23 +177,23 @@ does not read that path.
 ### Intake, step needs and risk evidence (added 2026-09-13)
 Spec: `Docs/superpowers/specs/2026-09-13-intake-docintel-risk-agents-design.md`.
 
-- **Intake** (`lib/classify.ts`, `lib/intake/`): relevance gate → slots →
+- **Intake** (`modules/intake/classify.ts`, `modules/intake/`): relevance gate → slots →
   commodity table (`taxonomy.ts`) → lookup `(category, direction, mode)` →
   ask ONE missing slot (after two follow-ups: candidate procedures by title) →
   `StepPlan` (`plan.ts`: blocks, parallel tracks, lanes, decisions, per-step
   needs). **The table picks the procedure**; a model's id is a proposal and is
   overridden, with the rationale saying so. Bare "apricots / plums / figs /
   fruit" asks fresh or dried — 325 and 306 are otherwise the same skeleton.
-- **Section 5 inputs** (`scripts/extract-inputs.mjs` → `scripts/inputs-data.json`
+- **Section 5 inputs** (`scripts/data/extract-inputs.mjs` → `scripts/data/inputs-data.json`
   → `step.inputs`, merged by `build-procedures.mjs`). The docx tags every line
-  "[trader supplies]" and flattens structure; `lib/requirements.ts` re-derives
+  "[trader supplies]" and flattens structure; `modules/procedures/requirements.ts` re-derives
   kind (profile / identity / case / produced / published / presence), the
   producing step (nearest earlier output, plus an alias table), channel
   variants ("For physical payment" / "For online payment") and groups.
-- **Document field checklists** (`lib/document-specs.ts`): 14 types, each field
+- **Document field checklists** (`modules/documents/specs.ts`): 14 types, each field
   tagged `procedure` or `reference` — the docx publishes specimen images, not
   field lists, so reference fields are never presented as the procedure's own.
-- **Risk** (`lib/compliance.ts`): certificate rules keyed `commodity×direction`
+- **Risk** (`modules/compliance/compliance.ts`): certificate rules keyed `commodity×direction`
   (868 vs 477 are disjoint); 8 inputs with why; `unresolved` names the
   conclusion each missing input blocks; every flag carries evidence with its
   producing step. Country notes are `advisory`.
@@ -201,7 +201,7 @@ Spec: `Docs/superpowers/specs/2026-09-13-intake-docintel-risk-agents-design.md`.
   published procedures: Document Intelligence records `amendmentsRequested`
   for inputs whose producing step hasn't completed; Compliance returns the real
   assessment. Unknown procedures keep the simulated stub.
-- **Conversational intake** (`lib/intake/draft.ts`, `validate.ts`,
+- **Conversational intake** (`modules/intake/draft.ts`, `validate.ts`,
   `conversation.ts`, `POST /api/intake`; spec
   `Docs/superpowers/specs/2026-09-13-conversational-intake-design.md`). The chat
   gathers **what → how → how much → from/to**, each validated, then shows a
@@ -209,7 +209,7 @@ Spec: `Docs/superpowers/specs/2026-09-13-intake-docintel-risk-agents-design.md`.
   offered only from published procedures (tea: train either way, air export
   only; dried/fresh: train, stated not asked). Quantity limits: rail 1–5,000 t,
   air ≤ 500 t with warnings above 10 t / 100 t. Route: one end in Uzbekistan,
-  the other in the supplied country fixture `app/data/countries.ts` (KZ, KG, TR,
+  the other in the supplied country fixture `modules/intake/data/countries.ts` (KZ, KG, TR,
   AF, RU, CN); the route decides direction and can send the trader back to the
   mode question (tea from China by air). The draft is client-held and
   re-parsed server-side every turn; no model call in this path. `/api/query`
@@ -228,7 +228,7 @@ research: `Docs/research/2026-09-13-document-specimens-rnd.md`.
   Intelligence, Risk & Compliance, ledger) is on the procedure page
   (`/procedures/[id]` shows the latest case for that procedure). Block "mark done" is gone —
   every completion goes through the gated step API.
-- **Engine** (`lib/steps/`): the case ledger is artifacts (`trader_input`,
+- **Engine** (`modules/steps/`): the case ledger is artifacts (`trader_input`,
   `uploaded_document`, latest version wins). `next.ts` derives each step's
   needs (earlier-step output, document, value, confirmation, channel choice,
   the step's own output). An agent step missing trader inputs **pauses**
@@ -238,7 +238,7 @@ research: `Docs/research/2026-09-13-document-specimens-rnd.md`.
   45 min × agent steps + 1 min × auto-filled values (formula shown).
 - **Document AI** (`apps/docai`, FastAPI on :8765; start with `run.sh`):
   EasyOCR ru+en → `impira/layoutlm-document-qa` questions + bilingual label
-  anchors → candidates. The app (`lib/docai/`) validates by field kind, gates
+  anchors → candidates. The app (`modules/documents/docai/`) validates by field kind, gates
   (≥0.80 accepted, 0.50–0.80 review, <0.50 missing) and cross-checks against
   intake and the ledger. Originals go to R2 (`DOCS`). Measured findings are in
   `apps/docai/README.md`; the ones that changed the code: cap pages at 1280 px
@@ -251,12 +251,12 @@ research: `Docs/research/2026-09-13-document-specimens-rnd.md`.
 - **Evaluation**: `npm run eval:docai` (published specimens — most are ~550 px
   thumbnails and correctly come back "unreadable"), `… -- --demo` (the demo
   pack). Speed on this i5 CPU: ~20–40 s OCR plus ~2 s per field question.
-- **Risk & Compliance** (`lib/risk.ts`, `/api/cases/[id]/risk`): rows of
+- **Risk & Compliance** (`modules/compliance/risk.ts`, `/api/cases/[id]/risk`): rows of
   title · value · reason computed from intake, route, country fixture, workflow
   state and parsed documents; no generic explanations, no invented duty.
-- **Demo pack (868 only)**: `app/data/demo/scenario-868.json` is the single
+- **Demo pack (868 only)**: `modules/demo/data/scenario-868.json` is the single
   source; `apps/docai/demo/generate_868.py` renders 38 readable DEMO-bannered
-  pages into `public/demo/868/`; `lib/demo.ts` maps each step need to its demo
+  pages into `public/demo/868/`; `modules/demo/demo.ts` maps each step need to its demo
   ("Use demo value" / "Use demo document" in the assistant — documents go
   through the real parser); `/demo/868` lists every file for download.
   Limitation: values are case-wide by label, so the one "Payment sum" is reused
@@ -327,7 +327,7 @@ no tariff data** (verified — one incidental "railway tariff" mention). The HS
 labelled "not verified against Uzbekistan's current published tariff schedule."
 This mirrors the reference spec's own pattern — *"HS-code advisor suggests
 candidates with duty/fee estimates; user confirms."* Swap `HS_REFERENCE` in
-`lib/compliance.ts` for a real table when one exists.
+`modules/compliance/compliance.ts` for a real table when one exists.
 
 **Two colour systems, deliberately.** `[data-lane]` is *who executes*
 (User/Agent/Physical, drives columns). `[data-counterparty]` is *who you deal
@@ -361,7 +361,7 @@ source is block-level, so step-level edges would have to be invented.
 ### One case at a time, FAQ, export/import slot, upfront inputs (added 2026-09-13)
 Spec: `Docs/superpowers/specs/2026-09-13-single-case-faq-upfront-design.md`.
 
-- **One user, one case.** `lib/active-case.ts` (`activeCase`, `latestCaseFor`,
+- **One user, one case.** `modules/cases/active-case.ts` (`activeCase`, `latestCaseFor`,
   `resetAllCases`). The dashboard loads the open case and the chat is its
   current step; the composer is disabled until it is complete, and
   `POST /api/intake {confirm:true}` returns 409 while one is open.
@@ -370,12 +370,50 @@ Spec: `Docs/superpowers/specs/2026-09-13-single-case-faq-upfront-design.md`.
 - **Intake order:** What → Export/Import → How → How much → From/To. Only
   published directions are offered (dried fruit and fresh produce are export
   only, so it's stated); a route that contradicts the chosen direction asks again.
-- **FAQ:** `lib/faq.ts` + `/faq?q=`. A declined (not-a-shipment) chat message
+- **FAQ:** `modules/faq/faq.ts` + `/faq?q=`. A declined (not-a-shipment) chat message
   navigates there with the closest answers open.
-- **Upfront inputs** (`lib/steps/upfront.ts`): an input qualifies when no
+- **Upfront inputs** (`modules/steps/upfront.ts`): an input qualifies when no
   earlier step produces it and the trader already holds or issues it. Given at
   step 0, it satisfies every later step (values are case-wide, documents are
   found by label/type, confirmations at step 0 count), so agent steps run
   without pausing. The `LATER` table gives the reason for the rest (offer
   amounts, agreements concluded during the procedure, portal applications,
   provider invoices, outputs). Shown as "Before you start" in the assistant.
+
+### Project structure (restructured 2026-09-14)
+
+```
+apps/web/
+  app/                 routes only - page.tsx, route.ts, layout.tsx, styles/
+  components/          UI: chat/ (workspace, step-assistant), workflow/ (dag, case-board,
+                       case-ledger, shipment-plan), documents/, compliance/, entities/,
+                       layout/ (nav), icons.tsx
+  modules/             logic, one folder per feature; no barrel files (keeps D1 code out
+                       of client bundles)
+    procedures/        data/procedures.generated.ts, delegation, actors, requirements, dag
+    intake/            conversation, draft, taxonomy, lookup, validate, relevance, plan,
+                       classify, shipment-plan, data/countries.ts
+    workflow/          domain, orchestrator, specialists, repository (+ d1-repository,
+                       d1-batching), service, dag-projection
+    cases/             store, active-case, orchestration, block-progress
+    steps/             ledger, next, upfront, kpis, assistant, service, context
+    documents/         specs, checklist (block completeness), agent-tasks, docai/
+    compliance/        compliance, risk
+    catalog/           users, entities, procedure versions (catalog, bootstrap, seed)
+    faq/  demo/        faq; demo.ts + data/scenario-868.json
+    shared/            http
+  db/  drizzle/  worker/
+  scripts/             data/ (docx -> procedures), eval/ (eval-docai), debug/
+  tests/               unit/<module>/ (npm run test:unit), e2e/ (npm run test:e2e, needs a build)
+
+apps/docai/
+  docai/               app.py (FastAPI), pipeline.py
+  bench/               ocr, resolution, qa_window, readability  (python -m bench.<name>)
+  tests/               python -m tests.test_pipeline
+  scripts/             python -m scripts.download_models
+  demo/  eval/         demo pack renderer; specimens, ground truth, reports
+  run.ps1 / run.sh     uvicorn docai.app:app on :8765
+```
+
+Imports stay relative. `app/` holds no logic: a route imports from `modules/` and
+renders `components/`.

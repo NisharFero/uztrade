@@ -1,14 +1,14 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Icon } from "../icons";
-import { delegationOfStep } from "../data/delegation";
-import { PROCEDURE_IDS, PROCEDURES, type ProcedureBlock } from "../data/procedures.generated";
-import type { ShipmentFacts } from "../domain/workflow";
-import { listCases } from "../lib/case-store";
-import { assessCompliance, CERTIFICATE_RULES } from "../lib/compliance";
-import { requiredOutputsForProcedure, parseDocumentState } from "../lib/document-intelligence";
-import { DOC_SPECS } from "../lib/document-specs";
-import { collectOnce, INPUT_KINDS } from "../lib/requirements";
+import { Icon } from "../../components/icons";
+import { delegationOfStep } from "../../modules/procedures/delegation";
+import { PROCEDURE_IDS, PROCEDURES, type ProcedureBlock } from "../../modules/procedures/data/procedures.generated";
+import type { ShipmentFacts } from "../../modules/workflow/domain";
+import { listCases } from "../../modules/cases/store";
+import { assessCompliance, CERTIFICATE_RULES } from "../../modules/compliance/compliance";
+import { requiredOutputsForProcedure, parseDocumentState } from "../../modules/documents/checklist";
+import { DOC_SPECS } from "../../modules/documents/specs";
+import { collectOnce, INPUT_KINDS } from "../../modules/procedures/requirements";
 
 function factsOf(raw: string | null | undefined): Partial<ShipmentFacts> {
   try {

@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Icon } from "../icons";
-import { laneBreakdown } from "../data/delegation";
-import { PROCEDURE_IDS, PROCEDURES } from "../data/procedures.generated";
-import { assessCompliance } from "../lib/compliance";
-import { fmtHours, fmtRange, procedureStats } from "../lib/dag";
+import { Icon } from "../../components/icons";
+import { laneBreakdown } from "../../modules/procedures/delegation";
+import { PROCEDURE_IDS, PROCEDURES } from "../../modules/procedures/data/procedures.generated";
+import { assessCompliance } from "../../modules/compliance/compliance";
+import { fmtHours, fmtRange, procedureStats } from "../../modules/procedures/dag";
 
 export const metadata: Metadata = {
   title: "Procedures · UzTrade",

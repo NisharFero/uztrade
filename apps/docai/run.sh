@@ -5,4 +5,4 @@ export DOCAI_CACHE="$here/.cache"
 export HF_HOME="$DOCAI_CACHE/hf"
 cd "$here" || exit 1
 if [ -x .venv/Scripts/python.exe ]; then py=.venv/Scripts/python.exe; else py=.venv/bin/python; fi
-exec "$py" -m uvicorn app:app --host 127.0.0.1 --port 8765
+exec "$py" -m uvicorn docai.app:app --host 127.0.0.1 --port 8765

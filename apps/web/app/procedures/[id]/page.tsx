@@ -1,15 +1,15 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import CaseBoard from "../../components/case-board";
-import CompliancePanel from "../../components/compliance-panel";
-import Dag from "../../components/dag";
-import { Icon } from "../../icons";
-import { PROCEDURES } from "../../data/procedures.generated";
-import type { ShipmentFacts } from "../../domain/workflow";
-import { latestCaseFor } from "../../lib/active-case";
-import { getCase } from "../../lib/case-store";
-import { parseDocumentState } from "../../lib/document-intelligence";
-import { getPersistedWorkflowDag } from "../../lib/workflow-service";
+import CaseBoard from "../../../components/workflow/case-board";
+import CompliancePanel from "../../../components/compliance/compliance-panel";
+import Dag from "../../../components/workflow/dag";
+import { Icon } from "../../../components/icons";
+import { PROCEDURES } from "../../../modules/procedures/data/procedures.generated";
+import type { ShipmentFacts } from "../../../modules/workflow/domain";
+import { latestCaseFor } from "../../../modules/cases/active-case";
+import { getCase } from "../../../modules/cases/store";
+import { parseDocumentState } from "../../../modules/documents/checklist";
+import { getPersistedWorkflowDag } from "../../../modules/workflow/service";
 
 export const dynamic = "force-dynamic";
 

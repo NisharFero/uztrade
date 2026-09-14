@@ -1,10 +1,10 @@
-import { PROCEDURES } from "../../data/procedures.generated";
-import type { ShipmentFacts } from "../../domain/workflow";
-import { openCaseFromIntake } from "../../lib/case-orchestration-service";
-import { buildDagProjection } from "../../lib/dag-projection";
-import { converse, evaluate } from "../../lib/intake/conversation";
-import { parseDraft, type Slot } from "../../lib/intake/draft";
-import { buildStepPlan } from "../../lib/intake/plan";
+import { PROCEDURES } from "../../../modules/procedures/data/procedures.generated";
+import type { ShipmentFacts } from "../../../modules/workflow/domain";
+import { openCaseFromIntake } from "../../../modules/cases/orchestration";
+import { buildDagProjection } from "../../../modules/workflow/dag-projection";
+import { converse, evaluate } from "../../../modules/intake/conversation";
+import { parseDraft, type Slot } from "../../../modules/intake/draft";
+import { buildStepPlan } from "../../../modules/intake/plan";
 
 const SLOTS: Slot[] = ["commodity", "mode", "quantity", "route"];
 
@@ -21,7 +21,7 @@ export async function POST(request: Request) {
       if (turn.status !== "confirm" || !turn.summary) return Response.json(turn);
 
       // One case at a time: the open one has to be completed first.
-      const { activeCase } = await import("../../lib/active-case");
+      const { activeCase } = await import("../../../modules/cases/active-case");
       const open = await activeCase();
       if (open) {
         return Response.json(

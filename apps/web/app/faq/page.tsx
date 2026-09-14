@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { FAQ, matchFaq } from "../lib/faq";
+import { FAQ, matchFaq } from "../../modules/faq/faq";
 
 export const dynamic = "force-dynamic";
 

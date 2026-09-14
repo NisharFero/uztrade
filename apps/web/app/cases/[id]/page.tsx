@@ -1,12 +1,12 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import CaseBoard from "../../components/case-board";
-import StepAssistant from "../../components/step-assistant";
-import { PROCEDURES } from "../../data/procedures.generated";
-import { getCase } from "../../lib/case-store";
-import { parseDocumentState } from "../../lib/document-intelligence";
-import type { ShipmentFacts } from "../../domain/workflow";
-import { getPersistedWorkflowDag } from "../../lib/workflow-service";
+import CaseBoard from "../../../components/workflow/case-board";
+import StepAssistant from "../../../components/chat/step-assistant";
+import { PROCEDURES } from "../../../modules/procedures/data/procedures.generated";
+import { getCase } from "../../../modules/cases/store";
+import { parseDocumentState } from "../../../modules/documents/checklist";
+import type { ShipmentFacts } from "../../../modules/workflow/domain";
+import { getPersistedWorkflowDag } from "../../../modules/workflow/service";
 
 export const dynamic = "force-dynamic";
 

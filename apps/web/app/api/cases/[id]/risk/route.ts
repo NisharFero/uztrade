@@ -1,8 +1,8 @@
-import type { ShipmentFacts } from "../../../../domain/workflow";
-import { routeError } from "../../../../lib/http";
-import { assessRisk } from "../../../../lib/risk";
-import { loadCase } from "../../../../lib/steps/context";
-import { buildLedger } from "../../../../lib/steps/ledger";
+import type { ShipmentFacts } from "../../../../../modules/workflow/domain";
+import { routeError } from "../../../../../modules/shared/http";
+import { assessRisk } from "../../../../../modules/compliance/risk";
+import { loadCase } from "../../../../../modules/steps/context";
+import { buildLedger } from "../../../../../modules/steps/ledger";
 
 type Ctx = { params: Promise<{ id: string }> };
 

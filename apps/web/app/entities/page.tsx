@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Icon } from "../icons";
-import { listEntityQueues } from "../lib/backend-catalog";
-import EntityAction from "./entity-action";
+import { Icon } from "../../components/icons";
+import { listEntityQueues } from "../../modules/catalog/catalog";
+import EntityAction from "../../components/entities/entity-action";
 
 export const metadata: Metadata = { title: "Entities · UzTrade" };
 export const dynamic = "force-dynamic";

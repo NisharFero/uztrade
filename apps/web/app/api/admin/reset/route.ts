@@ -1,6 +1,6 @@
 import { env } from "cloudflare:workers";
-import { resetAllCases } from "../../../lib/active-case";
-import { HttpError, jsonBody, routeError } from "../../../lib/http";
+import { resetAllCases } from "../../../../modules/cases/active-case";
+import { HttpError, jsonBody, routeError } from "../../../../modules/shared/http";
 
 /** Deletes all cases, workflow state, ledger entries and uploaded originals.
  *  Irreversible, so the body must spell it out. */

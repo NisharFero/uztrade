@@ -1,15 +1,15 @@
 import { env } from "cloudflare:workers";
-import { blankFields } from "../../../../lib/docai/blank";
-import { DOCAI_URL_DEFAULT, parseWithDocai } from "../../../../lib/docai/client";
-import { composeDocument, type ParsedDocument } from "../../../../lib/docai/compose";
-import { crossCheck } from "../../../../lib/docai/crosscheck";
-import { docTypeOf, specFor } from "../../../../lib/document-specs";
-import { HttpError, routeError } from "../../../../lib/http";
-import { syncCaseBlockProgress } from "../../../../lib/legacy-progress";
-import { assistantView } from "../../../../lib/steps/assistant";
-import { checkContext, loadCase } from "../../../../lib/steps/context";
-import { buildLedger, nextVersion, type DocumentRecord } from "../../../../lib/steps/ledger";
-import { recordDocument } from "../../../../lib/steps/service";
+import { blankFields } from "../../../../../modules/documents/docai/blank";
+import { DOCAI_URL_DEFAULT, parseWithDocai } from "../../../../../modules/documents/docai/client";
+import { composeDocument, type ParsedDocument } from "../../../../../modules/documents/docai/compose";
+import { crossCheck } from "../../../../../modules/documents/docai/crosscheck";
+import { docTypeOf, specFor } from "../../../../../modules/documents/specs";
+import { HttpError, routeError } from "../../../../../modules/shared/http";
+import { syncCaseBlockProgress } from "../../../../../modules/cases/block-progress";
+import { assistantView } from "../../../../../modules/steps/assistant";
+import { checkContext, loadCase } from "../../../../../modules/steps/context";
+import { buildLedger, nextVersion, type DocumentRecord } from "../../../../../modules/steps/ledger";
+import { recordDocument } from "../../../../../modules/steps/service";
 
 type Bucket = {
   put(key: string, value: ArrayBuffer, options?: { httpMetadata?: { contentType?: string } }): Promise<unknown>;

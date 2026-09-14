@@ -1,4 +1,4 @@
-import { completeBlock, getCase, setOutputProvided } from "../../../lib/case-store";
+import { completeBlock, getCase, setOutputProvided } from "../../../../modules/cases/store";
 
 type Ctx = { params: Promise<{ id: string }> };
 

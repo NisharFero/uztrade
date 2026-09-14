@@ -2,7 +2,7 @@ import { sql } from "drizzle-orm";
 import { index, integer, real, sqliteTable, text, uniqueIndex } from "drizzle-orm/sqlite-core";
 
 /* A case is one shipment being taken through one of the five procedures.
- * The procedure definition itself is static (app/data/procedures.generated.ts);
+ * The procedure definition itself is static (modules/procedures/data/procedures.generated.ts);
  * only per-case progress lives in the database. */
 export const cases = sqliteTable("cases", {
   /** Human-facing reference, e.g. "UZ-2609-0001". */

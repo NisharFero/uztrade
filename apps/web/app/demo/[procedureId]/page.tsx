@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { PROCEDURES } from "../../data/procedures.generated";
-import { demoFileUrl, demoFor } from "../../lib/demo";
+import { PROCEDURES } from "../../../modules/procedures/data/procedures.generated";
+import { demoFileUrl, demoFor } from "../../../modules/demo/demo";
 
 export const dynamic = "force-dynamic";
 

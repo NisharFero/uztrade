@@ -17,13 +17,13 @@ content leaves the machine; the Hugging Face key only authenticates downloads.
 
 ## Findings (i5-1135G7, 4 cores, no GPU)
 
-Measured with `bench.py`, `bench_resolution.py`, `bench_qa_window.py` and
-`bench_readability.py`; numbers are from those runs, not estimates.
+Measured with `bench/ocr.py`, `bench/resolution.py`, `bench/qa_window.py` and
+`bench/readability.py`; numbers are from those runs, not estimates.
 
 | Finding | Evidence | Decision |
 |---|---|---|
 | OCR misses on the eval specimens come from the images, not EasyOCR | KZ phytosanitary thumbnail (549 px, text ~8 px): 0/7 known values at every setting. Contract specimen (778 px, text ~16 px): 7/9. Synthetic Russian/English invoice at A4: 10/11 | Treat specimen thumbnails as worst case; measure real-resolution accuracy on the synthetic invoice too |
-| OCR time scales with pixels; accuracy doesn't | Synthetic invoice: 44.7 s at 2480 px, 15.9 s at 1240 px, both 10/11. Upscaling the thumbnail 549→1600 px: 13 s → 46 s, still 0/7. Recognition batch 16: no gain | Cap width at 1280 px, never upscale (`MAX_WIDTH`, `test_pipeline.py`) |
+| OCR time scales with pixels; accuracy doesn't | Synthetic invoice: 44.7 s at 2480 px, 15.9 s at 1240 px, both 10/11. Upscaling the thumbnail 549→1600 px: 13 s → 46 s, still 0/7. Recognition batch 16: no gain | Cap width at 1280 px, never upscale (`MAX_WIDTH`, `tests/test_pipeline.py`) |
 | LayoutLM slowness on unreadable pages is token blow-up | Garbled Cyrillic: 7.3 tokens per word vs 1.4 for English labels, so ~7 s per question | Not a code fix — see the readability guard |
 | LayoutLM on a readable page is usable | Synthetic invoice, whole page: 690 tokens, ~1.9 s per question, 6/10 exact answers with scores 0.78–1.00 | Keep whole-page questions |
 | Asking over only the lines around a label is faster but unreliable | 2.4 s vs 18.9 s for 10 fields, 5/10 correct, and correct answers scored 0.00–0.10 | Rejected: the confidence gate would discard its correct answers |
@@ -40,7 +40,7 @@ Measured with `bench.py`, `bench_resolution.py`, `bench_qa_window.py` and
 python -m venv .venv
 .venv/Scripts/python -m pip install torch --index-url https://download.pytorch.org/whl/cpu
 .venv/Scripts/python -m pip install -r requirements.txt
-.venv/Scripts/python download_models.py
+.venv/Scripts/python -m scripts.download_models
 ```
 
 ## Run

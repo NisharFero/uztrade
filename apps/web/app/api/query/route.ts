@@ -1,6 +1,6 @@
 import { env } from "cloudflare:workers";
-import { openCaseFromQuery } from "../../lib/case-orchestration-service";
-import { buildDagProjection } from "../../lib/dag-projection";
+import { openCaseFromQuery } from "../../../modules/cases/orchestration";
+import { buildDagProjection } from "../../../modules/workflow/dag-projection";
 
 function toRouteErrorMessage(error: unknown) {
   const message = error instanceof Error ? error.message : "Unexpected error";

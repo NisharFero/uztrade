@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import Nav from "./nav";
-import "./globals.css";
+import Nav from "../components/layout/nav";
+import "./styles/globals.css";
 
 /* Fonts are self-hosted from public/fonts and declared in app/fonts.css.
    next/font is deliberately not used here: vinext emits absolute disk paths

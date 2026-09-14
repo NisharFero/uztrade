@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
-import Workspace from "./workspace";
-import { PROCEDURE_IDS, PROCEDURES } from "./data/procedures.generated";
-import { activeCase, type CaseSummary } from "./lib/active-case";
+import Workspace from "../components/chat/workspace";
+import { PROCEDURE_IDS, PROCEDURES } from "../modules/procedures/data/procedures.generated";
+import { activeCase, type CaseSummary } from "../modules/cases/active-case";
 
 export const metadata: Metadata = {
   title: "UzTrade Trade Agent",

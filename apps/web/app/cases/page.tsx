@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Icon } from "../icons";
-import { PROCEDURES } from "../data/procedures.generated";
-import { listCases } from "../lib/case-store";
-import { fmtHours, procedureStats } from "../lib/dag";
+import { Icon } from "../../components/icons";
+import { PROCEDURES } from "../../modules/procedures/data/procedures.generated";
+import { listCases } from "../../modules/cases/store";
+import { fmtHours, procedureStats } from "../../modules/procedures/dag";
 
 export const metadata: Metadata = {
   title: "Cases & Shipments · UzTrade",

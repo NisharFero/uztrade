@@ -1,8 +1,8 @@
-import { HttpError, jsonBody, routeError } from "../../../../lib/http";
-import { syncCaseBlockProgress } from "../../../../lib/legacy-progress";
-import { assistantView } from "../../../../lib/steps/assistant";
-import { loadCase } from "../../../../lib/steps/context";
-import { completeStep, confirmDocument, recordInput, StepNotReady } from "../../../../lib/steps/service";
+import { HttpError, jsonBody, routeError } from "../../../../../modules/shared/http";
+import { syncCaseBlockProgress } from "../../../../../modules/cases/block-progress";
+import { assistantView } from "../../../../../modules/steps/assistant";
+import { loadCase } from "../../../../../modules/steps/context";
+import { completeStep, confirmDocument, recordInput, StepNotReady } from "../../../../../modules/steps/service";
 
 type Ctx = { params: Promise<{ id: string }> };
 

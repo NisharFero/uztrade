@@ -9,12 +9,14 @@
     "dev": "vinext dev",
     "build": "vinext build",
     "start": "vinext start",
-    "test": "npm run build && npm run test:unit && node --import ./tests/register-loader.mjs --test tests/rendered-html.test.mjs",
-    "test:unit": "tsx --test tests/workflow-domain.test.ts tests/backend-seed.test.ts tests/d1-batching.test.ts tests/dag-projection.test.ts tests/block-progress.test.ts tests/procedure-classification.test.ts tests/orchestrator.test.ts tests/agent-tasks.test.ts tests/shipment-plan.test.ts tests/intake-actions.test.ts tests/requirements.test.ts tests/document-specs.test.ts tests/intake-agent.test.ts tests/compliance-risk.test.ts tests/intake-conversation.test.ts tests/docai.test.ts tests/step-assistant.test.ts tests/risk-values.test.ts tests/demo-pack.test.ts tests/upfront.test.ts",
-    "data:build": "node scripts/build-procedures.mjs",
+    "test": "npm run build && npm run test:unit && npm run test:e2e",
+    "test:unit": "tsx --test tests/unit/workflow/domain.test.ts tests/unit/workflow/orchestrator.test.ts tests/unit/workflow/dag-projection.test.ts tests/unit/workflow/d1-batching.test.ts tests/unit/cases/block-progress.test.ts tests/unit/catalog/seed.test.ts tests/unit/intake/classify.test.ts tests/unit/intake/intake-agent.test.ts tests/unit/intake/conversation.test.ts tests/unit/intake/actions.test.ts tests/unit/intake/shipment-plan.test.ts tests/unit/procedures/requirements.test.ts tests/unit/documents/agent-tasks.test.ts tests/unit/documents/specs.test.ts tests/unit/documents/docai.test.ts tests/unit/compliance/compliance-risk.test.ts tests/unit/compliance/risk-values.test.ts tests/unit/steps/assistant.test.ts tests/unit/steps/upfront.test.ts tests/unit/demo/demo-pack.test.ts",
+    "data:build": "node scripts/data/build-procedures.mjs",
     "lint": "eslint . --ignore-pattern dist --ignore-pattern .next",
     "db:generate": "drizzle-kit generate",
-    "eval:docai": "tsx scripts/eval-docai.ts"
+    "eval:docai": "tsx scripts/eval/eval-docai.ts",
+    "test:e2e": "node --import ./tests/e2e/register-loader.mjs --test tests/e2e/rendered-html.test.mjs",
+    "data:inputs": "node scripts/data/extract-inputs.mjs"
   },
   "dependencies": {
     "@langchain/core": "^1.2.10",
