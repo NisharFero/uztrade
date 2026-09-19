@@ -52,7 +52,40 @@ curl http://127.0.0.1:8765/health
 
 The web app calls `DOCAI_URL` (default `http://127.0.0.1:8765`).
 
-## Railway deployment
+## Hosted deployment
+
+Inference runs on a Hugging Face Inference Endpoint; Railway runs only a thin
+FastAPI front that forwards to it. Nothing heavy is installed on Railway.
+
+### 1. Build the Hugging Face model repository
+
+```sh
+.venv/Scripts/python -m scripts.build_hf_repo --out ../../.hf-repo
+```
+
+This copies `hf_endpoint/handler.py`, `hf_endpoint/requirements.txt`, the model
+card and `docai/pipeline.py` into the output directory, then downloads the
+EasyOCR and LayoutLM weights into `models/`. Vendoring the weights is what keeps
+the endpoint's boot offline and fast; `--no-weights` skips them and lets the
+endpoint download both models on every replica instead.
+
+The handler reads its cache and QA model locations before importing the
+pipeline, so it writes to the system temp directory rather than the read-only
+model repository.
+
+### 2. Push it to the private model repository
+
+```sh
+cd ../../.hf-repo
+git init && git lfs install
+git remote add origin https://huggingface.co/<user>/<model-repo>
+git add . && git commit -m "UzTrade DocAI handler"
+git push -u origin main
+```
+
+Hugging Face sets the endpoint's task to Custom once it detects `handler.py`.
+
+### 3. Railway
 
 Create a Railway service from this repository with root directory `apps/docai`.
 The Dockerfile installs only the HTTP dependencies. Set `DOCAI_PROVIDER=hf_endpoint`,

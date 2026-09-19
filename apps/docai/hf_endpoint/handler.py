@@ -1,17 +1,49 @@
-"""Hugging Face Inference Endpoint handler for the UzTrade DocAI pipeline."""
+"""Hugging Face Inference Endpoint handler for the UzTrade DocAI pipeline.
+
+The endpoint unpacks the model repository next to this file, so this file's own
+directory is the repository root and `models/` beside it holds the weights that
+`scripts/build_hf_repo.py` vendored. `docai.pipeline` reads its cache location
+and QA model at import time, so both are set before it is imported.
+"""
 
 from __future__ import annotations
 
 import base64
 import os
+import shutil
+import tempfile
+from pathlib import Path
 from typing import Any
 
-from docai import pipeline
+REPO = Path(__file__).resolve().parent
+VENDORED_QA = REPO / "models" / "qa"
+
+# The unpacked repository is not a safe place to write, and both EasyOCR and
+# transformers want a cache. Vendored weights are used when the build script
+# put them in the repository; otherwise the pipeline downloads them as usual.
+os.environ.setdefault("DOCAI_CACHE", str(Path(tempfile.gettempdir()) / "docai-cache"))
+if VENDORED_QA.is_dir():
+    os.environ.setdefault("DOCAI_QA_MODEL", str(VENDORED_QA))
+
+from docai import pipeline  # noqa: E402  the environment above has to come first
+
+
+def stage_easyocr_weights(root: Path) -> None:
+    """Copies vendored EasyOCR weights into the cache so the reader never downloads."""
+    vendored = root / "models" / "easyocr"
+    if not vendored.is_dir():
+        return
+    pipeline.EASYOCR_DIR.mkdir(parents=True, exist_ok=True)
+    for weight in vendored.glob("*.pth"):
+        target = pipeline.EASYOCR_DIR / weight.name
+        if not target.exists():
+            shutil.copy2(weight, target)
 
 
 class EndpointHandler:
     def __init__(self, path: str = ""):
-        del path
+        # `path` is the unpacked repository, the directory this file sits in.
+        stage_easyocr_weights(Path(path) if path else REPO)
         if os.environ.get("DOCAI_WARM", "1") == "1":
             pipeline.reader()
             pipeline.qa()

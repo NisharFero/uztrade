@@ -24,3 +24,6 @@ apps/portals/.data/
 
 # local tooling (presentation builder)
 .tools/
+
+# hugging face model repository build output
+.hf-repo/

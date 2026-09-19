@@ -1,4 +1,8 @@
-easyocr
-pymupdf
-pillow
-transformers
+# Versions validated in apps/docai/.venv. torch comes from the endpoint image,
+# so it is deliberately not pinned here: reinstalling it costs GBs at boot.
+easyocr==1.7.2
+# easyocr pulls opencv-python, which needs libGL that the image does not have.
+opencv-python-headless==5.0.0.93
+transformers==5.17.0
+pymupdf==1.28.2
+pillow==12.3.0
