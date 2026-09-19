@@ -76,12 +76,12 @@ model repository.
 ### 2. Push it to the private model repository
 
 ```sh
-cd ../../.hf-repo
-git init && git lfs install
-git remote add origin https://huggingface.co/<user>/<model-repo>
-git add . && git commit -m "UzTrade DocAI handler"
-git push -u origin main
+.venv/Scripts/hf auth login          # paste the write token; never commit it
+.venv/Scripts/hf upload <user>/<model-repo> ../../.hf-repo . --private
 ```
+
+`hf upload` handles the large files itself, so `git lfs` is only needed if you
+push with git instead; the generated `.gitattributes` covers that case.
 
 Hugging Face sets the endpoint's task to Custom once it detects `handler.py`.
 

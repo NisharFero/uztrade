@@ -24,6 +24,10 @@ VENDORED_QA = REPO / "models" / "qa"
 os.environ.setdefault("DOCAI_CACHE", str(Path(tempfile.gettempdir()) / "docai-cache"))
 if VENDORED_QA.is_dir():
     os.environ.setdefault("DOCAI_QA_MODEL", str(VENDORED_QA))
+    model_id = VENDORED_QA / "MODEL_ID"
+    if model_id.exists():
+        # Otherwise every response would name the container path, not the model.
+        os.environ.setdefault("DOCAI_QA_MODEL_NAME", model_id.read_text(encoding="utf-8").strip())
 
 from docai import pipeline  # noqa: E402  the environment above has to come first
 

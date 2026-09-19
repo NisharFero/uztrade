@@ -28,6 +28,7 @@ requirements.txt      inference dependencies
 docai/pipeline.py     the OCR + layout QA pipeline, copied unchanged
 models/easyocr/       EasyOCR detector and recogniser weights
 models/qa/            impira/layoutlm-document-qa snapshot
+models/qa/MODEL_ID    the model id the snapshot holds, used in responses
 ```
 
 `models/` is optional. When it is present the endpoint boots offline; when it is
@@ -62,3 +63,4 @@ the local service, so the web app cannot tell the two providers apart.
 | `DOCAI_WARM` | `1` (default) loads both models during startup; `0` defers to the first request |
 | `DOCAI_CACHE` | writable cache directory; defaults to the system temp directory |
 | `DOCAI_QA_MODEL` | overrides the QA model; set automatically when `models/qa` is vendored |
+| `DOCAI_QA_MODEL_NAME` | the model id reported back; read from `models/qa/MODEL_ID` |

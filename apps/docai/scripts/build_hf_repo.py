@@ -63,13 +63,22 @@ def download_weights(out: Path) -> None:
     )
 
     print(f"  {pipeline.QA_MODEL} -> models/qa")
+    qa_dir = out / "models" / "qa"
     snapshot_download(
         pipeline.QA_MODEL,
-        local_dir=str(out / "models" / "qa"),
+        local_dir=str(qa_dir),
         token=pipeline.hf_token(),
-        # The pipeline runs on PyTorch; the other framework dumps double the size.
-        ignore_patterns=["*.msgpack", "*.h5", "*.ot", "*.onnx"],
+        # The repository ships the same weights twice. transformers prefers
+        # safetensors, so taking the .bin as well would add 488 MB for nothing.
+        # Other framework dumps and the upstream LFS rules are dead weight too.
+        ignore_patterns=["*.bin", "*.msgpack", "*.h5", "*.ot", "*.onnx", ".gitattributes"],
     )
+    if not (qa_dir / "model.safetensors").exists():
+        raise SystemExit(f"{pipeline.QA_MODEL} has no safetensors weights; adjust ignore_patterns")
+    # snapshot_download leaves its own bookkeeping behind; it must not be pushed.
+    shutil.rmtree(qa_dir / ".cache", ignore_errors=True)
+    # The handler loads the snapshot by path, so record what it actually holds.
+    (qa_dir / "MODEL_ID").write_text(pipeline.QA_MODEL, encoding="utf-8")
 
 
 def main() -> None:

@@ -31,6 +31,9 @@ os.environ.setdefault("HF_HOME", str(CACHE / "hf"))
 
 EASYOCR_DIR = CACHE / "easyocr"
 QA_MODEL = os.environ.get("DOCAI_QA_MODEL", "impira/layoutlm-document-qa")
+# A vendored snapshot is loaded from a directory, so QA_MODEL is a path there.
+# Reports carry the model it holds instead, so hosted answers match local ones.
+QA_MODEL_NAME = os.environ.get("DOCAI_QA_MODEL_NAME", QA_MODEL)
 OCR_LANGS = ["ru", "en"]
 # OCR cost scales with pixels while accuracy doesn't: an A4 300 dpi invoice read
 # 10/11 known values at 1240 px in 16 s against 45 s at full size, and upscaling
@@ -91,7 +94,7 @@ def health_info() -> dict:
     return {
         "ok": True,
         "ocr": {"engine": "easyocr", "languages": OCR_LANGS, "loaded": _reader is not None},
-        "qa": {"model": QA_MODEL, "loaded": _qa is not None},
+        "qa": {"model": QA_MODEL_NAME, "loaded": _qa is not None},
         "cache": str(CACHE),
     }
 
@@ -357,5 +360,5 @@ def parse(data: bytes, filename: str | None, content_type: str | None, spec: dic
         "text": "\n\n".join(texts),
         "fields": result,
         "timings": {"ocr_ms": ocr_ms, "fields_ms": qa_ms, "total_ms": int((time.time() - started) * 1000)},
-        "models": {"ocr": f"easyocr {'+'.join(OCR_LANGS)}", "qa": QA_MODEL},
+        "models": {"ocr": f"easyocr {'+'.join(OCR_LANGS)}", "qa": QA_MODEL_NAME},
     }
