@@ -3,6 +3,10 @@ import type { ReactNode } from "react";
 /* One shared set of stroke attributes keeps every glyph in the same family,
    and `currentColor` lets each context colour its own icons. */
 const s = {
+  // A size of its own, so a glyph no stylesheet rule sizes stays text-sized
+  // instead of filling its container; CSS width/height still win.
+  width: "1em",
+  height: "1em",
   viewBox: "0 0 24 24",
   fill: "none",
   stroke: "currentColor",

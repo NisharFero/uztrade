@@ -1,6 +1,9 @@
-import { env } from "cloudflare:workers";
+import { getRuntimeEnv } from "@/modules/runtime/env";
+const env = getRuntimeEnv();
 import { openCaseFromQuery } from "../../../modules/cases/orchestration";
 import { buildDagProjection } from "../../../modules/workflow/dag-projection";
+import { agenticAiFromEnv } from "../../../modules/workflow/agentic-ai";
+import { portalsFromEnv, type PortalEnv } from "../../../modules/portals/client";
 
 function toRouteErrorMessage(error: unknown) {
   const message = error instanceof Error ? error.message : "Unexpected error";
@@ -19,8 +22,8 @@ export async function POST(request: Request) {
     }
     const followUps = typeof payload.followUps === "number" && payload.followUps > 0 ? Math.floor(payload.followUps) : 0;
 
-    const apiKey = (env as unknown as { GROQ_API_KEY?: string }).GROQ_API_KEY;
-    const result = await openCaseFromQuery(query, apiKey, { followUps });
+    const bindings = env as unknown as { GROQ_API_KEY?: string; GROQ_MODEL?: string; DOCAI_URL?: string };
+    const result = await openCaseFromQuery(query, bindings.GROQ_API_KEY, { followUps, ai: agenticAiFromEnv(bindings), portals: portalsFromEnv(env as unknown as PortalEnv) });
 
     if (!result.matched) {
       // Out of scope: name what IS supported rather than guessing a procedure.

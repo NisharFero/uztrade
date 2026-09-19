@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { PROCEDURES } from "../../../modules/procedures/data/procedures.generated";
+import { PROCEDURES } from "../../../modules/procedures/sync";
 import { extractShipmentFacts } from "../../../modules/workflow/domain";
 import { classifyByRules, settleMatch } from "../../../modules/intake/classify";
 import { buildShipmentPlan, findPlace, resolveRoute, toTonnes } from "../../../modules/intake/shipment-plan";

@@ -1,0 +1,426 @@
+{
+ "procedureId": "161",
+ "title": "Clearance of fruit and vegetable juices by road — demo scenario",
+ "note": "Fictional demo data. Every company, person, number, amount and stamp is invented; nothing here is a real document.",
+ "shipment": {
+  "query": "Export 20 t of apple juice from Namangan to Almaty by road",
+  "goods": "Apple juice, not concentrated",
+  "goodsRu": "Сок яблочный",
+  "hs": "2009 71 200 0",
+  "netKg": "20 000",
+  "grossKg": "20 400",
+  "cartons": "20",
+  "packaging": "Bag-in-box in 1000 l IBC",
+  "unitKind": "truck",
+  "wagons": [
+   "01 A 777 BA / trailer 01 1234 XA"
+  ],
+  "seals": [
+   "UZ 330118"
+  ],
+  "departureStation": "Namangan",
+  "destinationStation": "Almaty",
+  "borderStations": "Yallama – Zhibek Zholy",
+  "from": "Namangan, Uzbekistan",
+  "to": "Almaty, Kazakhstan",
+  "valueUsd": "16 000.00",
+  "incoterms": "DAP Almaty",
+  "contractNo": "UZ-161/2026-01",
+  "contractDate": "01.09.2026",
+  "invoiceNo": "INV-161/2026-031",
+  "invoiceDate": "04.09.2026",
+  "caseLine": "clearance of fruit and vegetable juices by road, 20 000 kg of apple juice, not concentrated"
+ },
+ "parties": {
+  "exporter": {
+   "name": "OOO \"Namangan Sharbatlari\"",
+   "address": "Namangan, Uychi street 12, Uzbekistan",
+   "tin": "306789034",
+   "manager": "Bobur Khodjaev",
+   "phone": "+998 94 300 55 71",
+   "email": "export.sharbat@demo.uz",
+   "bank": "Demo Bank JSCB, account 20208000900666777001, MFO 00444"
+  },
+  "trader": {
+   "name": "OOO \"Namangan Sharbatlari\"",
+   "address": "Namangan, Uychi street 12, Uzbekistan",
+   "tin": "306789034",
+   "manager": "Bobur Khodjaev",
+   "phone": "+998 94 300 55 71",
+   "email": "export.sharbat@demo.uz",
+   "bank": "Demo Bank JSCB, account 20208000900666777001, MFO 00444"
+  },
+  "seller": {
+   "name": "OOO \"Namangan Sharbatlari\"",
+   "address": "Namangan, Uychi street 12, Uzbekistan",
+   "tin": "306789034",
+   "manager": "Bobur Khodjaev",
+   "phone": "+998 94 300 55 71",
+   "email": "export.sharbat@demo.uz",
+   "bank": "Demo Bank JSCB, account 20208000900666777001, MFO 00444"
+  },
+  "buyer": {
+   "name": "TOO \"Almaty Juice Distribution\"",
+   "address": "Almaty, Tole Bi street 286, Kazakhstan",
+   "tin": "—",
+   "manager": "A. Demo",
+   "phone": "—",
+   "email": "—",
+   "bank": "—"
+  },
+  "representative": {
+   "name": "Ilhom Nazarov",
+   "passport": "AA 2233445"
+  }
+ },
+ "values": {},
+ "documents": [
+  {
+   "id": "commercial-invoice",
+   "template": "commercial_invoice",
+   "title": "Commercial invoice",
+   "docType": "commercial_invoice",
+   "labels": [
+    "Commercial invoice"
+   ],
+   "steps": [
+    1,
+    4,
+    6,
+    11
+   ],
+   "output": false,
+   "fields": {
+    "invoice_no": "INV-161/2026-031",
+    "invoice_date": "04.09.2026",
+    "seller": "OOO \"Namangan Sharbatlari\"",
+    "buyer": "TOO \"Almaty Juice Distribution\"",
+    "goods": "Apple juice, not concentrated",
+    "hs_code": "2009 71 200 0",
+    "quantity": "20 000 kg",
+    "total_value": "16 000.00 USD",
+    "origin_country": "Uzbekistan",
+    "gross_weight": "20 400 kg",
+    "currency": "USD",
+    "contract_no": "UZ-161/2026-01",
+    "incoterms": "DAP Almaty",
+    "transport_doc": "CMR 161-2026/014"
+   },
+   "file": "161-01-commercial-invoice.png"
+  },
+  {
+   "id": "passport",
+   "template": "passport",
+   "title": "Passport",
+   "docType": "passport",
+   "labels": [
+    "Passport"
+   ],
+   "steps": [
+    4
+   ],
+   "output": false,
+   "fields": {
+    "full_name": "NAZAROV ILHOM",
+    "passport_no": "AA 2233445",
+    "expiry": "14.03.2031"
+   },
+   "file": "161-02-passport.png"
+  },
+  {
+   "id": "power-of-attorney",
+   "template": "poa",
+   "title": "Power of attorney",
+   "docType": "power_of_attorney",
+   "labels": [
+    "Power of attorney"
+   ],
+   "steps": [
+    4
+   ],
+   "output": false,
+   "fields": {
+    "poa_no": "21",
+    "issue_date": "02.09.2026",
+    "representative": "Ilhom Nazarov",
+    "passport": "AA 2233445",
+    "valid_until": "31.12.2026",
+    "scope": "Customs operations, cargo handling, signing and receiving documents"
+   },
+   "file": "161-03-power-of-attorney.png"
+  },
+  {
+   "id": "cmr-note",
+   "template": "cmr",
+   "title": "CMR consignment note",
+   "docType": "cmr_note",
+   "labels": [
+    "Convention on the International Carriage of Goods by Road"
+   ],
+   "steps": [
+    1,
+    4,
+    6,
+    11
+   ],
+   "output": false,
+   "fields": {
+    "cmr_no": "161-2026/014",
+    "sender": "OOO \"Namangan Sharbatlari\"",
+    "consignee": "TOO \"Almaty Juice Distribution\"",
+    "delivery_place": "Almaty, Kazakhstan",
+    "loading_place": "Namangan, Uzbekistan, 05.09.2026",
+    "goods": "Apple juice, not concentrated",
+    "places": "20",
+    "weight": "20 400 kg",
+    "carrier": "OOO \"Demo Trans Logistic\" (TIR carrier)",
+    "vehicle": "01 A 777 BA / trailer 01 1234 XA",
+    "issue_date": "05.09.2026"
+   },
+   "file": "161-04-cmr-consignment-note.png"
+  },
+  {
+   "template": "ct1",
+   "title": "Certificate of origin General form",
+   "docType": "certificate_of_origin",
+   "labels": [
+    "Certificate of origin General form"
+   ],
+   "steps": [
+    1
+   ],
+   "output": false,
+   "fields": {
+    "cert_no": "UZ 04161811",
+    "exporter": "OOO \"Namangan Sharbatlari\"",
+    "consignee": "TOO \"Almaty Juice Distribution\"",
+    "transport_route": "Road, Namangan – Yallama – Zhibek Zholy – Almaty",
+    "goods": "Apple juice, not concentrated, 20 places",
+    "weight": "20 400 kg",
+    "invoice_ref": "INV-161/2026-031 of 04.09.2026",
+    "exported_to": "Kazakhstan"
+   },
+   "id": "certificate-of-origin-general-form",
+   "file": "161-05-certificate-of-origin-general-form.png"
+  },
+  {
+   "template": "ct1",
+   "title": "Certificate of origin form A",
+   "docType": "certificate_of_origin",
+   "labels": [
+    "Certificate of origin form A"
+   ],
+   "steps": [
+    1
+   ],
+   "output": false,
+   "fields": {
+    "cert_no": "UZ 04161811",
+    "exporter": "OOO \"Namangan Sharbatlari\"",
+    "consignee": "TOO \"Almaty Juice Distribution\"",
+    "transport_route": "Road, Namangan – Yallama – Zhibek Zholy – Almaty",
+    "goods": "Apple juice, not concentrated, 20 places",
+    "weight": "20 400 kg",
+    "invoice_ref": "INV-161/2026-031 of 04.09.2026",
+    "exported_to": "Kazakhstan"
+   },
+   "id": "certificate-of-origin-form-a",
+   "file": "161-06-certificate-of-origin-form-a.png"
+  },
+  {
+   "template": "ct1",
+   "title": "Certificate of origin",
+   "docType": "certificate_of_origin",
+   "labels": [
+    "Certificate of origin"
+   ],
+   "steps": [
+    1
+   ],
+   "output": false,
+   "fields": {
+    "cert_no": "UZ 04161811",
+    "exporter": "OOO \"Namangan Sharbatlari\"",
+    "consignee": "TOO \"Almaty Juice Distribution\"",
+    "transport_route": "Road, Namangan – Yallama – Zhibek Zholy – Almaty",
+    "goods": "Apple juice, not concentrated, 20 places",
+    "weight": "20 400 kg",
+    "invoice_ref": "INV-161/2026-031 of 04.09.2026",
+    "exported_to": "Kazakhstan"
+   },
+   "id": "certificate-of-origin",
+   "file": "161-07-certificate-of-origin.png"
+  },
+  {
+   "template": "letter",
+   "title": "Identification number of foreign trade contract",
+   "docType": null,
+   "labels": [
+    "Identification number of foreign trade contract"
+   ],
+   "steps": [
+    1
+   ],
+   "output": false,
+   "fields": {},
+   "body": "Identification number of foreign trade contract for the shipment 20 000 kg of apple juice, not concentrated, Namangan (Uzbekistan) → Almaty (Kazakhstan), 1 truck 01 A 777 BA / trailer 01 1234 XA, contract UZ-161/2026-01 of 01.09.2026.",
+   "id": "identification-number-of-foreign-trade-contract",
+   "file": "161-08-identification-number-of-foreign-trade-contract.png"
+  },
+  {
+   "id": "receipt-of-payment-2",
+   "template": "receipt",
+   "title": "Receipt of payment — step 2",
+   "docType": "receipt_of_payment",
+   "labels": [
+    "Receipt of payment"
+   ],
+   "steps": [
+    2
+   ],
+   "output": true,
+   "fields": {
+    "receipt_no": "R-161-002",
+    "payer": "OOO \"Namangan Sharbatlari\"",
+    "payer_inn": "306789034",
+    "recipient": "State Customs Committee (demo)",
+    "payment_type": "customs fee",
+    "amount": "245 000",
+    "date": "02.09.2026"
+   },
+   "file": "161-09-receipt-of-payment-step-2.png"
+  },
+  {
+   "template": "letter",
+   "title": "TIR Carnet - \"Transport International Routier\"",
+   "docType": null,
+   "labels": [
+    "TIR Carnet - \"Transport International Routier\""
+   ],
+   "steps": [
+    6,
+    11
+   ],
+   "output": false,
+   "fields": {},
+   "body": "TIR Carnet - \"Transport International Routier\" for 01 A 777 BA / trailer 01 1234 XA, operated by OOO \"Demo Trans Logistic\" (TIR carrier). Shipment: 20 000 kg of apple juice, not concentrated, Namangan (Uzbekistan) → Almaty (Kazakhstan), 1 truck 01 A 777 BA / trailer 01 1234 XA.",
+   "id": "tir-carnet-transport-international-routier",
+   "file": "161-10-tir-carnet-transport-international-routier.png"
+  },
+  {
+   "template": "letter",
+   "title": "Driver's license",
+   "docType": null,
+   "labels": [
+    "Driver's license"
+   ],
+   "steps": [
+    6
+   ],
+   "output": false,
+   "fields": {},
+   "body": "Driver's license of Ilhom Nazarov, driver of the shipment (passport AA 2233445). Shipment: 20 000 kg of apple juice, not concentrated, Namangan (Uzbekistan) → Almaty (Kazakhstan), 1 truck 01 A 777 BA / trailer 01 1234 XA.",
+   "id": "driver-s-license",
+   "file": "161-11-driver-s-license.png"
+  },
+  {
+   "template": "letter",
+   "title": "Vehicle registration certificate",
+   "docType": null,
+   "labels": [
+    "Vehicle registration certificate"
+   ],
+   "steps": [
+    6,
+    11
+   ],
+   "output": false,
+   "fields": {},
+   "body": "Vehicle registration certificate for 01 A 777 BA / trailer 01 1234 XA, operated by OOO \"Demo Trans Logistic\" (TIR carrier). Shipment: 20 000 kg of apple juice, not concentrated, Namangan (Uzbekistan) → Almaty (Kazakhstan), 1 truck 01 A 777 BA / trailer 01 1234 XA.",
+   "id": "vehicle-registration-certificate",
+   "file": "161-12-vehicle-registration-certificate.png"
+  },
+  {
+   "template": "letter",
+   "title": "Vehicle registration number",
+   "docType": null,
+   "labels": [
+    "Vehicle registration number"
+   ],
+   "steps": [
+    7
+   ],
+   "output": false,
+   "fields": {},
+   "body": "Vehicle registration number for 01 A 777 BA / trailer 01 1234 XA, operated by OOO \"Demo Trans Logistic\" (TIR carrier). Shipment: 20 000 kg of apple juice, not concentrated, Namangan (Uzbekistan) → Almaty (Kazakhstan), 1 truck 01 A 777 BA / trailer 01 1234 XA.",
+   "id": "vehicle-registration-number",
+   "file": "161-13-vehicle-registration-number.png"
+  },
+  {
+   "template": "letter",
+   "title": "International passport",
+   "docType": null,
+   "labels": [
+    "International passport"
+   ],
+   "steps": [
+    7,
+    11,
+    12
+   ],
+   "output": false,
+   "fields": {},
+   "body": "International passport of Ilhom Nazarov, driver of the shipment (passport AA 2233445). Shipment: 20 000 kg of apple juice, not concentrated, Namangan (Uzbekistan) → Almaty (Kazakhstan), 1 truck 01 A 777 BA / trailer 01 1234 XA.",
+   "id": "international-passport",
+   "file": "161-14-international-passport.png"
+  },
+  {
+   "template": "letter",
+   "title": "Cargo delivery control book",
+   "docType": null,
+   "labels": [
+    "Cargo delivery control book"
+   ],
+   "steps": [
+    11
+   ],
+   "output": false,
+   "fields": {},
+   "body": "Cargo delivery control book for 01 A 777 BA / trailer 01 1234 XA, operated by OOO \"Demo Trans Logistic\" (TIR carrier). Shipment: 20 000 kg of apple juice, not concentrated, Namangan (Uzbekistan) → Almaty (Kazakhstan), 1 truck 01 A 777 BA / trailer 01 1234 XA.",
+   "id": "cargo-delivery-control-book",
+   "file": "161-15-cargo-delivery-control-book.png"
+  },
+  {
+   "template": "letter",
+   "title": "ATP certificate",
+   "docType": null,
+   "labels": [
+    "ATP certificate"
+   ],
+   "steps": [
+    11
+   ],
+   "output": false,
+   "fields": {},
+   "body": "ATP certificate for 01 A 777 BA / trailer 01 1234 XA, operated by OOO \"Demo Trans Logistic\" (TIR carrier). Shipment: 20 000 kg of apple juice, not concentrated, Namangan (Uzbekistan) → Almaty (Kazakhstan), 1 truck 01 A 777 BA / trailer 01 1234 XA.",
+   "id": "atp-certificate",
+   "file": "161-16-atp-certificate.png"
+  },
+  {
+   "template": "letter",
+   "title": "Authorization for international carriage of goods",
+   "docType": null,
+   "labels": [
+    "Authorization for international carriage of goods"
+   ],
+   "steps": [
+    11
+   ],
+   "output": false,
+   "fields": {},
+   "body": "Authorization for international carriage of goods for 01 A 777 BA / trailer 01 1234 XA, operated by OOO \"Demo Trans Logistic\" (TIR carrier). Shipment: 20 000 kg of apple juice, not concentrated, Namangan (Uzbekistan) → Almaty (Kazakhstan), 1 truck 01 A 777 BA / trailer 01 1234 XA.",
+   "id": "authorization-for-international-carriage-of-good",
+   "file": "161-17-authorization-for-international-carriage-of-good.png"
+  }
+ ]
+}

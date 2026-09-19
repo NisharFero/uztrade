@@ -1,0 +1,930 @@
+{
+ "procedureId": "477",
+ "title": "Import of tea by train — demo scenario",
+ "note": "Fictional demo data. Every company, person, number, amount and stamp is invented; nothing here is a real document.",
+ "shipment": {
+  "query": "Import 30 t of black tea from Almaty to Tashkent by train",
+  "goods": "Black tea, bulk",
+  "goodsRu": "Чай черный",
+  "hs": "0902 40 000 0",
+  "netKg": "30 000",
+  "grossKg": "30 600",
+  "cartons": "1500",
+  "packaging": "Paper sacks, 20 kg",
+  "unitKind": "wagon",
+  "wagons": [
+   "52917340"
+  ],
+  "seals": [
+   "KZ 771204"
+  ],
+  "departureStation": "Almaty-1",
+  "destinationStation": "Tashkent-Tovarny",
+  "borderStations": "Sary-Agash, Keles",
+  "from": "Almaty, Kazakhstan",
+  "to": "Tashkent, Uzbekistan",
+  "valueUsd": "84 000.00",
+  "incoterms": "CPT Tashkent",
+  "contractNo": "UZ-477/2026-01",
+  "contractDate": "01.09.2026",
+  "invoiceNo": "INV-477/2026-031",
+  "invoiceDate": "04.09.2026",
+  "caseLine": "import of tea by train, 30 000 kg of black tea, bulk"
+ },
+ "parties": {
+  "exporter": {
+   "name": "OOO \"Toshkent Choy Savdo\"",
+   "address": "Tashkent, Amir Temur street 108, Uzbekistan",
+   "tin": "304567812",
+   "manager": "Malika Akhmedova",
+   "phone": "+998 90 777 31 45",
+   "email": "import.choysavdo@demo.uz",
+   "bank": "Demo Bank JSCB, account 20208000900444555001, MFO 00444"
+  },
+  "trader": {
+   "name": "OOO \"Toshkent Choy Savdo\"",
+   "address": "Tashkent, Amir Temur street 108, Uzbekistan",
+   "tin": "304567812",
+   "manager": "Malika Akhmedova",
+   "phone": "+998 90 777 31 45",
+   "email": "import.choysavdo@demo.uz",
+   "bank": "Demo Bank JSCB, account 20208000900444555001, MFO 00444"
+  },
+  "seller": {
+   "name": "TOO \"Almaty Tea Packers\"",
+   "address": "Almaty, Suyunbay avenue 2, Kazakhstan",
+   "tin": "—",
+   "manager": "A. Demo",
+   "phone": "—",
+   "email": "—",
+   "bank": "—"
+  },
+  "buyer": {
+   "name": "OOO \"Toshkent Choy Savdo\"",
+   "address": "Tashkent, Amir Temur street 108, Uzbekistan",
+   "tin": "304567812",
+   "manager": "Malika Akhmedova",
+   "phone": "+998 90 777 31 45",
+   "email": "import.choysavdo@demo.uz",
+   "bank": "Demo Bank JSCB, account 20208000900444555001, MFO 00444"
+  },
+  "representative": {
+   "name": "Rustam Aliev",
+   "passport": "AE 1122334"
+  }
+ },
+ "values": {
+  "Tax Identification Number of the organization or individual": "304567812",
+  "Bank details": "Demo Bank JSCB, account 20208000900444555001, MFO 00444",
+  "Name of the organization": "OOO \"Toshkent Choy Savdo\"",
+  "Full name of an organization's manager": "Malika Akhmedova",
+  "Contact phone number": "+998 90 777 31 45",
+  "Agency region": "Tashkent region",
+  "Type of organization (business entity, budgetary)": "Business entity",
+  "Cost on the contract": "1 120 000 UZS",
+  "Amount of consignment": "30 000 kg",
+  "Warehouse license number": "CW-0417 (demo customs warehouse, Tashkent)"
+ },
+ "documents": [
+  {
+   "id": "commercial-invoice",
+   "template": "commercial_invoice",
+   "title": "Commercial invoice",
+   "docType": "commercial_invoice",
+   "labels": [
+    "Commercial invoice"
+   ],
+   "steps": [
+    17,
+    18,
+    19,
+    20,
+    22,
+    26,
+    45,
+    48
+   ],
+   "output": false,
+   "fields": {
+    "invoice_no": "INV-477/2026-031",
+    "invoice_date": "04.09.2026",
+    "seller": "TOO \"Almaty Tea Packers\"",
+    "buyer": "OOO \"Toshkent Choy Savdo\"",
+    "goods": "Black tea, bulk",
+    "hs_code": "0902 40 000 0",
+    "quantity": "30 000 kg",
+    "total_value": "84 000.00 USD",
+    "origin_country": "Kazakhstan",
+    "gross_weight": "30 600 kg",
+    "currency": "USD",
+    "contract_no": "UZ-477/2026-01",
+    "incoterms": "CPT Tashkent",
+    "transport_doc": "SMGS 77477451"
+   },
+   "file": "477-01-commercial-invoice.png"
+  },
+  {
+   "id": "trade-contract",
+   "template": "contract",
+   "title": "Foreign trade contract",
+   "docType": "trade_contract",
+   "labels": [
+    "Electronic copy of foreign trade contract"
+   ],
+   "steps": [
+    5
+   ],
+   "output": false,
+   "fields": {
+    "contract_no": "UZ-477/2026-01",
+    "contract_date": "01.09.2026",
+    "seller": "TOO \"Almaty Tea Packers\"",
+    "buyer": "OOO \"Toshkent Choy Savdo\"",
+    "goods": "Black tea, bulk",
+    "hs_code": "0902 40 000 0",
+    "quantity": "30 000 kg",
+    "total_value": "84 000.00 USD",
+    "incoterms": "CPT Tashkent"
+   },
+   "file": "477-02-foreign-trade-contract.png"
+  },
+  {
+   "id": "passport",
+   "template": "passport",
+   "title": "Passport",
+   "docType": "passport",
+   "labels": [
+    "Passport"
+   ],
+   "steps": [
+    2,
+    10,
+    11,
+    16,
+    20,
+    22,
+    28,
+    32,
+    43,
+    48,
+    50,
+    52
+   ],
+   "output": false,
+   "fields": {
+    "full_name": "ALIEV RUSTAM",
+    "passport_no": "AE 1122334",
+    "expiry": "14.03.2031"
+   },
+   "file": "477-03-passport.png"
+  },
+  {
+   "id": "power-of-attorney",
+   "template": "poa",
+   "title": "Power of attorney",
+   "docType": "power_of_attorney",
+   "labels": [
+    "Power of attorney",
+    "Power of attorney for railway station"
+   ],
+   "steps": [
+    10,
+    11,
+    16,
+    19,
+    20,
+    22,
+    25,
+    40,
+    48,
+    50,
+    52
+   ],
+   "output": false,
+   "fields": {
+    "poa_no": "37",
+    "issue_date": "02.09.2026",
+    "representative": "Rustam Aliev",
+    "passport": "AE 1122334",
+    "valid_until": "31.12.2026",
+    "scope": "Customs operations, cargo handling, signing and receiving documents"
+   },
+   "file": "477-04-power-of-attorney.png"
+  },
+  {
+   "id": "packing-list",
+   "template": "packing_list",
+   "title": "Packing list",
+   "docType": "packing_list",
+   "labels": [
+    "Packing list"
+   ],
+   "steps": [
+    17,
+    19,
+    26
+   ],
+   "output": false,
+   "fields": {
+    "list_no": "PL-477/2026-031",
+    "list_date": "04.09.2026",
+    "seller": "TOO \"Almaty Tea Packers\"",
+    "consignee": "OOO \"Toshkent Choy Savdo\"",
+    "goods": "Black tea, bulk",
+    "packaging": "Paper sacks, 20 kg",
+    "packages": "1500",
+    "net_weight": "30 000 kg",
+    "gross_weight": "30 600 kg",
+    "hs_code": "0902 40 000 0",
+    "seller_inn": "—"
+   },
+   "file": "477-05-packing-list.png"
+  },
+  {
+   "id": "offer-agreement-1",
+   "template": "offer",
+   "title": "Offer agreement — step 1",
+   "docType": "offer_agreement",
+   "labels": [
+    "Offer agreement"
+   ],
+   "steps": [
+    1
+   ],
+   "output": true,
+   "fields": {
+    "agreement_no": "26144770001",
+    "agreement_date": "02.09.2026",
+    "amount": "245 000",
+    "service": "Inspection services",
+    "units": "1"
+   },
+   "file": "477-06-offer-agreement-step-1.png"
+  },
+  {
+   "id": "receipt-of-payment-2",
+   "template": "receipt",
+   "title": "Receipt of payment — step 2",
+   "docType": "receipt_of_payment",
+   "labels": [
+    "Receipt of payment"
+   ],
+   "steps": [
+    2
+   ],
+   "output": true,
+   "fields": {
+    "receipt_no": "R-477-002",
+    "payer": "OOO \"Toshkent Choy Savdo\"",
+    "payer_inn": "304567812",
+    "recipient": "Agency of Plant Quarantine and Protection",
+    "payment_type": "quarantine permit",
+    "amount": "245 000",
+    "date": "02.09.2026"
+   },
+   "file": "477-07-receipt-of-payment-step-2.png"
+  },
+  {
+   "id": "receipt-of-payment-8",
+   "template": "receipt",
+   "title": "Receipt of payment — step 8",
+   "docType": "receipt_of_payment",
+   "labels": [
+    "Receipt of payment"
+   ],
+   "steps": [
+    8
+   ],
+   "output": true,
+   "fields": {
+    "receipt_no": "R-477-008",
+    "payer": "OOO \"Toshkent Choy Savdo\"",
+    "payer_inn": "304567812",
+    "recipient": "JSC Uzbekistan Temir Yo'llari",
+    "payment_type": "Prepay for railway services (for green tea)",
+    "amount": "1 120 000",
+    "date": "05.09.2026"
+   },
+   "file": "477-08-receipt-of-payment-step-8.png"
+  },
+  {
+   "template": "letter",
+   "title": "Certificate of state registration",
+   "docType": null,
+   "labels": [
+    "Certificate of state registration"
+   ],
+   "steps": [
+    11
+   ],
+   "output": false,
+   "fields": {},
+   "body": "Certificate of state registration issued to OOO \"Toshkent Choy Savdo\" (TIN 304567812). Demo record for the shipment: 30 000 kg of black tea, bulk, Almaty (Kazakhstan) → Tashkent (Uzbekistan), 1 wagon 52917340.",
+   "id": "certificate-of-state-registration",
+   "file": "477-09-certificate-of-state-registration.png"
+  },
+  {
+   "id": "invoice-for-payment-11",
+   "template": "invoice_for_payment",
+   "title": "Invoice for payment — step 11",
+   "docType": "invoice_for_payment",
+   "labels": [
+    "Invoice for payment"
+   ],
+   "steps": [
+    11
+   ],
+   "output": true,
+   "fields": {
+    "invoice_no": "IP-477/011",
+    "invoice_date": "07.09.2026",
+    "contract_no": "SRV-477-11",
+    "supplier": "Demo Customs Warehouse LLC",
+    "supplier_inn": "200933140",
+    "customer": "OOO \"Toshkent Choy Savdo\"",
+    "vat_rate": "12",
+    "total": "490 000"
+   },
+   "file": "477-10-invoice-for-payment-step-11.png"
+  },
+  {
+   "id": "receipt-of-payment-12",
+   "template": "receipt",
+   "title": "Receipt of payment — step 12",
+   "docType": "receipt_of_payment",
+   "labels": [
+    "Receipt of payment"
+   ],
+   "steps": [
+    12
+   ],
+   "output": true,
+   "fields": {
+    "receipt_no": "R-477-012",
+    "payer": "OOO \"Toshkent Choy Savdo\"",
+    "payer_inn": "304567812",
+    "recipient": "Demo Customs Warehouse LLC",
+    "payment_type": "Prepay for customs warehouse services",
+    "amount": "490 000",
+    "date": "07.09.2026"
+   },
+   "file": "477-11-receipt-of-payment-step-12.png"
+  },
+  {
+   "template": "letter",
+   "title": "Letter to railway station",
+   "docType": null,
+   "labels": [
+    "Letter to railway station"
+   ],
+   "steps": [
+    13,
+    15
+   ],
+   "output": false,
+   "fields": {},
+   "body": "OOO \"Toshkent Choy Savdo\" (TIN 304567812) applies for: letter to railway station. Shipment: 30 000 kg of black tea, bulk, Almaty (Kazakhstan) → Tashkent (Uzbekistan), 1 wagon 52917340. Contract UZ-477/2026-01 of 01.09.2026.",
+   "id": "letter-to-railway-station",
+   "file": "477-12-letter-to-railway-station.png"
+  },
+  {
+   "template": "letter",
+   "title": "Certificate on availability of funds at client's account",
+   "docType": null,
+   "labels": [
+    "Certificate on availability of funds at client's account"
+   ],
+   "steps": [
+    16
+   ],
+   "output": false,
+   "fields": {},
+   "body": "Certificate on availability of funds at client's account issued to OOO \"Toshkent Choy Savdo\" (TIN 304567812). Demo record for the shipment: 30 000 kg of black tea, bulk, Almaty (Kazakhstan) → Tashkent (Uzbekistan), 1 wagon 52917340.",
+   "id": "certificate-on-availability-of-funds-at-client-s",
+   "file": "477-13-certificate-on-availability-of-funds-at-client-s.png"
+  },
+  {
+   "id": "import-railway-bill-16",
+   "template": "smgs",
+   "title": "Import railway bill — step 16",
+   "docType": "railway_bill",
+   "labels": [
+    "Import railway bill"
+   ],
+   "steps": [
+    16
+   ],
+   "output": true,
+   "fields": {
+    "dispatch_no": "77477451",
+    "sender": "TOO \"Almaty Tea Packers\"",
+    "consignee": "OOO \"Toshkent Choy Savdo\"",
+    "departure_station": "Almaty-1",
+    "destination_station": "Tashkent-Tovarny",
+    "border_stations": "Sary-Agash, Keles",
+    "wagon_no": "52917340",
+    "cargo": "Чай черный / Black tea, bulk",
+    "packaging": "Paper sacks, 20 kg",
+    "places": "1500",
+    "weight": "30 600",
+    "seals": "KZ 771204",
+    "documents_attached": "Invoice INV-477/2026-031"
+   },
+   "file": "477-14-import-railway-bill-step-16.png"
+  },
+  {
+   "template": "letter",
+   "title": "Application for preliminary visual inspection",
+   "docType": null,
+   "labels": [
+    "Application for preliminary visual inspection"
+   ],
+   "steps": [
+    18,
+    19,
+    20
+   ],
+   "output": false,
+   "fields": {},
+   "body": "OOO \"Toshkent Choy Savdo\" (TIN 304567812) applies for: application for preliminary visual inspection. Shipment: 30 000 kg of black tea, bulk, Almaty (Kazakhstan) → Tashkent (Uzbekistan), 1 wagon 52917340. Contract UZ-477/2026-01 of 01.09.2026.",
+   "id": "application-for-preliminary-visual-inspection",
+   "file": "477-15-application-for-preliminary-visual-inspection.png"
+  },
+  {
+   "template": "letter",
+   "title": "Electronic application for preliminary visual inspection",
+   "docType": null,
+   "labels": [
+    "Electronic application for preliminary visual inspection"
+   ],
+   "steps": [
+    18
+   ],
+   "output": false,
+   "fields": {},
+   "body": "OOO \"Toshkent Choy Savdo\" (TIN 304567812) applies for: electronic application for preliminary visual inspection. Shipment: 30 000 kg of black tea, bulk, Almaty (Kazakhstan) → Tashkent (Uzbekistan), 1 wagon 52917340. Contract UZ-477/2026-01 of 01.09.2026.",
+   "id": "electronic-application-for-preliminary-visual-in",
+   "file": "477-16-electronic-application-for-preliminary-visual-in.png"
+  },
+  {
+   "template": "letter",
+   "title": "Contract for customs warehouse services",
+   "docType": null,
+   "labels": [
+    "Contract for customs warehouse services"
+   ],
+   "steps": [
+    20
+   ],
+   "output": false,
+   "fields": {},
+   "body": "Contract for customs warehouse services for the shipment 30 000 kg of black tea, bulk, Almaty (Kazakhstan) → Tashkent (Uzbekistan), 1 wagon 52917340, contract UZ-477/2026-01 of 01.09.2026.",
+   "id": "contract-for-customs-warehouse-services",
+   "file": "477-17-contract-for-customs-warehouse-services.png"
+  },
+  {
+   "template": "letter",
+   "title": "Documents requried to complete declaration",
+   "docType": null,
+   "labels": [
+    "Documents requried to complete declaration"
+   ],
+   "steps": [
+    20
+   ],
+   "output": false,
+   "fields": {},
+   "body": "Documents requried to complete declaration for the shipment 30 000 kg of black tea, bulk, Almaty (Kazakhstan) → Tashkent (Uzbekistan), 1 wagon 52917340, contract UZ-477/2026-01 of 01.09.2026.",
+   "id": "documents-requried-to-complete-declaration",
+   "file": "477-18-documents-requried-to-complete-declaration.png"
+  },
+  {
+   "template": "declaration",
+   "title": "Cargo customs declaration (IM70)",
+   "docType": "customs_declaration",
+   "labels": [
+    "Cargo customs declaration (IM70)"
+   ],
+   "steps": [
+    22
+   ],
+   "output": false,
+   "fields": {
+    "decl_type": "IM70",
+    "exporter": "TOO \"Almaty Tea Packers\"",
+    "consignee": "OOO \"Toshkent Choy Savdo\"",
+    "origin_country": "Kazakhstan",
+    "destination_country": "Uzbekistan",
+    "delivery_terms": "CPT Tashkent",
+    "invoice_amount": "84 000.00 USD",
+    "hs_code": "0902 40 000 0",
+    "gross_weight": "30 600",
+    "net_weight": "30 000",
+    "procedure_code": "40",
+    "customs_value": "84 000.00 USD"
+   },
+   "id": "cargo-customs-declaration",
+   "file": "477-19-cargo-customs-declaration.png"
+  },
+  {
+   "template": "letter",
+   "title": "Cargo delivery control book (railway)",
+   "docType": null,
+   "labels": [
+    "Cargo delivery control book (railway)"
+   ],
+   "steps": [
+    26
+   ],
+   "output": false,
+   "fields": {},
+   "body": "Cargo delivery control book (railway) for 52917340, operated by JSC Kazakhstan Temir Zholy. Shipment: 30 000 kg of black tea, bulk, Almaty (Kazakhstan) → Tashkent (Uzbekistan), 1 wagon 52917340.",
+   "id": "cargo-delivery-control-book",
+   "file": "477-20-cargo-delivery-control-book.png"
+  },
+  {
+   "id": "offer-agreement-27",
+   "template": "offer",
+   "title": "Offer agreement — step 27",
+   "docType": "offer_agreement",
+   "labels": [
+    "Offer agreement"
+   ],
+   "steps": [
+    27
+   ],
+   "output": true,
+   "fields": {
+    "agreement_no": "26144770027",
+    "agreement_date": "15.09.2026",
+    "amount": "780 000",
+    "service": "Inspection services",
+    "units": "1"
+   },
+   "file": "477-21-offer-agreement-step-27.png"
+  },
+  {
+   "id": "receipt-of-payment-28",
+   "template": "receipt",
+   "title": "Receipt of payment — step 28",
+   "docType": "receipt_of_payment",
+   "labels": [
+    "Receipt of payment"
+   ],
+   "steps": [
+    28
+   ],
+   "output": true,
+   "fields": {
+    "receipt_no": "R-477-028",
+    "payer": "OOO \"Toshkent Choy Savdo\"",
+    "payer_inn": "304567812",
+    "recipient": "Agency of Plant Quarantine and Protection",
+    "payment_type": "transport unit opening act",
+    "amount": "780 000",
+    "date": "15.09.2026"
+   },
+   "file": "477-22-receipt-of-payment-step-28.png"
+  },
+  {
+   "template": "phyto",
+   "title": "Phytosanitary certificate of the exporter's country",
+   "docType": "phytosanitary_certificate",
+   "labels": [
+    "Phytosanitary certificate of the exporter's country"
+   ],
+   "steps": [
+    29,
+    30
+   ],
+   "output": false,
+   "fields": {
+    "cert_no": "KZ-EX 2026/47712",
+    "exporter": "TOO \"Almaty Tea Packers\"",
+    "consignee": "OOO \"Toshkent Choy Savdo\"",
+    "destination_country": "Uzbekistan",
+    "point_of_entry": "Sary-Agash, Keles",
+    "place_of_origin": "Kazakhstan",
+    "produce": "Black tea, bulk",
+    "botanical_name": "Camellia sinensis",
+    "quantity": "30 000 kg",
+    "treatment": "Not treated",
+    "issue_date": "16.09.2026"
+   },
+   "id": "phytosanitary-certificate-of-the-exporter-s-coun",
+   "file": "477-23-phytosanitary-certificate-of-the-exporter-s-coun.png"
+  },
+  {
+   "id": "fumigation-offer-agreement-31",
+   "template": "offer",
+   "title": "Fumigation offer agreement — step 31",
+   "docType": "offer_agreement",
+   "labels": [
+    "Fumigation offer agreement"
+   ],
+   "steps": [
+    31
+   ],
+   "output": true,
+   "fields": {
+    "agreement_no": "26144770031",
+    "agreement_date": "17.09.2026",
+    "amount": "1 500 000",
+    "service": "Fumigation offer agreement",
+    "units": "1"
+   },
+   "file": "477-24-fumigation-offer-agreement-step-31.png"
+  },
+  {
+   "id": "receipt-of-payment-32",
+   "template": "receipt",
+   "title": "Receipt of payment — step 32",
+   "docType": "receipt_of_payment",
+   "labels": [
+    "Receipt of payment"
+   ],
+   "steps": [
+    32
+   ],
+   "output": true,
+   "fields": {
+    "receipt_no": "R-477-032",
+    "payer": "OOO \"Toshkent Choy Savdo\"",
+    "payer_inn": "304567812",
+    "recipient": "Agency of Plant Quarantine and Protection",
+    "payment_type": "fumigation",
+    "amount": "1 500 000",
+    "date": "17.09.2026"
+   },
+   "file": "477-25-receipt-of-payment-step-32.png"
+  },
+  {
+   "template": "letter",
+   "title": "Application for wagon handover",
+   "docType": null,
+   "labels": [
+    "Application for wagon handover"
+   ],
+   "steps": [
+    35
+   ],
+   "output": false,
+   "fields": {},
+   "body": "OOO \"Toshkent Choy Savdo\" (TIN 304567812) applies for: application for wagon handover. Shipment: 30 000 kg of black tea, bulk, Almaty (Kazakhstan) → Tashkent (Uzbekistan), 1 wagon 52917340. Contract UZ-477/2026-01 of 01.09.2026.",
+   "id": "application-for-wagon-handover",
+   "file": "477-26-application-for-wagon-handover.png"
+  },
+  {
+   "template": "smgs",
+   "title": "Export railway bill (SMGS)",
+   "docType": "railway_bill",
+   "labels": [
+    "Export railway bill (SMGS)"
+   ],
+   "steps": [
+    36
+   ],
+   "output": false,
+   "fields": {
+    "dispatch_no": "77477451",
+    "sender": "TOO \"Almaty Tea Packers\"",
+    "consignee": "OOO \"Toshkent Choy Savdo\"",
+    "departure_station": "Almaty-1",
+    "destination_station": "Tashkent-Tovarny",
+    "border_stations": "Sary-Agash, Keles",
+    "wagon_no": "52917340",
+    "cargo": "Чай черный / Black tea, bulk",
+    "packaging": "Paper sacks, 20 kg",
+    "places": "1500",
+    "weight": "30 600",
+    "seals": "KZ 771204",
+    "documents_attached": "Invoice INV-477/2026-031"
+   },
+   "id": "export-railway-bill",
+   "file": "477-27-export-railway-bill.png"
+  },
+  {
+   "template": "letter",
+   "title": "Application for returning empty wagons",
+   "docType": null,
+   "labels": [
+    "Application for returning empty wagons"
+   ],
+   "steps": [
+    36
+   ],
+   "output": false,
+   "fields": {},
+   "body": "OOO \"Toshkent Choy Savdo\" (TIN 304567812) applies for: application for returning empty wagons. Shipment: 30 000 kg of black tea, bulk, Almaty (Kazakhstan) → Tashkent (Uzbekistan), 1 wagon 52917340. Contract UZ-477/2026-01 of 01.09.2026.",
+   "id": "application-for-returning-empty-wagons",
+   "file": "477-28-application-for-returning-empty-wagons.png"
+  },
+  {
+   "id": "duplicate-of-railway-bill-with-datestamp-36",
+   "template": "smgs",
+   "title": "Duplicate of railway bill with datestamp — step 36",
+   "docType": "railway_bill",
+   "labels": [
+    "Duplicate of railway bill with datestamp"
+   ],
+   "steps": [
+    36
+   ],
+   "output": true,
+   "fields": {
+    "dispatch_no": "77477451",
+    "sender": "TOO \"Almaty Tea Packers\"",
+    "consignee": "OOO \"Toshkent Choy Savdo\"",
+    "departure_station": "Almaty-1",
+    "destination_station": "Tashkent-Tovarny",
+    "border_stations": "Sary-Agash, Keles",
+    "wagon_no": "52917340",
+    "cargo": "Чай черный / Black tea, bulk",
+    "packaging": "Paper sacks, 20 kg",
+    "places": "1500",
+    "weight": "30 600",
+    "seals": "KZ 771204",
+    "documents_attached": "Invoice INV-477/2026-031"
+   },
+   "stamp": "datestamp",
+   "file": "477-29-duplicate-of-railway-bill-with-datestamp-step-36.png"
+  },
+  {
+   "id": "offer-agreement-for-sanitary-epidemiological-con-38",
+   "template": "offer",
+   "title": "Offer agreement for sanitary-epidemiological conclusion — step 38",
+   "docType": "offer_agreement",
+   "labels": [
+    "Offer agreement for sanitary-epidemiological conclusion"
+   ],
+   "steps": [
+    38
+   ],
+   "output": true,
+   "fields": {
+    "agreement_no": "26144770038",
+    "agreement_date": "20.09.2026",
+    "amount": "2 350 000",
+    "service": "sanitary-epidemiological conclusion",
+    "units": "1"
+   },
+   "file": "477-30-offer-agreement-for-sanitary-epidemiological-con.png"
+  },
+  {
+   "template": "lab_report",
+   "title": "Food test report from international accredited laboratories",
+   "docType": "food_test_report",
+   "labels": [
+    "Food test report from international accredited laboratories"
+   ],
+   "steps": [
+    39
+   ],
+   "output": false,
+   "fields": {
+    "protocol_no": "LAB-477/2026-07",
+    "protocol_date": "07.09.2026",
+    "lab_accreditation": "KZ.T.02.0011 (demo)",
+    "sample": "Black tea, bulk",
+    "manufacturer": "TOO \"Almaty Tea Packers\"",
+    "test_period": "05.09.2026 – 07.09.2026"
+   },
+   "id": "food-test-report-from-international-accredited-l",
+   "file": "477-31-food-test-report-from-international-accredited-l.png"
+  },
+  {
+   "id": "invoice-for-payment-42",
+   "template": "invoice_for_payment",
+   "title": "Invoice for payment — step 42",
+   "docType": "invoice_for_payment",
+   "labels": [
+    "Invoice for payment"
+   ],
+   "steps": [
+    42
+   ],
+   "output": true,
+   "fields": {
+    "invoice_no": "IP-477/042",
+    "invoice_date": "22.09.2026",
+    "contract_no": "SRV-477-42",
+    "supplier": "Service provider (demo)",
+    "supplier_inn": "200933140",
+    "customer": "OOO \"Toshkent Choy Savdo\"",
+    "vat_rate": "12",
+    "total": "375 000"
+   },
+   "file": "477-32-invoice-for-payment-step-42.png"
+  },
+  {
+   "id": "receipt-of-payment-43",
+   "template": "receipt",
+   "title": "Receipt of payment — step 43",
+   "docType": "receipt_of_payment",
+   "labels": [
+    "Receipt of payment"
+   ],
+   "steps": [
+    43
+   ],
+   "output": true,
+   "fields": {
+    "receipt_no": "R-477-043",
+    "payer": "OOO \"Toshkent Choy Savdo\"",
+    "payer_inn": "304567812",
+    "recipient": "Sanitary-epidemiological service (demo)",
+    "payment_type": "sanitary-epidemiological conclusion",
+    "amount": "375 000",
+    "date": "23.09.2026"
+   },
+   "file": "477-33-receipt-of-payment-step-43.png"
+  },
+  {
+   "template": "ct1",
+   "title": "Certificate of origin of the exporter's country",
+   "docType": "certificate_of_origin",
+   "labels": [
+    "Certificate of origin of the exporter's country"
+   ],
+   "steps": [
+    45
+   ],
+   "output": false,
+   "fields": {
+    "cert_no": "KA 04477811",
+    "exporter": "TOO \"Almaty Tea Packers\"",
+    "consignee": "OOO \"Toshkent Choy Savdo\"",
+    "transport_route": "Rail, Almaty – Sary-Agash, Keles – Tashkent",
+    "goods": "Black tea, bulk, 1500 places",
+    "weight": "30 600 kg",
+    "invoice_ref": "INV-477/2026-031 of 04.09.2026",
+    "exported_to": "Uzbekistan"
+   },
+   "id": "certificate-of-origin-of-the-exporter-s-country",
+   "file": "477-34-certificate-of-origin-of-the-exporter-s-country.png"
+  },
+  {
+   "template": "letter",
+   "title": "Export declaration of the exporter's country",
+   "docType": null,
+   "labels": [
+    "Export declaration of the exporter's country"
+   ],
+   "steps": [
+    45
+   ],
+   "output": false,
+   "fields": {},
+   "body": "Export declaration of the exporter's country for the shipment 30 000 kg of black tea, bulk, Almaty (Kazakhstan) → Tashkent (Uzbekistan), 1 wagon 52917340, contract UZ-477/2026-01 of 01.09.2026.",
+   "id": "export-declaration-of-the-exporter-s-country",
+   "file": "477-35-export-declaration-of-the-exporter-s-country.png"
+  },
+  {
+   "id": "invoice-for-payment-50",
+   "template": "invoice_for_payment",
+   "title": "Invoice for payment — step 50",
+   "docType": "invoice_for_payment",
+   "labels": [
+    "Invoice for payment"
+   ],
+   "steps": [
+    50
+   ],
+   "output": true,
+   "fields": {
+    "invoice_no": "IP-477/050",
+    "invoice_date": "26.09.2026",
+    "contract_no": "SRV-477-50",
+    "supplier": "Demo Customs Warehouse LLC",
+    "supplier_inn": "200933140",
+    "customer": "OOO \"Toshkent Choy Savdo\"",
+    "vat_rate": "12",
+    "total": "18 400 000"
+   },
+   "file": "477-36-invoice-for-payment-step-50.png"
+  },
+  {
+   "id": "receipt-of-payment-for-warehouse-services-51",
+   "template": "receipt",
+   "title": "Receipt of payment for warehouse services — step 51",
+   "docType": "receipt_of_payment",
+   "labels": [
+    "Receipt of payment for warehouse services"
+   ],
+   "steps": [
+    51
+   ],
+   "output": true,
+   "fields": {
+    "receipt_no": "R-477-051",
+    "payer": "OOO \"Toshkent Choy Savdo\"",
+    "payer_inn": "304567812",
+    "recipient": "Demo Customs Warehouse LLC",
+    "payment_type": "customs warehouse services",
+    "amount": "18 400 000",
+    "date": "27.09.2026"
+   },
+   "file": "477-37-receipt-of-payment-for-warehouse-services-step-5.png"
+  }
+ ]
+}

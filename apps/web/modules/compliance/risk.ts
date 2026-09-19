@@ -11,13 +11,22 @@ import { COUNTRIES } from "../intake/data/countries";
 import type { Procedure } from "../procedures/data/procedures.generated";
 import type { ShipmentFacts } from "../workflow/domain";
 import { assessCompliance, CERTIFICATE_RULES } from "./compliance";
+import { explainRow, type RiskExplain } from "./explain";
 import { commodityOf } from "../intake/taxonomy";
-import { countryName, fmtTonnes, planRoute, resolveRoute, toTonnes, unitsFor } from "../intake/shipment-plan";
+import { countryName, fmtTonnes, planRoute, resolveRoute, toTonnes, unitsFor, planningDirection } from "../intake/shipment-plan";
 import type { Ledger } from "../steps/ledger";
 import type { WorkflowProjection } from "../workflow/repository";
 
 export type RiskStatus = "ok" | "pending" | "caution" | "high" | "unknown";
-export type RiskRow = { key: string; title: string; value: string; status: RiskStatus; reason: string };
+export type RiskRow = {
+  key: string;
+  title: string;
+  value: string;
+  status: RiskStatus;
+  reason: string;
+  /** Why this procedure needs the check, where its data comes from, how it is cross-verified. */
+  explain?: RiskExplain;
+};
 export type RiskReport = { overall: RiskRow; rows: RiskRow[] };
 
 const SUBHEADING: Record<string, string> = {
@@ -65,7 +74,7 @@ export function assessRisk(input: {
   });
 
   /* Procedure and route */
-  const ends = resolveRoute(procedure.direction, { origin: facts.origin ?? null, destination: facts.destination ?? null }, query);
+  const ends = resolveRoute(planningDirection(procedure.direction), { origin: facts.origin ?? null, destination: facts.destination ?? null }, query);
   const partnerEnd = exporting ? ends.destination : ends.origin;
   const partner = partnerEnd && !partnerEnd.assumed && partnerEnd.place.country !== "UZ" ? partnerEnd.place.country : null;
   rows.push({
@@ -80,7 +89,7 @@ export function assessRisk(input: {
   });
 
   const route =
-    ends.origin && ends.destination && partner ? planRoute(procedure.mode === "air" ? "air" : "train", ends.origin, ends.destination, procedure.direction) : null;
+    ends.origin && ends.destination && partner ? planRoute(procedure.mode, ends.origin, ends.destination, procedure.direction) : null;
   const profile = partner ? COUNTRIES[partner] : undefined;
   if (route) {
     const via = route.via.length ? `via ${route.via.map(countryName).join(", ")}` : "direct";
@@ -137,7 +146,7 @@ export function assessRisk(input: {
   /* Transport units */
   const tonnes = toTonnes(facts.quantity ?? null, facts.unit ?? null, procedure.goods);
   if (tonnes) {
-    const units = unitsFor(procedure.mode === "air" ? "air" : "train", procedure.goods, tonnes);
+    const units = unitsFor(procedure.mode, procedure.goods, tonnes);
     rows.push({
       key: "units",
       title: "Transport units",
@@ -240,6 +249,13 @@ export function assessRisk(input: {
     status: "unknown",
     reason: "Uzbekistan's tariff schedule hasn't been sourced — no rate is invented",
   });
+
+  for (const row of rows) {
+    row.explain = explainRow(row.key, procedure, ledger, {
+      certificate: row.key.startsWith("cert:") ? row.title : undefined,
+      requirement: row.key.startsWith("req:") ? row.key.slice(4) : undefined,
+    });
+  }
 
   const high = rows.filter((r) => r.status === "high");
   const caution = rows.filter((r) => r.status === "caution");

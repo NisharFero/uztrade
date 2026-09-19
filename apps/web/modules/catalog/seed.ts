@@ -1,4 +1,4 @@
-import { PROCEDURES } from "../procedures/data/procedures.generated";
+import { CATALOGUE } from "../procedures/data/procedures.generated";
 
 export type SeedUser = {
   id: string;
@@ -42,9 +42,11 @@ function entityType(name: string): SeedEntity["type"] {
 }
 
 export function mockEntities(): SeedEntity[] {
-  const names = [...new Set(Object.values(PROCEDURES).flatMap((procedure) =>
-    procedure.blocks.flatMap((block) => block.steps.map((step) => step.entity.trim())),
-  ))].sort((a, b) => a.localeCompare(b));
+  // The catalogue already lists every entity each procedure names, so seeding
+  // the directory needs no workflow files.
+  const names = [...new Set(Object.values(CATALOGUE).flatMap((procedure) => procedure.entities.map((entity) => entity.trim())))]
+    .filter(Boolean)
+    .sort((a, b) => a.localeCompare(b));
 
   return names.map((canonicalName) => {
     const type = entityType(canonicalName);
@@ -60,8 +62,11 @@ export function mockEntities(): SeedEntity[] {
   });
 }
 
+/** One catalogue row per published procedure. The workflow itself is not
+ *  seeded: at 243 procedures it is 3.4 MB, and the registry serves it from
+ *  public/data/procedures/<id>.json when a case needs it. */
 export function procedureSeeds() {
-  return Object.values(PROCEDURES).map((procedure) => ({
+  return Object.values(CATALOGUE).map((procedure) => ({
     id: `procedure:${procedure.id}:v1`,
     procedureId: procedure.id,
     version: 1,

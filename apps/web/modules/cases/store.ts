@@ -2,7 +2,7 @@ import { and, desc, eq } from "drizzle-orm";
 import { getDb } from "../../db";
 import { ensureSchema } from "../../db/migrate";
 import { caseBlocks, cases, type CaseBlockRow, type CaseRow } from "../../db/schema";
-import { PROCEDURES } from "../procedures/data/procedures.generated";
+import { getProcedure } from "../procedures/registry";
 import { checklistFor, markOutput, parseDocumentState, type BlockChecklist, type DocumentState } from "../documents/checklist";
 
 export type BlockState = "waiting" | "blocked" | "running" | "done";
@@ -58,8 +58,10 @@ export async function createCase(input: {
   procedureId: string;
   query: string;
   matchedBy: string;
+  /** The shipment workflow's title, e.g. "Export of tomatoes by train". */
+  title?: string;
 }): Promise<CaseWithBlocks> {
-  const procedure = PROCEDURES[input.procedureId];
+  const procedure = await getProcedure(input.procedureId);
   if (!procedure) throw new Error(`Unknown procedure ${input.procedureId}`);
 
   const d = await db();
@@ -69,7 +71,7 @@ export async function createCase(input: {
   await d.insert(cases).values({
     id,
     procedureId: procedure.id,
-    title: procedure.title,
+    title: input.title ?? procedure.title,
     goods: procedure.goods,
     query: input.query,
     matchedBy: input.matchedBy,
@@ -123,7 +125,7 @@ export async function completeBlock(caseId: string, blockId: string): Promise<Ne
   const existing = await getCase(caseId);
   if (!existing) return null;
 
-  const procedure = PROCEDURES[existing.procedureId];
+  const procedure = await getProcedure(existing.procedureId);
   if (!procedure) return { ok: true, case: existing };
 
   const block = procedure.blocks.find((b) => b.id === blockId);

@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { classifyByLlm, classifyByRules } from "../../../modules/intake/classify";
+import { classify, classifyByLlm, classifyByRules } from "../../../modules/intake/classify";
 
 const cases = [
   ["export 20 tonnes of dried apricots by train", "306"],
@@ -14,6 +14,12 @@ test("classifies a query for every published procedure", () => {
   for (const [query, expected] of cases) {
     assert.equal(classifyByRules(query).procedureId, expected, query);
   }
+});
+
+test("general procedure questions are not classified as shipments", async () => {
+  const result = await classify("What documents are needed for export?");
+  assert.equal(result.status, "declined");
+  assert.equal(result.procedureId, null);
 });
 
 test("uses the model to understand the shipment route and quantity", async () => {

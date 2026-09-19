@@ -1,0 +1,881 @@
+{
+ "procedureId": "325",
+ "title": "Export of fresh fruits and vegetables by train — demo scenario",
+ "note": "Fictional demo data. Every company, person, number, amount and stamp is invented; nothing here is a real document.",
+ "shipment": {
+  "query": "Export 22 t of fresh grapes from Andijan to Almaty by train",
+  "goods": "Fresh table grapes",
+  "goodsRu": "Виноград свежий",
+  "hs": "0806 10 101 0",
+  "netKg": "22 000",
+  "grossKg": "22 440",
+  "cartons": "2750",
+  "packaging": "Ventilated crates, 8 kg",
+  "unitKind": "wagon",
+  "wagons": [
+   "55012873"
+  ],
+  "seals": [
+   "UZ 230417"
+  ],
+  "departureStation": "Andijan-1",
+  "destinationStation": "Almaty-1",
+  "borderStations": "Keles, Sary-Agash",
+  "from": "Andijan, Uzbekistan",
+  "to": "Almaty, Kazakhstan",
+  "valueUsd": "30 800.00",
+  "incoterms": "FCA Andijan",
+  "contractNo": "UZ-325/2026-01",
+  "contractDate": "01.09.2026",
+  "invoiceNo": "INV-325/2026-031",
+  "invoiceDate": "04.09.2026",
+  "caseLine": "export of fresh fruits and vegetables by train, 22 000 kg of fresh table grapes"
+ },
+ "parties": {
+  "exporter": {
+   "name": "OOO \"Fergana Uzum Eksport\"",
+   "address": "Andijan, Navoi avenue 55, Uzbekistan",
+   "tin": "303456781",
+   "manager": "Otabek Mirzaev",
+   "phone": "+998 93 455 18 90",
+   "email": "sales.ferganauzum@demo.uz",
+   "bank": "Demo Bank JSCB, account 20208000900333444001, MFO 00444"
+  },
+  "trader": {
+   "name": "OOO \"Fergana Uzum Eksport\"",
+   "address": "Andijan, Navoi avenue 55, Uzbekistan",
+   "tin": "303456781",
+   "manager": "Otabek Mirzaev",
+   "phone": "+998 93 455 18 90",
+   "email": "sales.ferganauzum@demo.uz",
+   "bank": "Demo Bank JSCB, account 20208000900333444001, MFO 00444"
+  },
+  "seller": {
+   "name": "OOO \"Fergana Uzum Eksport\"",
+   "address": "Andijan, Navoi avenue 55, Uzbekistan",
+   "tin": "303456781",
+   "manager": "Otabek Mirzaev",
+   "phone": "+998 93 455 18 90",
+   "email": "sales.ferganauzum@demo.uz",
+   "bank": "Demo Bank JSCB, account 20208000900333444001, MFO 00444"
+  },
+  "buyer": {
+   "name": "TOO \"Almaty Fresh Market\"",
+   "address": "Almaty, Raiymbek avenue 348, Kazakhstan",
+   "tin": "—",
+   "manager": "A. Demo",
+   "phone": "—",
+   "email": "—",
+   "bank": "—"
+  },
+  "representative": {
+   "name": "Sardor Tursunov",
+   "passport": "AD 5566778"
+  }
+ },
+ "values": {
+  "Tax Identification Number of the organization or individual": "303456781",
+  "Personal identification number of an individual": "31503850210045",
+  "Bank details": "Demo Bank JSCB, account 20208000900333444001, MFO 00444",
+  "Name of the organization": "OOO \"Fergana Uzum Eksport\"",
+  "Full name of an organization's manager": "Otabek Mirzaev",
+  "Contact phone number": "+998 93 455 18 90",
+  "Email": "sales.ferganauzum@demo.uz",
+  "Agency region": "Andijan region",
+  "Payment sum": "245 000 UZS",
+  "Type of organization (business entity, budgetary)": "Business entity",
+  "Cost on the contract": "1 120 000 UZS",
+  "Quantity of transport units": "1"
+ },
+ "documents": [
+  {
+   "id": "commercial-invoice",
+   "template": "commercial_invoice",
+   "title": "Commercial invoice",
+   "docType": "commercial_invoice",
+   "labels": [
+    "Commercial invoice"
+   ],
+   "steps": [
+    25,
+    26,
+    27,
+    40,
+    41,
+    44,
+    46
+   ],
+   "output": false,
+   "fields": {
+    "invoice_no": "INV-325/2026-031",
+    "invoice_date": "04.09.2026",
+    "seller": "OOO \"Fergana Uzum Eksport\"",
+    "buyer": "TOO \"Almaty Fresh Market\"",
+    "goods": "Fresh table grapes",
+    "hs_code": "0806 10 101 0",
+    "quantity": "22 000 kg",
+    "total_value": "30 800.00 USD",
+    "origin_country": "Uzbekistan",
+    "gross_weight": "22 440 kg",
+    "currency": "USD",
+    "contract_no": "UZ-325/2026-01",
+    "incoterms": "FCA Andijan",
+    "transport_doc": "SMGS 77325451"
+   },
+   "file": "325-01-commercial-invoice.png"
+  },
+  {
+   "id": "trade-contract",
+   "template": "contract",
+   "title": "Foreign trade contract",
+   "docType": "trade_contract",
+   "labels": [
+    "Electronic copy of foreign trade contract",
+    "Foreign economic activity contract",
+    "Supply contract"
+   ],
+   "steps": [
+    1,
+    7
+   ],
+   "output": false,
+   "fields": {
+    "contract_no": "UZ-325/2026-01",
+    "contract_date": "01.09.2026",
+    "seller": "OOO \"Fergana Uzum Eksport\"",
+    "buyer": "TOO \"Almaty Fresh Market\"",
+    "goods": "Fresh table grapes",
+    "hs_code": "0806 10 101 0",
+    "quantity": "22 000 kg",
+    "total_value": "30 800.00 USD",
+    "incoterms": "FCA Andijan"
+   },
+   "file": "325-02-foreign-trade-contract.png"
+  },
+  {
+   "id": "passport",
+   "template": "passport",
+   "title": "Passport",
+   "docType": "passport",
+   "labels": [
+    "Passport"
+   ],
+   "steps": [
+    6,
+    8,
+    9,
+    14,
+    16,
+    20,
+    23,
+    24,
+    33,
+    37,
+    44
+   ],
+   "output": false,
+   "fields": {
+    "full_name": "TURSUNOV SARDOR",
+    "passport_no": "AD 5566778",
+    "expiry": "14.03.2031"
+   },
+   "file": "325-03-passport.png"
+  },
+  {
+   "id": "power-of-attorney",
+   "template": "poa",
+   "title": "Power of attorney",
+   "docType": "power_of_attorney",
+   "labels": [
+    "Power of attorney",
+    "Power of attorney for Transportation Unit",
+    "Power of attorney for railway station"
+   ],
+   "steps": [
+    6,
+    8,
+    14,
+    23,
+    37,
+    39,
+    44
+   ],
+   "output": false,
+   "fields": {
+    "poa_no": "35",
+    "issue_date": "02.09.2026",
+    "representative": "Sardor Tursunov",
+    "passport": "AD 5566778",
+    "valid_until": "31.12.2026",
+    "scope": "Customs operations, cargo handling, signing and receiving documents"
+   },
+   "file": "325-04-power-of-attorney.png"
+  },
+  {
+   "id": "receipt-of-payment-4",
+   "template": "receipt",
+   "title": "Receipt of payment — step 4",
+   "docType": "receipt_of_payment",
+   "labels": [
+    "Receipt of payment"
+   ],
+   "steps": [
+    4
+   ],
+   "output": true,
+   "fields": {
+    "receipt_no": "R-325-004",
+    "payer": "OOO \"Fergana Uzum Eksport\"",
+    "payer_inn": "303456781",
+    "recipient": "JSC Uzbekistan Temir Yo'llari",
+    "payment_type": "Prepay for railway services (tomatoes)",
+    "amount": "245 000",
+    "date": "03.09.2026"
+   },
+   "file": "325-05-receipt-of-payment-step-4.png"
+  },
+  {
+   "template": "invoice_for_payment",
+   "title": "Invoice for payment",
+   "docType": "invoice_for_payment",
+   "labels": [
+    "Invoice for payment"
+   ],
+   "steps": [
+    9
+   ],
+   "output": false,
+   "fields": {
+    "invoice_no": "IP-325/009",
+    "invoice_date": "06.09.2026",
+    "contract_no": "SRV-325-9",
+    "supplier": "OOO \"Demo Forwarding\"",
+    "supplier_inn": "200933140",
+    "customer": "OOO \"Fergana Uzum Eksport\"",
+    "vat_rate": "12",
+    "total": "1 120 000"
+   },
+   "id": "invoice-for-payment",
+   "file": "325-06-invoice-for-payment.png"
+  },
+  {
+   "id": "receipt-of-payment-9",
+   "template": "receipt",
+   "title": "Receipt of payment — step 9",
+   "docType": "receipt_of_payment",
+   "labels": [
+    "Receipt of payment"
+   ],
+   "steps": [
+    9
+   ],
+   "output": true,
+   "fields": {
+    "receipt_no": "R-325-009",
+    "payer": "OOO \"Fergana Uzum Eksport\"",
+    "payer_inn": "303456781",
+    "recipient": "OOO \"Demo Forwarding\"",
+    "payment_type": "code assignment and freight forwarder service",
+    "amount": "1 120 000",
+    "date": "06.09.2026"
+   },
+   "file": "325-07-receipt-of-payment-step-9.png"
+  },
+  {
+   "template": "letter",
+   "title": "Application for good transportation on specific conditions",
+   "docType": null,
+   "labels": [
+    "Application for good transportation on specific conditions"
+   ],
+   "steps": [
+    11
+   ],
+   "output": false,
+   "fields": {},
+   "body": "OOO \"Fergana Uzum Eksport\" (TIN 303456781) applies for: application for good transportation on specific conditions. Shipment: 22 000 kg of fresh table grapes, Andijan (Uzbekistan) → Almaty (Kazakhstan), 1 wagon 55012873. Contract UZ-325/2026-01 of 01.09.2026.",
+   "id": "application-for-good-transportation-on-specific-",
+   "file": "325-08-application-for-good-transportation-on-specific-.png"
+  },
+  {
+   "template": "letter",
+   "title": "Islamic Republic of Iran approval letter",
+   "docType": null,
+   "labels": [
+    "Islamic Republic of Iran approval letter"
+   ],
+   "steps": [
+    12
+   ],
+   "output": false,
+   "fields": {},
+   "body": "OOO \"Fergana Uzum Eksport\" (TIN 303456781) applies for: islamic republic of iran approval letter. Shipment: 22 000 kg of fresh table grapes, Andijan (Uzbekistan) → Almaty (Kazakhstan), 1 wagon 55012873. Contract UZ-325/2026-01 of 01.09.2026.",
+   "id": "islamic-republic-of-iran-approval-letter",
+   "file": "325-09-islamic-republic-of-iran-approval-letter.png"
+  },
+  {
+   "template": "letter",
+   "title": "Application for obtaining approval of cargo transportation",
+   "docType": null,
+   "labels": [
+    "Application for obtaining approval of cargo transportation"
+   ],
+   "steps": [
+    12
+   ],
+   "output": false,
+   "fields": {},
+   "body": "OOO \"Fergana Uzum Eksport\" (TIN 303456781) applies for: application for obtaining approval of cargo transportation. Shipment: 22 000 kg of fresh table grapes, Andijan (Uzbekistan) → Almaty (Kazakhstan), 1 wagon 55012873. Contract UZ-325/2026-01 of 01.09.2026.",
+   "id": "application-for-obtaining-approval-of-cargo-tran",
+   "file": "325-10-application-for-obtaining-approval-of-cargo-tran.png"
+  },
+  {
+   "template": "gu12",
+   "title": "Application for cargo transportation GU-12",
+   "docType": "cargo_transport_application",
+   "labels": [
+    "Application for cargo transportation GU-12"
+   ],
+   "steps": [
+    12
+   ],
+   "output": false,
+   "fields": {
+    "shipper": "OOO \"Fergana Uzum Eksport\"",
+    "departure_station": "Andijan-1",
+    "cargo": "Fresh table grapes",
+    "etsng": "214095",
+    "destination_station": "Almaty-1",
+    "consignee": "TOO \"Almaty Fresh Market\"",
+    "tonnes": "22",
+    "wagons": "1"
+   },
+   "id": "application-for-cargo-transportation-gu-12",
+   "file": "325-11-application-for-cargo-transportation-gu-12.png"
+  },
+  {
+   "template": "letter",
+   "title": "Application on letterhead (own wagons)",
+   "docType": null,
+   "labels": [
+    "Application on letterhead (own wagons)"
+   ],
+   "steps": [
+    14
+   ],
+   "output": false,
+   "fields": {},
+   "body": "OOO \"Fergana Uzum Eksport\" (TIN 303456781) applies for: application on letterhead (own wagons). Shipment: 22 000 kg of fresh table grapes, Andijan (Uzbekistan) → Almaty (Kazakhstan), 1 wagon 55012873. Contract UZ-325/2026-01 of 01.09.2026.",
+   "id": "application-on-letterhead",
+   "file": "325-12-application-on-letterhead.png"
+  },
+  {
+   "template": "letter",
+   "title": "Application on letterhead",
+   "docType": null,
+   "labels": [
+    "Application on letterhead"
+   ],
+   "steps": [
+    14
+   ],
+   "output": false,
+   "fields": {},
+   "body": "OOO \"Fergana Uzum Eksport\" (TIN 303456781) applies for: application on letterhead. Shipment: 22 000 kg of fresh table grapes, Andijan (Uzbekistan) → Almaty (Kazakhstan), 1 wagon 55012873. Contract UZ-325/2026-01 of 01.09.2026.",
+   "id": "application-on-letterhead-13",
+   "file": "325-13-application-on-letterhead.png"
+  },
+  {
+   "id": "offer-agreement-for-internal-phytosanitary-certi-15",
+   "template": "offer",
+   "title": "Offer agreement for internal phytosanitary certificate — step 15",
+   "docType": "offer_agreement",
+   "labels": [
+    "Offer agreement for internal phytosanitary certificate"
+   ],
+   "steps": [
+    15
+   ],
+   "output": true,
+   "fields": {
+    "agreement_no": "26143250015",
+    "agreement_date": "09.09.2026",
+    "amount": "490 000",
+    "service": "internal phytosanitary certificate",
+    "units": "1"
+   },
+   "file": "325-14-offer-agreement-for-internal-phytosanitary-certi.png"
+  },
+  {
+   "id": "receipt-of-payment-16",
+   "template": "receipt",
+   "title": "Receipt of payment — step 16",
+   "docType": "receipt_of_payment",
+   "labels": [
+    "Receipt of payment"
+   ],
+   "steps": [
+    16
+   ],
+   "output": true,
+   "fields": {
+    "receipt_no": "R-325-016",
+    "payer": "OOO \"Fergana Uzum Eksport\"",
+    "payer_inn": "303456781",
+    "recipient": "Agency of Plant Quarantine and Protection",
+    "payment_type": "internal phytosanitary certificate",
+    "amount": "490 000",
+    "date": "09.09.2026"
+   },
+   "file": "325-15-receipt-of-payment-step-16.png"
+  },
+  {
+   "id": "fumigation-offer-agreement-19",
+   "template": "offer",
+   "title": "Fumigation offer agreement — step 19",
+   "docType": "offer_agreement",
+   "labels": [
+    "Fumigation offer agreement"
+   ],
+   "steps": [
+    19
+   ],
+   "output": true,
+   "fields": {
+    "agreement_no": "26143250019",
+    "agreement_date": "11.09.2026",
+    "amount": "780 000",
+    "service": "Fumigation offer agreement",
+    "units": "1"
+   },
+   "file": "325-16-fumigation-offer-agreement-step-19.png"
+  },
+  {
+   "id": "receipt-of-payment-20",
+   "template": "receipt",
+   "title": "Receipt of payment — step 20",
+   "docType": "receipt_of_payment",
+   "labels": [
+    "Receipt of payment"
+   ],
+   "steps": [
+    20
+   ],
+   "output": true,
+   "fields": {
+    "receipt_no": "R-325-020",
+    "payer": "OOO \"Fergana Uzum Eksport\"",
+    "payer_inn": "303456781",
+    "recipient": "Agency of Plant Quarantine and Protection",
+    "payment_type": "fumigation",
+    "amount": "780 000",
+    "date": "11.09.2026"
+   },
+   "file": "325-17-receipt-of-payment-step-20.png"
+  },
+  {
+   "template": "invoice_for_payment",
+   "title": "Invoice for prepayment",
+   "docType": "invoice_for_payment",
+   "labels": [
+    "Invoice for prepayment"
+   ],
+   "steps": [
+    24
+   ],
+   "output": false,
+   "fields": {
+    "invoice_no": "IP-325/024",
+    "invoice_date": "13.09.2026",
+    "contract_no": "SRV-325-24",
+    "supplier": "Uzbekexpertiza JSC (demo)",
+    "supplier_inn": "200933140",
+    "customer": "OOO \"Fergana Uzum Eksport\"",
+    "vat_rate": "12",
+    "total": "1 500 000"
+   },
+   "id": "invoice-for-prepayment",
+   "file": "325-18-invoice-for-prepayment.png"
+  },
+  {
+   "id": "receipt-of-payment-24",
+   "template": "receipt",
+   "title": "Receipt of payment — step 24",
+   "docType": "receipt_of_payment",
+   "labels": [
+    "Receipt of payment"
+   ],
+   "steps": [
+    24
+   ],
+   "output": true,
+   "fields": {
+    "receipt_no": "R-325-024",
+    "payer": "OOO \"Fergana Uzum Eksport\"",
+    "payer_inn": "303456781",
+    "recipient": "Uzbekexpertiza JSC (demo)",
+    "payment_type": "certificate of origin",
+    "amount": "1 500 000",
+    "date": "13.09.2026"
+   },
+   "file": "325-19-receipt-of-payment-step-24.png"
+  },
+  {
+   "template": "letter",
+   "title": "Any document confirming purchase of agricultural products",
+   "docType": null,
+   "labels": [
+    "Any document confirming purchase of agricultural products"
+   ],
+   "steps": [
+    25,
+    26,
+    27
+   ],
+   "output": false,
+   "fields": {},
+   "body": "Any document confirming purchase of agricultural products for the shipment 22 000 kg of fresh table grapes, Andijan (Uzbekistan) → Almaty (Kazakhstan), 1 wagon 55012873, contract UZ-325/2026-01 of 01.09.2026.",
+   "id": "any-document-confirming-purchase-of-agricultural",
+   "file": "325-20-any-document-confirming-purchase-of-agricultural.png"
+  },
+  {
+   "template": "letter",
+   "title": "Any document confirming the exporter's right to use a land plot",
+   "docType": null,
+   "labels": [
+    "Any document confirming the exporter's right to use a land plot"
+   ],
+   "steps": [
+    25,
+    26,
+    27
+   ],
+   "output": false,
+   "fields": {},
+   "body": "Any document confirming the exporter's right to use a land plot for the shipment 22 000 kg of fresh table grapes, Andijan (Uzbekistan) → Almaty (Kazakhstan), 1 wagon 55012873, contract UZ-325/2026-01 of 01.09.2026.",
+   "id": "any-document-confirming-the-exporter-s-right-to-",
+   "file": "325-21-any-document-confirming-the-exporter-s-right-to-.png"
+  },
+  {
+   "template": "letter",
+   "title": "Application for obtaining of Certificate of origin for exported goods",
+   "docType": null,
+   "labels": [
+    "Application for obtaining of Certificate of origin for exported goods"
+   ],
+   "steps": [
+    25
+   ],
+   "output": false,
+   "fields": {},
+   "body": "OOO \"Fergana Uzum Eksport\" (TIN 303456781) applies for: application for obtaining of certificate of origin for exported goods. Shipment: 22 000 kg of fresh table grapes, Andijan (Uzbekistan) → Almaty (Kazakhstan), 1 wagon 55012873. Contract UZ-325/2026-01 of 01.09.2026.",
+   "id": "application-for-obtaining-of-certificate-of-orig",
+   "file": "325-22-application-for-obtaining-of-certificate-of-orig.png"
+  },
+  {
+   "template": "letter",
+   "title": "Online application for certificate of origin",
+   "docType": null,
+   "labels": [
+    "Online application for certificate of origin"
+   ],
+   "steps": [
+    26,
+    27
+   ],
+   "output": false,
+   "fields": {},
+   "body": "OOO \"Fergana Uzum Eksport\" (TIN 303456781) applies for: online application for certificate of origin. Shipment: 22 000 kg of fresh table grapes, Andijan (Uzbekistan) → Almaty (Kazakhstan), 1 wagon 55012873. Contract UZ-325/2026-01 of 01.09.2026.",
+   "id": "online-application-for-certificate-of-origin",
+   "file": "325-23-online-application-for-certificate-of-origin.png"
+  },
+  {
+   "id": "certificate-of-origin-30",
+   "template": "ct1",
+   "title": "Certificate of origin — step 30",
+   "docType": "certificate_of_origin",
+   "labels": [
+    "Certificate of origin"
+   ],
+   "steps": [
+    30
+   ],
+   "output": true,
+   "fields": {
+    "cert_no": "UZ 04325811",
+    "exporter": "OOO \"Fergana Uzum Eksport\"",
+    "consignee": "TOO \"Almaty Fresh Market\"",
+    "transport_route": "Rail, Andijan – Keles, Sary-Agash – Almaty",
+    "goods": "Fresh table grapes, 2750 places",
+    "weight": "22 440 kg",
+    "invoice_ref": "INV-325/2026-031 of 04.09.2026",
+    "exported_to": "Kazakhstan"
+   },
+   "file": "325-24-certificate-of-origin-step-30.png"
+  },
+  {
+   "id": "offer-agreement-for-phytosanitary-certificate-32",
+   "template": "offer",
+   "title": "Offer agreement for phytosanitary certificate — step 32",
+   "docType": "offer_agreement",
+   "labels": [
+    "Offer agreement for phytosanitary certificate"
+   ],
+   "steps": [
+    32
+   ],
+   "output": true,
+   "fields": {
+    "agreement_no": "26143250032",
+    "agreement_date": "17.09.2026",
+    "amount": "2 350 000",
+    "service": "phytosanitary certificate",
+    "units": "1"
+   },
+   "file": "325-25-offer-agreement-for-phytosanitary-certificate-st.png"
+  },
+  {
+   "id": "receipt-of-payment-33",
+   "template": "receipt",
+   "title": "Receipt of payment — step 33",
+   "docType": "receipt_of_payment",
+   "labels": [
+    "Receipt of payment"
+   ],
+   "steps": [
+    33
+   ],
+   "output": true,
+   "fields": {
+    "receipt_no": "R-325-033",
+    "payer": "OOO \"Fergana Uzum Eksport\"",
+    "payer_inn": "303456781",
+    "recipient": "Agency of Plant Quarantine and Protection",
+    "payment_type": "phytosanitary certificate",
+    "amount": "2 350 000",
+    "date": "18.09.2026"
+   },
+   "file": "325-26-receipt-of-payment-step-33.png"
+  },
+  {
+   "template": "letter",
+   "title": "Online application for phytosanitary certificate",
+   "docType": null,
+   "labels": [
+    "Online application for phytosanitary certificate"
+   ],
+   "steps": [
+    34
+   ],
+   "output": false,
+   "fields": {},
+   "body": "OOO \"Fergana Uzum Eksport\" (TIN 303456781) applies for: online application for phytosanitary certificate. Shipment: 22 000 kg of fresh table grapes, Andijan (Uzbekistan) → Almaty (Kazakhstan), 1 wagon 55012873. Contract UZ-325/2026-01 of 01.09.2026.",
+   "id": "online-application-for-phytosanitary-certificate",
+   "file": "325-27-online-application-for-phytosanitary-certificate.png"
+  },
+  {
+   "id": "phytosanitary-certificate-36",
+   "template": "phyto",
+   "title": "Phytosanitary certificate — step 36",
+   "docType": "phytosanitary_certificate",
+   "labels": [
+    "Phytosanitary certificate"
+   ],
+   "steps": [
+    36
+   ],
+   "output": true,
+   "fields": {
+    "cert_no": "UZ-EX 2026/32512",
+    "exporter": "OOO \"Fergana Uzum Eksport\"",
+    "consignee": "TOO \"Almaty Fresh Market\"",
+    "destination_country": "Kazakhstan",
+    "point_of_entry": "Keles, Sary-Agash",
+    "place_of_origin": "Uzbekistan",
+    "produce": "Fresh table grapes",
+    "botanical_name": "Vitis vinifera",
+    "quantity": "22 000 kg",
+    "treatment": "Not treated",
+    "issue_date": "19.09.2026"
+   },
+   "file": "325-28-phytosanitary-certificate-step-36.png"
+  },
+  {
+   "template": "letter",
+   "title": "Certificate on availability of funds at client's account",
+   "docType": null,
+   "labels": [
+    "Certificate on availability of funds at client's account"
+   ],
+   "steps": [
+    37
+   ],
+   "output": false,
+   "fields": {},
+   "body": "Certificate on availability of funds at client's account issued to OOO \"Fergana Uzum Eksport\" (TIN 303456781). Demo record for the shipment: 22 000 kg of fresh table grapes, Andijan (Uzbekistan) → Almaty (Kazakhstan), 1 wagon 55012873.",
+   "id": "certificate-on-availability-of-funds-at-client-s",
+   "file": "325-29-certificate-on-availability-of-funds-at-client-s.png"
+  },
+  {
+   "template": "letter",
+   "title": "Application on letterhead for allotment of wagons",
+   "docType": null,
+   "labels": [
+    "Application on letterhead for allotment of wagons"
+   ],
+   "steps": [
+    37
+   ],
+   "output": false,
+   "fields": {},
+   "body": "OOO \"Fergana Uzum Eksport\" (TIN 303456781) applies for: application on letterhead for allotment of wagons. Shipment: 22 000 kg of fresh table grapes, Andijan (Uzbekistan) → Almaty (Kazakhstan), 1 wagon 55012873. Contract UZ-325/2026-01 of 01.09.2026.",
+   "id": "application-on-letterhead-for-allotment-of-wagon",
+   "file": "325-30-application-on-letterhead-for-allotment-of-wagon.png"
+  },
+  {
+   "id": "export-railway-bill-40",
+   "template": "smgs",
+   "title": "Export railway bill (SMGS) — step 40",
+   "docType": "railway_bill",
+   "labels": [
+    "Export railway bill (SMGS)"
+   ],
+   "steps": [
+    40
+   ],
+   "output": true,
+   "fields": {
+    "dispatch_no": "77325451",
+    "sender": "OOO \"Fergana Uzum Eksport\"",
+    "consignee": "TOO \"Almaty Fresh Market\"",
+    "departure_station": "Andijan-1",
+    "destination_station": "Almaty-1",
+    "border_stations": "Keles, Sary-Agash",
+    "wagon_no": "55012873",
+    "cargo": "Виноград свежий / Fresh table grapes",
+    "packaging": "Ventilated crates, 8 kg",
+    "places": "2750",
+    "weight": "22 440",
+    "seals": "UZ 230417",
+    "documents_attached": "Invoice INV-325/2026-031"
+   },
+   "file": "325-31-export-railway-bill-step-40.png"
+  },
+  {
+   "id": "receipt-of-payment-42",
+   "template": "receipt",
+   "title": "Receipt of payment — step 42",
+   "docType": "receipt_of_payment",
+   "labels": [
+    "Receipt of payment"
+   ],
+   "steps": [
+    42
+   ],
+   "output": true,
+   "fields": {
+    "receipt_no": "R-325-042",
+    "payer": "OOO \"Fergana Uzum Eksport\"",
+    "payer_inn": "303456781",
+    "recipient": "State Customs Committee (demo)",
+    "payment_type": "customs fee",
+    "amount": "375 000",
+    "date": "22.09.2026"
+   },
+   "file": "325-32-receipt-of-payment-step-42.png"
+  },
+  {
+   "id": "commercial-invoice-stamped-by-customs-inspector-46",
+   "template": "commercial_invoice",
+   "title": "Commercial invoice stamped by customs inspector — step 46",
+   "docType": "commercial_invoice",
+   "labels": [
+    "Commercial invoice stamped by customs inspector"
+   ],
+   "steps": [
+    46
+   ],
+   "output": true,
+   "fields": {
+    "invoice_no": "INV-325/2026-031",
+    "invoice_date": "04.09.2026",
+    "seller": "OOO \"Fergana Uzum Eksport\"",
+    "buyer": "TOO \"Almaty Fresh Market\"",
+    "goods": "Fresh table grapes",
+    "hs_code": "0806 10 101 0",
+    "quantity": "22 000 kg",
+    "total_value": "30 800.00 USD",
+    "origin_country": "Uzbekistan",
+    "gross_weight": "22 440 kg",
+    "currency": "USD",
+    "contract_no": "UZ-325/2026-01",
+    "incoterms": "FCA Andijan",
+    "transport_doc": "SMGS 77325451"
+   },
+   "stamp": "customs",
+   "file": "325-33-commercial-invoice-stamped-by-customs-inspector-.png"
+  },
+  {
+   "template": "letter",
+   "title": "Application for wagon handover",
+   "docType": null,
+   "labels": [
+    "Application for wagon handover"
+   ],
+   "steps": [
+    47
+   ],
+   "output": false,
+   "fields": {},
+   "body": "OOO \"Fergana Uzum Eksport\" (TIN 303456781) applies for: application for wagon handover. Shipment: 22 000 kg of fresh table grapes, Andijan (Uzbekistan) → Almaty (Kazakhstan), 1 wagon 55012873. Contract UZ-325/2026-01 of 01.09.2026.",
+   "id": "application-for-wagon-handover",
+   "file": "325-34-application-for-wagon-handover.png"
+  },
+  {
+   "template": "letter",
+   "title": "Package of documents",
+   "docType": null,
+   "labels": [
+    "Package of documents"
+   ],
+   "steps": [
+    48
+   ],
+   "output": false,
+   "fields": {},
+   "body": "Package of documents for the shipment 22 000 kg of fresh table grapes, Andijan (Uzbekistan) → Almaty (Kazakhstan), 1 wagon 55012873, contract UZ-325/2026-01 of 01.09.2026.",
+   "id": "package-of-documents",
+   "file": "325-35-package-of-documents.png"
+  },
+  {
+   "id": "duplicate-of-railway-bill-with-datestamp-48",
+   "template": "smgs",
+   "title": "Duplicate of railway bill with datestamp — step 48",
+   "docType": "railway_bill",
+   "labels": [
+    "Duplicate of railway bill with datestamp"
+   ],
+   "steps": [
+    48
+   ],
+   "output": true,
+   "fields": {
+    "dispatch_no": "77325451",
+    "sender": "OOO \"Fergana Uzum Eksport\"",
+    "consignee": "TOO \"Almaty Fresh Market\"",
+    "departure_station": "Andijan-1",
+    "destination_station": "Almaty-1",
+    "border_stations": "Keles, Sary-Agash",
+    "wagon_no": "55012873",
+    "cargo": "Виноград свежий / Fresh table grapes",
+    "packaging": "Ventilated crates, 8 kg",
+    "places": "2750",
+    "weight": "22 440",
+    "seals": "UZ 230417",
+    "documents_attached": "Invoice INV-325/2026-031"
+   },
+   "stamp": "datestamp",
+   "file": "325-36-duplicate-of-railway-bill-with-datestamp-step-48.png"
+  }
+ ]
+}

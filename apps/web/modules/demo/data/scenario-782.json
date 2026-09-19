@@ -1,0 +1,373 @@
+{
+ "procedureId": "782",
+ "title": "Arrange cargo transportation by train via Single Window online portal — demo scenario",
+ "note": "Fictional demo data. Every company, person, number, amount and stamp is invented; nothing here is a real document.",
+ "shipment": {
+  "query": "Dispatch 40 t of ceramic tiles from Tashkent to Almaty by rail",
+  "goods": "Ceramic floor tiles",
+  "goodsRu": "Плитка керамическая",
+  "hs": "6907 21 000 0",
+  "netKg": "40 000",
+  "grossKg": "40 800",
+  "cartons": "40",
+  "packaging": "Wooden pallets",
+  "unitKind": "wagon",
+  "wagons": [
+   "60218844"
+  ],
+  "seals": [
+   "UZ 118790"
+  ],
+  "departureStation": "Tashkent-Tovarny",
+  "destinationStation": "Almaty-1",
+  "borderStations": "Keles, Sary-Agash",
+  "from": "Tashkent, Uzbekistan",
+  "to": "Almaty, Kazakhstan",
+  "valueUsd": "52 000.00",
+  "incoterms": "FCA Tashkent",
+  "contractNo": "UZ-782/2026-01",
+  "contractDate": "01.09.2026",
+  "invoiceNo": "INV-782/2026-031",
+  "invoiceDate": "04.09.2026",
+  "caseLine": "arrange cargo transportation by train via single window online portal, 40 000 kg of ceramic floor tiles"
+ },
+ "parties": {
+  "exporter": {
+   "name": "OOO \"Kulol Keramika\"",
+   "address": "Tashkent, Sergeli district, Yangi Sergeli 7, Uzbekistan",
+   "tin": "309012367",
+   "manager": "Umid Sobirov",
+   "phone": "+998 90 911 40 50",
+   "email": "logistics.kulol@demo.uz",
+   "bank": "Demo Bank JSCB, account 20208000900999000001, MFO 00444"
+  },
+  "trader": {
+   "name": "OOO \"Kulol Keramika\"",
+   "address": "Tashkent, Sergeli district, Yangi Sergeli 7, Uzbekistan",
+   "tin": "309012367",
+   "manager": "Umid Sobirov",
+   "phone": "+998 90 911 40 50",
+   "email": "logistics.kulol@demo.uz",
+   "bank": "Demo Bank JSCB, account 20208000900999000001, MFO 00444"
+  },
+  "seller": {
+   "name": "OOO \"Kulol Keramika\"",
+   "address": "Tashkent, Sergeli district, Yangi Sergeli 7, Uzbekistan",
+   "tin": "309012367",
+   "manager": "Umid Sobirov",
+   "phone": "+998 90 911 40 50",
+   "email": "logistics.kulol@demo.uz",
+   "bank": "Demo Bank JSCB, account 20208000900999000001, MFO 00444"
+  },
+  "buyer": {
+   "name": "TOO \"Almaty Stroy Snab\"",
+   "address": "Almaty, Ryskulov avenue 101, Kazakhstan",
+   "tin": "—",
+   "manager": "A. Demo",
+   "phone": "—",
+   "email": "—",
+   "bank": "—"
+  },
+  "representative": {
+   "name": "Farrukh Juraev",
+   "passport": "AC 7788990"
+  }
+ },
+ "values": {
+  "Tax Identification Number of the organization or individual": "309012367",
+  "Personal identification number of an individual": "31503850210045",
+  "Bank details": "Demo Bank JSCB, account 20208000900999000001, MFO 00444"
+ },
+ "documents": [
+  {
+   "id": "commercial-invoice",
+   "template": "commercial_invoice",
+   "title": "Commercial invoice",
+   "docType": "commercial_invoice",
+   "labels": [
+    "Commercial invoice"
+   ],
+   "steps": [
+    10
+   ],
+   "output": false,
+   "fields": {
+    "invoice_no": "INV-782/2026-031",
+    "invoice_date": "04.09.2026",
+    "seller": "OOO \"Kulol Keramika\"",
+    "buyer": "TOO \"Almaty Stroy Snab\"",
+    "goods": "Ceramic floor tiles",
+    "hs_code": "6907 21 000 0",
+    "quantity": "40 000 kg",
+    "total_value": "52 000.00 USD",
+    "origin_country": "Uzbekistan",
+    "gross_weight": "40 800 kg",
+    "currency": "USD",
+    "contract_no": "UZ-782/2026-01",
+    "incoterms": "FCA Tashkent",
+    "transport_doc": "SMGS 77782451"
+   },
+   "file": "782-01-commercial-invoice.png"
+  },
+  {
+   "id": "trade-contract",
+   "template": "contract",
+   "title": "Foreign trade contract",
+   "docType": "trade_contract",
+   "labels": [
+    "Foreign economic activity contract",
+    "Supply contract"
+   ],
+   "steps": [
+    6
+   ],
+   "output": false,
+   "fields": {
+    "contract_no": "UZ-782/2026-01",
+    "contract_date": "01.09.2026",
+    "seller": "OOO \"Kulol Keramika\"",
+    "buyer": "TOO \"Almaty Stroy Snab\"",
+    "goods": "Ceramic floor tiles",
+    "hs_code": "6907 21 000 0",
+    "quantity": "40 000 kg",
+    "total_value": "52 000.00 USD",
+    "incoterms": "FCA Tashkent"
+   },
+   "file": "782-02-foreign-trade-contract.png"
+  },
+  {
+   "id": "passport",
+   "template": "passport",
+   "title": "Passport",
+   "docType": "passport",
+   "labels": [
+    "Passport"
+   ],
+   "steps": [
+    5,
+    7,
+    8
+   ],
+   "output": false,
+   "fields": {
+    "full_name": "JURAEV FARRUKH",
+    "passport_no": "AC 7788990",
+    "expiry": "14.03.2031"
+   },
+   "file": "782-03-passport.png"
+  },
+  {
+   "id": "power-of-attorney",
+   "template": "poa",
+   "title": "Power of attorney",
+   "docType": "power_of_attorney",
+   "labels": [
+    "Power of attorney"
+   ],
+   "steps": [
+    5,
+    7,
+    15
+   ],
+   "output": false,
+   "fields": {
+    "poa_no": "42",
+    "issue_date": "02.09.2026",
+    "representative": "Farrukh Juraev",
+    "passport": "AC 7788990",
+    "valid_until": "31.12.2026",
+    "scope": "Customs operations, cargo handling, signing and receiving documents"
+   },
+   "file": "782-04-power-of-attorney.png"
+  },
+  {
+   "template": "letter",
+   "title": "Agreement with Technological center",
+   "docType": null,
+   "labels": [
+    "Agreement with Technological center"
+   ],
+   "steps": [
+    3
+   ],
+   "output": false,
+   "fields": {},
+   "body": "Agreement with Technological center for the shipment 40 000 kg of ceramic floor tiles, Tashkent (Uzbekistan) → Almaty (Kazakhstan), 1 wagon 60218844, contract UZ-782/2026-01 of 01.09.2026.",
+   "id": "agreement-with-technological-center",
+   "file": "782-05-agreement-with-technological-center.png"
+  },
+  {
+   "template": "invoice_for_payment",
+   "title": "Invoice for payment for railway services",
+   "docType": "invoice_for_payment",
+   "labels": [
+    "Invoice for payment for railway services"
+   ],
+   "steps": [
+    3
+   ],
+   "output": false,
+   "fields": {
+    "invoice_no": "IP-782/003",
+    "invoice_date": "03.09.2026",
+    "contract_no": "SRV-782-3",
+    "supplier": "JSC Uzbekistan Temir Yo'llari",
+    "supplier_inn": "200933140",
+    "customer": "OOO \"Kulol Keramika\"",
+    "vat_rate": "12",
+    "total": "245 000"
+   },
+   "id": "invoice-for-payment-for-railway-services",
+   "file": "782-06-invoice-for-payment-for-railway-services.png"
+  },
+  {
+   "id": "receipt-of-payment-3",
+   "template": "receipt",
+   "title": "Receipt of payment — step 3",
+   "docType": "receipt_of_payment",
+   "labels": [
+    "Receipt of payment"
+   ],
+   "steps": [
+    3
+   ],
+   "output": true,
+   "fields": {
+    "receipt_no": "R-782-003",
+    "payer": "OOO \"Kulol Keramika\"",
+    "payer_inn": "309012367",
+    "recipient": "JSC Uzbekistan Temir Yo'llari",
+    "payment_type": "Prepay for railway services (juices and tea)",
+    "amount": "245 000",
+    "date": "03.09.2026"
+   },
+   "file": "782-07-receipt-of-payment-step-3.png"
+  },
+  {
+   "template": "invoice_for_payment",
+   "title": "Invoice for payment",
+   "docType": "invoice_for_payment",
+   "labels": [
+    "Invoice for payment"
+   ],
+   "steps": [
+    8
+   ],
+   "output": false,
+   "fields": {
+    "invoice_no": "IP-782/008",
+    "invoice_date": "05.09.2026",
+    "contract_no": "SRV-782-8",
+    "supplier": "OOO \"Demo Forwarding\"",
+    "supplier_inn": "200933140",
+    "customer": "OOO \"Kulol Keramika\"",
+    "vat_rate": "12",
+    "total": "1 120 000"
+   },
+   "id": "invoice-for-payment",
+   "file": "782-08-invoice-for-payment.png"
+  },
+  {
+   "id": "receipt-of-payment-8",
+   "template": "receipt",
+   "title": "Receipt of payment — step 8",
+   "docType": "receipt_of_payment",
+   "labels": [
+    "Receipt of payment"
+   ],
+   "steps": [
+    8
+   ],
+   "output": true,
+   "fields": {
+    "receipt_no": "R-782-008",
+    "payer": "OOO \"Kulol Keramika\"",
+    "payer_inn": "309012367",
+    "recipient": "OOO \"Demo Forwarding\"",
+    "payment_type": "code assignment and freight forwarder service",
+    "amount": "1 120 000",
+    "date": "05.09.2026"
+   },
+   "file": "782-09-receipt-of-payment-step-8.png"
+  },
+  {
+   "template": "letter",
+   "title": "Information from following documents is required to complete the application",
+   "docType": null,
+   "labels": [
+    "Information from following documents is required to complete the application"
+   ],
+   "steps": [
+    10,
+    11
+   ],
+   "output": false,
+   "fields": {},
+   "body": "OOO \"Kulol Keramika\" (TIN 309012367) applies for: information from following documents is required to complete the application. Shipment: 40 000 kg of ceramic floor tiles, Tashkent (Uzbekistan) → Almaty (Kazakhstan), 1 wagon 60218844. Contract UZ-782/2026-01 of 01.09.2026.",
+   "id": "information-from-following-documents-is-required",
+   "file": "782-10-information-from-following-documents-is-required.png"
+  },
+  {
+   "template": "letter",
+   "title": "Telegram on payment for the railway tariff by telegraph",
+   "docType": null,
+   "labels": [
+    "Telegram on payment for the railway tariff by telegraph"
+   ],
+   "steps": [
+    11
+   ],
+   "output": false,
+   "fields": {},
+   "body": "Telegram on payment for the railway tariff by telegraph for the shipment 40 000 kg of ceramic floor tiles, Tashkent (Uzbekistan) → Almaty (Kazakhstan), 1 wagon 60218844, contract UZ-782/2026-01 of 01.09.2026.",
+   "id": "telegram-on-payment-for-the-railway-tariff-by-te",
+   "file": "782-11-telegram-on-payment-for-the-railway-tariff-by-te.png"
+  },
+  {
+   "template": "letter",
+   "title": "Package of documents",
+   "docType": null,
+   "labels": [
+    "Package of documents"
+   ],
+   "steps": [
+    19
+   ],
+   "output": false,
+   "fields": {},
+   "body": "Package of documents for the shipment 40 000 kg of ceramic floor tiles, Tashkent (Uzbekistan) → Almaty (Kazakhstan), 1 wagon 60218844, contract UZ-782/2026-01 of 01.09.2026.",
+   "id": "package-of-documents",
+   "file": "782-12-package-of-documents.png"
+  },
+  {
+   "id": "duplicate-of-railway-bill-with-datestamp-19",
+   "template": "smgs",
+   "title": "Duplicate of railway bill with datestamp — step 19",
+   "docType": "railway_bill",
+   "labels": [
+    "Duplicate of railway bill with datestamp"
+   ],
+   "steps": [
+    19
+   ],
+   "output": true,
+   "fields": {
+    "dispatch_no": "77782451",
+    "sender": "OOO \"Kulol Keramika\"",
+    "consignee": "TOO \"Almaty Stroy Snab\"",
+    "departure_station": "Tashkent-Tovarny",
+    "destination_station": "Almaty-1",
+    "border_stations": "Keles, Sary-Agash",
+    "wagon_no": "60218844",
+    "cargo": "Плитка керамическая / Ceramic floor tiles",
+    "packaging": "Wooden pallets",
+    "places": "40",
+    "weight": "40 800",
+    "seals": "UZ 118790",
+    "documents_attached": "Invoice INV-782/2026-031"
+   },
+   "stamp": "datestamp",
+   "file": "782-13-duplicate-of-railway-bill-with-datestamp-step-19.png"
+  }
+ ]
+}

@@ -15,6 +15,7 @@ type AuditEvent = {
 const AGENT_NAMES: Record<string, string> = {
   document_intelligence: "Document Intelligence",
   compliance_risk: "Compliance & Risk",
+  transit_capacity: "Transit & Capacity",
   inspection_scheduler: "Inspection scheduler",
   procedure_executor: "Procedure executor",
 };
@@ -39,12 +40,13 @@ const WHAT: Record<string, string> = {
   work_item_created: "handed over — waiting on you",
   work_item_completed: "confirmed done",
   optional_node_skipped: "skipped — optional route not taken",
+  transit_state_changed: "movement state changed",
 };
 
 /** The case ledger: the workflow engine's append-only record of every node
  *  transition, newest first. Nothing here is edited in place, so it is what
  *  to read when asking "who did what, and when" on a stalled case. */
-export default function CaseLedger({ caseId, procedure, version }: { caseId: string; procedure: Procedure; version: unknown }) {
+export default function CaseLedger({ caseId, procedure, version, open = false }: { caseId: string; procedure: Procedure; version?: unknown; open?: boolean }) {
   const [events, setEvents] = useState<AuditEvent[] | null>(null);
   const [failed, setFailed] = useState(false);
 
@@ -72,7 +74,7 @@ export default function CaseLedger({ caseId, procedure, version }: { caseId: str
   const rows = [...(events ?? [])].sort((a, b) => (b.createdAt ?? "").localeCompare(a.createdAt ?? "") || b.id.localeCompare(a.id));
 
   return (
-    <details className="ledger">
+    <details className="ledger" open={open}>
       <summary>
         <span className="wf-detail-h">Case ledger</span>
         <span className="ledger-count">

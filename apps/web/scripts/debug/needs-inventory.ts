@@ -1,6 +1,6 @@
 /* Everything a full walk-through of each procedure needs from the trader,
  * derived from the step engine itself (the same needs the step assistant shows). */
-import { PROCEDURES, PROCEDURE_IDS } from "../../modules/procedures/data/procedures.generated";
+import { PROCEDURES, PROCEDURE_IDS } from "../../modules/procedures/sync";
 import { instantiateWorkflow } from "../../modules/workflow/domain";
 import { buildLedger } from "../../modules/steps/ledger";
 import { stepViewFor } from "../../modules/steps/next";

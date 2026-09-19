@@ -6,10 +6,14 @@
 import { runOrchestrator } from "../workflow/orchestrator";
 import type { Procedure } from "../procedures/data/procedures.generated";
 import { applyCorrections, summarize } from "../documents/docai/compose";
+import type { AgenticAiClient } from "../workflow/agentic-ai";
+import type { PortalClient } from "../portals/client";
 import type { WorkflowRepository } from "../workflow/repository";
 import { completeWorkflowWorkItem } from "../workflow/service";
 import { buildLedger, DOCUMENT_ARTIFACT, INPUT_ARTIFACT, inputKey, nextVersion, type DocumentRecord, type InputKind } from "./ledger";
 import { stepViewFor } from "./next";
+
+export type StepServiceOptions = { ai?: AgenticAiClient; portals?: PortalClient };
 
 export class StepNotReady extends Error {
   constructor(public stepNum: number, public missing: string[]) {
@@ -21,6 +25,7 @@ export async function recordInput(
   repository: WorkflowRepository,
   runId: string,
   input: { kind: InputKind; stepNum: number; label: string; value: string },
+  options: StepServiceOptions = {},
 ) {
   const key = inputKey(input.kind, input.stepNum, input.label);
   const version = nextVersion();
@@ -42,10 +47,10 @@ export async function recordInput(
     actorId: "usr-trader",
     data: { label: input.label, stepNum: input.stepNum, kind: input.kind },
   });
-  return runOrchestrator(repository, runId);
+  return runOrchestrator(repository, runId, options);
 }
 
-export async function recordDocument(repository: WorkflowRepository, runId: string, record: DocumentRecord) {
+export async function recordDocument(repository: WorkflowRepository, runId: string, record: DocumentRecord, options: StepServiceOptions = {}) {
   const s = summarize(record.fields);
   const summary = record.parseError
     ? `Stored ${record.label} (step ${record.stepNum}) — not parsed: ${record.parseError}`
@@ -68,7 +73,7 @@ export async function recordDocument(repository: WorkflowRepository, runId: stri
     actorId: "document_intelligence",
     data: { summary, docType: record.docType, stepNum: record.stepNum },
   });
-  return runOrchestrator(repository, runId);
+  return runOrchestrator(repository, runId, options);
 }
 
 /** The trader's review of a parsed document: typed corrections are confirmed;
@@ -79,6 +84,7 @@ export async function confirmDocument(
   docId: string,
   corrections: Record<string, string | null>,
   confirmAll: boolean,
+  options: StepServiceOptions = {},
 ) {
   const ledger = buildLedger((await repository.getProjection(runId)).artifacts);
   const current = ledger.documents.find((d) => d.docId === docId);
@@ -90,10 +96,10 @@ export async function confirmDocument(
     fields,
     version: nextVersion(),
     confirmed: confirmAll && open.length === 0,
-  });
+  }, options);
 }
 
-export async function completeStep(repository: WorkflowRepository, procedure: Procedure, runId: string, stepNum: number, completedBy = "usr-trader") {
+export async function completeStep(repository: WorkflowRepository, procedure: Procedure, runId: string, stepNum: number, completedBy = "usr-trader", options: StepServiceOptions = {}) {
   const projection = await repository.getProjection(runId);
   const node = projection.nodes.find((n) => n.stepNum === stepNum);
   if (!node) throw new Error(`Step ${stepNum} not found`);
@@ -103,12 +109,18 @@ export async function completeStep(repository: WorkflowRepository, procedure: Pr
   if (!view.ready) throw new StepNotReady(stepNum, view.blocking);
 
   // A paused agent step resumes through the orchestrator once its inputs exist.
-  if (node.lane === "agent") return runOrchestrator(repository, runId);
+  if (node.lane === "agent") return runOrchestrator(repository, runId, options);
   if (!view.workItemId) throw new Error(`Invalid transition: step ${stepNum} has no open work item`);
   return completeWorkflowWorkItem(
     repository,
     view.workItemId,
     { verified: true, provided: view.needs.filter((n) => n.status === "have").map((n) => n.label) },
     completedBy,
+    options,
   );
+}
+
+/** Lets the orchestrator read back what the entities decided since the last run. */
+export async function syncCase(repository: WorkflowRepository, runId: string, options: StepServiceOptions = {}) {
+  return runOrchestrator(repository, runId, options);
 }

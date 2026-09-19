@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { PROCEDURES, PROCEDURE_IDS } from "../../../modules/procedures/data/procedures.generated";
+import { PROCEDURES, PROCEDURE_IDS } from "../../../modules/procedures/sync";
 import { DOC_SPECS, docTypeOf, specFor, type DocType } from "../../../modules/documents/specs";
 import { allInputs, procedureNeeds } from "../../../modules/procedures/requirements";
 
@@ -19,12 +19,13 @@ test("an event is not a document: 'Customs declaration submitted' asks for no up
 
 test("every customs declaration step's invoice and transport document have field checklists", () => {
   for (const id of PROCEDURE_IDS) {
+    if (PROCEDURES[id].kind === "logistics") continue; // rail logistics files no declaration
     const needs = procedureNeeds(PROCEDURES[id]).filter((n) => /^create .*customs declaration/i.test(n.title));
     assert.ok(needs.length, `${id} has a declaration step`);
     for (const n of needs) {
       const types = allInputs(n).map((i) => i.docType);
       assert.ok(types.includes("commercial_invoice"), `${id} step ${n.stepNum}`);
-      assert.ok(types.includes("railway_bill") || types.includes("air_waybill"), `${id} step ${n.stepNum}`);
+      assert.ok(types.includes("railway_bill") || types.includes("air_waybill") || types.includes("cmr_note"), `${id} step ${n.stepNum}`);
     }
   }
 });

@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import { runOrchestrator } from "../../../modules/workflow/orchestrator";
-import { PROCEDURES } from "../../../modules/procedures/data/procedures.generated";
+import { PROCEDURES } from "../../../modules/procedures/sync";
 import { extractShipmentFacts, instantiateWorkflow } from "../../../modules/workflow/domain";
 import { specFor, type DocType } from "../../../modules/documents/specs";
 import { assistantView } from "../../../modules/steps/assistant";
@@ -131,6 +131,25 @@ test("an agent step pauses until the trader's documents exist, then runs by itse
   assert.match(kpis.timeSavedFormula, /× 45 min/);
 });
 
+test("completed step summaries explain operational time, savings and important entity remarks", async () => {
+  const { repository, runId, caseId, procedure } = await openRun();
+  for (const node of (await repository.getProjection(runId)).nodes) {
+    if (node.stepNum < 41) await repository.updateNode(node.id, { state: "completed" });
+  }
+  await runOrchestrator(repository, runId);
+  await recordDocument(repository, runId, confirmedDocument("commercial_invoice", "Commercial invoice", 25));
+
+  const view = assistantView(procedure, await repository.getProjection(runId), caseId);
+  const customs = view.completed.find((row) => row.stepNum === 41)!;
+
+  assert.equal(customs.status, "Success");
+  assert.match(customs.timeTaken, /\d+ min/);
+  assert.equal(customs.timeSaved, "45 min");
+  assert.match(customs.remarks, /Customs\/SCC/);
+  assert.match(customs.remarks, /invoice/i);
+  assert.match(customs.remarks, /final submission/i);
+});
+
 test("a value given once is reused at later steps and counted as auto-filled", async () => {
   const { repository, runId, procedure } = await openRun();
   await recordInput(repository, runId, { kind: "value", stepNum: 8, label: "Tax Identification Number of the organization or individual", value: "301234567" });
@@ -142,16 +161,30 @@ test("a value given once is reused at later steps and counted as auto-filled", a
   assert.equal(tin.autoFilled, true);
 });
 
-test("payment steps ask which channel, then for the receipt as the step's output", async () => {
+test("a bank payment is the agent's: online channel, and nothing moves until the trader authorises it", async () => {
   const { repository, runId, procedure } = await openRun();
   let projection = await repository.getProjection(runId);
   const node4 = projection.nodes.find((n) => n.stepNum === 4)!;
+  assert.equal(node4.lane, "agent");
   let view = stepViewFor(procedure, projection, buildLedger(projection.artifacts), node4);
-  assert.ok(view.blocking.some((b) => /Choose one/.test(b)));
-  assert.ok(view.needs.some((n) => n.output && n.docType === "receipt_of_payment"));
+  assert.equal(view.actionLabel, "Agent pays");
+  assert.equal(view.variants.find((v) => v.chosen)?.label, "Online payment");
+  assert.ok(!view.blocking.some((b) => /Choose one/.test(b)));
+  assert.ok(!view.needs.some((n) => n.output && n.docType === "receipt_of_payment"), "the gateway issues the receipt");
+  assert.ok(view.blocking.includes("Payment authorisation"));
 
-  await recordInput(repository, runId, { kind: "variant", stepNum: 4, label: "channel", value: "Online payment" });
+  await recordInput(repository, runId, { kind: "confirm", stepNum: 4, label: "Payment authorisation", value: "yes" });
   projection = await repository.getProjection(runId);
   view = stepViewFor(procedure, projection, buildLedger(projection.artifacts), node4);
-  assert.equal(view.variants.find((v) => v.chosen)?.label, "Online payment");
+  assert.ok(!view.blocking.includes("Payment authorisation"));
+});
+
+test("a payment to anyone but a bank stays with the trader, who picks the channel and uploads the receipt", async () => {
+  const { repository, runId, procedure } = await openRun("540");
+  const projection = await repository.getProjection(runId);
+  const node4 = projection.nodes.find((n) => n.stepNum === 4)!;
+  assert.equal(node4.lane, "user");
+  const view = stepViewFor(procedure, projection, buildLedger(projection.artifacts), node4);
+  assert.ok(view.blocking.some((b) => /Choose one/.test(b)));
+  assert.ok(view.needs.some((n) => n.output && n.docType === "receipt_of_payment"));
 });

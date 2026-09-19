@@ -17,7 +17,7 @@
  */
 
 import { requiresPhysical } from "../procedures/delegation";
-import type { Procedure, ProcedureBlock } from "../procedures/data/procedures.generated";
+import type { Direction, Procedure, ProcedureBlock, TransportMode as ProcedureMode } from "../procedures/data/procedures.generated";
 import type { ShipmentFacts } from "../workflow/domain";
 
 export type Hours = [number, number];
@@ -181,6 +181,15 @@ export function findPlace(text: string | null | undefined): Place | null {
   return text ? placesIn(text)[0]?.place ?? null : null;
 }
 
+export function placesForCountry(country: string): Place[] {
+  const seen = new Set<string>();
+  return CITIES.filter(([, code]) => code === country).map(([name, code, lat, lon]) => ({ name, country: code, lat, lon })).filter((place) => {
+    if (seen.has(place.name)) return false;
+    seen.add(place.name);
+    return true;
+  });
+}
+
 export function countryName(code: string): string {
   return COUNTRY_NAMES[code]?.name ?? code;
 }
@@ -284,6 +293,14 @@ const RAIL = {
   sea: [72, 168] as Hours,
   road: [24, 72] as Hours,
 };
+/* Trucks follow the same country corridors; there is no gauge to change, and
+   a leg that is "road" on the rail corridor is simply part of the drive. */
+const ROAD = {
+  routeFactor: 1.2,
+  kmPerDay: [600, 350] as Hours, // one driver, rest stops included: best, worst
+  border: [4, 24] as Hours, // TIR queue and control at each crossing
+  sea: [72, 168] as Hours,
+};
 const AIR = {
   routeFactor: 1.08,
   kmPerHour: 750,
@@ -293,10 +310,23 @@ const AIR = {
   transferEveryKm: 4500,
 };
 
+/** A procedure's mode. "any" is a service procedure — obtaining one document,
+ *  which no transport mode belongs to; it is sized and routed as rail, the
+ *  mode most of the corpus uses, and the plan says so. */
+export type TransportMode = ProcedureMode;
+
+/** The mode to plan with: a service procedure is planned as rail. */
+export const planningMode = (mode: TransportMode): "train" | "air" | "road" => (mode === "any" ? "train" : mode);
+
+/** The direction to route with: transit runs through Uzbekistan, so it is
+ *  routed like an import as far as the border formalities go. */
+export const planningDirection = (direction: Direction): "import" | "export" =>
+  direction === "export" ? "export" : "import";
+
 export type Route = {
   origin: RouteEnd;
   destination: RouteEnd;
-  mode: "train" | "air";
+  mode: TransportMode;
   distanceKm: number;
   via: string[];
   borders: number;
@@ -308,7 +338,8 @@ export type Route = {
   modelled: boolean;
 };
 
-export function planRoute(mode: "train" | "air", origin: RouteEnd, destination: RouteEnd, direction: "import" | "export"): Route {
+export function planRoute(modeIn: TransportMode, origin: RouteEnd, destination: RouteEnd, direction: Direction): Route {
+  const mode = planningMode(modeIn);
   const gc = greatCircleKm(origin.place, destination.place);
   const partner = direction === "export" ? destination.place.country : origin.place.country;
   const domestic = origin.place.country === destination.place.country;
@@ -329,6 +360,20 @@ export function planRoute(mode: "train" | "air", origin: RouteEnd, destination: 
 
   const corridor = domestic ? { via: [] } : RAIL_CORRIDORS[partner];
   const c: Corridor = corridor ?? { via: [] };
+
+  if (mode === "road") {
+    const distanceKm = Math.round(gc * ROAD.routeFactor);
+    const borders = domestic ? 0 : c.via.length + 1;
+    const transit: Hours = [
+      (distanceKm / ROAD.kmPerDay[0]) * 24 + borders * ROAD.border[0] + (c.sea ? ROAD.sea[0] : 0),
+      (distanceKm / ROAD.kmPerDay[1]) * 24 + borders * ROAD.border[1] + (c.sea ? ROAD.sea[1] : 0),
+    ];
+    return {
+      origin, destination, mode, distanceKm, via: c.via, borders,
+      gaugeBreak: null, sea: c.sea ?? null, road: null, transfers: 0, transit: round(transit), modelled: Boolean(corridor) || domestic,
+    };
+  }
+
   const distanceKm = Math.round(gc * RAIL.routeFactor);
   const borders = domestic ? 0 : c.via.length + 1;
   const add = (h: Hours, n = 1): Hours => [h[0] * n, h[1] * n];
@@ -353,8 +398,16 @@ const round = (h: Hours): Hours => [Math.round(h[0]), Math.round(h[1])];
 
 /* Tonnes one unit carries. Tea and dried fruit fill a covered wagon's volume
    long before its 68 t weight limit; fresh produce travels refrigerated. */
-const WAGON_T: Record<string, number> = { tea: 30, "dried fruits": 45, "fresh fruits and vegetables": 22 };
-const CONTAINER_T: Record<string, number> = { tea: 18, "dried fruits": 22, "fresh fruits and vegetables": 22 };
+const WAGON_T: Record<string, number> = {
+  tea: 30,
+  "dried fruits": 45,
+  "fresh fruits and vegetables": 22,
+  "fruit and vegetable juices": 55,
+  "animal or vegetable fertilizers": 60,
+};
+const CONTAINER_T: Record<string, number> = { tea: 18, "dried fruits": 22, "fresh fruits and vegetables": 22, "fruit and vegetable juices": 22, "animal or vegetable fertilizers": 24 };
+/* A 20-24 t semi-trailer; juice in drums or bag-in-box weighs out first. */
+const TRUCK_T: Record<string, number> = { "fruit and vegetable juices": 20, "animal or vegetable fertilizers": 22 };
 const AIR_PALLET_T = 3.5; // one main-deck PMC pallet of packed tea
 const FREIGHTER_T = 100; // one wide-body freighter
 const BELLY_T = 10; // what scheduled passenger bellies realistically take
@@ -365,13 +418,19 @@ export function toTonnes(quantity: number | null, unit: string | null, goods: st
   if (/^(kg|kgs|kilo|kilogram)/.test(u)) return quantity / 1000;
   if (/^wagon|^railcar/.test(u)) return quantity * (WAGON_T[goods] ?? 30);
   if (/^container/.test(u)) return quantity * (CONTAINER_T[goods] ?? 18);
+  if (/^(truck|lorr|fura|trailer)/.test(u)) return quantity * (TRUCK_T[goods] ?? 20);
   if (/^(lb|pound)/.test(u)) return (quantity * 0.4536) / 1000;
   return quantity; // t, tonnes, tons, mt - read as metric tonnes
 }
 
 export type Units = { kind: string; count: number; perUnitT: number; assumed: boolean };
 
-export function unitsFor(mode: "train" | "air", goods: string, tonnes: number | null): Units {
+export function unitsFor(modeIn: TransportMode, goods: string, tonnes: number | null): Units {
+  const mode = planningMode(modeIn);
+  if (mode === "road") {
+    const perUnitT = TRUCK_T[goods] ?? 20;
+    return { kind: "truck", count: tonnes ? Math.max(1, Math.ceil(tonnes / perUnitT)) : 1, perUnitT, assumed: tonnes == null };
+  }
   if (mode === "air") {
     return { kind: "air pallet", count: tonnes ? Math.max(1, Math.ceil(tonnes / AIR_PALLET_T)) : 1, perUnitT: AIR_PALLET_T, assumed: tonnes == null };
   }
@@ -387,14 +446,15 @@ export type Adjustment = { blockId: string; name: string; published: Hours; adju
 /** Only blocks that handle the goods scale with the load: every extra wagon
  *  is loaded, sealed, sampled and inspected. Paperwork, and dispatch of a
  *  train that leaves as one, does not. */
-function adjustmentsFor(blocks: ProcedureBlock[], units: Units, mode: "train" | "air"): Adjustment[] {
+function adjustmentsFor(blocks: ProcedureBlock[], units: Units, modeIn: TransportMode): Adjustment[] {
+  const mode = planningMode(modeIn);
   if (units.count <= 1) return [];
   const extra = units.count - 1;
   const out: Adjustment[] = [];
   for (const b of blocks) {
     if (!requiresPhysical(b) || /dispatch/i.test(b.name)) continue;
     const loading = /load/i.test(b.name);
-    const rate: Hours = mode === "air" ? (loading ? [0.5, 1] : [0.25, 0.5]) : loading ? [2, 4] : [1, 2];
+    const rate: Hours = mode === "air" ? (loading ? [0.5, 1] : [0.25, 0.5]) : mode === "road" ? (loading ? [1, 2] : [0.5, 1]) : loading ? [2, 4] : [1, 2];
     const adjusted: Hours = [b.estDuration[0] + extra * rate[0], b.estDuration[1] + extra * rate[1]];
     const what = /unload/i.test(b.name)
       ? "unloaded"
@@ -477,11 +537,11 @@ export function fmtTonnes(t: number): string {
 }
 
 export function buildShipmentPlan(procedure: Procedure, facts: ShipmentFacts, query = ""): ShipmentPlan {
-  const mode = procedure.mode === "air" ? "air" : "train";
+  const mode: TransportMode = procedure.mode;
   const goods = procedure.goods;
   const tonnes = toTonnes(facts.quantity, facts.unit, goods);
   const units = unitsFor(mode, goods, tonnes);
-  const ends = resolveRoute(procedure.direction, facts, query);
+  const ends = resolveRoute(planningDirection(procedure.direction), facts, query);
   const route = ends.origin && ends.destination ? planRoute(mode, ends.origin, ends.destination, procedure.direction) : null;
 
   const adjustments = adjustmentsFor(procedure.blocks, units, mode);
@@ -524,7 +584,7 @@ export function buildShipmentPlan(procedure: Procedure, facts: ShipmentFacts, qu
     }
     if (route.via.length) notes.push({ tone: "info", text: `Transit through ${route.via.map(countryName).join(" → ")}: each border adds a handover and transit-declaration check.` });
     if (route.gaugeBreak) notes.push({ tone: "caution", text: `Break of gauge (${route.gaugeBreak}) — goods are transshipped or bogies changed.` });
-    if (route.sea) notes.push({ tone: "caution", text: `${route.sea} — not rail; book it separately.` });
+    if (route.sea) notes.push({ tone: "caution", text: `${route.sea} — ${mode === "road" ? "the truck travels on the ferry; book it" : "not rail; book it separately"}.` });
     if (route.road) notes.push({ tone: "caution", text: route.road + "." });
     if (!route.modelled) notes.push({ tone: "info", text: "Transit corridor for this country isn't modelled — estimate uses distance only." });
     if (goods === "fresh fruits and vegetables") {

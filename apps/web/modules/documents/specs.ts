@@ -23,6 +23,7 @@ export type DocType =
   | "trade_contract"
   | "railway_bill"
   | "air_waybill"
+  | "cmr_note"
   | "shippers_letter"
   | "phytosanitary_certificate"
   | "certificate_of_origin"
@@ -32,6 +33,8 @@ export type DocType =
   | "offer_agreement"
   | "quarantine_permit_application"
   | "quarantine_permit"
+  | "veterinary_certificate"
+  | "certificate_of_conformity"
   | "customs_declaration"
   | "cargo_transport_application"
   | "food_test_report"
@@ -178,6 +181,31 @@ export const DOC_SPECS: Record<DocType, DocSpec> = {
       "Consignee and destination station match the contract and invoice",
       "Weight matches the packing list and what intake recorded",
       "Seal numbers match those applied after customs inspection",
+    ],
+  },
+  cmr_note: {
+    type: "cmr_note",
+    name: "CMR consignment note",
+    purpose: "Contract of carriage by road under the CMR Convention; travels with the truck across borders.",
+    specimen: "International consignment note CMR (161, 57) — box numbers as printed on the standard form",
+    fields: [
+      s("cmr_no", "CMR number", "number", true, ["What is the CMR number?"], ["cmr\s*№", "международная товарно-транспортная накладная"]),
+      s("sender", "Sender (box 1)", "text", true, ["Who is the sender?"], ["отправитель", "sender"]),
+      s("consignee", "Consignee (box 2)", "text", true, ["Who is the consignee?"], ["получатель", "consignee"]),
+      s("delivery_place", "Place of delivery (box 3)", "text", true, ["What is the place of delivery?"], ["место разгрузки", "place of delivery"]),
+      s("loading_place", "Place and date of taking over (box 4)", "text", true, ["Where were the goods taken over?"], ["место и дата погрузки", "taking over"]),
+      s("goods", "Nature of the goods (box 9)", "text", true, ["What is the nature of the goods?"], ["наименование груза", "nature of the goods"]),
+      s("places", "Number of packages (box 7)", "number", false, ["How many packages?"], ["количество мест", "number of packages"]),
+      s("weight", "Gross weight, kg (box 11)", "weight", true, ["What is the gross weight?"], ["вес брутто", "gross weight"]),
+      s("carrier", "Carrier (box 16)", "text", true, ["Who is the carrier?"], ["перевозчик", "carrier"]),
+      s("vehicle", "Vehicle registration", "text", false, ["What is the vehicle registration number?"], ["регистрационный номер", "vehicle"]),
+      s("issue_date", "Established on (box 21)", "date", false, ["What is the date the note was established?"], ["составлена", "established"]),
+    ],
+    supporting: [],
+    checks: [
+      "Sender, consignee and goods match the contract and invoice",
+      "Gross weight matches the invoice and what intake recorded",
+      "Place of delivery is in the destination country of the case",
     ],
   },
   air_waybill: {
@@ -358,13 +386,13 @@ export const DOC_SPECS: Record<DocType, DocSpec> = {
     type: "quarantine_permit_application",
     name: "Quarantine permit application",
     purpose: "Requested before import; the permit must exist before the goods arrive.",
-    specimen: "Portal form sections (477)",
+    specimen: "Single Window form — screenshot in procedure 477, section 7 (fields: modules/steps/application-forms.ts)",
     fields: [
-      p("applicant", "Information about applicant", "text", true),
-      p("importer", "Information about importer", "text", true),
-      p("exporter", "Information about exporter", "text", true),
-      p("general", "General information", "text", false),
-      p("product", "Information about product", "text", true),
+      p("applicant", "Applicant: taxpayer type, INN, name, director, address, phone, fax; passport and patent for a private person", "text", true),
+      p("importer", "Importer: same as applicant, or its own taxpayer type, INN, name, address, phone", "text", true),
+      p("exporter", "Exporter: name, exporting country, address", "text", true),
+      p("general", "General: destination address, transit countries, transport method, customs clearance point, border crossing, purpose of import", "text", true),
+      p("product", "Product: HS code, product name, quantity and unit, gross weight", "text", true),
     ],
     supporting: [],
     checks: ["Product information matches the contract and invoice", "Importer matches the company profile"],
@@ -449,6 +477,42 @@ export const DOC_SPECS: Record<DocType, DocSpec> = {
     supporting: [],
     checks: ["Sample matches the imported product", "Report date precedes the conclusion application"],
   },
+  veterinary_certificate: {
+    type: "veterinary_certificate",
+    name: "Veterinary certificate",
+    purpose: "Animal-health clearance for goods of animal origin, issued by the veterinary service after inspection.",
+    specimen: "Veterinary certificate Form-3 (57, 707) and the exporter-country certificate named in section 5",
+    fields: [
+      s("cert_no", "Certificate number", "number", true, ["What is the certificate number?"], ["ветеринарный сертификат\s*№", "veterinary certificate"]),
+      s("issue_date", "Date of issue", "date", true, ["What is the date of issue?"], ["дата выдачи", "date of issue"]),
+      s("consignor", "Consignor", "text", true, ["Who is the consignor?"], ["отправитель", "consignor"]),
+      s("consignee", "Consignee", "text", true, ["Who is the consignee?"], ["получатель", "consignee"]),
+      s("goods", "Name of goods", "text", true, ["What are the goods?"], ["наименование продукции", "name of goods"]),
+      s("quantity", "Quantity", "weight", true, ["What is the quantity?"], ["количество", "quantity"]),
+      s("origin_country", "Country of origin", "country", false, ["What is the country of origin?"], ["страна происхождения", "country of origin"]),
+      s("vet_permit_no", "Import permit number", "text", false, ["What is the veterinary permit number?"], ["разрешение на ввоз", "import permit"]),
+    ],
+    supporting: [],
+    checks: ["Goods and quantity match the invoice", "Issued after the veterinary permit and on or before the declaration"],
+  },
+  certificate_of_conformity: {
+    type: "certificate_of_conformity",
+    name: "Certificate of conformity",
+    purpose: "States the goods meet Uzbekistan's technical regulations; required before an import is released.",
+    specimen: "Certificate of conformity from the certification body for fertilizers (57, 707)",
+    fields: [
+      s("cert_no", "Certificate number", "number", true, ["What is the certificate number?"], ["сертификат соответствия\s*№", "certificate of conformity"]),
+      s("issue_date", "Date of issue", "date", true, ["What is the date of issue?"], ["дата выдачи", "date of issue"]),
+      s("valid_until", "Valid until", "date", false, ["Until when is it valid?"], ["действителен до", "valid until"]),
+      s("applicant", "Applicant", "text", true, ["Who is the applicant?"], ["заявитель", "applicant"]),
+      s("product", "Product", "text", true, ["What is the product?"], ["продукция", "product"]),
+      s("hs_code", "HS code", "hs", false, ["What is the HS code?"], ["код тн вэд", "hs code"]),
+      s("standard", "Conforms to", "text", false, ["Which standard does it conform to?"], ["соответствует требованиям", "conforms to"]),
+      s("body", "Certification body", "text", false, ["Which body issued it?"], ["орган по сертификации", "certification body"]),
+    ],
+    supporting: [],
+    checks: ["Product and HS code match the declaration", "Valid on the date of release"],
+  },
   passport: {
     type: "passport",
     name: "Passport",
@@ -478,6 +542,9 @@ const PATTERNS: [RegExp, DocType][] = [
   [/packing list/i, "packing_list"],
   [/foreign trade contract|foreign economic activity contract|^supply contract$/i, "trade_contract"],
   [/railway bill|\bsmgs\b/i, "railway_bill"],
+  [/carriage of goods by road|\bcmr\b/i, "cmr_note"],
+  [/veterinary certificate/i, "veterinary_certificate"],
+  [/certificate of conformity/i, "certificate_of_conformity"],
   [/air ?waybill/i, "air_waybill"],
   [/phytosanitary certificate/i, "phytosanitary_certificate"],
   [/certificate of origin/i, "certificate_of_origin"],

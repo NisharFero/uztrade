@@ -1,11 +1,11 @@
 {
   "totals": {
     "expected": 160,
-    "correct": 97,
-    "correctAccepted": 76,
-    "correctReview": 21,
-    "wrongAccepted": 35,
-    "notFound": 1,
+    "correct": 75,
+    "correctAccepted": 33,
+    "correctReview": 42,
+    "wrongAccepted": 30,
+    "notFound": 2,
     "blankFields": 0,
     "blankAccepted": 0,
     "blankReview": 0
@@ -41,7 +41,7 @@
           "contains": "192 000.00 USD"
         }
       },
-      "seconds": 38.3,
+      "seconds": 226.5,
       "detectedType": "trade_contract",
       "typeMatches": true,
       "fields": [
@@ -50,9 +50,9 @@
           "expected": {
             "contains": "UZ-2026/118"
           },
-          "value": "Ng UZ-2026/118",
-          "normalized": "Ng UZ-2026/118",
-          "confidence": 1,
+          "value": "UZ-2026/118",
+          "normalized": "UZ-2026/118",
+          "confidence": 0.99,
           "status": "accepted",
           "correct": true
         },
@@ -83,9 +83,9 @@
           "expected": {
             "contains": "OOO Moskovsky Chai"
           },
-          "value": "I. Sokolova;",
-          "normalized": "I. Sokolova;",
-          "confidence": 0.77,
+          "value": "ь покупает чай черный",
+          "normalized": "ь покупает чай черный",
+          "confidence": 0.53,
           "status": "review",
           "correct": false
         },
@@ -94,29 +94,29 @@
           "expected": {
             "contains": "FCA Tashkent"
           },
-          "value": "FCA Tashkent (Incoterms 2020).",
-          "normalized": "FCA",
-          "confidence": 0.98,
-          "status": "accepted",
-          "correct": true
+          "value": "2020)",
+          "normalized": null,
+          "confidence": 0.26,
+          "status": "missing",
+          "correct": false
         },
         {
           "key": "goods",
           "expected": {
             "contains": "Black tea"
           },
-          "value": "black tea",
-          "normalized": "black tea",
-          "confidence": 0.85,
-          "status": "accepted",
-          "correct": true
+          "value": "'Product\"",
+          "normalized": "'Product\"",
+          "confidence": 0.7,
+          "status": "review",
+          "correct": false
         },
         {
           "key": "quantity",
           "expected": {
             "contains": "60 000 kg"
           },
-          "value": "60 00О kg",
+          "value": "60",
           "normalized": 60,
           "confidence": 0.99,
           "status": "accepted",
@@ -127,7 +127,7 @@
           "expected": {
             "contains": "192 000.00 USD"
           },
-          "value": "192 000.0О USD",
+          "value": "192 OOO.00 USD",
           "normalized": 192000,
           "confidence": 0.99,
           "status": "accepted",
@@ -135,7 +135,7 @@
         }
       ],
       "ocrSegments": [
-        36
+        380
       ]
     },
     {
@@ -153,7 +153,7 @@
           "contains": "14.03.2031"
         }
       },
-      "seconds": 38.4,
+      "seconds": 23.7,
       "detectedType": "passport",
       "typeMatches": true,
       "fields": [
@@ -164,8 +164,8 @@
           },
           "value": "RAKHIMOV",
           "normalized": "RAKHIMOV",
-          "confidence": 0.46,
-          "status": "missing",
+          "confidence": 0.83,
+          "status": "accepted",
           "correct": false
         },
         {
@@ -173,11 +173,11 @@
           "expected": {
             "contains": "AD 1234567"
           },
-          "value": "AD 1234567",
-          "normalized": "AD 1234567",
-          "confidence": 0.88,
+          "value": "1234567",
+          "normalized": "1234567",
+          "confidence": 0.97,
           "status": "accepted",
-          "correct": true
+          "correct": false
         },
         {
           "key": "expiry",
@@ -192,7 +192,7 @@
         }
       ],
       "ocrSegments": [
-        29
+        42
       ]
     },
     {
@@ -216,7 +216,7 @@
           "contains": "31.12.2026"
         }
       },
-      "seconds": 20.6,
+      "seconds": 48.2,
       "detectedType": "power_of_attorney",
       "typeMatches": true,
       "fields": [
@@ -225,11 +225,11 @@
           "expected": {
             "contains": "17"
           },
-          "value": "Ng 17",
-          "normalized": "Ng 17",
-          "confidence": 0.66,
-          "status": "review",
-          "correct": true
+          "value": "02.09.2026",
+          "normalized": "02.09.2026",
+          "confidence": 0.36,
+          "status": "missing",
+          "correct": false
         },
         {
           "key": "issue_date",
@@ -247,22 +247,22 @@
           "expected": {
             "contains": "Bekzod Nurmatov"
           },
-          "value": "Bekzod Nurmatov",
-          "normalized": "Bekzod Nurmatov",
-          "confidence": 1,
+          "value": "\"Samarkand Choy\"",
+          "normalized": "\"Samarkand Choy\"",
+          "confidence": 0.99,
           "status": "accepted",
-          "correct": true
+          "correct": false
         },
         {
           "key": "passport",
           "expected": {
             "contains": "AB 7654321"
           },
-          "value": "AB 7654321",
-          "normalized": "AB 7654321",
-          "confidence": 0.85,
-          "status": "accepted",
-          "correct": true
+          "value": "выдан ОВД Юнусабадского района",
+          "normalized": "выдан ОВД Юнусабадского района",
+          "confidence": 0.54,
+          "status": "review",
+          "correct": false
         },
         {
           "key": "valid_until",
@@ -271,13 +271,13 @@
           },
           "value": "31.12.2026",
           "normalized": "2026-12-31",
-          "confidence": 0.99,
-          "status": "accepted",
+          "confidence": 0.42,
+          "status": "missing",
           "correct": true
         }
       ],
       "ocrSegments": [
-        28
+        65
       ]
     },
     {
@@ -307,7 +307,7 @@
           "contains": "05.09.2026"
         }
       },
-      "seconds": 21.5,
+      "seconds": 68.1,
       "detectedType": "receipt_of_payment",
       "typeMatches": true,
       "fields": [
@@ -316,9 +316,9 @@
           "expected": {
             "contains": "R-2026-0412"
           },
-          "value": "Ng R-2026-0412",
-          "normalized": "Ng R-2026-0412",
-          "confidence": 0.86,
+          "value": "R-2026-0412",
+          "normalized": "R-2026-0412",
+          "confidence": 1,
           "status": "accepted",
           "correct": true
         },
@@ -327,10 +327,10 @@
           "expected": {
             "contains": "OOO Samarkand Choy"
           },
-          "value": "\"Samarkand Choy\"",
-          "normalized": "\"Samarkand Choy\"",
-          "confidence": 1,
-          "status": "accepted",
+          "value": "а: Demo Bank JSCB",
+          "normalized": "а: Demo Bank JSCB",
+          "confidence": 0.75,
+          "status": "review",
           "correct": false
         },
         {
@@ -340,8 +340,8 @@
           },
           "value": "301245678",
           "normalized": "301245678",
-          "confidence": 0.99,
-          "status": "accepted",
+          "confidence": 0.73,
+          "status": "review",
           "correct": true
         },
         {
@@ -351,8 +351,8 @@
           },
           "value": "JSC Uzbekistan Temir Yo'llari",
           "normalized": "JSC Uzbekistan Temir Yo'llari",
-          "confidence": 0.94,
-          "status": "accepted",
+          "confidence": 0.71,
+          "status": "review",
           "correct": true
         },
         {
@@ -360,22 +360,22 @@
           "expected": {
             "contains": "Prepayment for railway services"
           },
-          "value": "Prepayment for railway services",
-          "normalized": "Prepayment for railway services",
-          "confidence": 0.71,
+          "value": "Prepayment",
+          "normalized": "Prepayment",
+          "confidence": 0.78,
           "status": "review",
-          "correct": true
+          "correct": false
         },
         {
           "key": "amount",
           "expected": {
             "contains": "18 400 000"
           },
-          "value": "18 400 00О UZS",
+          "value": "18 400 000 UZS",
           "normalized": 18400000,
-          "confidence": 0.76,
-          "status": "review",
-          "correct": false
+          "confidence": 0.82,
+          "status": "accepted",
+          "correct": true
         },
         {
           "key": "date",
@@ -384,13 +384,13 @@
           },
           "value": "05.09.2026",
           "normalized": "2026-09-05",
-          "confidence": 0.99,
-          "status": "accepted",
+          "confidence": 0.75,
+          "status": "review",
           "correct": true
         }
       ],
       "ocrSegments": [
-        31
+        88
       ]
     },
     {
@@ -423,7 +423,7 @@
           "contains": "2 350 000"
         }
       },
-      "seconds": 18.9,
+      "seconds": 43.3,
       "detectedType": "invoice_for_payment",
       "typeMatches": true,
       "fields": [
@@ -432,9 +432,9 @@
           "expected": {
             "contains": "FW-2026/311"
           },
-          "value": "302987654",
-          "normalized": "302987654",
-          "confidence": 0.17,
+          "value": "20208000900123456001,",
+          "normalized": "20208000900123456001,",
+          "confidence": 0,
           "status": "missing",
           "correct": false
         },
@@ -443,9 +443,9 @@
           "expected": {
             "contains": "06.09.2026"
           },
-          "value": "Date: 06.09.2026",
+          "value": "06.09.2026",
           "normalized": "2026-09-06",
-          "confidence": 0.68,
+          "confidence": 0.58,
           "status": "review",
           "correct": true
         },
@@ -454,20 +454,20 @@
           "expected": {
             "contains": "FWD-44"
           },
-          "value": "FWD-44",
-          "normalized": "FWD-44",
-          "confidence": 1,
-          "status": "accepted",
-          "correct": true
+          "value": "20208000900123456001,",
+          "normalized": "20208000900123456001,",
+          "confidence": 0,
+          "status": "missing",
+          "correct": false
         },
         {
           "key": "supplier",
           "expected": {
             "contains": "OOO Demo Forwarding"
           },
-          "value": "\"Demo Forwarding'",
-          "normalized": "\"Demo Forwarding'",
-          "confidence": 0.59,
+          "value": "Юридический адрес",
+          "normalized": "Юридический адрес",
+          "confidence": 0.55,
           "status": "review",
           "correct": false
         },
@@ -478,8 +478,8 @@
           },
           "value": "302987654",
           "normalized": "302987654",
-          "confidence": 0.99,
-          "status": "accepted",
+          "confidence": 0.7,
+          "status": "review",
           "correct": true
         },
         {
@@ -487,9 +487,9 @@
           "expected": {
             "contains": "OOO Samarkand Choy"
           },
-          "value": "\"Samarkand Choy\"",
-          "normalized": "\"Samarkand Choy\"",
-          "confidence": 0.61,
+          "value": "Адрес",
+          "normalized": "Адрес",
+          "confidence": 0.55,
           "status": "review",
           "correct": false
         },
@@ -498,10 +498,10 @@
           "expected": {
             "contains": "12"
           },
-          "value": "12%",
-          "normalized": "12%",
-          "confidence": 1,
-          "status": "accepted",
+          "value": "12",
+          "normalized": "12",
+          "confidence": 0.55,
+          "status": "review",
           "correct": true
         },
         {
@@ -509,15 +509,15 @@
           "expected": {
             "contains": "2 350 000"
           },
-          "value": "2 350 000 UZS",
-          "normalized": 2350000,
-          "confidence": 0.99,
-          "status": "accepted",
-          "correct": true
+          "value": "2 098 214.29",
+          "normalized": 2098214.29,
+          "confidence": 0.7,
+          "status": "review",
+          "correct": false
         }
       ],
       "ocrSegments": [
-        29
+        76
       ]
     },
     {
@@ -547,7 +547,7 @@
           "contains": "07.09.2026"
         }
       },
-      "seconds": 18.1,
+      "seconds": 53.4,
       "detectedType": "receipt_of_payment",
       "typeMatches": true,
       "fields": [
@@ -556,9 +556,9 @@
           "expected": {
             "contains": "R-2026-0419"
           },
-          "value": "Ng R-2026-0419",
-          "normalized": "Ng R-2026-0419",
-          "confidence": 0.99,
+          "value": "R-2026-0419",
+          "normalized": "R-2026-0419",
+          "confidence": 1,
           "status": "accepted",
           "correct": true
         },
@@ -567,10 +567,10 @@
           "expected": {
             "contains": "OOO Samarkand Choy"
           },
-          "value": "\"Samarkand Choy\"",
-          "normalized": "\"Samarkand Choy\"",
-          "confidence": 1,
-          "status": "accepted",
+          "value": "ООО \"Samarkand Choy\"",
+          "normalized": "ООО \"Samarkand Choy\"",
+          "confidence": 0.64,
+          "status": "review",
           "correct": false
         },
         {
@@ -580,8 +580,8 @@
           },
           "value": "301245678",
           "normalized": "301245678",
-          "confidence": 0.99,
-          "status": "accepted",
+          "confidence": 0.73,
+          "status": "review",
           "correct": true
         },
         {
@@ -589,9 +589,9 @@
           "expected": {
             "contains": "OOO Demo Forwarding"
           },
-          "value": "Recipient: ООО \"Demo Forwarding'",
-          "normalized": "Recipient: ООО \"Demo Forwarding'",
-          "confidence": 0.61,
+          "value": "Ташкент",
+          "normalized": "Ташкент",
+          "confidence": 0.55,
           "status": "review",
           "correct": false
         },
@@ -600,8 +600,8 @@
           "expected": {
             "contains": "Code assignment and forwarder service"
           },
-          "value": "DEMO",
-          "normalized": "DEMO",
+          "value": "DEMO PAID",
+          "normalized": "DEMO PAID",
           "confidence": 1,
           "status": "accepted",
           "correct": false
@@ -611,11 +611,11 @@
           "expected": {
             "contains": "2 350 000"
           },
-          "value": "2 350",
-          "normalized": 2350,
-          "confidence": 0.61,
+          "value": "2 350 000 UZS",
+          "normalized": 2350000,
+          "confidence": 0.66,
           "status": "review",
-          "correct": false
+          "correct": true
         },
         {
           "key": "date",
@@ -624,13 +624,13 @@
           },
           "value": "07.09.2026",
           "normalized": "2026-09-07",
-          "confidence": 0.99,
-          "status": "accepted",
+          "confidence": 0.71,
+          "status": "review",
           "correct": true
         }
       ],
       "ocrSegments": [
-        31
+        95
       ]
     },
     {
@@ -648,7 +648,7 @@
           "contains": "245 000"
         }
       },
-      "seconds": 18.5,
+      "seconds": 39.4,
       "detectedType": "offer_agreement",
       "typeMatches": true,
       "fields": [
@@ -657,11 +657,11 @@
           "expected": {
             "contains": "26140004512"
           },
-          "value": "26140004512",
-          "normalized": "26140004512",
-          "confidence": 0.04,
-          "status": "missing",
-          "correct": true
+          "value": "07.09.2026",
+          "normalized": "07.09.2026",
+          "confidence": 0.99,
+          "status": "accepted",
+          "correct": false
         },
         {
           "key": "agreement_date",
@@ -670,8 +670,8 @@
           },
           "value": "07.09.2026",
           "normalized": "2026-09-07",
-          "confidence": 0,
-          "status": "missing",
+          "confidence": 1,
+          "status": "accepted",
           "correct": true
         },
         {
@@ -681,13 +681,13 @@
           },
           "value": "26140004512",
           "normalized": 26140004512,
-          "confidence": 0.62,
-          "status": "review",
+          "confidence": 0.97,
+          "status": "accepted",
           "correct": false
         }
       ],
       "ocrSegments": [
-        28
+        87
       ]
     },
     {
@@ -717,7 +717,7 @@
           "contains": "08.09.2026"
         }
       },
-      "seconds": 18,
+      "seconds": 44.9,
       "detectedType": "receipt_of_payment",
       "typeMatches": true,
       "fields": [
@@ -728,7 +728,7 @@
           },
           "value": "R-2026-0427",
           "normalized": "R-2026-0427",
-          "confidence": 0.98,
+          "confidence": 1,
           "status": "accepted",
           "correct": true
         },
@@ -737,10 +737,10 @@
           "expected": {
             "contains": "OOO Samarkand Choy"
           },
-          "value": "\"Samarkand Choy\"",
-          "normalized": "\"Samarkand Choy\"",
-          "confidence": 1,
-          "status": "accepted",
+          "value": "а: Demo Bank JSCB",
+          "normalized": "а: Demo Bank JSCB",
+          "confidence": 0.75,
+          "status": "review",
           "correct": false
         },
         {
@@ -750,8 +750,8 @@
           },
           "value": "301245678",
           "normalized": "301245678",
-          "confidence": 0.99,
-          "status": "accepted",
+          "confidence": 0.73,
+          "status": "review",
           "correct": true
         },
         {
@@ -759,20 +759,20 @@
           "expected": {
             "contains": "Agency of Plant Quarantine and Protection"
           },
-          "value": "Agency of Plant Quarantine and Protection",
-          "normalized": "Agency of Plant Quarantine and Protection",
-          "confidence": 1,
-          "status": "accepted",
-          "correct": true
+          "value": "\"Samarkand Choy\"",
+          "normalized": "\"Samarkand Choy\"",
+          "confidence": 0.57,
+          "status": "review",
+          "correct": false
         },
         {
           "key": "payment_type",
           "expected": {
             "contains": "Internal phytosanitary certificate"
           },
-          "value": "DEMO",
-          "normalized": "DEMO",
-          "confidence": 0.89,
+          "value": "PAID",
+          "normalized": "PAID",
+          "confidence": 0.99,
           "status": "accepted",
           "correct": false
         },
@@ -783,7 +783,7 @@
           },
           "value": "245 000 UZS",
           "normalized": 245000,
-          "confidence": 0.75,
+          "confidence": 0.63,
           "status": "review",
           "correct": true
         },
@@ -794,13 +794,13 @@
           },
           "value": "08.09.2026",
           "normalized": "2026-09-08",
-          "confidence": 0.99,
-          "status": "accepted",
+          "confidence": 0.75,
+          "status": "review",
           "correct": true
         }
       ],
       "ocrSegments": [
-        31
+        87
       ]
     },
     {
@@ -818,7 +818,7 @@
           "contains": "1 120 000"
         }
       },
-      "seconds": 17,
+      "seconds": 35.7,
       "detectedType": "offer_agreement",
       "typeMatches": true,
       "fields": [
@@ -827,11 +827,11 @@
           "expected": {
             "contains": "26140004533"
           },
-          "value": "26140004533",
-          "normalized": "26140004533",
-          "confidence": 0,
-          "status": "missing",
-          "correct": true
+          "value": "08.09.2026",
+          "normalized": "08.09.2026",
+          "confidence": 0.97,
+          "status": "accepted",
+          "correct": false
         },
         {
           "key": "agreement_date",
@@ -840,8 +840,8 @@
           },
           "value": "08.09.2026",
           "normalized": "2026-09-08",
-          "confidence": 0,
-          "status": "missing",
+          "confidence": 0.99,
+          "status": "accepted",
           "correct": true
         },
         {
@@ -849,15 +849,15 @@
           "expected": {
             "contains": "1 120 000"
           },
-          "value": "120 000 UZS",
-          "normalized": 120000,
-          "confidence": 0.55,
-          "status": "review",
+          "value": "26140004533",
+          "normalized": 26140004533,
+          "confidence": 0.95,
+          "status": "accepted",
           "correct": false
         }
       ],
       "ocrSegments": [
-        27
+        89
       ]
     },
     {
@@ -887,7 +887,7 @@
           "contains": "09.09.2026"
         }
       },
-      "seconds": 19,
+      "seconds": 45.5,
       "detectedType": "receipt_of_payment",
       "typeMatches": true,
       "fields": [
@@ -898,7 +898,7 @@
           },
           "value": "R-2026-0431",
           "normalized": "R-2026-0431",
-          "confidence": 0.98,
+          "confidence": 1,
           "status": "accepted",
           "correct": true
         },
@@ -907,10 +907,10 @@
           "expected": {
             "contains": "OOO Samarkand Choy"
           },
-          "value": "\"Samarkand Choy\"",
-          "normalized": "\"Samarkand Choy\"",
-          "confidence": 1,
-          "status": "accepted",
+          "value": "а: Demo Bank JSCB",
+          "normalized": "а: Demo Bank JSCB",
+          "confidence": 0.75,
+          "status": "review",
           "correct": false
         },
         {
@@ -920,8 +920,8 @@
           },
           "value": "301245678",
           "normalized": "301245678",
-          "confidence": 0.99,
-          "status": "accepted",
+          "confidence": 0.73,
+          "status": "review",
           "correct": true
         },
         {
@@ -929,20 +929,20 @@
           "expected": {
             "contains": "Agency of Plant Quarantine and Protection"
           },
-          "value": "Agency of Plant Quarantine and Protection",
-          "normalized": "Agency of Plant Quarantine and Protection",
-          "confidence": 1,
-          "status": "accepted",
-          "correct": true
+          "value": "Agency_of Plant Quarantine_and Protection",
+          "normalized": "Agency_of Plant Quarantine_and Protection",
+          "confidence": 0.57,
+          "status": "review",
+          "correct": false
         },
         {
           "key": "payment_type",
           "expected": {
             "contains": "Fumigation"
           },
-          "value": "DEMO",
-          "normalized": "DEMO",
-          "confidence": 0.98,
+          "value": "PAID",
+          "normalized": "PAID",
+          "confidence": 1,
           "status": "accepted",
           "correct": false
         },
@@ -951,11 +951,11 @@
           "expected": {
             "contains": "1 120 000"
           },
-          "value": "1 120 000 UZS",
-          "normalized": 1120000,
-          "confidence": 0.99,
-          "status": "accepted",
-          "correct": true
+          "value": "120 000 UZS",
+          "normalized": 120000,
+          "confidence": 0.7,
+          "status": "review",
+          "correct": false
         },
         {
           "key": "date",
@@ -964,13 +964,13 @@
           },
           "value": "09.09.2026",
           "normalized": "2026-09-09",
-          "confidence": 0.99,
-          "status": "accepted",
+          "confidence": 0.58,
+          "status": "review",
           "correct": true
         }
       ],
       "ocrSegments": [
-        31
+        90
       ]
     },
     {
@@ -1003,7 +1003,7 @@
           "contains": "2"
         }
       },
-      "seconds": 21.5,
+      "seconds": 43.5,
       "detectedType": "cargo_transport_application",
       "typeMatches": true,
       "fields": [
@@ -1012,9 +1012,9 @@
           "expected": {
             "contains": "OOO Samarkand Choy"
           },
-          "value": "OОО \"Samarkand Choy\" , Samarkand",
-          "normalized": "OОО \"Samarkand Choy\" , Samarkand",
-          "confidence": 0.37,
+          "value": null,
+          "normalized": null,
+          "confidence": 0,
           "status": "missing",
           "correct": false
         },
@@ -1023,53 +1023,53 @@
           "expected": {
             "contains": "Tashkent-Tovarny"
           },
-          "value": "Moscow-Tovarnaya",
-          "normalized": "Moscow-Tovarnaya",
-          "confidence": 1,
+          "value": "Tashkent-Tovarny",
+          "normalized": "Tashkent-Tovarny",
+          "confidence": 0.99,
           "status": "accepted",
-          "correct": false
+          "correct": true
         },
         {
           "key": "cargo",
           "expected": {
             "contains": "Black tea in cartons"
           },
-          "value": "Black tea in cartons",
-          "normalized": "Black tea in cartons",
+          "value": "Uzbekistan",
+          "normalized": "Uzbekistan",
           "confidence": 0.44,
           "status": "missing",
-          "correct": true
+          "correct": false
         },
         {
           "key": "etsng",
           "expected": {
             "contains": "214095"
           },
-          "value": "214095",
-          "normalized": "214095",
-          "confidence": 0.59,
-          "status": "review",
-          "correct": true
+          "value": "05471729",
+          "normalized": "05471729",
+          "confidence": 0,
+          "status": "missing",
+          "correct": false
         },
         {
           "key": "destination_station",
           "expected": {
             "contains": "Moscow-Tovarnaya"
           },
-          "value": "Moscow-Tovarnaya",
-          "normalized": "Moscow-Tovarnaya",
-          "confidence": 0.55,
-          "status": "review",
-          "correct": true
+          "value": "Tashkent-Tovarny",
+          "normalized": "Tashkent-Tovarny",
+          "confidence": 1,
+          "status": "accepted",
+          "correct": false
         },
         {
           "key": "consignee",
           "expected": {
             "contains": "OOO Moskovsky Chai"
           },
-          "value": "OОО \"Moskovsky Chai'",
-          "normalized": "OОО \"Moskovsky Chai'",
-          "confidence": 0.4,
+          "value": null,
+          "normalized": null,
+          "confidence": 0,
           "status": "missing",
           "correct": false
         },
@@ -1078,26 +1078,26 @@
           "expected": {
             "contains": "60"
           },
-          "value": "60",
-          "normalized": 60,
-          "confidence": 0.55,
-          "status": "review",
-          "correct": true
+          "value": "Количество",
+          "normalized": null,
+          "confidence": 0.24,
+          "status": "missing",
+          "correct": false
         },
         {
           "key": "wagons",
           "expected": {
             "contains": "2"
           },
-          "value": "2",
-          "normalized": "2",
-          "confidence": 0.55,
-          "status": "review",
+          "value": "12,",
+          "normalized": "12,",
+          "confidence": 0.01,
+          "status": "missing",
           "correct": true
         }
       ],
       "ocrSegments": [
-        29
+        87
       ]
     },
     {
@@ -1148,9 +1148,9 @@
           "contains": "SMGS 77120045"
         }
       },
-      "seconds": 48.4,
-      "detectedType": "railway_bill",
-      "typeMatches": false,
+      "seconds": 94.6,
+      "detectedType": "commercial_invoice",
+      "typeMatches": true,
       "fields": [
         {
           "key": "invoice_no",
@@ -1159,7 +1159,7 @@
           },
           "value": "INV-2026/0457",
           "normalized": "INV-2026/0457",
-          "confidence": 0.94,
+          "confidence": 1,
           "status": "accepted",
           "correct": true
         },
@@ -1170,7 +1170,7 @@
           },
           "value": "12.09.2026",
           "normalized": "2026-09-12",
-          "confidence": 0.99,
+          "confidence": 1,
           "status": "accepted",
           "correct": true
         },
@@ -1179,10 +1179,10 @@
           "expected": {
             "contains": "OOO Samarkand Choy"
           },
-          "value": "\"Samarkand Choy\"",
-          "normalized": "\"Samarkand Choy\"",
-          "confidence": 0.79,
-          "status": "review",
+          "value": "компании/ Company",
+          "normalized": "компании/ Company",
+          "confidence": 0.38,
+          "status": "missing",
           "correct": false
         },
         {
@@ -1190,10 +1190,10 @@
           "expected": {
             "contains": "OOO Moskovsky Chai"
           },
-          "value": null,
-          "normalized": null,
-          "confidence": 0,
-          "status": "missing",
+          "value": "\"Moskovsky Chai",
+          "normalized": "\"Moskovsky Chai",
+          "confidence": 0.87,
+          "status": "accepted",
           "correct": false
         },
         {
@@ -1201,33 +1201,33 @@
           "expected": {
             "contains": "Black tea"
           },
-          "value": "Black tea",
-          "normalized": "Black tea",
-          "confidence": 0.96,
-          "status": "accepted",
-          "correct": true
+          "value": "all names and numbers are invented",
+          "normalized": "all names and numbers are invented",
+          "confidence": 0.01,
+          "status": "missing",
+          "correct": false
         },
         {
           "key": "hs_code",
           "expected": {
             "contains": "0902 40 000 0"
           },
-          "value": "0902",
-          "normalized": "0902",
-          "confidence": 0.98,
-          "status": "accepted",
-          "correct": false
+          "value": "0902 40 000 0",
+          "normalized": "0902400000",
+          "confidence": 0.34,
+          "status": "missing",
+          "correct": true
         },
         {
           "key": "origin_country",
           "expected": {
             "contains": "Uzbekistan"
           },
-          "value": "Uzbekistan",
-          "normalized": "UZ",
-          "confidence": 0.99,
+          "value": "Russia",
+          "normalized": "RU",
+          "confidence": 1,
           "status": "accepted",
-          "correct": true
+          "correct": false
         },
         {
           "key": "quantity",
@@ -1236,7 +1236,7 @@
           },
           "value": "60 000 kg",
           "normalized": 60,
-          "confidence": 0.99,
+          "confidence": 1,
           "status": "accepted",
           "correct": true
         },
@@ -1247,7 +1247,7 @@
           },
           "value": "61 200 kg",
           "normalized": 61.2,
-          "confidence": 0.99,
+          "confidence": 0.98,
           "status": "accepted",
           "correct": true
         },
@@ -1256,11 +1256,11 @@
           "expected": {
             "contains": "192 000.00"
           },
-          "value": "192 00О.00",
+          "value": "192 000.00",
           "normalized": 192000,
-          "confidence": 0.72,
-          "status": "review",
-          "correct": false
+          "confidence": 0.99,
+          "status": "accepted",
+          "correct": true
         },
         {
           "key": "currency",
@@ -1269,7 +1269,7 @@
           },
           "value": "USD",
           "normalized": "USD",
-          "confidence": 0.99,
+          "confidence": 1,
           "status": "accepted",
           "correct": true
         },
@@ -1289,9 +1289,9 @@
           "expected": {
             "contains": "FCA Tashkent"
           },
-          "value": "): FCA",
+          "value": "FCA",
           "normalized": "FCA",
-          "confidence": 0.68,
+          "confidence": 0.66,
           "status": "review",
           "correct": false
         },
@@ -1300,15 +1300,15 @@
           "expected": {
             "contains": "SMGS 77120045"
           },
-          "value": "Ng: SMGS 77120045",
-          "normalized": "Ng: SMGS 77120045",
-          "confidence": 0.51,
-          "status": "review",
-          "correct": true
+          "value": "77120045",
+          "normalized": "77120045",
+          "confidence": 1,
+          "status": "accepted",
+          "correct": false
         }
       ],
       "ocrSegments": [
-        36
+        218
       ]
     },
     {
@@ -1356,7 +1356,7 @@
           "contains": "Commercial invoice"
         }
       },
-      "seconds": 26.3,
+      "seconds": 179.9,
       "detectedType": "railway_bill",
       "typeMatches": true,
       "fields": [
@@ -1365,9 +1365,9 @@
           "expected": {
             "contains": "77120045"
           },
-          "value": "52814467,52814475",
-          "normalized": "52814467,52814475",
-          "confidence": 0.32,
+          "value": "466308",
+          "normalized": "466308",
+          "confidence": 0,
           "status": "missing",
           "correct": false
         },
@@ -1376,10 +1376,10 @@
           "expected": {
             "contains": "OOO Samarkand Choy"
           },
-          "value": "\"Samarkand Choy\"",
-          "normalized": "\"Samarkand Choy\"",
-          "confidence": 0.96,
-          "status": "accepted",
+          "value": "Uzbekistan",
+          "normalized": "Uzbekistan",
+          "confidence": 0.43,
+          "status": "missing",
           "correct": false
         },
         {
@@ -1387,9 +1387,9 @@
           "expected": {
             "contains": "OOO Moskovsky Chai"
           },
-          "value": "Consignee",
-          "normalized": "Consignee",
-          "confidence": 0.7,
+          "value": "отправителем:",
+          "normalized": "отправителем:",
+          "confidence": 0.52,
           "status": "review",
           "correct": false
         },
@@ -1398,11 +1398,11 @@
           "expected": {
             "contains": "Tashkent-Tovarny"
           },
-          "value": "Tashkent-Tovarny",
-          "normalized": "Tashkent-Tovarny",
-          "confidence": 0.99,
+          "value": "Moscow-Tovarnaya",
+          "normalized": "Moscow-Tovarnaya",
+          "confidence": 1,
           "status": "accepted",
-          "correct": true
+          "correct": false
         },
         {
           "key": "destination_station",
@@ -1420,21 +1420,21 @@
           "expected": {
             "contains": "Keles"
           },
-          "value": "Keles; Sary-Agash",
-          "normalized": "Keles; Sary-Agash",
-          "confidence": 0.99,
-          "status": "accepted",
-          "correct": true
+          "value": "Moscow-Tovarnaya",
+          "normalized": "Moscow-Tovarnaya",
+          "confidence": 0,
+          "status": "missing",
+          "correct": false
         },
         {
           "key": "wagon_no",
           "expected": {
             "contains": "52814467"
           },
-          "value": "52814467,52814475",
-          "normalized": "52814467,52814475",
-          "confidence": 0.81,
-          "status": "accepted",
+          "value": "ы: 52814467, 52814475",
+          "normalized": "ы: 52814467, 52814475",
+          "confidence": 0.57,
+          "status": "review",
           "correct": true
         },
         {
@@ -1442,22 +1442,22 @@
           "expected": {
             "contains": "Black tea"
           },
-          "value": "Name of cargo",
-          "normalized": "Name of cargo",
-          "confidence": 0.67,
+          "value": "Black tea",
+          "normalized": "Black tea",
+          "confidence": 0.53,
           "status": "review",
-          "correct": false
+          "correct": true
         },
         {
           "key": "packaging",
           "expected": {
             "contains": "Cartons"
           },
-          "value": "Cartons",
-          "normalized": "Cartons",
-          "confidence": 0.99,
+          "value": "UzTrade demo pack",
+          "normalized": "UzTrade demo pack",
+          "confidence": 0.91,
           "status": "accepted",
-          "correct": true
+          "correct": false
         },
         {
           "key": "places",
@@ -1466,8 +1466,8 @@
           },
           "value": "2400",
           "normalized": "2400",
-          "confidence": 0.99,
-          "status": "accepted",
+          "confidence": 0.55,
+          "status": "review",
           "correct": true
         },
         {
@@ -1475,10 +1475,10 @@
           "expected": {
             "contains": "60 000 kg"
           },
-          "value": "60",
-          "normalized": 60,
-          "confidence": 0.86,
-          "status": "accepted",
+          "value": "груза",
+          "normalized": null,
+          "confidence": 0.19,
+          "status": "missing",
           "correct": false
         },
         {
@@ -1486,10 +1486,10 @@
           "expected": {
             "contains": "UZ 118201"
           },
-          "value": "Seals",
-          "normalized": "Seals",
-          "confidence": 0.7,
-          "status": "review",
+          "value": "к-во 2",
+          "normalized": "к-во 2",
+          "confidence": 0.39,
+          "status": "missing",
           "correct": false
         },
         {
@@ -1497,15 +1497,15 @@
           "expected": {
             "contains": "Commercial invoice"
           },
-          "value": "Commercial invoice; phytosanitary certificate; certificate of origin",
-          "normalized": "Commercial invoice; phytosanitary certificate; certificate of origin",
-          "confidence": 0.98,
-          "status": "accepted",
-          "correct": true
+          "value": "DEMO NOT",
+          "normalized": "DEMO NOT",
+          "confidence": 0.24,
+          "status": "missing",
+          "correct": false
         }
       ],
       "ocrSegments": [
-        49
+        107
       ]
     },
     {
@@ -1523,7 +1523,7 @@
           "contains": "490 000"
         }
       },
-      "seconds": 18.3,
+      "seconds": 92.6,
       "detectedType": "offer_agreement",
       "typeMatches": true,
       "fields": [
@@ -1532,11 +1532,11 @@
           "expected": {
             "contains": "26140004561"
           },
-          "value": "26140004561",
-          "normalized": "26140004561",
-          "confidence": 0.16,
-          "status": "missing",
-          "correct": true
+          "value": "10.09.2026",
+          "normalized": "10.09.2026",
+          "confidence": 0.97,
+          "status": "accepted",
+          "correct": false
         },
         {
           "key": "agreement_date",
@@ -1545,8 +1545,8 @@
           },
           "value": "10.09.2026",
           "normalized": "2026-09-10",
-          "confidence": 0,
-          "status": "missing",
+          "confidence": 1,
+          "status": "accepted",
           "correct": true
         },
         {
@@ -1556,13 +1556,13 @@
           },
           "value": "490 000 UZS",
           "normalized": 490000,
-          "confidence": 0.72,
+          "confidence": 0.74,
           "status": "review",
           "correct": true
         }
       ],
       "ocrSegments": [
-        28
+        87
       ]
     },
     {
@@ -1592,7 +1592,7 @@
           "contains": "10.09.2026"
         }
       },
-      "seconds": 18,
+      "seconds": 114.6,
       "detectedType": "receipt_of_payment",
       "typeMatches": true,
       "fields": [
@@ -1603,7 +1603,7 @@
           },
           "value": "R-2026-0448",
           "normalized": "R-2026-0448",
-          "confidence": 0.92,
+          "confidence": 1,
           "status": "accepted",
           "correct": true
         },
@@ -1612,10 +1612,10 @@
           "expected": {
             "contains": "OOO Samarkand Choy"
           },
-          "value": "\"Samarkand Choy\"",
-          "normalized": "\"Samarkand Choy\"",
-          "confidence": 1,
-          "status": "accepted",
+          "value": "а: Demo Bank JSCB",
+          "normalized": "а: Demo Bank JSCB",
+          "confidence": 0.75,
+          "status": "review",
           "correct": false
         },
         {
@@ -1625,8 +1625,8 @@
           },
           "value": "301245678",
           "normalized": "301245678",
-          "confidence": 0.99,
-          "status": "accepted",
+          "confidence": 0.73,
+          "status": "review",
           "correct": true
         },
         {
@@ -1634,20 +1634,20 @@
           "expected": {
             "contains": "Agency of Plant Quarantine and Protection"
           },
-          "value": "Agency of Plant Quarantine and Protection",
-          "normalized": "Agency of Plant Quarantine and Protection",
-          "confidence": 1,
-          "status": "accepted",
-          "correct": true
+          "value": "\"Samarkand Choy\"",
+          "normalized": "\"Samarkand Choy\"",
+          "confidence": 0.76,
+          "status": "review",
+          "correct": false
         },
         {
           "key": "payment_type",
           "expected": {
             "contains": "Phytosanitary certificate"
           },
-          "value": "DEMO",
-          "normalized": "DEMO",
-          "confidence": 0.94,
+          "value": "PAID",
+          "normalized": "PAID",
+          "confidence": 1,
           "status": "accepted",
           "correct": false
         },
@@ -1656,11 +1656,11 @@
           "expected": {
             "contains": "490 000"
           },
-          "value": "490 00О",
+          "value": "490 000 UZS",
           "normalized": 490000,
-          "confidence": 0.99,
-          "status": "accepted",
-          "correct": false
+          "confidence": 0.54,
+          "status": "review",
+          "correct": true
         },
         {
           "key": "date",
@@ -1669,13 +1669,13 @@
           },
           "value": "10.09.2026",
           "normalized": "2026-09-10",
-          "confidence": 0.82,
-          "status": "accepted",
+          "confidence": 0.74,
+          "status": "review",
           "correct": true
         }
       ],
       "ocrSegments": [
-        31
+        86
       ]
     },
     {
@@ -1717,7 +1717,7 @@
           "contains": "12.09.2026"
         }
       },
-      "seconds": 26.5,
+      "seconds": 140.1,
       "detectedType": "phytosanitary_certificate",
       "typeMatches": true,
       "fields": [
@@ -1728,7 +1728,7 @@
           },
           "value": "2026/004512",
           "normalized": "2026/004512",
-          "confidence": 0.7,
+          "confidence": 0.65,
           "status": "review",
           "correct": false
         },
@@ -1739,7 +1739,7 @@
           },
           "value": "\"Samarkand Choy\"",
           "normalized": "\"Samarkand Choy\"",
-          "confidence": 1,
+          "confidence": 0.98,
           "status": "accepted",
           "correct": false
         },
@@ -1748,9 +1748,9 @@
           "expected": {
             "contains": "OOO Moskovsky Chai"
           },
-          "value": "\"Moskovsky Chai'",
-          "normalized": "\"Moskovsky Chai'",
-          "confidence": 1,
+          "value": "\"Moskovsky Chai\"",
+          "normalized": "\"Moskovsky Chai\"",
+          "confidence": 0.99,
           "status": "accepted",
           "correct": false
         },
@@ -1772,7 +1772,7 @@
           },
           "value": "Keles Sary-Agash",
           "normalized": "Keles Sary-Agash",
-          "confidence": 1,
+          "confidence": 0.99,
           "status": "accepted",
           "correct": false
         },
@@ -1814,9 +1814,9 @@
           "expected": {
             "contains": "60 000 kg"
           },
-          "value": "60 00О kg",
-          "normalized": 60,
-          "confidence": 0.99,
+          "value": "2400 Cartons, 25 kg",
+          "normalized": 2.4,
+          "confidence": 0.95,
           "status": "accepted",
           "correct": false
         },
@@ -1825,11 +1825,11 @@
           "expected": {
             "contains": "Not required"
           },
-          "value": "Not required",
-          "normalized": "Not required",
-          "confidence": 0.55,
+          "value": "Chemica",
+          "normalized": "Chemica",
+          "confidence": 0.7,
           "status": "review",
-          "correct": true
+          "correct": false
         },
         {
           "key": "issue_date",
@@ -1838,13 +1838,13 @@
           },
           "value": "12.09.2026",
           "normalized": "2026-09-12",
-          "confidence": 0.89,
-          "status": "accepted",
+          "confidence": 0.4,
+          "status": "missing",
           "correct": true
         }
       ],
       "ocrSegments": [
-        51
+        92
       ]
     },
     {
@@ -1877,7 +1877,7 @@
           "contains": "780 000"
         }
       },
-      "seconds": 19.4,
+      "seconds": 100.7,
       "detectedType": "invoice_for_payment",
       "typeMatches": true,
       "fields": [
@@ -1886,9 +1886,9 @@
           "expected": {
             "contains": "UE-2026/1187"
           },
-          "value": "200933140",
-          "normalized": "200933140",
-          "confidence": 0.05,
+          "value": "83 571.43",
+          "normalized": "83 571.43",
+          "confidence": 0,
           "status": "missing",
           "correct": false
         },
@@ -1899,8 +1899,8 @@
           },
           "value": "11.09.2026",
           "normalized": "2026-09-11",
-          "confidence": 0.95,
-          "status": "accepted",
+          "confidence": 0.58,
+          "status": "review",
           "correct": true
         },
         {
@@ -1910,8 +1910,8 @@
           },
           "value": "UE-S-2026/904",
           "normalized": "UE-S-2026/904",
-          "confidence": 1,
-          "status": "accepted",
+          "confidence": 0,
+          "status": "missing",
           "correct": true
         },
         {
@@ -1919,11 +1919,11 @@
           "expected": {
             "contains": "Uzbekexpertiza JSC (demo)"
           },
-          "value": "Uzbekexpertiza",
-          "normalized": "Uzbekexpertiza",
-          "confidence": 0.99,
-          "status": "accepted",
-          "correct": false
+          "value": "Uzbekexpertiza JSC (demo)",
+          "normalized": "Uzbekexpertiza JSC (demo)",
+          "confidence": 0.63,
+          "status": "review",
+          "correct": true
         },
         {
           "key": "supplier_inn",
@@ -1932,8 +1932,8 @@
           },
           "value": "200933140",
           "normalized": "200933140",
-          "confidence": 0.99,
-          "status": "accepted",
+          "confidence": 0.7,
+          "status": "review",
           "correct": true
         },
         {
@@ -1941,10 +1941,10 @@
           "expected": {
             "contains": "OOO Samarkand Choy"
           },
-          "value": "\"Samarkand Choy\"",
-          "normalized": "\"Samarkand Choy\"",
-          "confidence": 0.98,
-          "status": "accepted",
+          "value": "Адрес",
+          "normalized": "Адрес",
+          "confidence": 0.55,
+          "status": "review",
           "correct": false
         },
         {
@@ -1952,10 +1952,10 @@
           "expected": {
             "contains": "12"
           },
-          "value": "12%",
-          "normalized": "12%",
-          "confidence": 1,
-          "status": "accepted",
+          "value": "12",
+          "normalized": "12",
+          "confidence": 0.55,
+          "status": "review",
           "correct": true
         },
         {
@@ -1963,15 +1963,15 @@
           "expected": {
             "contains": "780 000"
           },
-          "value": "780 000 UZS",
-          "normalized": 780000,
-          "confidence": 0.99,
-          "status": "accepted",
-          "correct": true
+          "value": "83 571.43",
+          "normalized": 83571.43,
+          "confidence": 0.67,
+          "status": "review",
+          "correct": false
         }
       ],
       "ocrSegments": [
-        29
+        78
       ]
     },
     {
@@ -2001,7 +2001,7 @@
           "contains": "11.09.2026"
         }
       },
-      "seconds": 18.9,
+      "seconds": 114.4,
       "detectedType": "receipt_of_payment",
       "typeMatches": true,
       "fields": [
@@ -2021,10 +2021,10 @@
           "expected": {
             "contains": "OOO Samarkand Choy"
           },
-          "value": "\"Samarkand Choy\"",
-          "normalized": "\"Samarkand Choy\"",
-          "confidence": 1,
-          "status": "accepted",
+          "value": "а: Demo Bank JSCB",
+          "normalized": "а: Demo Bank JSCB",
+          "confidence": 0.75,
+          "status": "review",
           "correct": false
         },
         {
@@ -2034,8 +2034,8 @@
           },
           "value": "301245678",
           "normalized": "301245678",
-          "confidence": 0.99,
-          "status": "accepted",
+          "confidence": 0.73,
+          "status": "review",
           "correct": true
         },
         {
@@ -2043,11 +2043,11 @@
           "expected": {
             "contains": "Uzbekexpertiza JSC (demo)"
           },
-          "value": "Uzbekexpertiza JSC",
-          "normalized": "Uzbekexpertiza JSC",
-          "confidence": 0.86,
-          "status": "accepted",
-          "correct": false
+          "value": "Uzbekexpertiza JSC (demo)",
+          "normalized": "Uzbekexpertiza JSC (demo)",
+          "confidence": 0.56,
+          "status": "review",
+          "correct": true
         },
         {
           "key": "payment_type",
@@ -2056,7 +2056,7 @@
           },
           "value": "DEMO",
           "normalized": "DEMO",
-          "confidence": 0.97,
+          "confidence": 0.88,
           "status": "accepted",
           "correct": false
         },
@@ -2065,11 +2065,11 @@
           "expected": {
             "contains": "780 000"
           },
-          "value": "780 00О",
+          "value": "780 000 UZS",
           "normalized": 780000,
-          "confidence": 0.99,
-          "status": "accepted",
-          "correct": false
+          "confidence": 0.75,
+          "status": "review",
+          "correct": true
         },
         {
           "key": "date",
@@ -2078,13 +2078,13 @@
           },
           "value": "11.09.2026",
           "normalized": "2026-09-11",
-          "confidence": 0.75,
+          "confidence": 0.7,
           "status": "review",
           "correct": true
         }
       ],
       "ocrSegments": [
-        31
+        85
       ]
     },
     {
@@ -2117,7 +2117,7 @@
           "contains": "Russia"
         }
       },
-      "seconds": 24.2,
+      "seconds": 120.8,
       "detectedType": "certificate_of_origin",
       "typeMatches": true,
       "fields": [
@@ -2126,10 +2126,10 @@
           "expected": {
             "contains": "UZ 0457811"
           },
-          "value": "CT-1",
-          "normalized": "CT-1",
-          "confidence": 0.35,
-          "status": "missing",
+          "value": "CERTIFICATE OF ORIGIN CT-1",
+          "normalized": "CERTIFICATE OF ORIGIN CT-1",
+          "confidence": 0.99,
+          "status": "accepted",
           "correct": false
         },
         {
@@ -2137,10 +2137,10 @@
           "expected": {
             "contains": "OOO Samarkand Choy"
           },
-          "value": "\"Samarkand Choy\"",
-          "normalized": "\"Samarkand Choy\"",
-          "confidence": 0.98,
-          "status": "accepted",
+          "value": "4.Ng UZ 0457811",
+          "normalized": "4.Ng UZ 0457811",
+          "confidence": 0.65,
+          "status": "review",
           "correct": false
         },
         {
@@ -2148,10 +2148,10 @@
           "expected": {
             "contains": "OOO Moskovsky Chai"
           },
-          "value": "OОО \"Moskovsky Chai'",
-          "normalized": "OОО \"Moskovsky Chai'",
-          "confidence": 0.96,
-          "status": "accepted",
+          "value": "импортер",
+          "normalized": "импортер",
+          "confidence": 0.62,
+          "status": "review",
           "correct": false
         },
         {
@@ -2159,9 +2159,9 @@
           "expected": {
             "contains": "Rail"
           },
-          "value": "Rail,",
-          "normalized": "Rail,",
-          "confidence": 1,
+          "value": "Rail;",
+          "normalized": "Rail;",
+          "confidence": 0.96,
           "status": "accepted",
           "correct": true
         },
@@ -2181,22 +2181,22 @@
           "expected": {
             "contains": "61 200 kg"
           },
-          "value": "61 200 kg",
-          "normalized": 61.2,
-          "confidence": 0.99,
-          "status": "accepted",
-          "correct": true
+          "value": "4.Ng",
+          "normalized": 4,
+          "confidence": 0,
+          "status": "missing",
+          "correct": false
         },
         {
           "key": "invoice_ref",
           "expected": {
             "contains": "INV-2026/0457"
           },
-          "value": "INV-2026/0457, 12.09.2026",
-          "normalized": "INV-2026/0457, 12.09.2026",
-          "confidence": 0.96,
-          "status": "accepted",
-          "correct": true
+          "value": "12.09.2026",
+          "normalized": "12.09.2026",
+          "confidence": 0.3,
+          "status": "missing",
+          "correct": false
         },
         {
           "key": "exported_to",
@@ -2205,13 +2205,13 @@
           },
           "value": "Russia",
           "normalized": "RU",
-          "confidence": 0.99,
+          "confidence": 0.88,
           "status": "accepted",
           "correct": true
         }
       ],
       "ocrSegments": [
-        42
+        80
       ]
     },
     {
@@ -2241,7 +2241,7 @@
           "contains": "13.09.2026"
         }
       },
-      "seconds": 25.1,
+      "seconds": 117.2,
       "detectedType": "receipt_of_payment",
       "typeMatches": true,
       "fields": [
@@ -2252,7 +2252,7 @@
           },
           "value": "R-2026-0466",
           "normalized": "R-2026-0466",
-          "confidence": 0.99,
+          "confidence": 1,
           "status": "accepted",
           "correct": true
         },
@@ -2261,10 +2261,10 @@
           "expected": {
             "contains": "OOO Samarkand Choy"
           },
-          "value": "\"Samarkand Choy\"",
-          "normalized": "\"Samarkand Choy\"",
-          "confidence": 1,
-          "status": "accepted",
+          "value": "а: Demo Bank JSCB",
+          "normalized": "а: Demo Bank JSCB",
+          "confidence": 0.75,
+          "status": "review",
           "correct": false
         },
         {
@@ -2274,8 +2274,8 @@
           },
           "value": "301245678",
           "normalized": "301245678",
-          "confidence": 0.99,
-          "status": "accepted",
+          "confidence": 0.73,
+          "status": "review",
           "correct": true
         },
         {
@@ -2285,8 +2285,8 @@
           },
           "value": "State Customs Committee (demo)",
           "normalized": "State Customs Committee (demo)",
-          "confidence": 0.98,
-          "status": "accepted",
+          "confidence": 0.68,
+          "status": "review",
           "correct": true
         },
         {
@@ -2294,21 +2294,21 @@
           "expected": {
             "contains": "Customs clearance fee"
           },
-          "value": "DEMO",
-          "normalized": "DEMO",
-          "confidence": 1,
-          "status": "accepted",
-          "correct": false
+          "value": "Customs clearance fee",
+          "normalized": "Customs clearance fee",
+          "confidence": 0.69,
+          "status": "review",
+          "correct": true
         },
         {
           "key": "amount",
           "expected": {
             "contains": "1 500 000"
           },
-          "value": "1 500",
-          "normalized": 1500,
-          "confidence": 0.91,
-          "status": "accepted",
+          "value": "500 000 UZS",
+          "normalized": 500000,
+          "confidence": 0.51,
+          "status": "review",
           "correct": false
         },
         {
@@ -2318,13 +2318,13 @@
           },
           "value": "13.09.2026",
           "normalized": "2026-09-13",
-          "confidence": 0.99,
-          "status": "accepted",
+          "confidence": 0.55,
+          "status": "review",
           "correct": true
         }
       ],
       "ocrSegments": [
-        31
+        87
       ]
     },
     {
@@ -2357,7 +2357,7 @@
           "contains": "60 000 kg"
         }
       },
-      "seconds": 23.7,
+      "seconds": 203.3,
       "detectedType": "railway_bill",
       "typeMatches": true,
       "fields": [
@@ -2366,9 +2366,9 @@
           "expected": {
             "contains": "77120045"
           },
-          "value": "52814467,52814475",
-          "normalized": "52814467,52814475",
-          "confidence": 0.06,
+          "value": "9294018",
+          "normalized": "9294018",
+          "confidence": 0.01,
           "status": "missing",
           "correct": false
         },
@@ -2377,10 +2377,10 @@
           "expected": {
             "contains": "OOO Samarkand Choy"
           },
-          "value": "Sender",
-          "normalized": "Sender",
-          "confidence": 0.7,
-          "status": "review",
+          "value": "Uzbekistan",
+          "normalized": "Uzbekistan",
+          "confidence": 0.43,
+          "status": "missing",
           "correct": false
         },
         {
@@ -2388,9 +2388,9 @@
           "expected": {
             "contains": "OOO Moskovsky Chai"
           },
-          "value": "Consignee",
-          "normalized": "Consignee",
-          "confidence": 0.7,
+          "value": "отправителем:",
+          "normalized": "отправителем:",
+          "confidence": 0.52,
           "status": "review",
           "correct": false
         },
@@ -2399,11 +2399,11 @@
           "expected": {
             "contains": "Tashkent-Tovarny"
           },
-          "value": "Tashkent-Tovarny",
-          "normalized": "Tashkent-Tovarny",
-          "confidence": 0.99,
+          "value": "Moscow-Tovarnaya",
+          "normalized": "Moscow-Tovarnaya",
+          "confidence": 1,
           "status": "accepted",
-          "correct": true
+          "correct": false
         },
         {
           "key": "destination_station",
@@ -2421,9 +2421,9 @@
           "expected": {
             "contains": "52814467"
           },
-          "value": "52814467,52814475",
-          "normalized": "52814467,52814475",
-          "confidence": 0.7,
+          "value": "ы: 52814467, 52814475",
+          "normalized": "ы: 52814467, 52814475",
+          "confidence": 0.57,
           "status": "review",
           "correct": true
         },
@@ -2434,8 +2434,8 @@
           },
           "value": "Black tea",
           "normalized": "Black tea",
-          "confidence": 0.99,
-          "status": "accepted",
+          "confidence": 0.53,
+          "status": "review",
           "correct": true
         },
         {
@@ -2445,13 +2445,13 @@
           },
           "value": "60",
           "normalized": 60,
-          "confidence": 1,
-          "status": "accepted",
+          "confidence": 0.77,
+          "status": "review",
           "correct": false
         }
       ],
       "ocrSegments": [
-        38
+        112
       ]
     },
     {
@@ -2484,7 +2484,7 @@
           "contains": "60 000 kg"
         }
       },
-      "seconds": 24.1,
+      "seconds": 201.5,
       "detectedType": "railway_bill",
       "typeMatches": true,
       "fields": [
@@ -2493,10 +2493,10 @@
           "expected": {
             "contains": "77120045"
           },
-          "value": "52814467,52814475",
-          "normalized": "52814467,52814475",
-          "confidence": 0.51,
-          "status": "review",
+          "value": "0439156",
+          "normalized": "0439156",
+          "confidence": 0,
+          "status": "missing",
           "correct": false
         },
         {
@@ -2504,10 +2504,10 @@
           "expected": {
             "contains": "OOO Samarkand Choy"
           },
-          "value": "\"Samarkand Choy\"",
-          "normalized": "\"Samarkand Choy\"",
-          "confidence": 1,
-          "status": "accepted",
+          "value": "Uzbekistan",
+          "normalized": "Uzbekistan",
+          "confidence": 0.43,
+          "status": "missing",
           "correct": false
         },
         {
@@ -2515,9 +2515,9 @@
           "expected": {
             "contains": "OOO Moskovsky Chai"
           },
-          "value": "Consignee",
-          "normalized": "Consignee",
-          "confidence": 0.7,
+          "value": "отправителем:",
+          "normalized": "отправителем:",
+          "confidence": 0.52,
           "status": "review",
           "correct": false
         },
@@ -2526,11 +2526,11 @@
           "expected": {
             "contains": "Tashkent-Tovarny"
           },
-          "value": "Tashkent-Tovarny",
-          "normalized": "Tashkent-Tovarny",
-          "confidence": 0.99,
+          "value": "Moscow-Tovarnaya",
+          "normalized": "Moscow-Tovarnaya",
+          "confidence": 1,
           "status": "accepted",
-          "correct": true
+          "correct": false
         },
         {
           "key": "destination_station",
@@ -2548,9 +2548,9 @@
           "expected": {
             "contains": "52814467"
           },
-          "value": "52814467,52814475",
-          "normalized": "52814467,52814475",
-          "confidence": 0.75,
+          "value": "ы: 52814467, 52814475",
+          "normalized": "ы: 52814467, 52814475",
+          "confidence": 0.57,
           "status": "review",
           "correct": true
         },
@@ -2561,8 +2561,8 @@
           },
           "value": "Black tea",
           "normalized": "Black tea",
-          "confidence": 0.95,
-          "status": "accepted",
+          "confidence": 0.53,
+          "status": "review",
           "correct": true
         },
         {
@@ -2572,13 +2572,13 @@
           },
           "value": "60",
           "normalized": 60,
-          "confidence": 1,
+          "confidence": 0.98,
           "status": "accepted",
           "correct": false
         }
       ],
       "ocrSegments": [
-        33
+        104
       ]
     }
   ]

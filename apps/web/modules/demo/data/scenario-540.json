@@ -1,0 +1,877 @@
+{
+ "procedureId": "540",
+ "title": "Export of tea by air — demo scenario",
+ "note": "Fictional demo data. Every company, person, number, amount and stamp is invented; nothing here is a real document.",
+ "shipment": {
+  "query": "Export 2 t of green tea from Tashkent to Istanbul by air",
+  "goods": "Green tea in packets",
+  "goodsRu": "Чай зеленый",
+  "hs": "0902 10 000 0",
+  "netKg": "2 000",
+  "grossKg": "2 040",
+  "cartons": "200",
+  "packaging": "Cartons, 10 kg",
+  "unitKind": "air pallet",
+  "wagons": [
+   "PMC 40211 TK"
+  ],
+  "seals": [],
+  "departureStation": "Tashkent International (TAS)",
+  "destinationStation": "Istanbul (IST)",
+  "borderStations": "Tashkent airport customs post",
+  "from": "Tashkent, Uzbekistan",
+  "to": "Istanbul, Türkiye",
+  "valueUsd": "18 000.00",
+  "incoterms": "FCA Tashkent Airport",
+  "contractNo": "UZ-540/2026-01",
+  "contractDate": "01.09.2026",
+  "invoiceNo": "INV-540/2026-031",
+  "invoiceDate": "04.09.2026",
+  "caseLine": "export of tea by air, 2 000 kg of green tea in packets"
+ },
+ "parties": {
+  "exporter": {
+   "name": "OOO \"Silk Road Tea\"",
+   "address": "Tashkent, Shota Rustaveli street 41, Uzbekistan",
+   "tin": "305678923",
+   "manager": "Aziza Rakhmonova",
+   "phone": "+998 97 610 22 04",
+   "email": "cargo.silkroadtea@demo.uz",
+   "bank": "Demo Bank JSCB, account 20208000900555666001, MFO 00444"
+  },
+  "trader": {
+   "name": "OOO \"Silk Road Tea\"",
+   "address": "Tashkent, Shota Rustaveli street 41, Uzbekistan",
+   "tin": "305678923",
+   "manager": "Aziza Rakhmonova",
+   "phone": "+998 97 610 22 04",
+   "email": "cargo.silkroadtea@demo.uz",
+   "bank": "Demo Bank JSCB, account 20208000900555666001, MFO 00444"
+  },
+  "seller": {
+   "name": "OOO \"Silk Road Tea\"",
+   "address": "Tashkent, Shota Rustaveli street 41, Uzbekistan",
+   "tin": "305678923",
+   "manager": "Aziza Rakhmonova",
+   "phone": "+998 97 610 22 04",
+   "email": "cargo.silkroadtea@demo.uz",
+   "bank": "Demo Bank JSCB, account 20208000900555666001, MFO 00444"
+  },
+  "buyer": {
+   "name": "Anadolu Çay Ticaret A.Ş.",
+   "address": "Istanbul, Kazım Karabekir cad. 18, Türkiye",
+   "tin": "—",
+   "manager": "A. Demo",
+   "phone": "—",
+   "email": "—",
+   "bank": "—"
+  },
+  "representative": {
+   "name": "Timur Saidov",
+   "passport": "AF 9988776"
+  }
+ },
+ "values": {
+  "Tax Identification Number of the organization or individual": "305678923",
+  "Bank details": "Demo Bank JSCB, account 20208000900555666001, MFO 00444",
+  "Name of the organization": "OOO \"Silk Road Tea\"",
+  "Full name of an organization's manager": "Aziza Rakhmonova",
+  "Contact phone number": "+998 97 610 22 04",
+  "Email": "cargo.silkroadtea@demo.uz",
+  "Agency region": "Tashkent region",
+  "Payment sum": "245 000 UZS",
+  "Type of organization (business entity, budgetary)": "Business entity",
+  "Cost on the contract": "1 120 000 UZS",
+  "Quantity of transport units": "1"
+ },
+ "documents": [
+  {
+   "id": "commercial-invoice",
+   "template": "commercial_invoice",
+   "title": "Commercial invoice",
+   "docType": "commercial_invoice",
+   "labels": [
+    "Commercial invoice"
+   ],
+   "steps": [
+    3,
+    25,
+    26,
+    27,
+    33,
+    39,
+    42,
+    45
+   ],
+   "output": false,
+   "fields": {
+    "invoice_no": "INV-540/2026-031",
+    "invoice_date": "04.09.2026",
+    "seller": "OOO \"Silk Road Tea\"",
+    "buyer": "Anadolu Çay Ticaret A.Ş.",
+    "goods": "Green tea in packets",
+    "hs_code": "0902 10 000 0",
+    "quantity": "2 000 kg",
+    "total_value": "18 000.00 USD",
+    "origin_country": "Uzbekistan",
+    "gross_weight": "2 040 kg",
+    "currency": "USD",
+    "contract_no": "UZ-540/2026-01",
+    "incoterms": "FCA Tashkent Airport",
+    "transport_doc": "AWB 250-54088213"
+   },
+   "file": "540-01-commercial-invoice.png"
+  },
+  {
+   "id": "trade-contract",
+   "template": "contract",
+   "title": "Foreign trade contract",
+   "docType": "trade_contract",
+   "labels": [
+    "Electronic copy of foreign trade contract"
+   ],
+   "steps": [
+    1
+   ],
+   "output": false,
+   "fields": {
+    "contract_no": "UZ-540/2026-01",
+    "contract_date": "01.09.2026",
+    "seller": "OOO \"Silk Road Tea\"",
+    "buyer": "Anadolu Çay Ticaret A.Ş.",
+    "goods": "Green tea in packets",
+    "hs_code": "0902 10 000 0",
+    "quantity": "2 000 kg",
+    "total_value": "18 000.00 USD",
+    "incoterms": "FCA Tashkent Airport"
+   },
+   "file": "540-02-foreign-trade-contract.png"
+  },
+  {
+   "id": "passport",
+   "template": "passport",
+   "title": "Passport",
+   "docType": "passport",
+   "labels": [
+    "Passport"
+   ],
+   "steps": [
+    11,
+    15,
+    19,
+    23,
+    24,
+    33,
+    34,
+    42
+   ],
+   "output": false,
+   "fields": {
+    "full_name": "SAIDOV TIMUR",
+    "passport_no": "AF 9988776",
+    "expiry": "14.03.2031"
+   },
+   "file": "540-03-passport.png"
+  },
+  {
+   "id": "power-of-attorney",
+   "template": "poa",
+   "title": "Power of attorney",
+   "docType": "power_of_attorney",
+   "labels": [
+    "Power of attorney"
+   ],
+   "steps": [
+    7,
+    23,
+    32,
+    42
+   ],
+   "output": false,
+   "fields": {
+    "poa_no": "50",
+    "issue_date": "02.09.2026",
+    "representative": "Timur Saidov",
+    "passport": "AF 9988776",
+    "valid_until": "31.12.2026",
+    "scope": "Customs operations, cargo handling, signing and receiving documents"
+   },
+   "file": "540-04-power-of-attorney.png"
+  },
+  {
+   "id": "packing-list",
+   "template": "packing_list",
+   "title": "Packing list",
+   "docType": "packing_list",
+   "labels": [
+    "Packing list"
+   ],
+   "steps": [
+    3
+   ],
+   "output": false,
+   "fields": {
+    "list_no": "PL-540/2026-031",
+    "list_date": "04.09.2026",
+    "seller": "OOO \"Silk Road Tea\"",
+    "consignee": "Anadolu Çay Ticaret A.Ş.",
+    "goods": "Green tea in packets",
+    "packaging": "Cartons, 10 kg",
+    "packages": "200",
+    "net_weight": "2 000 kg",
+    "gross_weight": "2 040 kg",
+    "hs_code": "0902 10 000 0",
+    "seller_inn": "305678923"
+   },
+   "file": "540-05-packing-list.png"
+  },
+  {
+   "template": "invoice_for_payment",
+   "title": "Invoice for payment",
+   "docType": "invoice_for_payment",
+   "labels": [
+    "Invoice for payment"
+   ],
+   "steps": [
+    4
+   ],
+   "output": false,
+   "fields": {
+    "invoice_no": "IP-540/004",
+    "invoice_date": "03.09.2026",
+    "contract_no": "SRV-540-4",
+    "supplier": "Service provider (demo)",
+    "supplier_inn": "200933140",
+    "customer": "OOO \"Silk Road Tea\"",
+    "vat_rate": "12",
+    "total": "245 000"
+   },
+   "id": "invoice-for-payment",
+   "file": "540-06-invoice-for-payment.png"
+  },
+  {
+   "id": "bank-payment-receipt-4",
+   "template": "receipt",
+   "title": "Bank payment receipt — step 4",
+   "docType": "receipt_of_payment",
+   "labels": [
+    "Bank payment receipt"
+   ],
+   "steps": [
+    4
+   ],
+   "output": true,
+   "fields": {
+    "receipt_no": "R-540-004",
+    "payer": "OOO \"Silk Road Tea\"",
+    "payer_inn": "305678923",
+    "recipient": "Service provider (demo)",
+    "payment_type": "transportation service",
+    "amount": "245 000",
+    "date": "03.09.2026"
+   },
+   "file": "540-07-bank-payment-receipt-step-4.png"
+  },
+  {
+   "id": "air-waybill-5",
+   "template": "awb",
+   "title": "Air waybill — step 5",
+   "docType": "air_waybill",
+   "labels": [
+    "Air waybill"
+   ],
+   "steps": [
+    5
+   ],
+   "output": true,
+   "fields": {
+    "awb_no": "250-54088213",
+    "shipper": "OOO \"Silk Road Tea\"",
+    "consignee": "Anadolu Çay Ticaret A.Ş.",
+    "departure_airport": "Tashkent International (TAS)",
+    "destination_airport": "Istanbul (IST)",
+    "flight_date": "HY 7021 / 11.09.2026",
+    "pieces": "200",
+    "gross_weight": "2 040 kg",
+    "goods": "Green tea in packets",
+    "declared_customs": "NCV",
+    "executed_on": "11.09.2026"
+   },
+   "file": "540-08-air-waybill-step-5.png"
+  },
+  {
+   "template": "letter",
+   "title": "Stamp",
+   "docType": null,
+   "labels": [
+    "Stamp"
+   ],
+   "steps": [
+    6
+   ],
+   "output": false,
+   "fields": {},
+   "body": "Stamp for the shipment 2 000 kg of green tea in packets, Tashkent (Uzbekistan) → Istanbul (Türkiye), 1 air pallet PMC 40211 TK, contract UZ-540/2026-01 of 01.09.2026.",
+   "id": "stamp",
+   "file": "540-09-stamp.png"
+  },
+  {
+   "template": "letter",
+   "title": "Certificate of state registration",
+   "docType": null,
+   "labels": [
+    "Certificate of state registration"
+   ],
+   "steps": [
+    6
+   ],
+   "output": false,
+   "fields": {},
+   "body": "Certificate of state registration issued to OOO \"Silk Road Tea\" (TIN 305678923). Demo record for the shipment: 2 000 kg of green tea in packets, Tashkent (Uzbekistan) → Istanbul (Türkiye), 1 air pallet PMC 40211 TK.",
+   "id": "certificate-of-state-registration",
+   "file": "540-10-certificate-of-state-registration.png"
+  },
+  {
+   "id": "invoice-for-prepayment-for-cargo-handling-8",
+   "template": "invoice_for_payment",
+   "title": "Invoice for prepayment for cargo handling — step 8",
+   "docType": "invoice_for_payment",
+   "labels": [
+    "Invoice for prepayment for cargo handling"
+   ],
+   "steps": [
+    8
+   ],
+   "output": true,
+   "fields": {
+    "invoice_no": "IP-540/008",
+    "invoice_date": "05.09.2026",
+    "contract_no": "SRV-540-8",
+    "supplier": "Service provider (demo)",
+    "supplier_inn": "200933140",
+    "customer": "OOO \"Silk Road Tea\"",
+    "vat_rate": "12",
+    "total": "1 120 000"
+   },
+   "file": "540-11-invoice-for-prepayment-for-cargo-handling-step-8.png"
+  },
+  {
+   "id": "receipt-of-payment-9",
+   "template": "receipt",
+   "title": "Receipt of payment — step 9",
+   "docType": "receipt_of_payment",
+   "labels": [
+    "Receipt of payment"
+   ],
+   "steps": [
+    9
+   ],
+   "output": true,
+   "fields": {
+    "receipt_no": "R-540-009",
+    "payer": "OOO \"Silk Road Tea\"",
+    "payer_inn": "305678923",
+    "recipient": "Service provider (demo)",
+    "payment_type": "Prepay for handling and storage of cargo",
+    "amount": "1 120 000",
+    "date": "06.09.2026"
+   },
+   "file": "540-12-receipt-of-payment-step-9.png"
+  },
+  {
+   "id": "offer-agreement-for-internal-phytosanitary-certi-10",
+   "template": "offer",
+   "title": "Offer agreement for internal phytosanitary certificate — step 10",
+   "docType": "offer_agreement",
+   "labels": [
+    "Offer agreement for internal phytosanitary certificate"
+   ],
+   "steps": [
+    10
+   ],
+   "output": true,
+   "fields": {
+    "agreement_no": "26145400010",
+    "agreement_date": "06.09.2026",
+    "amount": "490 000",
+    "service": "internal phytosanitary certificate",
+    "units": "1"
+   },
+   "file": "540-13-offer-agreement-for-internal-phytosanitary-certi.png"
+  },
+  {
+   "id": "receipt-of-payment-11",
+   "template": "receipt",
+   "title": "Receipt of payment — step 11",
+   "docType": "receipt_of_payment",
+   "labels": [
+    "Receipt of payment"
+   ],
+   "steps": [
+    11
+   ],
+   "output": true,
+   "fields": {
+    "receipt_no": "R-540-011",
+    "payer": "OOO \"Silk Road Tea\"",
+    "payer_inn": "305678923",
+    "recipient": "Agency of Plant Quarantine and Protection",
+    "payment_type": "internal phytosanitary certificate",
+    "amount": "490 000",
+    "date": "07.09.2026"
+   },
+   "file": "540-14-receipt-of-payment-step-11.png"
+  },
+  {
+   "id": "fumigation-offer-agreement-14",
+   "template": "offer",
+   "title": "Fumigation offer agreement — step 14",
+   "docType": "offer_agreement",
+   "labels": [
+    "Fumigation offer agreement"
+   ],
+   "steps": [
+    14
+   ],
+   "output": true,
+   "fields": {
+    "agreement_no": "26145400014",
+    "agreement_date": "08.09.2026",
+    "amount": "780 000",
+    "service": "Fumigation offer agreement",
+    "units": "1"
+   },
+   "file": "540-15-fumigation-offer-agreement-step-14.png"
+  },
+  {
+   "id": "receipt-of-payment-15",
+   "template": "receipt",
+   "title": "Receipt of payment — step 15",
+   "docType": "receipt_of_payment",
+   "labels": [
+    "Receipt of payment"
+   ],
+   "steps": [
+    15
+   ],
+   "output": true,
+   "fields": {
+    "receipt_no": "R-540-015",
+    "payer": "OOO \"Silk Road Tea\"",
+    "payer_inn": "305678923",
+    "recipient": "Agency of Plant Quarantine and Protection",
+    "payment_type": "fumigation",
+    "amount": "780 000",
+    "date": "09.09.2026"
+   },
+   "file": "540-16-receipt-of-payment-step-15.png"
+  },
+  {
+   "id": "offer-agreement-for-phytosanitary-certificate-18",
+   "template": "offer",
+   "title": "Offer agreement for phytosanitary certificate — step 18",
+   "docType": "offer_agreement",
+   "labels": [
+    "Offer agreement for phytosanitary certificate"
+   ],
+   "steps": [
+    18
+   ],
+   "output": true,
+   "fields": {
+    "agreement_no": "26145400018",
+    "agreement_date": "10.09.2026",
+    "amount": "1 500 000",
+    "service": "phytosanitary certificate",
+    "units": "1"
+   },
+   "file": "540-17-offer-agreement-for-phytosanitary-certificate-st.png"
+  },
+  {
+   "id": "receipt-of-payment-19",
+   "template": "receipt",
+   "title": "Receipt of payment — step 19",
+   "docType": "receipt_of_payment",
+   "labels": [
+    "Receipt of payment"
+   ],
+   "steps": [
+    19
+   ],
+   "output": true,
+   "fields": {
+    "receipt_no": "R-540-019",
+    "payer": "OOO \"Silk Road Tea\"",
+    "payer_inn": "305678923",
+    "recipient": "Agency of Plant Quarantine and Protection",
+    "payment_type": "phytosanitary certificate",
+    "amount": "1 500 000",
+    "date": "11.09.2026"
+   },
+   "file": "540-18-receipt-of-payment-step-19.png"
+  },
+  {
+   "template": "letter",
+   "title": "Online application for phytosanitary certificate",
+   "docType": null,
+   "labels": [
+    "Online application for phytosanitary certificate"
+   ],
+   "steps": [
+    20
+   ],
+   "output": false,
+   "fields": {},
+   "body": "OOO \"Silk Road Tea\" (TIN 305678923) applies for: online application for phytosanitary certificate. Shipment: 2 000 kg of green tea in packets, Tashkent (Uzbekistan) → Istanbul (Türkiye), 1 air pallet PMC 40211 TK. Contract UZ-540/2026-01 of 01.09.2026.",
+   "id": "online-application-for-phytosanitary-certificate",
+   "file": "540-19-online-application-for-phytosanitary-certificate.png"
+  },
+  {
+   "id": "phytosanitary-certificate-22",
+   "template": "phyto",
+   "title": "Phytosanitary certificate — step 22",
+   "docType": "phytosanitary_certificate",
+   "labels": [
+    "Phytosanitary certificate"
+   ],
+   "steps": [
+    22
+   ],
+   "output": true,
+   "fields": {
+    "cert_no": "UZ-EX 2026/54012",
+    "exporter": "OOO \"Silk Road Tea\"",
+    "consignee": "Anadolu Çay Ticaret A.Ş.",
+    "destination_country": "Türkiye",
+    "point_of_entry": "Tashkent airport customs post",
+    "place_of_origin": "Uzbekistan",
+    "produce": "Green tea in packets",
+    "botanical_name": "Camellia sinensis",
+    "quantity": "2 000 kg",
+    "treatment": "Not treated",
+    "issue_date": "12.09.2026"
+   },
+   "file": "540-20-phytosanitary-certificate-step-22.png"
+  },
+  {
+   "template": "invoice_for_payment",
+   "title": "Invoice for prepayment",
+   "docType": "invoice_for_payment",
+   "labels": [
+    "Invoice for prepayment"
+   ],
+   "steps": [
+    24
+   ],
+   "output": false,
+   "fields": {
+    "invoice_no": "IP-540/024",
+    "invoice_date": "13.09.2026",
+    "contract_no": "SRV-540-24",
+    "supplier": "Uzbekexpertiza JSC (demo)",
+    "supplier_inn": "200933140",
+    "customer": "OOO \"Silk Road Tea\"",
+    "vat_rate": "12",
+    "total": "2 350 000"
+   },
+   "id": "invoice-for-prepayment",
+   "file": "540-21-invoice-for-prepayment.png"
+  },
+  {
+   "id": "receipt-of-payment-24",
+   "template": "receipt",
+   "title": "Receipt of payment — step 24",
+   "docType": "receipt_of_payment",
+   "labels": [
+    "Receipt of payment"
+   ],
+   "steps": [
+    24
+   ],
+   "output": true,
+   "fields": {
+    "receipt_no": "R-540-024",
+    "payer": "OOO \"Silk Road Tea\"",
+    "payer_inn": "305678923",
+    "recipient": "Uzbekexpertiza JSC (demo)",
+    "payment_type": "certificate of origin",
+    "amount": "2 350 000",
+    "date": "13.09.2026"
+   },
+   "file": "540-22-receipt-of-payment-step-24.png"
+  },
+  {
+   "template": "letter",
+   "title": "Any document confirming purchase of agricultural products",
+   "docType": null,
+   "labels": [
+    "Any document confirming purchase of agricultural products"
+   ],
+   "steps": [
+    25,
+    26,
+    27
+   ],
+   "output": false,
+   "fields": {},
+   "body": "Any document confirming purchase of agricultural products for the shipment 2 000 kg of green tea in packets, Tashkent (Uzbekistan) → Istanbul (Türkiye), 1 air pallet PMC 40211 TK, contract UZ-540/2026-01 of 01.09.2026.",
+   "id": "any-document-confirming-purchase-of-agricultural",
+   "file": "540-23-any-document-confirming-purchase-of-agricultural.png"
+  },
+  {
+   "template": "letter",
+   "title": "Any document confirming the exporter's right to use a land plot",
+   "docType": null,
+   "labels": [
+    "Any document confirming the exporter's right to use a land plot"
+   ],
+   "steps": [
+    25,
+    26,
+    27
+   ],
+   "output": false,
+   "fields": {},
+   "body": "Any document confirming the exporter's right to use a land plot for the shipment 2 000 kg of green tea in packets, Tashkent (Uzbekistan) → Istanbul (Türkiye), 1 air pallet PMC 40211 TK, contract UZ-540/2026-01 of 01.09.2026.",
+   "id": "any-document-confirming-the-exporter-s-right-to-",
+   "file": "540-24-any-document-confirming-the-exporter-s-right-to-.png"
+  },
+  {
+   "template": "letter",
+   "title": "Application for obtaining of Certificate of origin for exported goods",
+   "docType": null,
+   "labels": [
+    "Application for obtaining of Certificate of origin for exported goods"
+   ],
+   "steps": [
+    25
+   ],
+   "output": false,
+   "fields": {},
+   "body": "OOO \"Silk Road Tea\" (TIN 305678923) applies for: application for obtaining of certificate of origin for exported goods. Shipment: 2 000 kg of green tea in packets, Tashkent (Uzbekistan) → Istanbul (Türkiye), 1 air pallet PMC 40211 TK. Contract UZ-540/2026-01 of 01.09.2026.",
+   "id": "application-for-obtaining-of-certificate-of-orig",
+   "file": "540-25-application-for-obtaining-of-certificate-of-orig.png"
+  },
+  {
+   "template": "letter",
+   "title": "Online application for certificate of origin",
+   "docType": null,
+   "labels": [
+    "Online application for certificate of origin"
+   ],
+   "steps": [
+    26,
+    27
+   ],
+   "output": false,
+   "fields": {},
+   "body": "OOO \"Silk Road Tea\" (TIN 305678923) applies for: online application for certificate of origin. Shipment: 2 000 kg of green tea in packets, Tashkent (Uzbekistan) → Istanbul (Türkiye), 1 air pallet PMC 40211 TK. Contract UZ-540/2026-01 of 01.09.2026.",
+   "id": "online-application-for-certificate-of-origin",
+   "file": "540-26-online-application-for-certificate-of-origin.png"
+  },
+  {
+   "id": "certificate-of-origin-30",
+   "template": "ct1",
+   "title": "Certificate of origin — step 30",
+   "docType": "certificate_of_origin",
+   "labels": [
+    "Certificate of origin"
+   ],
+   "steps": [
+    30
+   ],
+   "output": true,
+   "fields": {
+    "cert_no": "UZ 04540811",
+    "exporter": "OOO \"Silk Road Tea\"",
+    "consignee": "Anadolu Çay Ticaret A.Ş.",
+    "transport_route": "Air, Tashkent – Tashkent airport customs post – Istanbul",
+    "goods": "Green tea in packets, 200 places",
+    "weight": "2 040 kg",
+    "invoice_ref": "INV-540/2026-031 of 04.09.2026",
+    "exported_to": "Türkiye"
+   },
+   "file": "540-27-certificate-of-origin-step-30.png"
+  },
+  {
+   "template": "letter",
+   "title": "Vehicle registration certificate",
+   "docType": null,
+   "labels": [
+    "Vehicle registration certificate"
+   ],
+   "steps": [
+    33,
+    34
+   ],
+   "output": false,
+   "fields": {},
+   "body": "Vehicle registration certificate for PMC 40211 TK, operated by Uzbekistan Airways (demo). Shipment: 2 000 kg of green tea in packets, Tashkent (Uzbekistan) → Istanbul (Türkiye), 1 air pallet PMC 40211 TK.",
+   "id": "vehicle-registration-certificate",
+   "file": "540-28-vehicle-registration-certificate.png"
+  },
+  {
+   "template": "letter",
+   "title": "Vehicle entrance permit",
+   "docType": null,
+   "labels": [
+    "Vehicle entrance permit"
+   ],
+   "steps": [
+    35
+   ],
+   "output": false,
+   "fields": {},
+   "body": "Vehicle entrance permit for PMC 40211 TK, operated by Uzbekistan Airways (demo). Shipment: 2 000 kg of green tea in packets, Tashkent (Uzbekistan) → Istanbul (Türkiye), 1 air pallet PMC 40211 TK.",
+   "id": "vehicle-entrance-permit",
+   "file": "540-29-vehicle-entrance-permit.png"
+  },
+  {
+   "id": "notes-or-stamps-in-the-air-waybill-38",
+   "template": "awb",
+   "title": "Notes or stamps in the air waybill — step 38",
+   "docType": "air_waybill",
+   "labels": [
+    "Notes or stamps in the air waybill"
+   ],
+   "steps": [
+    38
+   ],
+   "output": true,
+   "fields": {
+    "awb_no": "250-54088213",
+    "shipper": "OOO \"Silk Road Tea\"",
+    "consignee": "Anadolu Çay Ticaret A.Ş.",
+    "departure_airport": "Tashkent International (TAS)",
+    "destination_airport": "Istanbul (IST)",
+    "flight_date": "HY 7021 / 11.09.2026",
+    "pieces": "200",
+    "gross_weight": "2 040 kg",
+    "goods": "Green tea in packets",
+    "declared_customs": "NCV",
+    "executed_on": "11.09.2026"
+   },
+   "file": "540-30-notes-or-stamps-in-the-air-waybill-step-38.png"
+  },
+  {
+   "id": "receipt-of-payment-40",
+   "template": "receipt",
+   "title": "Receipt of payment — step 40",
+   "docType": "receipt_of_payment",
+   "labels": [
+    "Receipt of payment"
+   ],
+   "steps": [
+    40
+   ],
+   "output": true,
+   "fields": {
+    "receipt_no": "R-540-040",
+    "payer": "OOO \"Silk Road Tea\"",
+    "payer_inn": "305678923",
+    "recipient": "State Customs Committee (demo)",
+    "payment_type": "customs fee",
+    "amount": "375 000",
+    "date": "21.09.2026"
+   },
+   "file": "540-31-receipt-of-payment-step-40.png"
+  },
+  {
+   "id": "cashdesk-stamp-on-airwaybill-44",
+   "template": "awb",
+   "title": "Cashdesk stamp on airwaybill — step 44",
+   "docType": "air_waybill",
+   "labels": [
+    "Cashdesk stamp on airwaybill"
+   ],
+   "steps": [
+    44
+   ],
+   "output": true,
+   "fields": {
+    "awb_no": "250-54088213",
+    "shipper": "OOO \"Silk Road Tea\"",
+    "consignee": "Anadolu Çay Ticaret A.Ş.",
+    "departure_airport": "Tashkent International (TAS)",
+    "destination_airport": "Istanbul (IST)",
+    "flight_date": "HY 7021 / 11.09.2026",
+    "pieces": "200",
+    "gross_weight": "2 040 kg",
+    "goods": "Green tea in packets",
+    "declared_customs": "NCV",
+    "executed_on": "11.09.2026"
+   },
+   "file": "540-32-cashdesk-stamp-on-airwaybill-step-44.png"
+  },
+  {
+   "id": "stamp-release-permited-on-airwaybill-45",
+   "template": "awb",
+   "title": "Stamp \"Release permited\" on airwaybill — step 45",
+   "docType": "air_waybill",
+   "labels": [
+    "Stamp \"Release permited\" on airwaybill"
+   ],
+   "steps": [
+    45
+   ],
+   "output": true,
+   "fields": {
+    "awb_no": "250-54088213",
+    "shipper": "OOO \"Silk Road Tea\"",
+    "consignee": "Anadolu Çay Ticaret A.Ş.",
+    "departure_airport": "Tashkent International (TAS)",
+    "destination_airport": "Istanbul (IST)",
+    "flight_date": "HY 7021 / 11.09.2026",
+    "pieces": "200",
+    "gross_weight": "2 040 kg",
+    "goods": "Green tea in packets",
+    "declared_customs": "NCV",
+    "executed_on": "11.09.2026"
+   },
+   "file": "540-33-stamp-release-permited-on-airwaybill-step-45.png"
+  },
+  {
+   "template": "letter",
+   "title": "Package of documents",
+   "docType": null,
+   "labels": [
+    "Package of documents"
+   ],
+   "steps": [
+    47
+   ],
+   "output": false,
+   "fields": {},
+   "body": "Package of documents for the shipment 2 000 kg of green tea in packets, Tashkent (Uzbekistan) → Istanbul (Türkiye), 1 air pallet PMC 40211 TK, contract UZ-540/2026-01 of 01.09.2026.",
+   "id": "package-of-documents",
+   "file": "540-34-package-of-documents.png"
+  },
+  {
+   "id": "blue-page-of-air-waybill-47",
+   "template": "awb",
+   "title": "Blue page of air waybill — step 47",
+   "docType": "air_waybill",
+   "labels": [
+    "Blue page of air waybill"
+   ],
+   "steps": [
+    47
+   ],
+   "output": true,
+   "fields": {
+    "awb_no": "250-54088213",
+    "shipper": "OOO \"Silk Road Tea\"",
+    "consignee": "Anadolu Çay Ticaret A.Ş.",
+    "departure_airport": "Tashkent International (TAS)",
+    "destination_airport": "Istanbul (IST)",
+    "flight_date": "HY 7021 / 11.09.2026",
+    "pieces": "200",
+    "gross_weight": "2 040 kg",
+    "goods": "Green tea in packets",
+    "declared_customs": "NCV",
+    "executed_on": "11.09.2026"
+   },
+   "file": "540-35-blue-page-of-air-waybill-step-47.png"
+  }
+ ]
+}

@@ -7,6 +7,8 @@ import { chunkForD1 } from "./d1-batching";
 import type { AgentRunRecord, AuditEventRecord, WorkflowNodeRecord, WorkflowProjection, WorkflowRepository, WorkflowRunRecord, WorkItemRecord } from "./repository";
 
 const json = (value: unknown) => JSON.stringify(value ?? {});
+/* SQLite CURRENT_TIMESTAMP is UTC without a zone ("2026-09-14 06:43:29"); JS would read it as local time. */
+const iso = (value: string | null | undefined) => (value ? (/[TZ]/.test(value) ? value : `${value.replace(" ", "T")}Z`) : undefined);
 const parse = <T>(value: string, fallback: T): T => {
   try { return JSON.parse(value) as T; } catch { return fallback; }
 };
@@ -39,10 +41,10 @@ export function createD1WorkflowRepository(): WorkflowRepository {
         shipmentFacts: parse<ShipmentFacts>(caseRow?.shipmentFacts ?? "{}", { goods: "", quantity: null, unit: null, origin: null, destination: null, mode: null }),
         nodes: nodeRows.map((row) => ({ id: row.id, runId: row.runId, blockId: row.blockId, blockName: row.blockName, stepNum: row.stepNum, title: row.title, output: row.outputName, entityName: row.entityName, channel: row.channel, lane: row.lane as WorkflowNodeRecord["lane"], delegationReason: row.delegationReason, optional: row.optional, state: row.state as WorkflowNodeRecord["state"], assignedUserId: row.assignedUserId, assignedEntityId: row.assignedEntityId, input: parse(row.input, {}), result: parse(row.output, {}), attempts: row.attempts })),
         edges: edgeRows.map((row) => ({ runId: row.runId, fromNodeId: row.fromNodeId, toNodeId: row.toNodeId, reason: row.reason })),
-        workItems: itemRows.map((row) => ({ id: row.id, runId: row.runId, nodeId: row.nodeId, lane: row.lane as WorkItemRecord["lane"], assigneeUserId: row.assigneeUserId, entityId: row.entityId, state: row.state as WorkItemRecord["state"], request: parse(row.request, {}), result: parse(row.result, {}), completedBy: row.completedBy })),
+        workItems: itemRows.map((row) => ({ id: row.id, runId: row.runId, nodeId: row.nodeId, lane: row.lane as WorkItemRecord["lane"], assigneeUserId: row.assigneeUserId, entityId: row.entityId, state: row.state as WorkItemRecord["state"], request: parse(row.request, {}), result: parse(row.result, {}), completedBy: row.completedBy, createdAt: iso(row.createdAt), completedAt: iso(row.completedAt) ?? null })),
         agentRuns: agentRows.map((row) => ({ id: row.id, runId: row.runId, nodeId: row.nodeId, agentName: row.agentName, attempt: row.attempt, status: row.status as AgentRunRecord["status"], input: parse(row.input, {}), output: parse(row.output, {}), error: row.error })),
         artifacts: artifactRows.map((row) => ({ id: row.id, runId: row.runId, nodeId: row.nodeId, type: row.type, name: row.name, data: parse(row.data, {}), simulated: row.simulated })),
-        auditEvents: auditRows.map((row) => ({ id: row.id, runId: row.runId, nodeId: row.nodeId, eventType: row.eventType, actorType: row.actorType as AuditEventRecord["actorType"], actorId: row.actorId, data: parse(row.data, {}) })),
+        auditEvents: auditRows.map((row) => ({ id: row.id, runId: row.runId, nodeId: row.nodeId, eventType: row.eventType, actorType: row.actorType as AuditEventRecord["actorType"], actorId: row.actorId, data: parse(row.data, {}), at: iso(row.createdAt) })),
       } satisfies WorkflowProjection;
     },
     async updateNode(nodeId, patch) {

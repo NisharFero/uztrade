@@ -8,6 +8,7 @@ import { ACTIONS, actionOfStep, blockColumn, blockDelegation, blockDelegationRea
 import type { Procedure, ProcedureBlock } from "../../modules/procedures/data/procedures.generated";
 import { criticalPath, deriveStates, fmtHours, fmtRange, levelsOf, procedureStats, type BlockState } from "../../modules/procedures/dag";
 import { checklistFor, type DocumentState } from "../../modules/documents/checklist";
+import { blockExtras, shipmentOf, stepExtras } from "../../modules/workflow/tailor";
 
 export type CaseBlockState = { state: BlockState; actualHours: number | null };
 export type WorkflowDag = {
@@ -31,6 +32,8 @@ type Props = {
   onCompleteCurrent?: () => void;
   /** Present on a live case: stamps payment references. */
   caseId?: string;
+  /** The procedure title and shipment line above the KPIs; off on a case page. */
+  showTitle?: boolean;
 };
 
 type Edge = {
@@ -46,13 +49,23 @@ type Edge = {
 
 type Hover = { block: ProcedureBlock; x: number; y: number } | null;
 
-export default function Dag({ procedure, progress, documentState, onComplete, busy, workflow, onCompleteCurrent, caseId }: Props) {
+export default function Dag({ procedure, progress, documentState, onComplete, busy, workflow, onCompleteCurrent, caseId, showTitle = true }: Props) {
   const [selected, setSelected] = useState<string | null>(null);
   const [hover, setHover] = useState<Hover>(null);
   const [edges, setEdges] = useState<Edge[]>([]);
 
   const gridRef = useRef<HTMLDivElement>(null);
   const nodeEls = useRef(new Map<string, HTMLElement>());
+
+  // Esc closes the block detail.
+  useEffect(() => {
+    if (!selected) return;
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setSelected(null);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [selected]);
 
   const blocks = procedure.blocks;
   const levels = useMemo(() => levelsOf(blocks), [blocks]);
@@ -174,7 +187,12 @@ export default function Dag({ procedure, progress, documentState, onComplete, bu
             <span className="head-icon">{Icon.flow}</span>
             Procedure {procedure.id}
           </p>
-          <h2>{procedure.title}</h2>
+          {showTitle ? <h2>{procedure.title}</h2> : <h2>Workflow</h2>}
+          {showTitle && shipmentOf(procedure) ? (
+            <p className="wf-shipment-line">
+              {shipmentOf(procedure)!.line ? `${shipmentOf(procedure)!.line} · ` : ""}tailored from “{shipmentOf(procedure)!.publishedTitle}”
+            </p>
+          ) : null}
         </div>
         <div className="wf-status">
           <span className="wf-count">
@@ -464,7 +482,7 @@ function CurrentStep({
         {spec && step ? (
           <small className="wf-current-agent">
             {step.entity ? <>{step.entity} · </> : null}Agent: {spec.agent}
-            {action === "pay" && caseId && current ? (
+            {(action === "pay" || action === "gateway") && caseId && current ? (
               <>
                 {" "}Reference <code>{paymentReference(caseId, current.stepNum)}</code>.
               </>
@@ -596,6 +614,13 @@ function BlockDetail({
         {reason}
       </p>
       <p>{block.dependencyReason}</p>
+      {blockExtras(block).notes.length ? (
+        <ul className="wf-notes" aria-label="For this shipment">
+          {blockExtras(block).notes.map((n) => (
+            <li key={n}>{n}</li>
+          ))}
+        </ul>
+      ) : null}
 
       <dl className="wf-detail-grid">
         <div>
@@ -604,7 +629,10 @@ function BlockDetail({
         </div>
         <div>
           <dt>Expected</dt>
-          <dd>{fmtRange(block.estDuration)}</dd>
+          <dd>
+            {fmtRange(block.estDuration)}
+            {blockExtras(block).publishedDuration.join() !== block.estDuration.join() ? <em> (published {fmtRange(blockExtras(block).publishedDuration)})</em> : null}
+          </dd>
         </div>
         {actual != null ? (
           <div>
@@ -710,6 +738,7 @@ function BlockDetail({
                     {s.alternative ? <span data-flag="alt">alternative</span> : null}
                   </span>
                   {s.output ? <span className="dag-step-out">→ {s.output}</span> : null}
+                  <StepNotes step={s} />
                 </span>
               </li>
             );
@@ -723,5 +752,28 @@ function BlockDetail({
         </button>
       ) : null}
     </aside>
+  );
+}
+
+/** What the shipment's context changed on a step: notes, added needs, inputs it doesn't need. */
+function StepNotes({ step }: { step: ProcedureBlock["steps"][number] }) {
+  const x = stepExtras(step);
+  if (!x.notes.length && !x.extraNeeds.length && !x.notNeeded.length) return null;
+  return (
+    <ul className="dag-step-notes">
+      {x.notes.map((n) => (
+        <li key={n}>{n}</li>
+      ))}
+      {x.extraNeeds.map((e) => (
+        <li key={e.label} data-kind="extra">
+          + {e.label} <em>— {e.reason}</em>
+        </li>
+      ))}
+      {x.notNeeded.map((e) => (
+        <li key={e.label} data-kind="skip">
+          <s>{e.label}</s> <em>— {e.reason}</em>
+        </li>
+      ))}
+    </ul>
   );
 }

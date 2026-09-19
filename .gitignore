@@ -1,6 +1,7 @@
 # secrets
 .env
 .env.*
+!**/.env.example
 *.pem
 
 # dependencies and environments
@@ -19,3 +20,7 @@ apps/web/.wrangler/
 apps/web/.next/
 apps/web/tsconfig.tsbuildinfo
 apps/web/next-env.d.ts
+apps/portals/.data/
+
+# local tooling (presentation builder)
+.tools/

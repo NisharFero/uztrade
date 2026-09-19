@@ -96,8 +96,11 @@ test("a route that makes the chosen mode unpublished asks the mode again", () =>
   assert.deepEqual(t.options.map((o) => o.reply), ["by train"]);
 
   const fixed = converse(t.draft, "by train", { expecting: "mode" });
-  assert.equal(fixed.status, "confirm");
-  assert.equal(fixed.summary?.procedureId, "477");
+  assert.equal(fixed.slot, "route");
+  assert.match(fixed.message, /which city in China/i);
+  const city = converse(fixed.draft, "Urumqi", { expecting: "route" });
+  assert.equal(city.status, "confirm");
+  assert.equal(city.summary?.procedureId, "477");
 });
 
 test("one reply can fill several details, and a later reply corrects one", () => {
@@ -114,11 +117,66 @@ test("one reply can fill several details, and a later reply corrects one", () =>
 
 test("the confirm card carries country notes from the supplied fixture", () => {
   const t = talk("export 20 tonnes of tomatoes from Andijan to Kazakhstan");
-  assert.equal(t.status, "confirm");
-  assert.equal(t.summary?.procedureId, "325");
-  assert.ok(t.notes.some((n) => /Form CT-1/.test(n)));
-  assert.ok(t.notes.some((n) => /Almaty/.test(n) && /assumed/i.test(n)));
-  assert.ok(t.notes.some((n) => /Phytosanitary certificate for fresh produce/.test(n)));
+  assert.equal(t.slot, "route");
+  assert.match(t.message, /which city in Kazakhstan/i);
+
+  const confirmed = converse(t.draft, "Almaty", { expecting: "route" });
+  assert.equal(confirmed.status, "confirm");
+  assert.equal(confirmed.summary?.procedureId, "325");
+  assert.ok(confirmed.notes.some((n) => /Form CT-1/.test(n)));
+  assert.ok(confirmed.notes.every((n) => !/assumed/i.test(n)));
+  assert.ok(confirmed.notes.some((n) => /Phytosanitary certificate for fresh produce/.test(n)));
+});
+
+test("country-only routes ask for the city inside that country before confirming", () => {
+  const base = talk("export tea by train", "20 tonnes");
+  const country = converse(base.draft, "to Russia", { expecting: "route" });
+  assert.equal(country.slot, "route");
+  assert.match(country.message, /from where in Uzbekistan/i);
+
+  const homeCity = converse(country.draft, "from Tashkent", { expecting: "route" });
+  assert.equal(homeCity.slot, "route");
+  assert.match(homeCity.message, /which city in Russia/i);
+  assert.ok(homeCity.options.some((o) => o.reply === "to Kazan"));
+
+  const destinationCity = converse(homeCity.draft, "Kazan", { expecting: "route" });
+  assert.equal(destinationCity.status, "confirm");
+  assert.equal(destinationCity.summary?.route, "Tashkent, Uzbekistan → Kazan, Russia");
+});
+
+test("a complete query with only a country destination asks only for that city", () => {
+  const turn = converse(EMPTY_DRAFT, "export 20 tonnes of tea from Tashkent to Russia by train");
+  assert.equal(turn.status, "asking");
+  assert.equal(turn.slot, "route");
+  assert.match(turn.message, /which city in Russia/i);
+  assert.deepEqual(turn.progress.filter((row) => !row.done).map((row) => row.slot), ["route"]);
+  assert.ok(turn.options.some((option) => option.reply === "to Kazan"));
+
+  const confirmed = converse(turn.draft, "Kazan", { expecting: "route" });
+  assert.equal(confirmed.status, "confirm");
+  assert.equal(confirmed.summary?.route, "Tashkent, Uzbekistan → Kazan, Russia");
+});
+
+test("while only the city is missing: progress shows the country, and odd answers keep the one question", () => {
+  const turn = converse(EMPTY_DRAFT, "export 20 tonnes of tea from Tashkent to Russia by train");
+  assert.equal(turn.progress.find((row) => row.slot === "route")?.value, "Tashkent → Russia (city?)", "the assumed city isn't shown as chosen");
+
+  const unknown = converse(turn.draft, "Sochi", { expecting: "route" });
+  assert.equal(unknown.slot, "route");
+  assert.match(unknown.message, /Sochi/);
+  assert.match(unknown.message, /which city in Russia/i);
+  assert.ok(unknown.options.some((o) => o.reply === "to Kazan"), "the Russian city options stay on offer");
+
+  const elsewhere = converse(turn.draft, "Almaty", { expecting: "route" });
+  assert.equal(elsewhere.status, "confirm");
+  assert.match(elsewhere.message, /Almaty is in Kazakhstan, not Russia/);
+
+  const imported = converse(EMPTY_DRAFT, "import 20 tonnes of tea from China to Bukhara by train");
+  assert.equal(imported.slot, "route");
+  assert.match(imported.message, /which city in China is it from/i);
+  assert.deepEqual(imported.progress.filter((row) => !row.done).map((row) => row.slot), ["route"]);
+  assert.ok(imported.options.some((o) => o.reply === "from Urumqi"));
+  assert.equal(converse(imported.draft, "Urumqi", { expecting: "route" }).summary?.procedureId, "477");
 });
 
 test("small talk is declined; unknown goods are named and the question stays open", () => {
@@ -126,4 +184,45 @@ test("small talk is declined; unknown goods are named and the question stays ope
   const cotton = converse(EMPTY_DRAFT, "export cotton by train");
   assert.equal(cotton.slot, "commodity");
   assert.match(cotton.message, /cotton/);
+});
+
+test("general procedure questions do not start shipment intake", () => {
+  const docs = converse(EMPTY_DRAFT, "What documents are needed for export?");
+  assert.equal(docs.status, "declined");
+  assert.equal(docs.slot, undefined);
+  assert.equal(docs.draft.statedDirection, null);
+
+  const timing = converse(EMPTY_DRAFT, "How long does export approval take?");
+  assert.equal(timing.status, "declined");
+  assert.equal(timing.slot, undefined);
+  assert.equal(timing.draft.statedDirection, null);
+});
+
+test("actual shipment intents with export still start intake", () => {
+  const turn = converse(EMPTY_DRAFT, "I want to export tea");
+  assert.equal(turn.status, "asking");
+  assert.equal(turn.slot, "mode");
+  assert.equal(turn.draft.statedDirection, "export");
+});
+
+test("juices, fertilizers and rail logistics each reach their own procedure", () => {
+  const walk = (...messages: string[]) => {
+    let turn = converse(EMPTY_DRAFT, messages[0]);
+    for (const message of messages.slice(1)) turn = converse(turn.draft, message, { expecting: turn.slot ?? null });
+    return turn;
+  };
+  assert.equal(walk("I want to export apple juice", "20 tonnes", "from Tashkent to Almaty").summary?.procedureId, "161");
+  assert.equal(walk("import manure", "by train", "44 tonnes", "from Almaty to Tashkent").summary?.procedureId, "707");
+  const road = walk("import organic fertilizer by truck", "3 trucks", "from Bishkek to Tashkent");
+  assert.equal(road.summary?.procedureId, "57");
+  assert.match(road.summary?.howMuch ?? "", /3 trucks/);
+  assert.equal(walk("arrange cargo transportation by train", "40 tonnes", "from Tashkent to Almaty").summary?.procedureId, "782");
+
+  const asked = converse(EMPTY_DRAFT, "I need to arrange rail transport");
+  assert.equal(asked.slot, "direction");
+  assert.deepEqual(asked.options.map((o) => o.reply), ["export", "import"]);
+  assert.equal(walk("I need to arrange rail transport", "take delivery", "60 tonnes", "from Moscow to Tashkent").summary?.procedureId, "924");
+
+  const mineral = converse(EMPTY_DRAFT, "export urea fertilizer");
+  assert.match(mineral.message, /No published procedure covers mineral fertilizers/);
 });

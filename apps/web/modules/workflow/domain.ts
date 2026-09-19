@@ -49,8 +49,8 @@ export type InstantiatedWorkflow = {
 
 const cleanPlace = (value: string | undefined) => value?.trim().replace(/[.,;]+$/, "") || null;
 
-/* Casual phrasing: "20t", "20 mt", "20,000 kg", "3 wagons", "2 containers". */
-const QUANTITY_UNIT = String.raw`tonnes?|tons?|mt|t|kilograms?|kgs?|kg|wagons?|railcars?|containers?`;
+/* Casual phrasing: "20t", "20 mt", "20,000 kg", "3 wagons", "2 containers", "3 trucks". */
+const QUANTITY_UNIT = String.raw`tonnes?|tons?|mt|t|kilograms?|kgs?|kg|wagons?|railcars?|containers?|trucks?|lorry|lorries|furas?`;
 const NUMBER = String.raw`\d[\d,]*(?:\.\d+)?`;
 const QUANTITY = new RegExp(String.raw`\b(${NUMBER})\s*(${QUANTITY_UNIT})\b`, "i");
 const QUANTITY_PREFIX = new RegExp(String.raw`^${NUMBER}\s*(?:${QUANTITY_UNIT})\s+(?:of\s+)?`, "i");

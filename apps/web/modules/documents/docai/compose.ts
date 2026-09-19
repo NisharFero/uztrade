@@ -11,6 +11,7 @@
 
 import type { DocField, DocSpec, DocType } from "../specs";
 import { detectDocType } from "./doctype";
+import { readableAnchor, type FieldEvidence } from "./evidence";
 import { normalizeValue } from "./validate";
 
 export const GATE = { accept: 0.8, review: 0.5 };
@@ -22,7 +23,19 @@ export const GATE = { accept: 0.8, review: 0.5 };
  * relative to 0.6 and only full-strength on a well-read page. */
 export const OCR_TRUST = 0.6;
 
-export type Candidate = { value: string; score: number; source: string; page?: number };
+export type Candidate = {
+  value: string;
+  score: number;
+  source: string;
+  /** 0-based page the value was read on. */
+  page?: number;
+  /** The question the layout model was asked. */
+  question?: string;
+  /** The label pattern the value was found next to. */
+  anchor?: string;
+  /** A readable label, when the reader knows it (the demo pack does). */
+  label?: string;
+};
 
 export type DocaiResponse = {
   docType?: string | null;
@@ -47,6 +60,8 @@ export type ExtractedField = {
   confidence: number;
   status: FieldStatus;
   source: string | null;
+  /** Where the value was found - see evidence.ts. */
+  evidence?: FieldEvidence | null;
   alternatives: string[];
 };
 
@@ -110,7 +125,15 @@ export function composeField(field: DocField, candidates: Candidate[], labels: R
   const best = scored[0];
   const base = { key: field.key, label: field.name, kind: field.kind, required: field.required };
 
-  if (!best) return { ...base, value: null, normalized: null, confidence: 0, status: "missing", source: null, alternatives: [] };
+  if (!best) return { ...base, value: null, normalized: null, confidence: 0, status: "missing", source: null, evidence: null, alternatives: [] };
+
+  const agreed = scored.filter((c) => c !== best && c.v.ok && best.v.ok && String(c.v.normalized) === String(best.v.normalized)).map((c) => c.source);
+  const evidence: FieldEvidence = {
+    ...(best.question ? { question: best.question } : {}),
+    ...(best.label ? { label: best.label } : best.anchor ? { label: readableAnchor(best.anchor) } : {}),
+    ...(best.page != null ? { page: best.page + 1 } : {}),
+    ...(agreed.length ? { agreed: [...new Set(agreed)] } : {}),
+  };
 
   const status: FieldStatus = best.score >= GATE.accept ? "accepted" : best.score >= GATE.review ? "review" : "missing";
   return {
@@ -120,6 +143,7 @@ export function composeField(field: DocField, candidates: Candidate[], labels: R
     confidence: round(best.score),
     status,
     source: best.source,
+    evidence,
     alternatives: [...new Set(scored.slice(1).map((c) => c.value))].slice(0, 3),
   };
 }
@@ -211,9 +235,10 @@ export function applyCorrections(fields: ExtractedField[], corrections: Record<s
   return fields.map((f) => {
     if (f.key in corrections) {
       const typed = (corrections[f.key] ?? "").trim();
-      if (!typed) return { ...f, value: null, normalized: null, confidence: 0, status: "missing" };
+      if (!typed) return { ...f, value: null, normalized: null, confidence: 0, status: "missing", source: null, evidence: null };
+      if (typed === f.value) return { ...f, confidence: Math.max(f.confidence, 1), status: "confirmed" };
       const v = normalizeValue(f.kind, typed);
-      return { ...f, value: typed, normalized: v.normalized, confidence: 1, status: "confirmed", source: "trader" };
+      return { ...f, value: typed, normalized: v.normalized, confidence: 1, status: "confirmed", source: "trader", evidence: null };
     }
     if (confirmAll && f.value) return { ...f, confidence: Math.max(f.confidence, 1), status: "confirmed" };
     return f;

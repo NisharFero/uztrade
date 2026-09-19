@@ -15,7 +15,9 @@ key is only used to download the model.
 
 from __future__ import annotations
 
+import hashlib
 import io
+from collections import OrderedDict
 import os
 import re
 import threading
@@ -269,6 +271,39 @@ def anchor_candidates(segments: list[dict], patterns: list[str], label_patterns:
 # ------------------------------------------------------------------ parse ---
 
 
+# One OCR pass per file, kept briefly: a document is often read twice - once to
+# tell what it is, once for its fields - and OCR is the expensive half.
+_OCR_CACHE: "OrderedDict[str, list]" = OrderedDict()
+_OCR_CACHE_MAX = 4
+
+
+def ocr_pages(data: bytes, filename: str | None, content_type: str | None) -> tuple[list, int]:
+    key = hashlib.sha256(data).hexdigest()
+    cached = _OCR_CACHE.get(key)
+    if cached is not None:
+        _OCR_CACHE.move_to_end(key)
+        return cached, 0
+
+    pages, ocr_ms = [], 0
+    for raw in load_pages(data, filename, content_type):
+        image = prepare(raw)
+        t0 = time.time()
+        segments = ocr(image)
+        ocr_ms += int((time.time() - t0) * 1000)
+        pages.append({
+            "image": image,
+            "segments": segments,
+            "size": {"width": image.width, "height": image.height, "segments": len(segments)},
+            "text": "\n".join(" ".join(s["text"] for s in line) for line in lines_of(segments)),
+            "verdict": readability(segments),
+        })
+
+    _OCR_CACHE[key] = pages
+    while len(_OCR_CACHE) > _OCR_CACHE_MAX:
+        _OCR_CACHE.popitem(last=False)
+    return pages, ocr_ms
+
+
 def parse(data: bytes, filename: str | None, content_type: str | None, spec: dict) -> dict:
     started = time.time()
     fields = spec.get("fields") or []
@@ -282,17 +317,17 @@ def parse(data: bytes, filename: str | None, content_type: str | None, spec: dic
 
     result = {f["key"]: {"candidates": []} for f in fields}
     pages, texts, verdicts = [], [], []
-    ocr_ms = qa_ms = 0
+    qa_ms = 0
 
-    for index, raw in enumerate(load_pages(data, filename, content_type)):
-        image = prepare(raw)
-        t0 = time.time()
-        segments = ocr(image)
-        ocr_ms += int((time.time() - t0) * 1000)
-        pages.append({"width": image.width, "height": image.height, "segments": len(segments)})
-        texts.append("\n".join(" ".join(s["text"] for s in line) for line in lines_of(segments)))
+    read_pages, ocr_ms = ocr_pages(data, filename, content_type)
 
-        verdict = readability(segments)
+    for index, page in enumerate(read_pages):
+        image = page["image"]
+        segments = page["segments"]
+        pages.append(page["size"])
+        texts.append(page["text"])
+
+        verdict = page["verdict"]
         verdicts.append(verdict)
         if not verdict["readable"]:
             continue  # questions over garbled text cost ~7 s each and return junk

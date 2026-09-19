@@ -1,4 +1,4 @@
-/* Extracts section 5 "Inputs required per step" from the five procedure .docx
+/* Extracts section 5 "Inputs required per step" from the procedure .docx
  * files into scripts/data/inputs-data.json.
  *
  * dag-data.json never captured this section. Only document.xml is read (via
@@ -14,7 +14,7 @@ import { fileURLToPath } from "node:url";
 
 const DOCS = fileURLToPath(new URL("../../../../Docs/Procedures/", import.meta.url));
 const OUT = fileURLToPath(new URL("./inputs-data.json", import.meta.url));
-const IN_SCOPE = ["306", "325", "477", "540", "868"];
+const IN_SCOPE = ["306", "325", "477", "540", "868", "161", "57", "707", "782", "924"];
 
 const decode = (s) =>
   s

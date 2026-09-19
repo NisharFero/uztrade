@@ -8,7 +8,7 @@
 import { extractShipmentFacts } from "../workflow/domain";
 import { mentionedRoute, placesIn, type Place } from "./shipment-plan";
 import type { Direction, Mode } from "./lookup";
-import { CATEGORIES, commodityOf, type Category } from "./taxonomy";
+import { CATEGORIES, commodityOf, logisticsDirection, type Category } from "./taxonomy";
 
 export type Slot = "commodity" | "direction" | "mode" | "quantity" | "route";
 
@@ -107,6 +107,10 @@ export function mergeReply(draft: IntakeDraft, text: string, expecting: Slot | n
   if (EXPORT_WORD.test(text) !== IMPORT_WORD.test(text)) {
     next.statedDirection = EXPORT_WORD.test(text) ? "export" : "import";
     understood = true;
+  } else if (next.commodity?.category === "any cargo" && logisticsDirection(text)) {
+    // Rail logistics: dispatching the cargo is 782, taking delivery of it 924.
+    next.statedDirection = logisticsDirection(text);
+    understood = true;
   }
 
   // How much
@@ -140,13 +144,19 @@ export function mergeReply(draft: IntakeDraft, text: string, expecting: Slot | n
       // One bare place answering the route question: it fills the missing end.
       const end = endOf(places[0].place, text);
       const importing = draft.statedDirection === "import";
-      if (draft.destination && !draft.origin) next.origin = end;
+      if (draft.origin?.assumed && draft.origin.country === end.country) next.origin = { ...end, assumed: false };
+      else if (draft.destination?.assumed && draft.destination.country === end.country) next.destination = { ...end, assumed: false };
+      else if (draft.destination && !draft.origin) next.origin = end;
       else if (draft.origin && !draft.destination) next.destination = end;
       else if ((end.country === "UZ") !== importing) next.origin = end;
       else next.destination = end;
     }
   } else if (expecting === "route" && /\b(from|to|into)\b/i.test(text)) {
     unknownPlace = (facts.destination ?? facts.origin ?? text.replace(/^.*\b(from|to|into)\s+/i, "")).trim();
+    understood = true;
+  } else if (expecting === "route" && !understood && (draft.origin?.assumed || draft.destination?.assumed) && /^[\p{L}][\p{L}\s'.-]{1,39}$/u.test(text.trim())) {
+    // A bare name answering "which city in …?" that the gazetteer doesn't know: name it, keep the question.
+    unknownPlace = text.trim();
     understood = true;
   }
 

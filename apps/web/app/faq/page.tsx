@@ -1,11 +1,13 @@
 import Link from "next/link";
 import { FAQ, matchFaq } from "../../modules/faq/faq";
+import FaqAsk from "../../components/faq/faq-ask";
+import FaqList from "../../components/faq/faq-list";
 
 export const dynamic = "force-dynamic";
 
 export const metadata = { title: "FAQ · UzTrade" };
 
-/** Where the chat sends questions that aren't a shipment. The closest answers
+/** The FAQ, linked from the chat's answers. The closest answers
  *  to what was asked come first and open. */
 export default async function FaqPage({ searchParams }: { searchParams: Promise<{ q?: string }> }) {
   const { q = "" } = await searchParams;
@@ -26,7 +28,7 @@ export default async function FaqPage({ searchParams }: { searchParams: Promise<
         <h1>Questions and answers</h1>
         {asked ? (
           <p className="page-lede faq-asked">
-            You asked &ldquo;{asked}&rdquo;. That isn&rsquo;t a shipment the assistant can open a case for —{" "}
+            You asked &ldquo;{asked}&rdquo; —{" "}
             {matches.length ? "these answers look closest." : "here are the common questions."}
           </p>
         ) : (
@@ -34,21 +36,9 @@ export default async function FaqPage({ searchParams }: { searchParams: Promise<
         )}
       </header>
 
-      <section className="faq-list" aria-label="Frequently asked questions">
-        {entries.map((entry) => (
-          <details key={entry.id} className="faq-item" open={matched.has(entry.id)} data-match={matched.has(entry.id) || undefined}>
-            <summary>{entry.question}</summary>
-            {entry.answer.map((paragraph) => (
-              <p key={paragraph}>{paragraph}</p>
-            ))}
-            {entry.link ? (
-              <Link className="crumb" href={entry.link.href}>
-                {entry.link.label} →
-              </Link>
-            ) : null}
-          </details>
-        ))}
-      </section>
+      <FaqAsk key={asked} initial={asked} />
+
+      <FaqList entries={entries} matched={[...matched]} />
 
       <p className="faq-back">
         <Link className="crumb" href="/">

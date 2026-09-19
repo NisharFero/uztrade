@@ -10,10 +10,12 @@
     "build": "vinext build",
     "start": "vinext start",
     "test": "npm run build && npm run test:unit && npm run test:e2e",
-    "test:unit": "tsx --test tests/unit/workflow/domain.test.ts tests/unit/workflow/orchestrator.test.ts tests/unit/workflow/dag-projection.test.ts tests/unit/workflow/d1-batching.test.ts tests/unit/cases/block-progress.test.ts tests/unit/catalog/seed.test.ts tests/unit/intake/classify.test.ts tests/unit/intake/intake-agent.test.ts tests/unit/intake/conversation.test.ts tests/unit/intake/actions.test.ts tests/unit/intake/shipment-plan.test.ts tests/unit/procedures/requirements.test.ts tests/unit/documents/agent-tasks.test.ts tests/unit/documents/specs.test.ts tests/unit/documents/docai.test.ts tests/unit/compliance/compliance-risk.test.ts tests/unit/compliance/risk-values.test.ts tests/unit/steps/assistant.test.ts tests/unit/steps/upfront.test.ts tests/unit/demo/demo-pack.test.ts",
+    "test:unit": "tsx --test tests/unit/workflow/domain.test.ts tests/unit/workflow/orchestrator.test.ts tests/unit/workflow/agentic-ai.test.ts tests/unit/workflow/dag-projection.test.ts tests/unit/workflow/d1-batching.test.ts tests/unit/workflow/tailor.test.ts tests/unit/portals/agent.test.ts tests/unit/portals/readiness.test.ts tests/unit/steps/note.test.ts tests/unit/ai/llm.test.ts tests/unit/intake/llm-extract.test.ts tests/unit/compliance/hs-suggest.test.ts tests/unit/documents/names.test.ts tests/unit/documents/reread.test.ts tests/unit/documents/evidence.test.ts tests/unit/faq/answer.test.ts tests/unit/assistant/router.test.ts tests/unit/assistant/chat.test.ts tests/unit/cases/block-progress.test.ts tests/unit/catalog/seed.test.ts tests/unit/entities/mock-api.test.ts tests/unit/intake/classify.test.ts tests/unit/intake/intake-agent.test.ts tests/unit/intake/conversation.test.ts tests/unit/intake/actions.test.ts tests/unit/intake/shipment-plan.test.ts tests/unit/procedures/requirements.test.ts tests/unit/documents/agent-tasks.test.ts tests/unit/documents/specs.test.ts tests/unit/documents/docai.test.ts tests/unit/documents/pack.test.ts tests/unit/compliance/compliance-risk.test.ts tests/unit/compliance/risk-values.test.ts tests/unit/steps/assistant.test.ts tests/unit/steps/procedure-qa.test.ts tests/unit/steps/upfront.test.ts tests/unit/steps/planning.test.ts tests/unit/steps/application-forms.test.ts tests/unit/demo/demo-pack.test.ts tests/unit/transit/transit.test.ts",
     "data:build": "node scripts/data/build-procedures.mjs",
     "lint": "eslint . --ignore-pattern dist --ignore-pattern .next",
     "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
+    "build:vercel": "next build",
     "eval:docai": "tsx scripts/eval/eval-docai.ts",
     "test:e2e": "node --import ./tests/e2e/register-loader.mjs --test tests/e2e/rendered-html.test.mjs",
     "data:inputs": "node scripts/data/extract-inputs.mjs"
@@ -21,6 +23,8 @@
   "dependencies": {
     "@langchain/core": "^1.2.10",
     "@langchain/langgraph": "^1.4.14",
+    "@neondatabase/serverless": "^1.1.0",
+    "@vercel/blob": "^2.8.0",
     "drizzle-orm": "0.45.2",
     "next": "16.2.6",
     "react": "19.2.6",

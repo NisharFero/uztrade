@@ -27,6 +27,9 @@ export type WorkItemRecord = {
   request: Record<string, unknown>;
   result: Record<string, unknown>;
   completedBy?: string | null;
+  /** When it was opened and closed (ISO) - what the case's measured timing is built from. */
+  createdAt?: string;
+  completedAt?: string | null;
 };
 
 export type AgentRunRecord = {
@@ -59,6 +62,8 @@ export type AuditEventRecord = {
   actorType: "system" | "agent" | "user" | "entity";
   actorId?: string | null;
   data: Record<string, unknown>;
+  /** When it happened (ISO). The repository sets it; timing reads it. */
+  at?: string;
 };
 
 export type WorkflowProjection = {
@@ -120,8 +125,9 @@ export function createMemoryWorkflowRepository(): WorkflowRepository {
       const projection = find(item.runId);
       const existing = projection.workItems.find((candidate) => candidate.nodeId === item.nodeId);
       if (existing) return clone(existing);
-      projection.workItems.push(clone(item));
-      return clone(item);
+      const opened = { ...clone(item), createdAt: item.createdAt ?? new Date().toISOString() };
+      projection.workItems.push(opened);
+      return clone(opened);
     },
     async completeWorkItem(id, result, completedBy) {
       for (const projection of projections.values()) {
@@ -131,6 +137,7 @@ export function createMemoryWorkflowRepository(): WorkflowRepository {
         item.state = "completed";
         item.result = clone(result);
         item.completedBy = completedBy;
+        item.completedAt = new Date().toISOString();
         return clone(item);
       }
       throw new Error(`Work item ${id} not found`);
@@ -145,7 +152,9 @@ export function createMemoryWorkflowRepository(): WorkflowRepository {
     },
     async addAudit(event) {
       const projection = find(event.runId);
-      if (!projection.auditEvents.some((candidate) => candidate.id === event.id)) projection.auditEvents.push(clone(event));
+      if (!projection.auditEvents.some((candidate) => candidate.id === event.id)) {
+        projection.auditEvents.push({ ...clone(event), at: event.at ?? new Date().toISOString() });
+      }
     },
   };
 }
@@ -154,7 +163,8 @@ export function transitionAllowed(from: WorkflowNodeState, to: WorkflowNodeState
   const allowed: Record<WorkflowNodeState, WorkflowNodeState[]> = {
     waiting: ["ready", "skipped"],
     ready: ["running", "needs_input", "skipped"],
-    running: ["completed", "failed"],
+    // A step under review at an entity pauses if the entity sends it back.
+    running: ["completed", "failed", "needs_input"],
     // An agent step paused for trader inputs goes back to ready once they exist.
     needs_input: ["completed", "skipped", "ready"],
     failed: ["ready", "skipped"],

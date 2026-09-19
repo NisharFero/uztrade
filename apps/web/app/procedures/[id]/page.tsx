@@ -4,7 +4,9 @@ import CaseBoard from "../../../components/workflow/case-board";
 import CompliancePanel from "../../../components/compliance/compliance-panel";
 import Dag from "../../../components/workflow/dag";
 import { Icon } from "../../../components/icons";
-import { PROCEDURES } from "../../../modules/procedures/data/procedures.generated";
+import { demoFor } from "../../../modules/demo/demo";
+import { CATALOGUE } from "../../../modules/procedures/data/procedures.generated";
+import { getProcedure } from "../../../modules/procedures/registry";
 import type { ShipmentFacts } from "../../../modules/workflow/domain";
 import { latestCaseFor } from "../../../modules/cases/current-case";
 import { getCase } from "../../../modules/cases/store";
@@ -15,7 +17,7 @@ export const dynamic = "force-dynamic";
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const p = PROCEDURES[id];
+  const p = CATALOGUE[id];
   return { title: p ? `${p.title} · UzTrade` : "Procedure · UzTrade" };
 }
 
@@ -23,7 +25,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
  *  DAG, documents, risk and ledger. The current step lives in the chat. */
 export default async function ProcedurePage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const procedure = PROCEDURES[id];
+  const procedure = await getProcedure(id);
   if (!procedure) notFound();
 
   let live: Awaited<ReturnType<typeof getCase>> = null;
@@ -64,6 +66,13 @@ export default async function ProcedurePage({ params }: { params: Promise<{ id: 
             )}
           </p>
         ) : null}
+        {demoFor(procedure.id) ? (
+          <p className="page-lede">
+            <Link className="crumb" href={`/demo/${procedure.id}`}>
+              Demo pack — invented documents and values for every step →
+            </Link>
+          </p>
+        ) : null}
       </header>
 
       {live ? (
@@ -71,6 +80,7 @@ export default async function ProcedurePage({ params }: { params: Promise<{ id: 
           key={`${live.id}:${workflow?.progress.completed ?? 0}`}
           caseId={live.id}
           procedureId={live.procedureId}
+          publishedProcedure={procedure}
           initialProgress={progress}
           initialDocumentState={parseDocumentState(live.documentState)}
           initialWorkflow={workflow}

@@ -1,9 +1,9 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import CaseBoard from "../../../components/workflow/case-board";
-import StepAssistant from "../../../components/chat/step-assistant";
 import RememberCase from "../../../components/cases/remember-case";
-import { PROCEDURES } from "../../../modules/procedures/data/procedures.generated";
+import CaseUpfront from "../../../components/cases/case-upfront";
+import { getProcedure } from "../../../modules/procedures/registry";
 import { getCase } from "../../../modules/cases/store";
 import { parseDocumentState } from "../../../modules/documents/checklist";
 import type { ShipmentFacts } from "../../../modules/workflow/domain";
@@ -21,7 +21,7 @@ export default async function CasePage({ params }: { params: Promise<{ id: strin
   const found = await getCase(id);
   if (!found) notFound();
 
-  const procedure = PROCEDURES[found.procedureId];
+  const procedure = await getProcedure(found.procedureId);
   if (!procedure) notFound();
 
   const progress = Object.fromEntries(
@@ -40,26 +40,33 @@ export default async function CasePage({ params }: { params: Promise<{ id: strin
           <Link href="/cases" className="crumb">
             Cases &amp; Shipments
           </Link>{" "}
-          · {found.id}
-        </p>
-        <h1>{found.title}</h1>
-        <p className="page-lede">
-          Opened from: &ldquo;{found.query}&rdquo; — matched to procedure{" "}
+          · procedure{" "}
           <Link className="crumb" href={`/procedures/${found.procedureId}`}>
             {found.procedureId}
+          </Link>
+        </p>
+        <h1>{found.id}</h1>
+        <p className="page-lede">
+          <Link className="crumb" href="/">
+            Steps on the dashboard
           </Link>{" "}
-          by {found.matchedBy === "llm" ? "the classifier" : "keyword rules"}.
+          ·{" "}
+          <Link className="crumb" href={`/ledger?case=${encodeURIComponent(found.id)}`}>
+            Ledger &amp; entity API records
+          </Link>
         </p>
       </header>
 
       <RememberCase caseId={found.id} />
-      <StepAssistant caseId={found.id} />
+
+      <CaseUpfront caseId={found.id} procedureId={found.procedureId} />
 
       {/* Remounts after each step so the workflow below reflects it. */}
       <CaseBoard
         key={`${found.id}:${workflow?.progress.completed ?? 0}:${found.documentState.length}`}
         caseId={found.id}
         procedureId={found.procedureId}
+        publishedProcedure={procedure}
         initialProgress={progress}
         initialDocumentState={parseDocumentState(found.documentState)}
         initialWorkflow={workflow}

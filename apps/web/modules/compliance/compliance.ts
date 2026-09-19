@@ -22,7 +22,7 @@ import type { Procedure, ProcedureStep } from "../procedures/data/procedures.gen
 import type { ShipmentFacts } from "../workflow/domain";
 import { commodityOf } from "../intake/taxonomy";
 import { stepNeeds } from "../procedures/requirements";
-import { countryName, planRoute, resolveRoute, type Route } from "../intake/shipment-plan";
+import { countryName, planRoute, resolveRoute, type Route, planningDirection } from "../intake/shipment-plan";
 
 export type RiskFlag = {
   label: string;
@@ -55,6 +55,8 @@ const HS_REFERENCE: Record<string, { code: string; heading: string }> = {
     code: "0702–0810",
     heading: "Fresh or chilled vegetables and fruit (heading depends on the specific item)",
   },
+  "fruit and vegetable juices": { code: "2009", heading: "Fruit or nut juices and vegetable juices, unfermented" },
+  "animal or vegetable fertilizers": { code: "3101", heading: "Animal or vegetable fertilisers, whether or not mixed together or chemically treated" },
 };
 
 export const CAPABILITY_GAPS: { label: string; reason: string }[] = [
@@ -81,6 +83,22 @@ export const CERTIFICATE_RULES: Record<string, { certificates: string[]; basis: 
   "fresh fruits and vegetables×export": {
     certificates: EXPORT_PLANT_STACK,
     basis: "Perishable plant product leaving Uzbekistan: domestic phytosanitary control, an export phytosanitary certificate and a certificate of origin — on a tight clock.",
+  },
+  "fruit and vegetable juices×export": {
+    certificates: ["Export customs declaration"],
+    basis: "Processed food leaving Uzbekistan by road: the published procedure is the export declaration and the border crossing — it asks for no plant-health or origin certificate.",
+  },
+  "animal or vegetable fertilizers×import": {
+    certificates: ["Quarantine permit", "Veterinary permit for import", "Quarantine inspection act", "Veterinary certificate Form-3", "Certificate of conformity", "Import customs declaration"],
+    basis: "Fertiliser of plant or animal origin entering Uzbekistan: quarantine and veterinary permits before arrival, quarantine inspection and a veterinary certificate on arrival, and a certificate of conformity before release.",
+  },
+  "any cargo×export": {
+    certificates: [],
+    basis: "Rail logistics only: dispatching the cargo needs railway contracts and forms, not certificates — those come with the goods' own customs procedure.",
+  },
+  "any cargo×import": {
+    certificates: [],
+    basis: "Rail logistics only: taking delivery needs railway and warehouse paperwork, not certificates — those come with the goods' own customs procedure.",
   },
   "tea×import": {
     certificates: ["Quarantine permit", "Quarantine inspection act", "Sanitary-epidemiological conclusion", "Import customs declaration"],
@@ -128,12 +146,12 @@ export function assessCompliance(procedure: Procedure, facts: Facts = {}, query 
   const hsHeading = specific && hit.term !== procedure.goods ? `${ref.heading} — ${hit.term}` : ref.heading;
 
   /* ---- route ---- */
-  const ends = resolveRoute(procedure.direction, { origin: facts.origin ?? null, destination: facts.destination ?? null }, query);
+  const ends = resolveRoute(planningDirection(procedure.direction), { origin: facts.origin ?? null, destination: facts.destination ?? null }, query);
   const partnerEnd = exporting ? ends.destination : ends.origin;
   const partner = partnerEnd && !partnerEnd.assumed && partnerEnd.place.country !== "UZ" ? partnerEnd.place.country : null;
   const route: Route | null =
-    partner && ends.origin && ends.destination && procedure.mode !== "road"
-      ? planRoute(procedure.mode === "air" ? "air" : "train", ends.origin, ends.destination, procedure.direction)
+    partner && ends.origin && ends.destination
+      ? planRoute(procedure.mode, ends.origin, ends.destination, procedure.direction)
       : null;
   const packaging = packagingIn(query);
 
@@ -204,7 +222,7 @@ export function assessCompliance(procedure: Procedure, facts: Facts = {}, query 
   /* ---- risk flags with evidence ---- */
   const flags: RiskFlag[] = [];
 
-  if (rule) {
+  if (rule?.certificates.length) {
     flags.push({
       label: exporting ? "Export certificate stack" : "Import permit stack",
       severity: "caution",
@@ -213,12 +231,15 @@ export function assessCompliance(procedure: Procedure, facts: Facts = {}, query 
     });
   }
 
-  const inspections = steps.filter((s) => /^undergo\b.*(phytosanitary|quarantine)/i.test(s.title));
+  const inspections = steps.filter((s) => /^undergo\b.*(phytosanitary|quarantine|veterinary)/i.test(s.title));
+  const veterinary = inspections.some((s) => /veterinary/i.test(s.title));
   if (inspections.length) {
     flags.push({
-      label: "Phytosanitary control required",
+      label: veterinary ? "Quarantine and veterinary control required" : "Phytosanitary control required",
       severity: "caution",
-      reason: "This HS chapter is subject to plant-quarantine inspection with the goods present.",
+      reason: veterinary
+        ? "Goods of plant or animal origin are inspected by plant quarantine and by the veterinary service with the goods present."
+        : "This HS chapter is subject to plant-quarantine inspection with the goods present.",
       evidence: inspections.map((s) => `${s.title} — step ${s.num} (goods present)`),
     });
   }
@@ -255,7 +276,9 @@ export function assessCompliance(procedure: Procedure, facts: Facts = {}, query 
     });
   }
 
-  if (!exporting) {
+  if (procedure.kind === "logistics") {
+    // Rail logistics files no declaration; duty belongs to the goods' own procedure.
+  } else if (!exporting) {
     flags.push({
       label: "Import duty and VAT apply",
       severity: "info",

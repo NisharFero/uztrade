@@ -16,7 +16,8 @@
 }
 
 .doc-panel,
-.cr-panel {
+.cr-panel,
+.tr-panel {
   display: grid;
   align-content: start;
   gap: 13px;
@@ -748,4 +749,280 @@
 .doc-spec em[data-source="specimen"] {
   border-color: var(--accent-line);
   color: var(--accent);
+}
+
+/* Ledger page: pick a case, then its ledger and entity API records. */
+.ledger-picker {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-block: 0 16px;
+}
+
+.ledger-picker select {
+  min-width: 0;
+  max-width: 100%;
+  padding: 7px 10px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-sm);
+  background: var(--surface);
+  color: var(--ink);
+  font: inherit;
+  font-size: 13px;
+}
+
+.ledger-page {
+  display: grid;
+  gap: 14px;
+}
+
+.ledger-page .ledger-list {
+  max-height: none;
+}
+
+.ledger-summary {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+
+.portal-list-rows {
+  list-style: none;
+  margin: 10px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 6px;
+}
+
+/* "Give it upfront": folded on a case, opens into the same needs form the
+   steps use, plus what cannot be given yet. */
+.upfront {
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  background: var(--surface);
+  padding: 0.7rem 1rem;
+  margin-block: 0 16px;
+}
+
+.upfront > summary {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  cursor: pointer;
+  list-style: none;
+}
+
+.upfront > summary::-webkit-details-marker {
+  display: none;
+}
+
+.upfront > summary::after {
+  content: "Open";
+  margin-left: auto;
+  color: var(--accent);
+  font-size: 11.5px;
+  font-weight: 550;
+}
+
+.upfront[open] > summary::after {
+  content: "Close";
+}
+
+.upfront[open] > summary {
+  margin-bottom: 10px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--line);
+}
+
+.upfront-later {
+  margin-top: 14px;
+  border-top: 1px dashed var(--line);
+  padding-top: 10px;
+}
+
+.upfront-later ul {
+  list-style: none;
+  margin: 8px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 6px;
+}
+
+.upfront-later li {
+  display: grid;
+  gap: 2px;
+  font-size: 12.5px;
+}
+
+.upfront-later small {
+  color: var(--ink-2);
+}
+
+/* Transit & Capacity: the movement picture for one case. */
+.tr-status {
+  display: grid;
+  gap: 8px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  background: var(--surface-2);
+  padding: 10px 12px;
+}
+
+.tr-status strong {
+  display: block;
+  font-size: 17px;
+  margin-top: 2px;
+}
+
+.tr-status small,
+.tr-grid small,
+.tr-legs small,
+.tr-refs small,
+.tr-exceptions small {
+  display: block;
+  color: var(--ink-2);
+  font-size: 12px;
+}
+
+.tr-next {
+  margin: 0;
+  padding-top: 8px;
+  border-top: 1px dashed var(--line);
+  font-size: 13px;
+}
+
+.tr-track {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.tr-track li {
+  display: grid;
+  justify-items: center;
+  gap: 3px;
+  flex: 1 1 60px;
+  min-width: 56px;
+}
+
+.tr-track li span {
+  width: 100%;
+  height: 5px;
+  border-radius: 3px;
+  background: var(--line);
+}
+
+.tr-track li[data-state="done"] span {
+  background: var(--lane-agent, #4338ca);
+}
+
+.tr-track li[data-state="now"] span {
+  background: var(--accent);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 25%, transparent);
+}
+
+.tr-track li small {
+  font-size: 9.5px;
+  line-height: 1.15;
+  text-align: center;
+  color: var(--faint);
+}
+
+.tr-track li[data-state="now"] small {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.tr-grid {
+  display: grid;
+  gap: 10px;
+}
+
+.tr-grid > div {
+  border-left: 3px solid var(--line);
+  padding-left: 10px;
+}
+
+.tr-grid strong {
+  display: block;
+  font-size: 14.5px;
+}
+
+.tr-legs ol,
+.tr-refs ul,
+.tr-exceptions ul {
+  list-style: none;
+  margin: 8px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 6px;
+}
+
+.tr-legs li {
+  display: grid;
+  gap: 1px;
+  border-left: 3px solid var(--line);
+  padding: 2px 0 2px 10px;
+  font-size: 13px;
+}
+
+.tr-legs li[data-state="done"] {
+  border-left-color: var(--ok, #15803d);
+}
+
+.tr-legs li[data-state="active"] {
+  border-left-color: var(--accent);
+}
+
+.tr-refs li {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 2px 8px;
+  align-items: baseline;
+  font-size: 12.5px;
+}
+
+.tr-refs code {
+  font-size: 12px;
+  color: var(--ink);
+}
+
+.tr-refs small {
+  grid-column: 1 / -1;
+}
+
+.tr-exceptions li {
+  display: grid;
+  gap: 2px;
+  border-left: 3px solid var(--line);
+  padding: 3px 0 3px 10px;
+  font-size: 13px;
+}
+
+.tr-exceptions li[data-severity="high"] {
+  border-left-color: var(--danger, #b42318);
+}
+
+.tr-exceptions li[data-severity="caution"] {
+  border-left-color: var(--warn, #b54708);
+}
+
+/* The transit panel runs the full width under the two agent columns, so its
+   own sections sit side by side. */
+#case-transit {
+  margin-top: 16px;
+}
+
+.tr-panel .tr-grid {
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+}
+
+.tr-columns {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  align-items: start;
+  gap: 16px;
 }
