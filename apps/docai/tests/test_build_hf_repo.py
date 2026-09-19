@@ -22,3 +22,14 @@ def test_build_tracks_model_weights_with_lfs(tmp_path):
     attributes = (tmp_path / ".gitattributes").read_text(encoding="utf-8")
     assert "*.pth filter=lfs" in attributes
     assert "*.safetensors filter=lfs" in attributes
+
+
+def test_build_never_ships_compiled_bytecode(tmp_path):
+    stale = tmp_path / "docai" / "__pycache__"
+    stale.mkdir(parents=True)
+    (stale / "pipeline.cpython-311.pyc").write_bytes(b"stale bytecode")
+
+    build_hf_repo.remove_caches(tmp_path)
+
+    assert not stale.exists()
+    assert list(tmp_path.rglob("*.pyc")) == []

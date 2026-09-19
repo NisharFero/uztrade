@@ -46,6 +46,12 @@ def copy_code(out: Path) -> None:
     print("  .gitattributes")
 
 
+def remove_caches(out: Path) -> None:
+    """Importing the handler to test it leaves bytecode behind; it must not ship."""
+    for cache in out.rglob("__pycache__"):
+        shutil.rmtree(cache, ignore_errors=True)
+
+
 def download_weights(out: Path) -> None:
     """Fills models/ so the endpoint never downloads at boot. Skips what it has."""
     import easyocr
@@ -99,6 +105,7 @@ def main() -> None:
         print("skipping weights (--no-weights); the endpoint downloads them at boot")
     else:
         download_weights(out)
+    remove_caches(out)
     print("done")
 
 
