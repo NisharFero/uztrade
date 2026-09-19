@@ -56,9 +56,9 @@ The web app calls `DOCAI_URL` (default `http://127.0.0.1:8765`).
 
 Create a Railway service from this repository with root directory `apps/docai`.
 The Dockerfile installs only the HTTP dependencies. Set `DOCAI_PROVIDER=hf_endpoint`,
-`DOCAI_WARM=0`, `HF_ENDPOINT_URL` and `HF_API_KEY` in Railway. The hosted endpoint
-must implement the same multipart `POST /parse` contract as this service and return
-the same JSON fields (`fields`, `pages`, `readability`, `text`, `models`, `timings`).
+`DOCAI_WARM=0`, `HF_ENDPOINT_URL` and `HF_API_KEY` in Railway. The Hugging Face
+custom handler receives a base64 document in its JSON `inputs` object and returns
+the same fields (`fields`, `pages`, `readability`, `text`, `models`, `timings`).
 Railway supplies `PORT`; `railway.toml` binds Uvicorn to `0.0.0.0:$PORT` and checks
 `/health`. Point the web app's `DOCAI_URL` at the generated Railway public domain.
 

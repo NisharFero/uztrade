@@ -2,9 +2,9 @@
 
 from __future__ import annotations
 
+import base64
 import json
 import os
-import uuid
 from urllib import request
 
 from . import pipeline
@@ -26,24 +26,20 @@ def parse_document(data: bytes, filename: str | None, content_type: str | None, 
     if not endpoint or not token:
         raise RuntimeError("HF_ENDPOINT_URL and HF_API_KEY are required for hf_endpoint")
 
-    boundary = uuid.uuid4().hex
-    file_header = (
-        f"--{boundary}\r\nContent-Disposition: form-data; name=\"file\"; "
-        f"filename=\"{(filename or 'document').replace(chr(34), '')}\"\r\n"
-        f"Content-Type: {content_type or 'application/octet-stream'}\r\n\r\n"
-    ).encode()
-    spec_part = (
-        f"\r\n--{boundary}\r\nContent-Disposition: form-data; name=\"spec\"\r\n\r\n"
-        + json.dumps(spec)
-        + f"\r\n--{boundary}--\r\n"
-    ).encode()
-    target = endpoint if endpoint.endswith("/parse") else f"{endpoint}/parse"
+    payload = json.dumps({
+        "inputs": {
+            "file_base64": base64.b64encode(data).decode("ascii"),
+            "filename": filename or "document",
+            "content_type": content_type or "application/octet-stream",
+            "spec": spec,
+        }
+    }).encode()
     outgoing = request.Request(
-        target,
-        data=file_header + data + spec_part,
+        endpoint,
+        data=payload,
         headers={
             "Authorization": f"Bearer {token}",
-            "Content-Type": f"multipart/form-data; boundary={boundary}",
+            "Content-Type": "application/json",
         },
         method="POST",
     )

@@ -13,15 +13,17 @@ def test_local_provider_keeps_pipeline_contract():
         local.assert_called_once()
 
 
-def test_remote_provider_sends_multipart_and_returns_contract():
+def test_remote_provider_sends_hugging_face_json_and_returns_contract():
     expected = {"fields": {}, "pages": [], "readability": {"readable": False}}
 
     def respond(outgoing, timeout):
-        assert outgoing.full_url == "https://example.test/parse"
+        assert outgoing.full_url == "https://example.test"
         assert outgoing.get_header("Authorization") == "Bearer test-token"
-        assert b'name="spec"' in outgoing.data
-        assert b"scan.png" in outgoing.data
-        assert b"image bytes" in outgoing.data
+        payload = json.loads(outgoing.data)
+        assert payload["inputs"]["filename"] == "scan.png"
+        assert payload["inputs"]["content_type"] == "image/png"
+        assert payload["inputs"]["spec"] == {"fields": []}
+        assert payload["inputs"]["file_base64"] == "aW1hZ2UgYnl0ZXM="
         assert timeout == 180
         return io.BytesIO(json.dumps(expected).encode())
 
