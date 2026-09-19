@@ -52,13 +52,46 @@ curl http://127.0.0.1:8765/health
 
 The web app calls `DOCAI_URL` (default `http://127.0.0.1:8765`).
 
-## Railway deployment
+## Hosted deployment
+
+Inference runs on a Hugging Face Inference Endpoint; Railway runs only a thin
+FastAPI front that forwards to it. Nothing heavy is installed on Railway.
+
+### 1. Build the Hugging Face model repository
+
+```sh
+.venv/Scripts/python -m scripts.build_hf_repo --out ../../.hf-repo
+```
+
+This copies `hf_endpoint/handler.py`, `hf_endpoint/requirements.txt`, the model
+card and `docai/pipeline.py` into the output directory, then downloads the
+EasyOCR and LayoutLM weights into `models/`. Vendoring the weights is what keeps
+the endpoint's boot offline and fast; `--no-weights` skips them and lets the
+endpoint download both models on every replica instead.
+
+The handler reads its cache and QA model locations before importing the
+pipeline, so it writes to the system temp directory rather than the read-only
+model repository.
+
+### 2. Push it to the private model repository
+
+```sh
+.venv/Scripts/hf auth login          # paste the write token; never commit it
+.venv/Scripts/hf upload <user>/<model-repo> ../../.hf-repo . --private
+```
+
+`hf upload` handles the large files itself, so `git lfs` is only needed if you
+push with git instead; the generated `.gitattributes` covers that case.
+
+Hugging Face sets the endpoint's task to Custom once it detects `handler.py`.
+
+### 3. Railway
 
 Create a Railway service from this repository with root directory `apps/docai`.
 The Dockerfile installs only the HTTP dependencies. Set `DOCAI_PROVIDER=hf_endpoint`,
-`DOCAI_WARM=0`, `HF_ENDPOINT_URL` and `HF_API_KEY` in Railway. The hosted endpoint
-must implement the same multipart `POST /parse` contract as this service and return
-the same JSON fields (`fields`, `pages`, `readability`, `text`, `models`, `timings`).
+`DOCAI_WARM=0`, `HF_ENDPOINT_URL` and `HF_API_KEY` in Railway. The Hugging Face
+custom handler receives a base64 document in its JSON `inputs` object and returns
+the same fields (`fields`, `pages`, `readability`, `text`, `models`, `timings`).
 Railway supplies `PORT`; `railway.toml` binds Uvicorn to `0.0.0.0:$PORT` and checks
 `/health`. Point the web app's `DOCAI_URL` at the generated Railway public domain.
 

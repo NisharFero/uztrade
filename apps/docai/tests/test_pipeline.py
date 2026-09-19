@@ -78,3 +78,14 @@ if __name__ == "__main__":
                 failures += 1
                 print("FAIL", name, "-", repr(error))
     raise SystemExit(1 if failures else 0)
+
+
+def test_reports_name_the_qa_model_not_the_directory_it_loads_from(monkeypatch):
+    # A vendored snapshot loads by path; the hosted response must still match local.
+    monkeypatch.setattr(pipeline, "QA_MODEL_NAME", "impira/layoutlm-document-qa")
+    monkeypatch.setattr(pipeline, "QA_MODEL", "/repository/models/qa")
+    assert pipeline.health_info()["qa"]["model"] == "impira/layoutlm-document-qa"
+
+
+def test_the_reported_name_defaults_to_the_model_that_is_loaded():
+    assert pipeline.QA_MODEL_NAME == pipeline.QA_MODEL
