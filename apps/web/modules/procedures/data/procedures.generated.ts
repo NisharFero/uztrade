@@ -1,6 +1,11 @@
 /* GENERATED FILE - do not edit by hand.
- * Source: scripts/data/dag-data.json + scripts/data/inputs-data.json (parsed from Docs/Procedures/*.docx)
- * Regenerate: node scripts/data/build-procedures.mjs
+ * Source: Docs/Procedures/*.docx -> scripts/data/extract-all.mjs -> scripts/data/procedures/*.json
+ * Regenerate: node scripts/data/extract-all.mjs && node scripts/data/build-procedures.mjs
+ *
+ * This module holds the types and the catalogue of all 243 published
+ * procedures. A procedure's workflow - its blocks, steps and step inputs - is
+ * 3.6 MB across the corpus, so it is served from public/data/procedures/<id>.json
+ * and loaded on demand by modules/procedures/registry.ts.
  */
 
 export type Channel =
@@ -48,1222 +53,1579 @@ export type EntityRef = {
   contact: string;
 };
 
+export type Direction = "import" | "export" | "transit";
+
+/** "any" is a service procedure: obtaining one document or registering one
+ *  contract, which no single transport mode belongs to. */
+export type TransportMode = "train" | "air" | "road" | "any";
+
+/** "customs": clearing named goods across the border. "logistics": arranging
+ *  or taking delivery of any cargo, and transit. "service": obtaining one
+ *  document or registering one contract. */
+export type ProcedureKind = "customs" | "logistics" | "service";
+
+/** What the catalogue knows about every procedure without loading its workflow. */
+export type ProcedureSummary = {
+  id: string;
+  title: string;
+  direction: Direction;
+  goods: string;
+  mode: TransportMode;
+  kind: ProcedureKind;
+  /** [min, max] hours end to end, as published. */
+  timeframe: [number, number];
+  blocksCount: number;
+  stepsCount: number;
+  onlineCount: number;
+  entities: string[];
+};
+
 export type Procedure = {
   id: string;
   title: string;
-  direction: "import" | "export";
+  direction: Direction;
   goods: string;
-  mode: "train" | "air" | "road";
-  /** [min, max] hours end to end, as published. */
+  mode: TransportMode;
+  kind: ProcedureKind;
   timeframe: [number, number];
   stepsCount: number;
   blocks: ProcedureBlock[];
   entityDirectory: EntityRef[];
 };
 
-/** The only procedures this application supports. */
-export const PROCEDURE_IDS = ["306","325","477","540","868"] as const;
+/** Every published procedure in Docs/Procedures, by id. */
+export const PROCEDURE_IDS = ["32","33","46","49","54","55","57","105","109","125","126","127","128","130","131","135","137","138","140","143","145","158","161","165","169","175","176","178","184","191","198","202","208","209","210","217","219","220","223","224","229","230","233","244","251","252","254","260","264","271","273","280","281","284","286","288","290","292","295","303","304","306","318","320","321","325","332","333","340","344","345","347","348","352","353","354","359","360","385","400","402","412","436","440","451","458","459","466","470","476","477","482","483","487","488","496","497","499","500","507","512","514","518","519","522","537","540","541","543","548","550","555","556","557","561","562","563","570","572","576","584","585","587","591","593","596","598","600","611","626","660","668","672","678","680","685","687","707","710","714","715","716","718","720","724","725","735","738","739","740","741","742","744","746","748","750","752","753","754","755","757","758","760","761","762","763","764","765","766","767","769","770","771","772","774","775","776","777","779","780","782","783","784","785","787","788","789","793","795","796","801","804","805","806","819","824","827","828","835","838","839","861","865","866","868","877","884","888","891","911","924","925","934","935","948","949","953","983","984","993","994","1000","1001","1002","1007","1012","1046","1047","1051","1052","1070","1092","1096","1101","1104","1105","1108","1113","1116","1122","1141","1155","1179"] as const;
 
 export type ProcedureId = (typeof PROCEDURE_IDS)[number];
 
-export const PROCEDURES: Record<string, Procedure> = {
+/** Title, goods, mode and counts for every procedure - what listing, search
+ *  and intake matching read. The workflow itself comes from the registry. */
+export const CATALOGUE: Record<string, ProcedureSummary> = {
+ "32": {
+  "id": "32",
+  "title": "Export of fresh fruits and vegetables by road",
+  "direction": "export",
+  "goods": "fresh fruits and vegetables",
+  "mode": "road",
+  "kind": "customs",
+  "timeframe": [
+   29,
+   89
+  ],
+  "blocksCount": 7,
+  "stepsCount": 42,
+  "onlineCount": 17,
+  "entities": [
+   "Single portal of interactive state services",
+   "Agency of plant quarantine and protection Personal cabinet (Oferta)",
+   "Bank",
+   "Assalom Agro",
+   "Warehouse / Location of goods",
+   "Territorial Department of plant quarantine and protection",
+   "\"Uzbekexpertiza\" JSC",
+   "\"Uzbekexpertiza\" JSC service portal",
+   "One-stop service system Single window",
+   "Border checkpoint for plant quarantine",
+   "Transportation company",
+   "Personal cabinet of participant of foreign economic activity",
+   "Customs post of foreign trade activity",
+   "State border crossing point"
+  ]
+ },
+ "33": {
+  "id": "33",
+  "title": "Export of fruit and vegetable juices by road",
+  "direction": "export",
+  "goods": "fruit and vegetable juices",
+  "mode": "road",
+  "kind": "customs",
+  "timeframe": [
+   15,
+   52
+  ],
+  "blocksCount": 5,
+  "stepsCount": 27,
+  "onlineCount": 8,
+  "entities": [
+   "Single portal of interactive state services",
+   "\"Uzbekexpertiza\" JSC",
+   "Bank",
+   "\"Uzbekexpertiza\" JSC service portal",
+   "One-stop service system Single window",
+   "Warehouse / Location of goods",
+   "Transportation company",
+   "Personal cabinet of participant of foreign economic activity",
+   "Customs post of foreign trade activity",
+   "State border crossing point"
+  ]
+ },
+ "46": {
+  "id": "46",
+  "title": "Import of flour by road",
+  "direction": "import",
+  "goods": "flour",
+  "mode": "road",
+  "kind": "customs",
+  "timeframe": [
+   39,
+   169
+  ],
+  "blocksCount": 10,
+  "stepsCount": 50,
+  "onlineCount": 27,
+  "entities": [
+   "Agency of plant quarantine and protection Personal cabinet (Oferta)",
+   "Bank",
+   "One-stop service system Single window",
+   "Single portal of interactive state services",
+   "Customs warehouse",
+   "Automated information system \"E-tranzit\"",
+   "State border crossing point",
+   "Customs post of foreign trade activity",
+   "Personal cabinet of participant of foreign economic activity",
+   "Territorial Department of plant quarantine and protection",
+   "Regional center for sanitary-epidemiological service",
+   "Sanitary-epidemiological welfare and public health committee of the Republic of Uzbekistan",
+   "Online banking system"
+  ]
+ },
+ "49": {
+  "id": "49",
+  "title": "Import of pharmaceutical products by road",
+  "direction": "import",
+  "goods": "pharmaceutical products",
+  "mode": "road",
+  "kind": "customs",
+  "timeframe": [
+   82,
+   275
+  ],
+  "blocksCount": 9,
+  "stepsCount": 37,
+  "onlineCount": 18,
+  "entities": [
+   "State center for expertise and standardization of medicines official web-site",
+   "Single portal of interactive state services",
+   "Customs warehouse",
+   "Bank",
+   "Automated information system \"E-tranzit\"",
+   "State border crossing point",
+   "Customs post of foreign trade activity",
+   "Personal cabinet of participant of foreign economic activity",
+   "One-stop service system Single window",
+   "State center for expertise and standardization of medicines, medical devices and medical equipment",
+   "Electronic document management systems",
+   "Online banking system"
+  ]
+ },
+ "54": {
+  "id": "54",
+  "title": "Import of mineral fertilizers by road",
+  "direction": "import",
+  "goods": "mineral fertilizers",
+  "mode": "road",
+  "kind": "customs",
+  "timeframe": [
+   27,
+   183
+  ],
+  "blocksCount": 8,
+  "stepsCount": 35,
+  "onlineCount": 15,
+  "entities": [
+   "Single portal of interactive state services",
+   "Customs warehouse",
+   "Bank",
+   "Automated information system \"E-tranzit\"",
+   "State border crossing point",
+   "Customs post of foreign trade activity",
+   "Personal cabinet of participant of foreign economic activity",
+   "One-stop service system Single window",
+   "Certification body of fertilizers, pesticides and chemical protection of plants",
+   "Online banking system"
+  ]
+ },
+ "55": {
+  "id": "55",
+  "title": "Import of medical equipment by road",
+  "direction": "import",
+  "goods": "medical equipment",
+  "mode": "road",
+  "kind": "customs",
+  "timeframe": [
+   82,
+   275
+  ],
+  "blocksCount": 9,
+  "stepsCount": 37,
+  "onlineCount": 18,
+  "entities": [
+   "State center for expertise and standardization of medicines official web-site",
+   "Single portal of interactive state services",
+   "Customs warehouse",
+   "Bank",
+   "Automated information system \"E-tranzit\"",
+   "State border crossing point",
+   "Customs post of foreign trade activity",
+   "Personal cabinet of participant of foreign economic activity",
+   "One-stop service system Single window",
+   "State center for expertise and standardization of medicines, medical devices and medical equipment",
+   "Electronic document management systems",
+   "Online banking system"
+  ]
+ },
+ "57": {
+  "id": "57",
+  "title": "Import of animal or vegetable fertilizers by road",
+  "direction": "import",
+  "goods": "animal or vegetable fertilizers",
+  "mode": "road",
+  "kind": "customs",
+  "timeframe": [
+   45,
+   517
+  ],
+  "blocksCount": 12,
+  "stepsCount": 58,
+  "onlineCount": 33,
+  "entities": [
+   "Agency of plant quarantine and protection Personal cabinet (Oferta)",
+   "Bank",
+   "One-stop service system Single window",
+   "Single portal of interactive state services",
+   "Customs warehouse",
+   "Automated information system \"E-tranzit\"",
+   "State border crossing point",
+   "Customs post of foreign trade activity",
+   "Personal cabinet of participant of foreign economic activity",
+   "Territorial Department of plant quarantine and protection",
+   "Warehouse / Location of goods",
+   "Certification body of fertilizers, pesticides and chemical protection of plants",
+   "Online banking system"
+  ]
+ },
+ "105": {
+  "id": "105",
+  "title": "Import of confectionery by road",
+  "direction": "import",
+  "goods": "confectionery",
+  "mode": "road",
+  "kind": "customs",
+  "timeframe": [
+   21,
+   83
+  ],
+  "blocksCount": 8,
+  "stepsCount": 37,
+  "onlineCount": 17,
+  "entities": [
+   "Single portal of interactive state services",
+   "Customs warehouse",
+   "Bank",
+   "Automated information system \"E-tranzit\"",
+   "State border crossing point",
+   "Customs post of foreign trade activity",
+   "Personal cabinet of participant of foreign economic activity",
+   "One-stop service system Single window",
+   "Regional center for sanitary-epidemiological service",
+   "Sanitary-epidemiological welfare and public health committee of the Republic of Uzbekistan",
+   "Online banking system"
+  ]
+ },
+ "109": {
+  "id": "109",
+  "title": "Import of dairy products by road",
+  "direction": "import",
+  "goods": "dairy products",
+  "mode": "road",
+  "kind": "customs",
+  "timeframe": [
+   63,
+   371
+  ],
+  "blocksCount": 10,
+  "stepsCount": 47,
+  "onlineCount": 25,
+  "entities": [
+   "One-stop service system Single window",
+   "Bank",
+   "Single portal of interactive state services",
+   "Customs warehouse",
+   "Automated information system \"E-tranzit\"",
+   "State border crossing point",
+   "Customs post of foreign trade activity",
+   "Personal cabinet of participant of foreign economic activity",
+   "Regional center for sanitary-epidemiological service",
+   "Sanitary-epidemiological welfare and public health committee of the Republic of Uzbekistan",
+   "Warehouse / Location of goods",
+   "Online banking system"
+  ]
+ },
+ "125": {
+  "id": "125",
+  "title": "Export of confectionery by road",
+  "direction": "export",
+  "goods": "confectionery",
+  "mode": "road",
+  "kind": "customs",
+  "timeframe": [
+   15,
+   52
+  ],
+  "blocksCount": 5,
+  "stepsCount": 27,
+  "onlineCount": 8,
+  "entities": [
+   "Single portal of interactive state services",
+   "\"Uzbekexpertiza\" JSC",
+   "Bank",
+   "\"Uzbekexpertiza\" JSC service portal",
+   "One-stop service system Single window",
+   "Warehouse / Location of goods",
+   "Transportation company",
+   "Personal cabinet of participant of foreign economic activity",
+   "Customs post of foreign trade activity",
+   "State border crossing point"
+  ]
+ },
+ "126": {
+  "id": "126",
+  "title": "Contract customs broker",
+  "direction": "export",
+  "goods": "any cargo",
+  "mode": "any",
+  "kind": "service",
+  "timeframe": [
+   0,
+   0
+  ],
+  "blocksCount": 1,
+  "stepsCount": 1,
+  "onlineCount": 0,
+  "entities": [
+   "Customs broker"
+  ]
+ },
+ "127": {
+  "id": "127",
+  "title": "Registration of export contract",
+  "direction": "export",
+  "goods": "any cargo",
+  "mode": "any",
+  "kind": "service",
+  "timeframe": [
+   0,
+   0
+  ],
+  "blocksCount": 1,
+  "stepsCount": 1,
+  "onlineCount": 1,
+  "entities": [
+   "Single portal of interactive state services"
+  ]
+ },
+ "128": {
+  "id": "128",
+  "title": "Obtain insurance policy",
+  "direction": "export",
+  "goods": "any cargo",
+  "mode": "any",
+  "kind": "service",
+  "timeframe": [
+   8,
+   19
+  ],
+  "blocksCount": 1,
+  "stepsCount": 4,
+  "onlineCount": 0,
+  "entities": [
+   "Insurance company"
+  ]
+ },
+ "130": {
+  "id": "130",
+  "title": "Arrange cargo transportation by road",
+  "direction": "export",
+  "goods": "any cargo",
+  "mode": "road",
+  "kind": "logistics",
+  "timeframe": [
+   11,
+   30
+  ],
+  "blocksCount": 1,
+  "stepsCount": 5,
+  "onlineCount": 0,
+  "entities": [
+   "Transportation company",
+   "Warehouse / Location of goods"
+  ]
+ },
+ "131": {
+  "id": "131",
+  "title": "Clearance of confectionery by road",
+  "direction": "import",
+  "goods": "confectionery",
+  "mode": "road",
+  "kind": "customs",
+  "timeframe": [
+   2,
+   12
+  ],
+  "blocksCount": 2,
+  "stepsCount": 13,
+  "onlineCount": 4,
+  "entities": [
+   "Personal cabinet of participant of foreign economic activity",
+   "Bank",
+   "Customs post of foreign trade activity",
+   "State border crossing point"
+  ]
+ },
+ "135": {
+  "id": "135",
+  "title": "Clearance of confectionery by road",
+  "direction": "import",
+  "goods": "confectionery",
+  "mode": "road",
+  "kind": "customs",
+  "timeframe": [
+   6,
+   32
+  ],
+  "blocksCount": 5,
+  "stepsCount": 27,
+  "onlineCount": 10,
+  "entities": [
+   "Automated information system \"E-tranzit\"",
+   "State border crossing point",
+   "Customs warehouse",
+   "Customs post of foreign trade activity",
+   "Personal cabinet of participant of foreign economic activity",
+   "Online banking system",
+   "Bank"
+  ]
+ },
+ "137": {
+  "id": "137",
+  "title": "Registration of import contract",
+  "direction": "import",
+  "goods": "any cargo",
+  "mode": "any",
+  "kind": "service",
+  "timeframe": [
+   0,
+   0
+  ],
+  "blocksCount": 1,
+  "stepsCount": 1,
+  "onlineCount": 1,
+  "entities": [
+   "Single portal of interactive state services"
+  ]
+ },
+ "138": {
+  "id": "138",
+  "title": "Contract customs warehouse",
+  "direction": "export",
+  "goods": "any cargo",
+  "mode": "any",
+  "kind": "service",
+  "timeframe": [
+   2,
+   3
+  ],
+  "blocksCount": 1,
+  "stepsCount": 2,
+  "onlineCount": 1,
+  "entities": [
+   "Customs warehouse",
+   "Bank"
+  ]
+ },
+ "140": {
+  "id": "140",
+  "title": "Obtain sanitary-epidemiological conclusion",
+  "direction": "export",
+  "goods": "any cargo",
+  "mode": "any",
+  "kind": "service",
+  "timeframe": [
+   13,
+   48
+  ],
+  "blocksCount": 1,
+  "stepsCount": 7,
+  "onlineCount": 5,
+  "entities": [
+   "One-stop service system Single window",
+   "Customs warehouse",
+   "Regional center for sanitary-epidemiological service",
+   "Sanitary-epidemiological welfare and public health committee of the Republic of Uzbekistan",
+   "Bank"
+  ]
+ },
+ "143": {
+  "id": "143",
+  "title": "Export of dairy products by road",
+  "direction": "export",
+  "goods": "dairy products",
+  "mode": "road",
+  "kind": "customs",
+  "timeframe": [
+   26,
+   84
+  ],
+  "blocksCount": 7,
+  "stepsCount": 35,
+  "onlineCount": 14,
+  "entities": [
+   "Single portal of interactive state services",
+   "One-stop service system Single window",
+   "\"Uzbekexpertiza\" JSC",
+   "Bank",
+   "\"Uzbekexpertiza\" JSC service portal",
+   "Warehouse / Location of goods",
+   "Transportation company",
+   "Personal cabinet of participant of foreign economic activity",
+   "Customs post of foreign trade activity",
+   "State border crossing point"
+  ]
+ },
+ "145": {
+  "id": "145",
+  "title": "Export of seed oil by road",
+  "direction": "export",
+  "goods": "seed oil",
+  "mode": "road",
+  "kind": "customs",
+  "timeframe": [
+   14,
+   52
+  ],
+  "blocksCount": 5,
+  "stepsCount": 27,
+  "onlineCount": 8,
+  "entities": [
+   "Single portal of interactive state services",
+   "\"Uzbekexpertiza\" JSC",
+   "Bank",
+   "\"Uzbekexpertiza\" JSC service portal",
+   "One-stop service system Single window",
+   "Warehouse / Location of goods",
+   "Transportation company",
+   "Personal cabinet of participant of foreign economic activity",
+   "Customs post of foreign trade activity",
+   "State border crossing point"
+  ]
+ },
+ "158": {
+  "id": "158",
+  "title": "Obtain phytosanitary certificate for package and pallets",
+  "direction": "export",
+  "goods": "any cargo",
+  "mode": "any",
+  "kind": "service",
+  "timeframe": [
+   5,
+   13
+  ],
+  "blocksCount": 1,
+  "stepsCount": 8,
+  "onlineCount": 5,
+  "entities": [
+   "Agency of plant quarantine and protection Personal cabinet (Oferta)",
+   "Bank",
+   "One-stop service system Single window",
+   "Border checkpoint for plant quarantine",
+   "Territorial Department of plant quarantine and protection"
+  ]
+ },
+ "161": {
+  "id": "161",
+  "title": "Clearance of fruit and vegetable juices by road",
+  "direction": "export",
+  "goods": "fruit and vegetable juices",
+  "mode": "road",
+  "kind": "customs",
+  "timeframe": [
+   2,
+   12
+  ],
+  "blocksCount": 2,
+  "stepsCount": 13,
+  "onlineCount": 4,
+  "entities": [
+   "Personal cabinet of participant of foreign economic activity",
+   "Bank",
+   "Customs post of foreign trade activity",
+   "State border crossing point"
+  ]
+ },
+ "165": {
+  "id": "165",
+  "title": "Export of meat and meat products by road",
+  "direction": "export",
+  "goods": "meat and meat products",
+  "mode": "road",
+  "kind": "customs",
+  "timeframe": [
+   25,
+   82
+  ],
+  "blocksCount": 7,
+  "stepsCount": 35,
+  "onlineCount": 14,
+  "entities": [
+   "Single portal of interactive state services",
+   "One-stop service system Single window",
+   "\"Uzbekexpertiza\" JSC",
+   "Bank",
+   "\"Uzbekexpertiza\" JSC service portal",
+   "Warehouse / Location of goods",
+   "Transportation company",
+   "Personal cabinet of participant of foreign economic activity",
+   "Customs post of foreign trade activity",
+   "State border crossing point"
+  ]
+ },
+ "169": {
+  "id": "169",
+  "title": "Clearance of meat and meat products by road",
+  "direction": "import",
+  "goods": "meat and meat products",
+  "mode": "road",
+  "kind": "customs",
+  "timeframe": [
+   2,
+   12
+  ],
+  "blocksCount": 2,
+  "stepsCount": 14,
+  "onlineCount": 4,
+  "entities": [
+   "Personal cabinet of participant of foreign economic activity",
+   "Bank",
+   "Customs post of foreign trade activity",
+   "State border crossing point"
+  ]
+ },
+ "175": {
+  "id": "175",
+  "title": "Clearance of dairy products by road",
+  "direction": "import",
+  "goods": "dairy products",
+  "mode": "road",
+  "kind": "customs",
+  "timeframe": [
+   4,
+   15
+  ],
+  "blocksCount": 2,
+  "stepsCount": 14,
+  "onlineCount": 4,
+  "entities": [
+   "Personal cabinet of participant of foreign economic activity",
+   "Bank",
+   "Customs post of foreign trade activity",
+   "State border crossing point"
+  ]
+ },
+ "176": {
+  "id": "176",
+  "title": "Clearance of seed oil by road",
+  "direction": "import",
+  "goods": "seed oil",
+  "mode": "road",
+  "kind": "customs",
+  "timeframe": [
+   1,
+   12
+  ],
+  "blocksCount": 2,
+  "stepsCount": 13,
+  "onlineCount": 4,
+  "entities": [
+   "Personal cabinet of participant of foreign economic activity",
+   "Bank",
+   "Customs post of foreign trade activity",
+   "State border crossing point"
+  ]
+ },
+ "178": {
+  "id": "178",
+  "title": "Obtain veterinary certificate for export",
+  "direction": "export",
+  "goods": "any cargo",
+  "mode": "any",
+  "kind": "service",
+  "timeframe": [
+   1,
+   5
+  ],
+  "blocksCount": 1,
+  "stepsCount": 5,
+  "onlineCount": 4,
+  "entities": [
+   "One-stop service system Single window",
+   "Bank",
+   "Warehouse / Location of goods"
+  ]
+ },
+ "184": {
+  "id": "184",
+  "title": "Import of meat and meat products by road",
+  "direction": "import",
+  "goods": "meat and meat products",
+  "mode": "road",
+  "kind": "customs",
+  "timeframe": [
+   63,
+   371
+  ],
+  "blocksCount": 10,
+  "stepsCount": 47,
+  "onlineCount": 25,
+  "entities": [
+   "One-stop service system Single window",
+   "Bank",
+   "Single portal of interactive state services",
+   "Customs warehouse",
+   "Automated information system \"E-tranzit\"",
+   "State border crossing point",
+   "Customs post of foreign trade activity",
+   "Personal cabinet of participant of foreign economic activity",
+   "Warehouse / Location of goods",
+   "Regional center for sanitary-epidemiological service",
+   "Sanitary-epidemiological welfare and public health committee of the Republic of Uzbekistan",
+   "Online banking system"
+  ]
+ },
+ "191": {
+  "id": "191",
+  "title": "Recover transportation costs for export of poultry meat and edible offal",
+  "direction": "export",
+  "goods": "any cargo",
+  "mode": "any",
+  "kind": "service",
+  "timeframe": [
+   48,
+   113
+  ],
+  "blocksCount": 1,
+  "stepsCount": 3,
+  "onlineCount": 1,
+  "entities": [
+   "The Export promotion agency",
+   "Online banking system"
+  ]
+ },
+ "198": {
+  "id": "198",
+  "title": "Obtain phytosanitary certificate",
+  "direction": "export",
+  "goods": "any cargo",
+  "mode": "any",
+  "kind": "service",
+  "timeframe": [
+   5,
+   13
+  ],
+  "blocksCount": 1,
+  "stepsCount": 5,
+  "onlineCount": 3,
+  "entities": [
+   "Agency of plant quarantine and protection Personal cabinet (Oferta)",
+   "Bank",
+   "One-stop service system Single window",
+   "Border checkpoint for plant quarantine"
+  ]
+ },
+ "202": {
+  "id": "202",
+  "title": "Obtain veterinary permit",
+  "direction": "export",
+  "goods": "any cargo",
+  "mode": "any",
+  "kind": "service",
+  "timeframe": [
+   8,
+   24
+  ],
+  "blocksCount": 1,
+  "stepsCount": 2,
+  "onlineCount": 2,
+  "entities": [
+   "One-stop service system Single window"
+  ]
+ },
+ "208": {
+  "id": "208",
+  "title": "Obtain veterinary permit",
+  "direction": "export",
+  "goods": "any cargo",
+  "mode": "any",
+  "kind": "service",
+  "timeframe": [
+   8,
+   243
+  ],
+  "blocksCount": 1,
+  "stepsCount": 4,
+  "onlineCount": 4,
+  "entities": [
+   "One-stop service system Single window",
+   "Bank"
+  ]
+ },
+ "209": {
+  "id": "209",
+  "title": "Obtain certificate of origin form CT-1",
+  "direction": "export",
+  "goods": "any cargo",
+  "mode": "any",
+  "kind": "service",
+  "timeframe": [
+   2,
+   10
+  ],
+  "blocksCount": 1,
+  "stepsCount": 8,
+  "onlineCount": 3,
+  "entities": [
+   "\"Uzbekexpertiza\" JSC",
+   "Bank",
+   "\"Uzbekexpertiza\" JSC service portal",
+   "One-stop service system Single window",
+   "Warehouse / Location of goods"
+  ]
+ },
+ "210": {
+  "id": "210",
+  "title": "Obtain certificate of origin form A",
+  "direction": "export",
+  "goods": "any cargo",
+  "mode": "any",
+  "kind": "service",
+  "timeframe": [
+   2,
+   10
+  ],
+  "blocksCount": 1,
+  "stepsCount": 8,
+  "onlineCount": 3,
+  "entities": [
+   "\"Uzbekexpertiza\" JSC",
+   "Bank",
+   "\"Uzbekexpertiza\" JSC service portal",
+   "One-stop service system Single window",
+   "Warehouse / Location of goods"
+  ]
+ },
+ "217": {
+  "id": "217",
+  "title": "Clearance of dairy products by road",
+  "direction": "import",
+  "goods": "dairy products",
+  "mode": "road",
+  "kind": "customs",
+  "timeframe": [
+   7,
+   33
+  ],
+  "blocksCount": 5,
+  "stepsCount": 28,
+  "onlineCount": 10,
+  "entities": [
+   "Automated information system \"E-tranzit\"",
+   "State border crossing point",
+   "Customs warehouse",
+   "Customs post of foreign trade activity",
+   "Personal cabinet of participant of foreign economic activity",
+   "Online banking system",
+   "Bank"
+  ]
+ },
+ "219": {
+  "id": "219",
+  "title": "Obtain veterinary certificate for import",
+  "direction": "import",
+  "goods": "any cargo",
+  "mode": "any",
+  "kind": "service",
+  "timeframe": [
+   1,
+   5
+  ],
+  "blocksCount": 1,
+  "stepsCount": 5,
+  "onlineCount": 4,
+  "entities": [
+   "One-stop service system Single window",
+   "Bank",
+   "Warehouse / Location of goods"
+  ]
+ },
+ "220": {
+  "id": "220",
+  "title": "Obtain sanitary and epidemiological conclusion",
+  "direction": "export",
+  "goods": "any cargo",
+  "mode": "any",
+  "kind": "service",
+  "timeframe": [
+   45,
+   88
+  ],
+  "blocksCount": 1,
+  "stepsCount": 7,
+  "onlineCount": 5,
+  "entities": [
+   "One-stop service system Single window",
+   "Customs warehouse",
+   "Regional center for sanitary-epidemiological service",
+   "Sanitary-epidemiological welfare and public health committee of the Republic of Uzbekistan",
+   "Bank"
+  ]
+ },
+ "223": {
+  "id": "223",
+  "title": "Import of vegetable oils for consumers' use and consumption by road",
+  "direction": "import",
+  "goods": "vegetable oils for consumers' use and consumption",
+  "mode": "road",
+  "kind": "customs",
+  "timeframe": [
+   45,
+   83
+  ],
+  "blocksCount": 8,
+  "stepsCount": 37,
+  "onlineCount": 17,
+  "entities": [
+   "Single portal of interactive state services",
+   "Customs warehouse",
+   "Bank",
+   "Automated information system \"E-tranzit\"",
+   "State border crossing point",
+   "Customs post of foreign trade activity",
+   "Personal cabinet of participant of foreign economic activity",
+   "One-stop service system Single window",
+   "Regional center for sanitary-epidemiological service",
+   "Sanitary-epidemiological welfare and public health committee of the Republic of Uzbekistan",
+   "Online banking system"
+  ]
+ },
+ "224": {
+  "id": "224",
+  "title": "Import of vegetable oils for technical or industrial use by road",
+  "direction": "import",
+  "goods": "vegetable oils for technical or industrial use",
+  "mode": "road",
+  "kind": "customs",
+  "timeframe": [
+   4,
+   20
+  ],
+  "blocksCount": 4,
+  "stepsCount": 20,
+  "onlineCount": 7,
+  "entities": [
+   "Single portal of interactive state services",
+   "Automated information system \"E-tranzit\"",
+   "State border crossing point",
+   "Customs warehouse",
+   "Customs post of foreign trade activity",
+   "Personal cabinet of participant of foreign economic activity",
+   "Online banking system"
+  ]
+ },
+ "229": {
+  "id": "229",
+  "title": "Clearance of vegetable oils for consumers' use and consumption by road",
+  "direction": "import",
+  "goods": "vegetable oils for consumers' use and consumption",
+  "mode": "road",
+  "kind": "customs",
+  "timeframe": [
+   6,
+   32
+  ],
+  "blocksCount": 5,
+  "stepsCount": 27,
+  "onlineCount": 10,
+  "entities": [
+   "Automated information system \"E-tranzit\"",
+   "State border crossing point",
+   "Customs warehouse",
+   "Customs post of foreign trade activity",
+   "Personal cabinet of participant of foreign economic activity",
+   "Online banking system",
+   "Bank"
+  ]
+ },
+ "230": {
+  "id": "230",
+  "title": "Clearance of vegetable oils for technical or industrial use by road",
+  "direction": "import",
+  "goods": "vegetable oils for technical or industrial use",
+  "mode": "road",
+  "kind": "customs",
+  "timeframe": [
+   4,
+   20
+  ],
+  "blocksCount": 3,
+  "stepsCount": 19,
+  "onlineCount": 6,
+  "entities": [
+   "Automated information system \"E-tranzit\"",
+   "State border crossing point",
+   "Customs warehouse",
+   "Customs post of foreign trade activity",
+   "Personal cabinet of participant of foreign economic activity",
+   "Online banking system"
+  ]
+ },
+ "233": {
+  "id": "233",
+  "title": "Obtain certificate of origin General form",
+  "direction": "export",
+  "goods": "any cargo",
+  "mode": "any",
+  "kind": "service",
+  "timeframe": [
+   2,
+   10
+  ],
+  "blocksCount": 1,
+  "stepsCount": 8,
+  "onlineCount": 3,
+  "entities": [
+   "\"Uzbekexpertiza\" JSC",
+   "Bank",
+   "\"Uzbekexpertiza\" JSC service portal",
+   "One-stop service system Single window",
+   "Warehouse / Location of goods"
+  ]
+ },
+ "244": {
+  "id": "244",
+  "title": "Obtain quarantine permit",
+  "direction": "export",
+  "goods": "any cargo",
+  "mode": "any",
+  "kind": "service",
+  "timeframe": [
+   4,
+   42
+  ],
+  "blocksCount": 1,
+  "stepsCount": 4,
+  "onlineCount": 4,
+  "entities": [
+   "Agency of plant quarantine and protection Personal cabinet (Oferta)",
+   "Bank",
+   "One-stop service system Single window"
+  ]
+ },
+ "251": {
+  "id": "251",
+  "title": "Clearance of animal or vegetable fertilizers by road",
+  "direction": "import",
+  "goods": "animal or vegetable fertilizers",
+  "mode": "road",
+  "kind": "customs",
+  "timeframe": [
+   6,
+   33
+  ],
+  "blocksCount": 5,
+  "stepsCount": 29,
+  "onlineCount": 10,
+  "entities": [
+   "Automated information system \"E-tranzit\"",
+   "State border crossing point",
+   "Customs warehouse",
+   "Customs post of foreign trade activity",
+   "Personal cabinet of participant of foreign economic activity",
+   "Online banking system",
+   "Bank"
+  ]
+ },
+ "252": {
+  "id": "252",
+  "title": "Obtain quarantine inspection act",
+  "direction": "export",
+  "goods": "any cargo",
+  "mode": "any",
+  "kind": "service",
+  "timeframe": [
+   5,
+   43
+  ],
+  "blocksCount": 1,
+  "stepsCount": 8,
+  "onlineCount": 6,
+  "entities": [
+   "Agency of plant quarantine and protection Personal cabinet (Oferta)",
+   "Bank",
+   "One-stop service system Single window",
+   "Customs warehouse",
+   "Territorial Department of plant quarantine and protection"
+  ]
+ },
+ "254": {
+  "id": "254",
+  "title": "Obtain certificate of conformity",
+  "direction": "export",
+  "goods": "any cargo",
+  "mode": "any",
+  "kind": "service",
+  "timeframe": [
+   19,
+   148
+  ],
+  "blocksCount": 1,
+  "stepsCount": 5,
+  "onlineCount": 3,
+  "entities": [
+   "One-stop service system Single window",
+   "Certification body of fertilizers, pesticides and chemical protection of plants",
+   "Online banking system",
+   "Customs warehouse"
+  ]
+ },
+ "260": {
+  "id": "260",
+  "title": "Clearance of flour by road",
+  "direction": "import",
+  "goods": "flour",
+  "mode": "road",
+  "kind": "customs",
+  "timeframe": [
+   6,
+   33
+  ],
+  "blocksCount": 5,
+  "stepsCount": 28,
+  "onlineCount": 10,
+  "entities": [
+   "Automated information system \"E-tranzit\"",
+   "State border crossing point",
+   "Customs warehouse",
+   "Customs post of foreign trade activity",
+   "Personal cabinet of participant of foreign economic activity",
+   "Online banking system",
+   "Bank"
+  ]
+ },
+ "264": {
+  "id": "264",
+  "title": "Obtain registration certificate for pharmaceutical products",
+  "direction": "export",
+  "goods": "any cargo",
+  "mode": "any",
+  "kind": "service",
+  "timeframe": [
+   450,
+   1524
+  ],
+  "blocksCount": 1,
+  "stepsCount": 8,
+  "onlineCount": 2,
+  "entities": [
+   "Darmon",
+   "State center for expertise and standardization of medicines, medical devices and medical equipment",
+   "Foreign bank"
+  ]
+ },
+ "271": {
+  "id": "271",
+  "title": "Obtain certificate of conformity",
+  "direction": "export",
+  "goods": "any cargo",
+  "mode": "any",
+  "kind": "service",
+  "timeframe": [
+   74,
+   239
+  ],
+  "blocksCount": 1,
+  "stepsCount": 6,
+  "onlineCount": 5,
+  "entities": [
+   "One-stop service system Single window",
+   "State center for expertise and standardization of medicines, medical devices and medical equipment",
+   "Customs warehouse",
+   "Electronic document management systems",
+   "Online banking system"
+  ]
+ },
+ "273": {
+  "id": "273",
+  "title": "Obtain registration certificate",
+  "direction": "export",
+  "goods": "any cargo",
+  "mode": "any",
+  "kind": "service",
+  "timeframe": [
+   162,
+   1514
+  ],
+  "blocksCount": 1,
+  "stepsCount": 7,
+  "onlineCount": 0,
+  "entities": [
+   "State center for expertise and standardization of medicines, medical devices and medical equipment",
+   "Foreign bank",
+   "Place of medical equipment installation"
+  ]
+ },
+ "280": {
+  "id": "280",
+  "title": "Obtain certificate of conformity for equipment not requiring pre-installation",
+  "direction": "export",
+  "goods": "any cargo",
+  "mode": "any",
+  "kind": "service",
+  "timeframe": [
+   74,
+   239
+  ],
+  "blocksCount": 1,
+  "stepsCount": 6,
+  "onlineCount": 5,
+  "entities": [
+   "One-stop service system Single window",
+   "State center for expertise and standardization of medicines, medical devices and medical equipment",
+   "Customs warehouse",
+   "Electronic document management systems",
+   "Online banking system"
+  ]
+ },
+ "281": {
+  "id": "281",
+  "title": "Export of dairy products by train",
+  "direction": "export",
+  "goods": "dairy products",
+  "mode": "train",
+  "kind": "customs",
+  "timeframe": [
+   76,
+   235
+  ],
+  "blocksCount": 10,
+  "stepsCount": 41,
+  "onlineCount": 19,
+  "entities": [
+   "Single portal of interactive state services",
+   "One-stop service system Single window",
+   "Uzbekistan railways Single window",
+   "Bank",
+   "Tashkent regional railway junction",
+   "Freight forwarding company",
+   "Joint Stock Company \"O'zbekiston temir yo'llari\"",
+   "Warehouse / Location of goods",
+   "Railway station",
+   "Place of loading / branch line",
+   "\"Uzbekexpertiza\" JSC",
+   "\"Uzbekexpertiza\" JSC service portal",
+   "Personal cabinet of participant of foreign economic activity",
+   "Customs post of foreign trade activity"
+  ]
+ },
+ "284": {
+  "id": "284",
+  "title": "Clearance of dairy products by train",
+  "direction": "import",
+  "goods": "dairy products",
+  "mode": "train",
+  "kind": "customs",
+  "timeframe": [
+   2,
+   12
+  ],
+  "blocksCount": 1,
+  "stepsCount": 6,
+  "onlineCount": 4,
+  "entities": [
+   "Personal cabinet of participant of foreign economic activity",
+   "Bank",
+   "Warehouse / Location of goods",
+   "Customs post of foreign trade activity"
+  ]
+ },
+ "286": {
+  "id": "286",
+  "title": "Arrange cargo transportation by train physically",
+  "direction": "export",
+  "goods": "any cargo",
+  "mode": "train",
+  "kind": "logistics",
+  "timeframe": [
+   63,
+   189
+  ],
+  "blocksCount": 5,
+  "stepsCount": 21,
+  "onlineCount": 2,
+  "entities": [
+   "Tashkent Technological center for the processing of transport documents",
+   "Tashkent regional railway junction",
+   "Railway station",
+   "Bank",
+   "Freight forwarding company",
+   "Joint Stock Company \"O'zbekiston temir yo'llari\"",
+   "Place of loading / branch line"
+  ]
+ },
+ "288": {
+  "id": "288",
+  "title": "Import of dairy products by train",
+  "direction": "import",
+  "goods": "dairy products",
+  "mode": "train",
+  "kind": "customs",
+  "timeframe": [
+   66,
+   386
+  ],
+  "blocksCount": 15,
+  "stepsCount": 50,
+  "onlineCount": 27,
+  "entities": [
+   "One-stop service system Single window",
+   "Bank",
+   "Single portal of interactive state services",
+   "Uzbekistan railways Single window",
+   "Tashkent regional railway junction",
+   "Customs warehouse",
+   "Railway station",
+   "Customs post of foreign trade activity",
+   "Personal cabinet of participant of foreign economic activity",
+   "Warehouse / Location of goods",
+   "Regional center for sanitary-epidemiological service",
+   "Sanitary-epidemiological welfare and public health committee of the Republic of Uzbekistan",
+   "Online banking system"
+  ]
+ },
+ "290": {
+  "id": "290",
+  "title": "Register in the REX system to export to the European Union",
+  "direction": "export",
+  "goods": "any cargo",
+  "mode": "any",
+  "kind": "service",
+  "timeframe": [
+   2,
+   10
+  ],
+  "blocksCount": 3,
+  "stepsCount": 7,
+  "onlineCount": 1,
+  "entities": [
+   "\"Uzbekexpertiza\" JSC",
+   "Bank",
+   "Warehouse / Location of goods"
+  ]
+ },
+ "292": {
+  "id": "292",
+  "title": "Obtain veterinary certificate for export",
+  "direction": "export",
+  "goods": "any cargo",
+  "mode": "any",
+  "kind": "service",
+  "timeframe": [
+   1,
+   5
+  ],
+  "blocksCount": 1,
+  "stepsCount": 5,
+  "onlineCount": 4,
+  "entities": [
+   "One-stop service system Single window",
+   "Bank",
+   "Warehouse / Location of goods"
+  ]
+ },
+ "295": {
+  "id": "295",
+  "title": "Clearance of dairy products by train",
+  "direction": "import",
+  "goods": "dairy products",
+  "mode": "train",
+  "kind": "customs",
+  "timeframe": [
+   4,
+   28
+  ],
+  "blocksCount": 4,
+  "stepsCount": 16,
+  "onlineCount": 8,
+  "entities": [
+   "Customs post of foreign trade activity",
+   "Personal cabinet of participant of foreign economic activity",
+   "Online banking system",
+   "Customs warehouse",
+   "Bank"
+  ]
+ },
+ "303": {
+  "id": "303",
+  "title": "Arrange cargo transportation by train physically",
+  "direction": "export",
+  "goods": "any cargo",
+  "mode": "train",
+  "kind": "logistics",
+  "timeframe": [
+   63,
+   189
+  ],
+  "blocksCount": 5,
+  "stepsCount": 21,
+  "onlineCount": 2,
+  "entities": [
+   "Tashkent Technological center for the processing of transport documents",
+   "Tashkent regional railway junction",
+   "Railway station",
+   "Bank",
+   "Freight forwarding company",
+   "Joint Stock Company \"O'zbekiston temir yo'llari\"",
+   "Place of loading / branch line"
+  ]
+ },
+ "304": {
+  "id": "304",
+  "title": "Export of fruit and vegetable juices by train",
+  "direction": "export",
+  "goods": "fruit and vegetable juices",
+  "mode": "train",
+  "kind": "customs",
+  "timeframe": [
+   67,
+   206
+  ],
+  "blocksCount": 8,
+  "stepsCount": 34,
+  "onlineCount": 13,
+  "entities": [
+   "Single portal of interactive state services",
+   "Uzbekistan railways Single window",
+   "Bank",
+   "Tashkent regional railway junction",
+   "Freight forwarding company",
+   "Joint Stock Company \"O'zbekiston temir yo'llari\"",
+   "Railway station",
+   "Place of loading / branch line",
+   "\"Uzbekexpertiza\" JSC",
+   "\"Uzbekexpertiza\" JSC service portal",
+   "One-stop service system Single window",
+   "Warehouse / Location of goods",
+   "Personal cabinet of participant of foreign economic activity",
+   "Customs post of foreign trade activity"
+  ]
+ },
  "306": {
   "id": "306",
   "title": "Export of dried fruits by train",
   "direction": "export",
   "goods": "dried fruits",
   "mode": "train",
+  "kind": "customs",
   "timeframe": [
    81,
    241
   ],
+  "blocksCount": 10,
   "stepsCount": 48,
-  "blocks": [
-   {
-    "id": "b1",
-    "name": "Registration of export contract",
-    "dependsOn": [],
-    "level": 0,
-    "estDuration": [
-     2,
-     8
-    ],
-    "dependencyReason": "Independent track — can start as soon as the case opens, no upstream block required.",
-    "lane": "Other government",
-    "entities": [
-     "Single portal of interactive state services"
-    ],
-    "stepRange": [
-     1,
-     1
-    ],
-    "optionalSteps": [],
-    "altSteps": [],
-    "steps": [
-     {
-      "num": 1,
-      "title": "Register foreign trade contract in UEISFTO",
-      "output": "Identification number of foreign trade contract",
-      "entity": "Single portal of interactive state services",
-      "channel": "Online: apply",
-      "where": "my.gov.uz — unified state services my.gov.uz",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Electronic digital signature",
-       "Electronic copy of foreign trade contract"
-      ]
-     }
-    ]
-   },
-   {
-    "id": "b2",
-    "name": "Prepare for railway transportation online",
-    "dependsOn": [],
-    "level": 0,
-    "estDuration": [
-     10,
-     30
-    ],
-    "dependencyReason": "Independent track — can start as soon as the case opens, no upstream block required.",
-    "lane": "Single Window & certification",
-    "entities": [
-     "Bank",
-     "Tashkent regional railway junction",
-     "Uzbekistan railways Single window"
-    ],
-    "stepRange": [
-     2,
-     6
-    ],
-    "optionalSteps": [],
-    "altSteps": [],
-    "steps": [
-     {
-      "num": 2,
-      "title": "Conclude online agreement with Technological Center and contract with Regional railway junction",
-      "output": "Agreement with Technological center (single window)",
-      "entity": "Uzbekistan railways Single window",
-      "channel": "Online: obtain",
-      "where": "Railway electronic waybill e-nakl.railway.uz",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Electronic digital signature",
-       "One ID account"
-      ]
-     },
-     {
-      "num": 3,
-      "title": "Obtain cost calculation for railway services",
-      "output": "Information on cost amount",
-      "entity": "Uzbekistan railways Single window",
-      "channel": "Online: obtain",
-      "where": "Railway electronic waybill e-nakl.railway.uz",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Electronic digital signature",
-       "One ID account"
-      ]
-     },
-     {
-      "num": 4,
-      "title": "Prepay for railway services (dried fruits)",
-      "output": "Receipt of payment",
-      "entity": "Bank",
-      "channel": "Online: pay",
-      "where": "Payment methods information page uzbekistan.tradeportal.org",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Invoice for payment for railway services",
-       "Agreement with Technological center",
-       "For physical payment",
-       "Physical presence",
-       "For online payment (without necessity to visit a bank)",
-       "Online banking account"
-      ]
-     },
-     {
-      "num": 5,
-      "title": "Generate electronic certificate for railway station",
-      "output": "Electronic certificate for railway station",
-      "entity": "Uzbekistan railways Single window",
-      "channel": "Online: obtain",
-      "where": "Railway electronic waybill e-nakl.railway.uz",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Electronic digital signature"
-      ]
-     },
-     {
-      "num": 6,
-      "title": "Obtain approval for loading and unloading",
-      "output": "Passing examination",
-      "entity": "Tashkent regional railway junction",
-      "channel": "In person",
-      "where": "Inspectors of the Department on freight and commerce Room 402, 4th floor\"",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Physical presence",
-       "Passport",
-       "Power of attorney"
-      ]
-     }
-    ]
-   },
-   {
-    "id": "b3",
-    "name": "Obtain code notification",
-    "dependsOn": [],
-    "level": 0,
-    "estDuration": [
-     12,
-     36
-    ],
-    "dependencyReason": "Independent track — can start as soon as the case opens, no upstream block required.",
-    "lane": "Transport & E-Tranzit",
-    "entities": [
-     "Bank",
-     "Freight forwarding company"
-    ],
-    "stepRange": [
-     7,
-     10
-    ],
-    "optionalSteps": [],
-    "altSteps": [],
-    "steps": [
-     {
-      "num": 7,
-      "title": "Request for freight transportation by railway",
-      "output": "Transportation request",
-      "entity": "Freight forwarding company",
-      "channel": "In person",
-      "where": "Freight forwarding company",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Foreign economic activity contract",
-       "Supply contract"
-      ]
-     },
-     {
-      "num": 8,
-      "title": "Contract with freight forwarder",
-      "output": "Agreement on railway transportation services",
-      "entity": "Freight forwarding company",
-      "channel": "In person",
-      "where": "Freight forwarding company",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Passport",
-       "Power of attorney",
-       "Tax Identification Number of the organization or individual",
-       "Personal identification number of an individual",
-       "Bank details"
-      ]
-     },
-     {
-      "num": 9,
-      "title": "Pay for code assignment and freight forwarder service",
-      "output": "Receipt of payment",
-      "entity": "Bank",
-      "channel": "Online: pay",
-      "where": "Payment methods information page uzbekistan.tradeportal.org",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Invoice for payment",
-       "Agreement on railway transportation services",
-       "For physical payment",
-       "Physical presence",
-       "Passport",
-       "For online payment (without necessity to visit a bank)",
-       "Online banking account"
-      ]
-     },
-     {
-      "num": 10,
-      "title": "Obtain code notification",
-      "output": "Telegram on payment for the railway tariff by telegraph",
-      "entity": "Freight forwarding company",
-      "channel": "In person",
-      "where": "Freight forwarding company",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Receipt of payment",
-       "Agreement on railway transportation services"
-      ]
-     }
-    ]
-   },
-   {
-    "id": "b4",
-    "name": "Arrange freight transportation by railway",
-    "dependsOn": [
-     "b2",
-     "b3"
-    ],
-    "level": 1,
-    "estDuration": [
-     16,
-     48
-    ],
-    "dependencyReason": "Needs the rail agreement/cert from b2 and the forwarder code notification from b3 before Uzbekistan Railways will accept a transport application.",
-    "lane": "Transport & E-Tranzit",
-    "entities": [
-     "Joint Stock Company \"O'zbekiston temir yo'llari\""
-    ],
-    "stepRange": [
-     11,
-     14
-    ],
-    "optionalSteps": [],
-    "altSteps": [],
-    "steps": [
-     {
-      "num": 11,
-      "title": "Apply for good transportation on specific conditions",
-      "output": "Acceptance of application",
-      "entity": "Joint Stock Company \"O'zbekiston temir yo'llari\"",
-      "channel": "In person",
-      "where": "Department of carriage conditions \"Room 313, 3rd Floor\"",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Application for good transportation on specific conditions"
-      ]
-     },
-     {
-      "num": 12,
-      "title": "Apply for freight transportation by railway",
-      "output": "Acceptance of application",
-      "entity": "Joint Stock Company \"O'zbekiston temir yo'llari\"",
-      "channel": "In person",
-      "where": "Transportation  Unit \"Room 128, 1st Floor\"",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "For submitting application by emails mpo@uzrailway.uz, mpo1@uzrailway.uz, mpo2@uzrailway.uz",
-       "Application for cargo transportation GU-12",
-       "Application for obtaining approval of cargo transportation",
-       "Islamic Republic of Iran approval letter",
-       "For submitting application physically",
-       "Application for cargo transportation GU-12",
-       "Application for obtaining approval of cargo transportation",
-       "Islamic Republic of Iran approval letter"
-      ]
-     },
-     {
-      "num": 13,
-      "title": "Obtain approval for freight transportation by railway",
-      "output": "Coordination of transportation with other countries",
-      "entity": "Joint Stock Company \"O'zbekiston temir yo'llari\"",
-      "channel": "In person",
-      "where": "Transportation  Unit \"Room 128, 1st Floor\"",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Availability by phone"
-      ]
-     },
-     {
-      "num": 14,
-      "title": "Obtain order for wagon supply",
-      "output": "Order for wagon supply for loading",
-      "entity": "Joint Stock Company \"O'zbekiston temir yo'llari\"",
-      "channel": "In person",
-      "where": "Transportation  Unit \"Room 128, 1st Floor\"",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "For submitting application by emails mpo@uzrailway.uz, mpo1@uzrailway.uz, mpo2@uzrailway.uz",
-       "Application on letterhead",
-       "Application on letterhead (own wagons)",
-       "Code notification from the forwarder that concluded the contract with JSC \"Uzbekistan railways\"",
-       "For submitting application physically",
-       "Power of attorney for Transportation Unit",
-       "Passport",
-       "Application on letterhead",
-       "Application on letterhead (own wagons)",
-       "Code notification from the forwarder that concluded the contract with JSC \"Uzbekistan railways\""
-      ]
-     }
-    ]
-   },
-   {
-    "id": "b5",
-    "name": "Obtain internal phytosanitary certificate",
-    "dependsOn": [],
-    "level": 0,
-    "estDuration": [
-     24,
-     72
-    ],
-    "dependencyReason": "Independent track — can start as soon as the case opens, no upstream block required.",
-    "lane": "Single Window & certification",
-    "entities": [
-     "Agency of plant quarantine and protection Personal cabinet (Oferta)",
-     "Assalom Agro",
-     "Bank",
-     "Territorial Department of plant quarantine and protection",
-     "Warehouse / Location of goods"
-    ],
-    "stepRange": [
-     15,
-     22
-    ],
-    "optionalSteps": [
-     19,
-     20,
-     21
-    ],
-    "altSteps": [],
-    "steps": [
-     {
-      "num": 15,
-      "title": "Obtain offer agreement",
-      "output": "Offer agreement for internal phytosanitary certificate",
-      "entity": "Agency of plant quarantine and protection Personal cabinet (Oferta)",
-      "channel": "Online: obtain",
-      "where": "eFito (phytosanitary) efito.uz",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Internet access",
-       "Data required to complete offer agreement",
-       "Tax Identification Number of the organization or individual",
-       "Name of the organization",
-       "Full name of an organization's manager",
-       "Contact phone number",
-       "Agency region",
-       "Payment sum"
-      ]
-     },
-     {
-      "num": 16,
-      "title": "Pay for internal phytosanitary certificate",
-      "output": "Receipt of payment",
-      "entity": "Bank",
-      "channel": "Online: pay",
-      "where": "Payment methods information page uzbekistan.tradeportal.org",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Offer agreement for internal phytosanitary certificate",
-       "For physical payment",
-       "Physical presence",
-       "Passport",
-       "For online payment (without necessity to visit a bank)",
-       "Online banking account"
-      ]
-     },
-     {
-      "num": 17,
-      "title": "Apply for internal phytosanitary certificate",
-      "output": "Appointment for inspection",
-      "entity": "Assalom Agro",
-      "channel": "Online: apply",
-      "where": "assalomagro.uz assalomagro.uz",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "To access the platform",
-       "One ID account",
-       "Contact phone number",
-       "Email"
-      ]
-     },
-     {
-      "num": 18,
-      "title": "Undergo phytosanitary inspection",
-      "output": "Sealing",
-      "entity": "Warehouse / Location of goods",
-      "channel": "In person",
-      "where": "Warehouse / Location of goods",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Physical presence"
-      ]
-     },
-     {
-      "num": 19,
-      "title": "Obtain offer agreement for fumigation",
-      "output": "Fumigation offer agreement",
-      "entity": "Agency of plant quarantine and protection Personal cabinet (Oferta)",
-      "channel": "Online: obtain",
-      "where": "eFito (phytosanitary) efito.uz",
-      "performedBy": "",
-      "optional": true,
-      "alternative": false,
-      "inputs": [
-       "Internet access",
-       "Data required to complete offer agreement",
-       "Tax Identification Number of the organization or individual",
-       "Name of the organization",
-       "Full name of an organization's manager",
-       "Type of organization (business entity, budgetary)",
-       "Contact phone number",
-       "Agency region",
-       "Cost on the contract"
-      ]
-     },
-     {
-      "num": 20,
-      "title": "Pay for fumigation",
-      "output": "Receipt of payment",
-      "entity": "Bank",
-      "channel": "Online: pay",
-      "where": "Payment methods information page uzbekistan.tradeportal.org",
-      "performedBy": "",
-      "optional": true,
-      "alternative": false,
-      "inputs": [
-       "Fumigation offer agreement",
-       "For physical payment",
-       "Physical presence",
-       "Passport",
-       "For online payment (without necessity to visit a bank)",
-       "Online banking account"
-      ]
-     },
-     {
-      "num": 21,
-      "title": "Undergo fumigation",
-      "output": "Certificate of disinfestation",
-      "entity": "Territorial Department of plant quarantine and protection",
-      "channel": "In person",
-      "where": "Fumigation (disinfection) division",
-      "performedBy": "",
-      "optional": true,
-      "alternative": false,
-      "inputs": [
-       "Physical presence"
-      ]
-     },
-     {
-      "num": 22,
-      "title": "Obtain internal phytosanitary certificate",
-      "output": "Internal phytosanitary certificate",
-      "entity": "Assalom Agro",
-      "channel": "Online: obtain",
-      "where": "assalomagro.uz assalomagro.uz",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "One ID account",
-       "Contact phone number",
-       "Email"
-      ]
-     }
-    ]
-   },
-   {
-    "id": "b6",
-    "name": "Obtain certificate of origin",
-    "dependsOn": [],
-    "level": 0,
-    "estDuration": [
-     24,
-     72
-    ],
-    "dependencyReason": "Independent track — can start as soon as the case opens, no upstream block required.",
-    "lane": "Single Window & certification",
-    "entities": [
-     "Bank",
-     "One-stop service system Single window",
-     "Warehouse / Location of goods",
-     "“Uzbekexpertiza” JSC",
-     "“Uzbekexpertiza” JSC service portal"
-    ],
-    "stepRange": [
-     23,
-     31
-    ],
-    "optionalSteps": [],
-    "altSteps": [
-     27,
-     31
-    ],
-    "steps": [
-     {
-      "num": 23,
-      "title": "Conclude contract for services",
-      "output": "Contract with Uzbekexpertiza",
-      "entity": "“Uzbekexpertiza” JSC",
-      "channel": "In person",
-      "where": "Deputy Chief of the Department of examination of preferential goods \"Room 36, 3rd floor\"",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Physical presence",
-       "Passport",
-       "Power of attorney"
-      ]
-     },
-     {
-      "num": 24,
-      "title": "Pay for certificate of origin",
-      "output": "Receipt of payment",
-      "entity": "Bank",
-      "channel": "Online: pay",
-      "where": "Payment methods information page uzbekistan.tradeportal.org",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Invoice for prepayment",
-       "For physical payment",
-       "Physical presence",
-       "Passport",
-       "For online payment (without necessity to visit a bank)",
-       "Online banking account"
-      ]
-     },
-     {
-      "num": 25,
-      "title": "Apply for certificate of origin",
-      "output": "Assignment of expert on certification",
-      "entity": "“Uzbekexpertiza” JSC",
-      "channel": "In person",
-      "where": "Deputy Chief of the Department of examination of preferential goods \"Room 36, 3rd floor\"",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Application for obtaining of Certificate of origin for exported goods",
-       "Application for obtaining of Certificate of origin for exported goods",
-       "Commercial invoice",
-       "Any document confirming the exporter's right to use a land plot",
-       "Any document confirming purchase of agricultural products"
-      ]
-     },
-     {
-      "num": 26,
-      "title": "Apply for certificate of origin via Uzbekexpertiza service portal",
-      "output": "Appointment with an expert on certification",
-      "entity": "“Uzbekexpertiza” JSC service portal",
-      "channel": "Online: apply",
-      "where": "Uzbekexpertiza service portal application.expertiza.uz",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Electronic digital signature",
-       "One ID account",
-       "Online application for certificate of origin",
-       "Commercial invoice",
-       "Any document confirming the exporter's right to use a land plot",
-       "Any document confirming purchase of agricultural products"
-      ]
-     },
-     {
-      "num": 27,
-      "title": "Apply for certificate of origin via Single Window",
-      "output": "Application registration number",
-      "entity": "One-stop service system Single window",
-      "channel": "Online: apply",
-      "where": "Single Window singlewindow.uz",
-      "performedBy": "",
-      "optional": false,
-      "alternative": true,
-      "inputs": [
-       "Electronic digital signature",
-       "Online application for certificate of origin",
-       "Commercial invoice",
-       "Any document confirming the exporter's right to use a land plot",
-       "Any document confirming purchase of agricultural products"
-      ]
-     },
-     {
-      "num": 28,
-      "title": "Assessment of application",
-      "output": "Appointment for cargo expertise",
-      "entity": "“Uzbekexpertiza” JSC",
-      "channel": "In person",
-      "where": "Department of Examination of Preferential Goods \"3rd floor\"",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Physical presence"
-      ]
-     },
-     {
-      "num": 29,
-      "title": "Undergo expertise of goods",
-      "output": "Act of expertise",
-      "entity": "Warehouse / Location of goods",
-      "channel": "In person",
-      "where": "Warehouse / Location of goods",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Physical presence"
-      ]
-     },
-     {
-      "num": 30,
-      "title": "Obtain certificate of origin",
-      "output": "Certificate of origin",
-      "entity": "“Uzbekexpertiza” JSC",
-      "channel": "In person",
-      "where": "Department of Examination of Preferential Goods \"3rd floor\"",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Physical presence"
-      ]
-     },
-     {
-      "num": 31,
-      "title": "Obtain expert conclusion",
-      "output": "Expert conclusion",
-      "entity": "“Uzbekexpertiza” JSC",
-      "channel": "In person",
-      "where": "Department of Examination of Preferential Goods \"3rd floor\"",
-      "performedBy": "",
-      "optional": false,
-      "alternative": true,
-      "inputs": [
-       "Physical presence"
-      ]
-     }
-    ]
-   },
-   {
-    "id": "b7",
-    "name": "Complete freight loading",
-    "dependsOn": [
-     "b4",
-     "b5"
-    ],
-    "level": 2,
-    "estDuration": [
-     10,
-     30
-    ],
-    "dependencyReason": "Loading can't start until wagons are ordered (b4) and the goods are sealed/certified fit for transport (b5).",
-    "lane": "Transport & E-Tranzit",
-    "entities": [
-     "Place of loading / branch line",
-     "Railway station"
-    ],
-    "stepRange": [
-     32,
-     35
-    ],
-    "optionalSteps": [],
-    "altSteps": [],
-    "steps": [
-     {
-      "num": 32,
-      "title": "Apply for allotment of wagons",
-      "output": "Permit for allotment of wagons",
-      "entity": "Railway station",
-      "channel": "In person",
-      "where": "Commodity cash desk",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Physical presence",
-       "Application on letterhead for allotment of wagons",
-       "Order for wagon supply for loading",
-       "Certificate on availability of funds at client's account",
-       "Passport",
-       "Power of attorney for railway station",
-       "Certificate on passing examination"
-      ]
-     },
-     {
-      "num": 33,
-      "title": "Obtain wagons for loading",
-      "output": "Signed GU-45 form",
-      "entity": "Railway station",
-      "channel": "In person",
-      "where": "Freight acceptance and handover Room",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Physical presence"
-      ]
-     },
-     {
-      "num": 34,
-      "title": "Loading",
-      "output": "Report of the work done",
-      "entity": "Place of loading / branch line",
-      "channel": "In person",
-      "where": "Place of loading / branch line",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Physical presence",
-       "Power of attorney"
-      ]
-     },
-     {
-      "num": 35,
-      "title": "Obtain railway bill of lading",
-      "output": "Export railway bill (SMGS)",
-      "entity": "Railway station",
-      "channel": "In person",
-      "where": "Commodity cash desk",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Commercial invoice"
-      ]
-     }
-    ]
-   },
-   {
-    "id": "b8",
-    "name": "Obtain phytosanitary certificate",
-    "dependsOn": [
-     "b7"
-    ],
-    "level": 3,
-    "estDuration": [
-     10,
-     30
-    ],
-    "dependencyReason": "Border phytosanitary inspection is carried out on the loaded, sealed wagon using the export railway bill produced in b7.",
-    "lane": "Single Window & certification",
-    "entities": [
-     "Agency of plant quarantine and protection Personal cabinet (Oferta)",
-     "Bank",
-     "Border checkpoint for plant quarantine",
-     "One-stop service system Single window"
-    ],
-    "stepRange": [
-     36,
-     40
-    ],
-    "optionalSteps": [],
-    "altSteps": [],
-    "steps": [
-     {
-      "num": 36,
-      "title": "Obtain offer agreement",
-      "output": "Offer agreement for phytosanitary certificate",
-      "entity": "Agency of plant quarantine and protection Personal cabinet (Oferta)",
-      "channel": "Online: obtain",
-      "where": "Quarantine cabinet cabinet.karantin.uz",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Electronic digital signature",
-       "Data required to complete offer agreement",
-       "Tax Identification Number of the organization or individual",
-       "Name of the organization",
-       "Full name of an organization's manager",
-       "Type of organization (business entity, budgetary)",
-       "Contact phone number",
-       "Agency region",
-       "Payment sum",
-       "Quantity of transport units"
-      ]
-     },
-     {
-      "num": 37,
-      "title": "Pay for phytosanitary certificate",
-      "output": "Receipt of payment",
-      "entity": "Bank",
-      "channel": "Online: pay",
-      "where": "Payment methods information page uzbekistan.tradeportal.org",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Offer agreement for phytosanitary certificate",
-       "For physical payment",
-       "Physical presence",
-       "Passport",
-       "For online payment (without necessity to visit a bank)",
-       "Online banking account"
-      ]
-     },
-     {
-      "num": 38,
-      "title": "Apply for phytosanitary certificate",
-      "output": "Appointment for phytosanitary control",
-      "entity": "One-stop service system Single window",
-      "channel": "Online: apply",
-      "where": "Single Window singlewindow.uz",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Electronic digital signature",
-       "Online application for phytosanitary certificate"
-      ]
-     },
-     {
-      "num": 39,
-      "title": "Undergo phytosanitary inspection",
-      "output": "Visual inspection",
-      "entity": "Border checkpoint for plant quarantine",
-      "channel": "In person",
-      "where": "Office of the inspector on the border checkpoint for plant quarantine",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Physical presence"
-      ]
-     },
-     {
-      "num": 40,
-      "title": "Obtain phytosanitary certificate",
-      "output": "Phytosanitary certificate",
-      "entity": "Border checkpoint for plant quarantine",
-      "channel": "In person",
-      "where": "Office of the inspector on the border checkpoint for plant quarantine",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Physical presence"
-      ]
-     }
-    ]
-   },
-   {
-    "id": "b9",
-    "name": "Undergo customs clearance",
-    "dependsOn": [
-     "b6",
-     "b8"
-    ],
-    "level": 4,
-    "estDuration": [
-     12,
-     40
-    ],
-    "dependencyReason": "Customs declaration needs both the certificate of origin (b6) and the border phytosanitary certificate (b8) as supporting documents.",
-    "lane": "Customs / SCC",
-    "entities": [
-     "Bank",
-     "Customs post of foreign trade activity",
-     "Personal cabinet of participant of foreign economic activity",
-     "Warehouse / Location of goods"
-    ],
-    "stepRange": [
-     41,
-     46
-    ],
-    "optionalSteps": [
-     44
-    ],
-    "altSteps": [],
-    "steps": [
-     {
-      "num": 41,
-      "title": "Create export customs declaration",
-      "output": "Electronic form of customs declaration",
-      "entity": "Personal cabinet of participant of foreign economic activity",
-      "channel": "Online: apply",
-      "where": "Customs e-declaration cabinet (SCC) ed1.customs.uz",
-      "performedBy": "trader or customs broker",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Electronic digital signature",
-       "Identification number of foreign trade contract",
-       "Commercial invoice",
-       "Export railway bill (SMGS)",
-       "Documents that are not obligatory to submit for export declaration",
-       "Phytosanitary certificate",
-       "Certificate of origin",
-       "Certificate of origin form A",
-       "Certificate of origin General form"
-      ]
-     },
-     {
-      "num": 42,
-      "title": "Pay for customs fee",
-      "output": "Receipt of payment",
-      "entity": "Bank",
-      "channel": "Online: pay",
-      "where": "Trade info portal uztradeinfo.uz",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Bank details of territorial customs departments",
-       "For physical payment",
-       "Physical presence",
-       "For online payment (without necessity to visit a bank)",
-       "Online banking account"
-      ]
-     },
-     {
-      "num": 43,
-      "title": "Submit export customs declaration",
-      "output": "Customs declaration submitted",
-      "entity": "Personal cabinet of participant of foreign economic activity",
-      "channel": "Online: submit",
-      "where": "Customs e-declaration cabinet (SCC) ed1.customs.uz",
-      "performedBy": "trader or customs broker",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Electronic digital signature",
-       "Electronic form of customs declaration"
-      ]
-     },
-     {
-      "num": 44,
-      "title": "Undergo customs inspection in red corridor",
-      "output": "Undergo documentary control",
-      "entity": "Warehouse / Location of goods",
-      "channel": "In person",
-      "where": "Warehouse / Location of goods",
-      "performedBy": "",
-      "optional": true,
-      "alternative": false,
-      "inputs": [
-       "Export customs declaration",
-       "Export railway bill (SMGS)",
-       "Commercial invoice",
-       "Physical presence",
-       "Passport",
-       "Power of attorney"
-      ]
-     },
-     {
-      "num": 45,
-      "title": "Obtain export customs declaration",
-      "output": "Export customs declaration",
-      "entity": "Personal cabinet of participant of foreign economic activity",
-      "channel": "Online: obtain",
-      "where": "Customs e-declaration cabinet (SCC) ed1.customs.uz",
-      "performedBy": "trader or customs broker",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Electronic digital signature"
-      ]
-     },
-     {
-      "num": 46,
-      "title": "Obtain stamps on shipping documents",
-      "output": "Export railway bill stamped by customs inspector",
-      "entity": "Customs post of foreign trade activity",
-      "channel": "In person",
-      "where": "Group of customs control and customs clearance",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Physical presence",
-       "Export railway bill (SMGS)",
-       "Commercial invoice",
-       "Export customs declaration"
-      ]
-     }
-    ]
-   },
-   {
-    "id": "b10",
-    "name": "Dispatch freight",
-    "dependsOn": [
-     "b9"
-    ],
-    "level": 5,
-    "estDuration": [
-     4,
-     12
-    ],
-    "dependencyReason": "Freight can only be dispatched after customs has stamped the shipping documents in b9.",
-    "lane": "Transport & E-Tranzit",
-    "entities": [
-     "Railway station"
-    ],
-    "stepRange": [
-     47,
-     48
-    ],
-    "optionalSteps": [],
-    "altSteps": [],
-    "steps": [
-     {
-      "num": 47,
-      "title": "Close memo of handover specialist",
-      "output": "Signed GU-45 form",
-      "entity": "Railway station",
-      "channel": "In person",
-      "where": "Freight acceptance and handover Room",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Physical presence",
-       "Application for wagon handover"
-      ]
-     },
-     {
-      "num": 48,
-      "title": "Dispatch freight",
-      "output": "Duplicate of railway bill with datestamp",
-      "entity": "Railway station",
-      "channel": "In person",
-      "where": "Commodity cash desk",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Export railway bill (SMGS)",
-       "Package of documents"
-      ]
-     }
-    ]
-   }
+  "onlineCount": 22,
+  "entities": [
+   "Single portal of interactive state services",
+   "Bank",
+   "Tashkent regional railway junction",
+   "Uzbekistan railways Single window",
+   "Freight forwarding company",
+   "Joint Stock Company \"O'zbekiston temir yo'llari\"",
+   "Agency of plant quarantine and protection Personal cabinet (Oferta)",
+   "Assalom Agro",
+   "Territorial Department of plant quarantine and protection",
+   "Warehouse / Location of goods",
+   "One-stop service system Single window",
+   "“Uzbekexpertiza” JSC",
+   "“Uzbekexpertiza” JSC service portal",
+   "Place of loading / branch line",
+   "Railway station",
+   "Border checkpoint for plant quarantine",
+   "Customs post of foreign trade activity",
+   "Personal cabinet of participant of foreign economic activity"
+  ]
+ },
+ "318": {
+  "id": "318",
+  "title": "Arrange cargo transportation by train physically",
+  "direction": "export",
+  "goods": "any cargo",
+  "mode": "train",
+  "kind": "logistics",
+  "timeframe": [
+   63,
+   189
   ],
-  "entityDirectory": [
-   {
-    "name": "Single portal of interactive state services",
-    "steps": "1",
-    "lane": "Other government",
-    "contact": "✉ epigu@egov.uz ☎ +998 55 501 36 19,  +998 55 501 36 17 🌐 https://my.gov.uz/, https://my.gov.uz/ru/site/feedback"
-   },
-   {
-    "name": "Uzbekistan railways Single window",
-    "steps": "2, 3, 5",
-    "lane": "Single Window & certification",
-    "contact": "✉ git@railway.uz ☎ +998 71 238 88 02 🌐 https://e-nakl.railway.uz/"
-   },
-   {
-    "name": "Bank",
-    "steps": "4, 9, 16, 20, 24, 37, 42",
-    "lane": "Bank",
-    "contact": ""
-   },
-   {
-    "name": "Tashkent regional railway junction",
-    "steps": "6",
-    "lane": "Transport & E-Tranzit",
-    "contact": "✉ rju-1@railway.uz ☎ +998 71 299 96 20 🌐 http://tashkent.railway.uz/en/"
-   },
-   {
-    "name": "Freight forwarding company",
-    "steps": "7, 8, 10",
-    "lane": "Transport & E-Tranzit",
-    "contact": ""
-   },
-   {
-    "name": "Joint Stock Company \"O'zbekiston temir yo'llari\"",
-    "steps": "11, 12, 13, 14",
-    "lane": "Transport & E-Tranzit",
-    "contact": "✉ info@uzrailway.uz ☎ +998 71 237 99 98, 1005 🌐 https://railway.uz/en/"
-   },
-   {
-    "name": "Agency of plant quarantine and protection Personal cabinet (Oferta)",
-    "steps": "15, 19, 36",
-    "lane": "Single Window & certification",
-    "contact": "✉ info@karantin.uz 🌐 https://efito.uz/invoice/, http://karantin.uz/"
-   },
-   {
-    "name": "Assalom Agro",
-    "steps": "17, 22",
-    "lane": "Single Window & certification",
-    "contact": "✉ assalomagro@gmail.com, info@5x5.uz ☎ +998 55 502 55 75, +998 98 198 14 02 🌐 https://assalomagro.uz/en"
-   },
-   {
-    "name": "Warehouse / Location of goods",
-    "steps": "18, 29, 44",
-    "lane": "Transport & E-Tranzit",
-    "contact": ""
-   },
-   {
-    "name": "Territorial Department of plant quarantine and protection",
-    "steps": "21",
-    "lane": "Single Window & certification",
-    "contact": ""
-   },
-   {
-    "name": "“Uzbekexpertiza” JSC",
-    "steps": "23, 25, 28, 30, 31",
-    "lane": "Single Window & certification",
-    "contact": "✉ info1@expertiza.uz, expertiza@exat.uz ☎ +998 71 230 23 64, +998 71 230 23 60 🌐 http://www.expertiza.uz/, http://t.me/uzbekexpertiza_bot"
-   },
-   {
-    "name": "“Uzbekexpertiza” JSC service portal",
-    "steps": "26",
-    "lane": "Single Window & certification",
-    "contact": "🌐 http://application.expertiza.uz/expertiza/#/, http://www.expertiza.uz/"
-   },
-   {
-    "name": "One-stop service system Single window",
-    "steps": "27, 38",
-    "lane": "Single Window & certification",
-    "contact": "☎ +998 78 120 76 08 (Int. 5603, 5646, 5606, 5885) , +998 78 120 76 00 (Int. 5603, 5646, 5606, 5885) 🌐 http://singlewindow.uz/index.jsp, http://sw2.customs.uz/"
-   },
-   {
-    "name": "Railway station",
-    "steps": "32, 33, 35, 47, 48",
-    "lane": "Transport & E-Tranzit",
-    "contact": ""
-   },
-   {
-    "name": "Place of loading / branch line",
-    "steps": "34",
-    "lane": "Transport & E-Tranzit",
-    "contact": ""
-   },
-   {
-    "name": "Border checkpoint for plant quarantine",
-    "steps": "39, 40",
-    "lane": "Single Window & certification",
-    "contact": ""
-   },
-   {
-    "name": "Personal cabinet of participant of foreign economic activity",
-    "steps": "41, 43, 45",
-    "lane": "Customs / SCC",
-    "contact": "🌐 http://ed1.customs.uz, http://ed2.customs.uz"
-   },
-   {
-    "name": "Customs post of foreign trade activity",
-    "steps": "46",
-    "lane": "Customs / SCC",
-    "contact": ""
-   }
+  "blocksCount": 5,
+  "stepsCount": 21,
+  "onlineCount": 2,
+  "entities": [
+   "Tashkent Technological center for the processing of transport documents",
+   "Tashkent regional railway junction",
+   "Railway station",
+   "Bank",
+   "Freight forwarding company",
+   "Joint Stock Company \"O'zbekiston temir yo'llari\"",
+   "Place of loading / branch line"
+  ]
+ },
+ "320": {
+  "id": "320",
+  "title": "Clearance of dried fruits by road",
+  "direction": "import",
+  "goods": "dried fruits",
+  "mode": "road",
+  "kind": "customs",
+  "timeframe": [
+   2,
+   13
+  ],
+  "blocksCount": 2,
+  "stepsCount": 14,
+  "onlineCount": 4,
+  "entities": [
+   "Personal cabinet of participant of foreign economic activity",
+   "Bank",
+   "Customs post of foreign trade activity",
+   "State border crossing point"
+  ]
+ },
+ "321": {
+  "id": "321",
+  "title": "Clearance of dried fruits by train",
+  "direction": "import",
+  "goods": "dried fruits",
+  "mode": "train",
+  "kind": "customs",
+  "timeframe": [
+   2,
+   12
+  ],
+  "blocksCount": 1,
+  "stepsCount": 6,
+  "onlineCount": 4,
+  "entities": [
+   "Personal cabinet of participant of foreign economic activity",
+   "Bank",
+   "Customs post of foreign trade activity",
+   "Warehouse / Location of goods"
   ]
  },
  "325": {
@@ -1272,1197 +1634,665 @@ export const PROCEDURES: Record<string, Procedure> = {
   "direction": "export",
   "goods": "fresh fruits and vegetables",
   "mode": "train",
+  "kind": "customs",
   "timeframe": [
    81,
    241
   ],
+  "blocksCount": 10,
   "stepsCount": 48,
-  "blocks": [
-   {
-    "id": "b1",
-    "name": "Registration of export contract",
-    "dependsOn": [],
-    "level": 0,
-    "estDuration": [
-     2,
-     8
-    ],
-    "dependencyReason": "Independent track — can start as soon as the case opens, no upstream block required.",
-    "lane": "Other government",
-    "entities": [
-     "Single portal of interactive state services"
-    ],
-    "stepRange": [
-     1,
-     1
-    ],
-    "optionalSteps": [],
-    "altSteps": [],
-    "steps": [
-     {
-      "num": 1,
-      "title": "Register foreign trade contract in UEISFTO",
-      "output": "Identification number of foreign trade contract",
-      "entity": "Single portal of interactive state services",
-      "channel": "Online: apply",
-      "where": "my.gov.uz — unified state services my.gov.uz",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Electronic digital signature",
-       "Electronic copy of foreign trade contract"
-      ]
-     }
-    ]
-   },
-   {
-    "id": "b2",
-    "name": "Prepare for railway transportation online",
-    "dependsOn": [],
-    "level": 0,
-    "estDuration": [
-     10,
-     30
-    ],
-    "dependencyReason": "Independent track — can start as soon as the case opens, no upstream block required.",
-    "lane": "Single Window & certification",
-    "entities": [
-     "Bank",
-     "Tashkent regional railway junction",
-     "Uzbekistan railways Single window"
-    ],
-    "stepRange": [
-     2,
-     6
-    ],
-    "optionalSteps": [],
-    "altSteps": [],
-    "steps": [
-     {
-      "num": 2,
-      "title": "Conclude online agreement with Technological Center and contract with Regional railway junction",
-      "output": "Agreement with Technological center (single window)",
-      "entity": "Uzbekistan railways Single window",
-      "channel": "Online: obtain",
-      "where": "Railway electronic waybill e-nakl.railway.uz",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Electronic digital signature",
-       "One ID account"
-      ]
-     },
-     {
-      "num": 3,
-      "title": "Obtain cost calculation for railway services",
-      "output": "Information on cost amount",
-      "entity": "Uzbekistan railways Single window",
-      "channel": "Online: obtain",
-      "where": "Railway electronic waybill e-nakl.railway.uz",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Electronic digital signature",
-       "One ID account"
-      ]
-     },
-     {
-      "num": 4,
-      "title": "Prepay for railway services (tomatoes)",
-      "output": "Receipt of payment",
-      "entity": "Bank",
-      "channel": "Online: pay",
-      "where": "Payment methods information page uzbekistan.tradeportal.org",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Invoice for payment for railway services",
-       "Agreement with Technological center",
-       "For physical payment",
-       "Physical presence",
-       "For online payment (without necessity to visit a bank)",
-       "Online banking account"
-      ]
-     },
-     {
-      "num": 5,
-      "title": "Generate electronic certificate for railway station",
-      "output": "Electronic certificate for railway station",
-      "entity": "Uzbekistan railways Single window",
-      "channel": "Online: obtain",
-      "where": "Railway electronic waybill e-nakl.railway.uz",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Electronic digital signature"
-      ]
-     },
-     {
-      "num": 6,
-      "title": "Obtain approval for loading and unloading",
-      "output": "Passing examination",
-      "entity": "Tashkent regional railway junction",
-      "channel": "In person",
-      "where": "Inspectors of the Department on freight and commerce Room 402, 4th floor\"",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Physical presence",
-       "Passport",
-       "Power of attorney"
-      ]
-     }
-    ]
-   },
-   {
-    "id": "b3",
-    "name": "Obtain code notification",
-    "dependsOn": [],
-    "level": 0,
-    "estDuration": [
-     12,
-     36
-    ],
-    "dependencyReason": "Independent track — can start as soon as the case opens, no upstream block required.",
-    "lane": "Transport & E-Tranzit",
-    "entities": [
-     "Bank",
-     "Freight forwarding company"
-    ],
-    "stepRange": [
-     7,
-     10
-    ],
-    "optionalSteps": [],
-    "altSteps": [],
-    "steps": [
-     {
-      "num": 7,
-      "title": "Request for freight transportation by railway",
-      "output": "Transportation request",
-      "entity": "Freight forwarding company",
-      "channel": "In person",
-      "where": "Freight forwarding company",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Foreign economic activity contract",
-       "Supply contract"
-      ]
-     },
-     {
-      "num": 8,
-      "title": "Contract with freight forwarder",
-      "output": "Agreement on railway transportation services",
-      "entity": "Freight forwarding company",
-      "channel": "In person",
-      "where": "Freight forwarding company",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Passport",
-       "Power of attorney",
-       "Tax Identification Number of the organization or individual",
-       "Personal identification number of an individual",
-       "Bank details"
-      ]
-     },
-     {
-      "num": 9,
-      "title": "Pay for code assignment and freight forwarder service",
-      "output": "Receipt of payment",
-      "entity": "Bank",
-      "channel": "Online: pay",
-      "where": "Payment methods information page uzbekistan.tradeportal.org",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Invoice for payment",
-       "Agreement on railway transportation services",
-       "For physical payment",
-       "Physical presence",
-       "Passport",
-       "For online payment (without necessity to visit a bank)",
-       "Online banking account"
-      ]
-     },
-     {
-      "num": 10,
-      "title": "Obtain code notification",
-      "output": "Code notification from the forwarder that concluded the contract with JSC \"Uzbekistan railways\"",
-      "entity": "Freight forwarding company",
-      "channel": "In person",
-      "where": "Freight forwarding company",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Receipt of payment",
-       "Agreement on railway transportation services"
-      ]
-     }
-    ]
-   },
-   {
-    "id": "b4",
-    "name": "Arrange freight transportation by railway",
-    "dependsOn": [
-     "b2",
-     "b3"
-    ],
-    "level": 1,
-    "estDuration": [
-     16,
-     48
-    ],
-    "dependencyReason": "Needs the rail agreement/cert from b2 and the forwarder code notification from b3.",
-    "lane": "Transport & E-Tranzit",
-    "entities": [
-     "Joint Stock Company \"O'zbekiston temir yo'llari\""
-    ],
-    "stepRange": [
-     11,
-     14
-    ],
-    "optionalSteps": [],
-    "altSteps": [],
-    "steps": [
-     {
-      "num": 11,
-      "title": "Apply for good transportation on specific conditions",
-      "output": "Acceptance of application",
-      "entity": "Joint Stock Company \"O'zbekiston temir yo'llari\"",
-      "channel": "In person",
-      "where": "Department of carriage conditions \"Room 313, 3rd Floor\"",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Application for good transportation on specific conditions"
-      ]
-     },
-     {
-      "num": 12,
-      "title": "Apply for freight transportation by railway",
-      "output": "Acceptance of application",
-      "entity": "Joint Stock Company \"O'zbekiston temir yo'llari\"",
-      "channel": "In person",
-      "where": "Transportation  Unit \"Room 128, 1st Floor\"",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "For submitting application by emails mpo@uzrailway.uz, mpo1@uzrailway.uz, mpo2@uzrailway.uz",
-       "Application for cargo transportation GU-12",
-       "Application for obtaining approval of cargo transportation",
-       "Islamic Republic of Iran approval letter",
-       "For submitting application physically",
-       "Application for cargo transportation GU-12",
-       "Application for obtaining approval of cargo transportation",
-       "Islamic Republic of Iran approval letter"
-      ]
-     },
-     {
-      "num": 13,
-      "title": "Obtain approval for freight transportation by railway",
-      "output": "Coordination of transportation with other countries",
-      "entity": "Joint Stock Company \"O'zbekiston temir yo'llari\"",
-      "channel": "In person",
-      "where": "Transportation  Unit \"Room 128, 1st Floor\"",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Availability by phone"
-      ]
-     },
-     {
-      "num": 14,
-      "title": "Obtain order for wagon supply",
-      "output": "Order for wagon supply for loading",
-      "entity": "Joint Stock Company \"O'zbekiston temir yo'llari\"",
-      "channel": "In person",
-      "where": "Transportation  Unit \"Room 128, 1st Floor\"",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "For submitting application by emails mpo@uzrailway.uz, mpo1@uzrailway.uz, mpo2@uzrailway.uz",
-       "Application on letterhead",
-       "Application on letterhead (own wagons)",
-       "Code notification from the forwarder that concluded the contract with JSC \"Uzbekistan railways\"",
-       "For submitting application physically",
-       "Power of attorney for Transportation Unit",
-       "Passport",
-       "Application on letterhead",
-       "Application on letterhead (own wagons)",
-       "Code notification from the forwarder that concluded the contract with JSC \"Uzbekistan railways\""
-      ]
-     }
-    ]
-   },
-   {
-    "id": "b5",
-    "name": "Obtain internal phytosanitary certificate",
-    "dependsOn": [],
-    "level": 0,
-    "estDuration": [
-     24,
-     72
-    ],
-    "dependencyReason": "Independent track — can start as soon as the case opens, no upstream block required.",
-    "lane": "Single Window & certification",
-    "entities": [
-     "Agency of plant quarantine and protection Personal cabinet (Oferta)",
-     "Assalom Agro",
-     "Bank",
-     "Territorial Department of plant quarantine and protection",
-     "Warehouse / Location of goods"
-    ],
-    "stepRange": [
-     15,
-     22
-    ],
-    "optionalSteps": [
-     19,
-     20,
-     21
-    ],
-    "altSteps": [],
-    "steps": [
-     {
-      "num": 15,
-      "title": "Obtain offer agreement",
-      "output": "Offer agreement for internal phytosanitary certificate",
-      "entity": "Agency of plant quarantine and protection Personal cabinet (Oferta)",
-      "channel": "Online: obtain",
-      "where": "eFito (phytosanitary) efito.uz",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Internet access",
-       "Data required to complete offer agreement",
-       "Tax Identification Number of the organization or individual",
-       "Name of the organization",
-       "Full name of an organization's manager",
-       "Contact phone number",
-       "Agency region",
-       "Payment sum"
-      ]
-     },
-     {
-      "num": 16,
-      "title": "Pay for internal phytosanitary certificate",
-      "output": "Receipt of payment",
-      "entity": "Bank",
-      "channel": "Online: pay",
-      "where": "Payment methods information page uzbekistan.tradeportal.org",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Offer agreement for internal phytosanitary certificate",
-       "For physical payment",
-       "Physical presence",
-       "Passport",
-       "For online payment (without necessity to visit a bank)",
-       "Online banking account"
-      ]
-     },
-     {
-      "num": 17,
-      "title": "Apply for internal phytosanitary certificate",
-      "output": "Appointment for inspection",
-      "entity": "Assalom Agro",
-      "channel": "Online: apply",
-      "where": "assalomagro.uz assalomagro.uz",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "To access the platform",
-       "One ID account",
-       "Contact phone number",
-       "Email"
-      ]
-     },
-     {
-      "num": 18,
-      "title": "Undergo phytosanitary inspection",
-      "output": "Product sampling label",
-      "entity": "Warehouse / Location of goods",
-      "channel": "In person",
-      "where": "Warehouse / Location of goods",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Physical presence"
-      ]
-     },
-     {
-      "num": 19,
-      "title": "Obtain offer agreement for fumigation",
-      "output": "Fumigation offer agreement",
-      "entity": "Agency of plant quarantine and protection Personal cabinet (Oferta)",
-      "channel": "Online: obtain",
-      "where": "eFito (phytosanitary) efito.uz",
-      "performedBy": "",
-      "optional": true,
-      "alternative": false,
-      "inputs": [
-       "Internet access",
-       "Data required to complete offer agreement",
-       "Tax Identification Number of the organization or individual",
-       "Name of the organization",
-       "Full name of an organization's manager",
-       "Type of organization (business entity, budgetary)",
-       "Contact phone number",
-       "Agency region",
-       "Cost on the contract"
-      ]
-     },
-     {
-      "num": 20,
-      "title": "Pay for fumigation",
-      "output": "Receipt of payment",
-      "entity": "Bank",
-      "channel": "Online: pay",
-      "where": "Payment methods information page uzbekistan.tradeportal.org",
-      "performedBy": "",
-      "optional": true,
-      "alternative": false,
-      "inputs": [
-       "Fumigation offer agreement",
-       "For physical payment",
-       "Physical presence",
-       "Passport",
-       "For online payment (without necessity to visit a bank)",
-       "Online banking account"
-      ]
-     },
-     {
-      "num": 21,
-      "title": "Undergo fumigation",
-      "output": "Certificate of disinfestation",
-      "entity": "Territorial Department of plant quarantine and protection",
-      "channel": "In person",
-      "where": "Fumigation (disinfection) division",
-      "performedBy": "",
-      "optional": true,
-      "alternative": false,
-      "inputs": [
-       "Physical presence"
-      ]
-     },
-     {
-      "num": 22,
-      "title": "Obtain internal phytosanitary certificate",
-      "output": "Internal phytosanitary certificate",
-      "entity": "Assalom Agro",
-      "channel": "Online: obtain",
-      "where": "assalomagro.uz assalomagro.uz",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "One ID account",
-       "Contact phone number",
-       "Email"
-      ]
-     }
-    ]
-   },
-   {
-    "id": "b6",
-    "name": "Obtain certificate of origin",
-    "dependsOn": [],
-    "level": 0,
-    "estDuration": [
-     24,
-     72
-    ],
-    "dependencyReason": "Independent track — can start as soon as the case opens, no upstream block required.",
-    "lane": "Single Window & certification",
-    "entities": [
-     "Bank",
-     "One-stop service system Single window",
-     "Warehouse / Location of goods",
-     "“Uzbekexpertiza” JSC",
-     "“Uzbekexpertiza” JSC service portal"
-    ],
-    "stepRange": [
-     23,
-     31
-    ],
-    "optionalSteps": [],
-    "altSteps": [
-     27,
-     31
-    ],
-    "steps": [
-     {
-      "num": 23,
-      "title": "Conclude contract for services",
-      "output": "Contract with Uzbekexpertiza",
-      "entity": "“Uzbekexpertiza” JSC",
-      "channel": "In person",
-      "where": "Deputy Chief of the Department of examination of preferential goods \"Room 36, 3rd floor\"",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Physical presence",
-       "Passport",
-       "Power of attorney"
-      ]
-     },
-     {
-      "num": 24,
-      "title": "Pay for certificate of origin",
-      "output": "Receipt of payment",
-      "entity": "Bank",
-      "channel": "Online: pay",
-      "where": "Payment methods information page uzbekistan.tradeportal.org",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Invoice for prepayment",
-       "For physical payment",
-       "Physical presence",
-       "Passport",
-       "For online payment (without necessity to visit a bank)",
-       "Online banking account"
-      ]
-     },
-     {
-      "num": 25,
-      "title": "Apply for certificate of origin",
-      "output": "Assignment of expert on certification",
-      "entity": "“Uzbekexpertiza” JSC",
-      "channel": "In person",
-      "where": "Deputy Chief of the Department of examination of preferential goods \"Room 36, 3rd floor\"",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Application for obtaining of Certificate of origin for exported goods",
-       "Application for obtaining of Certificate of origin for exported goods",
-       "Commercial invoice",
-       "Any document confirming the exporter's right to use a land plot",
-       "Any document confirming purchase of agricultural products"
-      ]
-     },
-     {
-      "num": 26,
-      "title": "Apply for certificate of origin via Uzbekexpertiza service portal",
-      "output": "Appointment with an expert on certification",
-      "entity": "“Uzbekexpertiza” JSC service portal",
-      "channel": "Online: apply",
-      "where": "Uzbekexpertiza service portal application.expertiza.uz",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Electronic digital signature",
-       "One ID account",
-       "Online application for certificate of origin",
-       "Commercial invoice",
-       "Any document confirming the exporter's right to use a land plot",
-       "Any document confirming purchase of agricultural products"
-      ]
-     },
-     {
-      "num": 27,
-      "title": "Apply for certificate of origin via Single Window",
-      "output": "Application registration number",
-      "entity": "One-stop service system Single window",
-      "channel": "Online: apply",
-      "where": "Single Window singlewindow.uz",
-      "performedBy": "",
-      "optional": false,
-      "alternative": true,
-      "inputs": [
-       "Electronic digital signature",
-       "Online application for certificate of origin",
-       "Commercial invoice",
-       "Any document confirming the exporter's right to use a land plot",
-       "Any document confirming purchase of agricultural products"
-      ]
-     },
-     {
-      "num": 28,
-      "title": "Assessment of application",
-      "output": "Appointment for cargo expertise",
-      "entity": "“Uzbekexpertiza” JSC",
-      "channel": "In person",
-      "where": "Department of Examination of Preferential Goods \"3rd floor\"",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Physical presence"
-      ]
-     },
-     {
-      "num": 29,
-      "title": "Undergo expertise of goods",
-      "output": "Undergo expertise",
-      "entity": "Warehouse / Location of goods",
-      "channel": "In person",
-      "where": "Warehouse / Location of goods",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Physical presence"
-      ]
-     },
-     {
-      "num": 30,
-      "title": "Obtain certificate of origin",
-      "output": "Certificate of origin",
-      "entity": "“Uzbekexpertiza” JSC",
-      "channel": "In person",
-      "where": "Department of Examination of Preferential Goods \"3rd floor\"",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Physical presence"
-      ]
-     },
-     {
-      "num": 31,
-      "title": "Obtain expert conclusion",
-      "output": "Expert conclusion",
-      "entity": "“Uzbekexpertiza” JSC",
-      "channel": "In person",
-      "where": "Department of Examination of Preferential Goods \"3rd floor\"",
-      "performedBy": "",
-      "optional": false,
-      "alternative": true,
-      "inputs": [
-       "Physical presence"
-      ]
-     }
-    ]
-   },
-   {
-    "id": "b7",
-    "name": "Obtain phytosanitary certificate",
-    "dependsOn": [
-     "b5"
-    ],
-    "level": 1,
-    "estDuration": [
-     10,
-     30
-    ],
-    "dependencyReason": "Border phytosanitary cert is obtained on the sealed goods right after the internal cert (b5) — before the wagons are loaded.",
-    "lane": "Single Window & certification",
-    "entities": [
-     "Agency of plant quarantine and protection Personal cabinet (Oferta)",
-     "Bank",
-     "Border checkpoint for plant quarantine",
-     "One-stop service system Single window"
-    ],
-    "stepRange": [
-     32,
-     36
-    ],
-    "optionalSteps": [],
-    "altSteps": [],
-    "steps": [
-     {
-      "num": 32,
-      "title": "Obtain offer agreement",
-      "output": "Offer agreement for phytosanitary certificate",
-      "entity": "Agency of plant quarantine and protection Personal cabinet (Oferta)",
-      "channel": "Online: obtain",
-      "where": "Quarantine cabinet cabinet.karantin.uz",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Electronic digital signature",
-       "Data required to complete offer agreement",
-       "Tax Identification Number of the organization or individual",
-       "Name of the organization",
-       "Full name of an organization's manager",
-       "Type of organization (business entity, budgetary)",
-       "Contact phone number",
-       "Agency region",
-       "Payment sum",
-       "Quantity of transport units"
-      ]
-     },
-     {
-      "num": 33,
-      "title": "Pay for phytosanitary certificate",
-      "output": "Receipt of payment",
-      "entity": "Bank",
-      "channel": "Online: pay",
-      "where": "Payment methods information page uzbekistan.tradeportal.org",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Offer agreement for phytosanitary certificate",
-       "For physical payment",
-       "Physical presence",
-       "Passport",
-       "For online payment (without necessity to visit a bank)",
-       "Online banking account"
-      ]
-     },
-     {
-      "num": 34,
-      "title": "Apply for phytosanitary certificate",
-      "output": "Appointment for phytosanitary control",
-      "entity": "One-stop service system Single window",
-      "channel": "Online: apply",
-      "where": "Single Window singlewindow.uz",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Electronic digital signature",
-       "Online application for phytosanitary certificate"
-      ]
-     },
-     {
-      "num": 35,
-      "title": "Undergo phytosanitary inspection",
-      "output": "Visual inspection",
-      "entity": "Border checkpoint for plant quarantine",
-      "channel": "In person",
-      "where": "Office of the inspector on the border checkpoint for plant quarantine",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Physical presence"
-      ]
-     },
-     {
-      "num": 36,
-      "title": "Obtain phytosanitary certificate",
-      "output": "Phytosanitary certificate",
-      "entity": "Border checkpoint for plant quarantine",
-      "channel": "In person",
-      "where": "Office of the inspector on the border checkpoint for plant quarantine",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Physical presence"
-      ]
-     }
-    ]
-   },
-   {
-    "id": "b8",
-    "name": "Complete freight loading",
-    "dependsOn": [
-     "b4",
-     "b7"
-    ],
-    "level": 2,
-    "estDuration": [
-     10,
-     30
-    ],
-    "dependencyReason": "Loading requires the wagons ordered in b4 and the phytosanitary clearance already obtained in b7.",
-    "lane": "Transport & E-Tranzit",
-    "entities": [
-     "Place of loading / branch line",
-     "Railway station"
-    ],
-    "stepRange": [
-     37,
-     40
-    ],
-    "optionalSteps": [],
-    "altSteps": [],
-    "steps": [
-     {
-      "num": 37,
-      "title": "Apply for allotment of wagons",
-      "output": "Permit for allotment of wagons",
-      "entity": "Railway station",
-      "channel": "In person",
-      "where": "Commodity cash desk",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Physical presence",
-       "Application on letterhead for allotment of wagons",
-       "Order for wagon supply for loading",
-       "Certificate on availability of funds at client's account",
-       "Passport",
-       "Power of attorney for railway station",
-       "Certificate on passing examination"
-      ]
-     },
-     {
-      "num": 38,
-      "title": "Obtain wagons for loading",
-      "output": "Signed GU-45 form",
-      "entity": "Railway station",
-      "channel": "In person",
-      "where": "Freight acceptance and handover Room",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Physical presence"
-      ]
-     },
-     {
-      "num": 39,
-      "title": "Loading",
-      "output": "Report of the work done",
-      "entity": "Place of loading / branch line",
-      "channel": "In person",
-      "where": "Place of loading / branch line",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Physical presence",
-       "Power of attorney"
-      ]
-     },
-     {
-      "num": 40,
-      "title": "Obtain railway bill of lading",
-      "output": "Export railway bill (SMGS)",
-      "entity": "Railway station",
-      "channel": "In person",
-      "where": "Commodity cash desk",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Commercial invoice"
-      ]
-     }
-    ]
-   },
-   {
-    "id": "b9",
-    "name": "Undergo customs clearance",
-    "dependsOn": [
-     "b6",
-     "b8"
-    ],
-    "level": 3,
-    "estDuration": [
-     12,
-     40
-    ],
-    "dependencyReason": "Customs declaration needs the certificate of origin (b6) and the loaded/dispatched cargo documents (b8).",
-    "lane": "Customs / SCC",
-    "entities": [
-     "Bank",
-     "Customs post of foreign trade activity",
-     "Personal cabinet of participant of foreign economic activity",
-     "Warehouse / Location of goods"
-    ],
-    "stepRange": [
-     41,
-     46
-    ],
-    "optionalSteps": [
-     44
-    ],
-    "altSteps": [],
-    "steps": [
-     {
-      "num": 41,
-      "title": "Create export customs declaration",
-      "output": "Electronic form of customs declaration",
-      "entity": "Personal cabinet of participant of foreign economic activity",
-      "channel": "Online: apply",
-      "where": "Customs e-declaration cabinet (SCC) ed1.customs.uz",
-      "performedBy": "trader or customs broker",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Electronic digital signature",
-       "Identification number of foreign trade contract",
-       "Commercial invoice",
-       "Export railway bill (SMGS)",
-       "Documents that are not obligatory to submit for export declaration",
-       "Phytosanitary certificate",
-       "Certificate of origin",
-       "Certificate of origin form A",
-       "Certificate of origin General form"
-      ]
-     },
-     {
-      "num": 42,
-      "title": "Pay for customs fee",
-      "output": "Receipt of payment",
-      "entity": "Bank",
-      "channel": "Online: pay",
-      "where": "Trade info portal uztradeinfo.uz",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Bank details of territorial customs departments",
-       "For physical payment",
-       "Physical presence",
-       "For online payment (without necessity to visit a bank)",
-       "Online banking account"
-      ]
-     },
-     {
-      "num": 43,
-      "title": "Submit export customs declaration",
-      "output": "Customs declaration submitted",
-      "entity": "Personal cabinet of participant of foreign economic activity",
-      "channel": "Online: submit",
-      "where": "Customs e-declaration cabinet (SCC) ed1.customs.uz",
-      "performedBy": "trader or customs broker",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Electronic digital signature",
-       "Electronic form of customs declaration"
-      ]
-     },
-     {
-      "num": 44,
-      "title": "Undergo customs inspection in red corridor",
-      "output": "Sealing with special customs seals",
-      "entity": "Warehouse / Location of goods",
-      "channel": "In person",
-      "where": "Warehouse / Location of goods",
-      "performedBy": "",
-      "optional": true,
-      "alternative": false,
-      "inputs": [
-       "Export customs declaration",
-       "Export railway bill (SMGS)",
-       "Commercial invoice",
-       "Physical presence",
-       "Passport",
-       "Power of attorney"
-      ]
-     },
-     {
-      "num": 45,
-      "title": "Obtain export customs declaration",
-      "output": "Export customs declaration",
-      "entity": "Personal cabinet of participant of foreign economic activity",
-      "channel": "Online: obtain",
-      "where": "Customs e-declaration cabinet (SCC) ed1.customs.uz",
-      "performedBy": "trader or customs broker",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Electronic digital signature"
-      ]
-     },
-     {
-      "num": 46,
-      "title": "Obtain stamps on shipping documents",
-      "output": "Commercial invoice stamped by customs inspector",
-      "entity": "Customs post of foreign trade activity",
-      "channel": "In person",
-      "where": "Group of customs control and customs clearance",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Physical presence",
-       "Export railway bill (SMGS)",
-       "Commercial invoice",
-       "Export customs declaration"
-      ]
-     }
-    ]
-   },
-   {
-    "id": "b10",
-    "name": "Dispatch freight",
-    "dependsOn": [
-     "b9"
-    ],
-    "level": 4,
-    "estDuration": [
-     4,
-     12
-    ],
-    "dependencyReason": "Dispatch follows the customs stamp obtained in b9.",
-    "lane": "Transport & E-Tranzit",
-    "entities": [
-     "Railway station"
-    ],
-    "stepRange": [
-     47,
-     48
-    ],
-    "optionalSteps": [],
-    "altSteps": [],
-    "steps": [
-     {
-      "num": 47,
-      "title": "Close memo of handover specialist",
-      "output": "Signed GU-45 form",
-      "entity": "Railway station",
-      "channel": "In person",
-      "where": "Freight acceptance and handover Room",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Physical presence",
-       "Application for wagon handover"
-      ]
-     },
-     {
-      "num": 48,
-      "title": "Dispatch freight",
-      "output": "Duplicate of railway bill with datestamp",
-      "entity": "Railway station",
-      "channel": "In person",
-      "where": "Commodity cash desk",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Export railway bill (SMGS)",
-       "Package of documents"
-      ]
-     }
-    ]
-   }
+  "onlineCount": 22,
+  "entities": [
+   "Single portal of interactive state services",
+   "Bank",
+   "Tashkent regional railway junction",
+   "Uzbekistan railways Single window",
+   "Freight forwarding company",
+   "Joint Stock Company \"O'zbekiston temir yo'llari\"",
+   "Agency of plant quarantine and protection Personal cabinet (Oferta)",
+   "Assalom Agro",
+   "Territorial Department of plant quarantine and protection",
+   "Warehouse / Location of goods",
+   "One-stop service system Single window",
+   "“Uzbekexpertiza” JSC",
+   "“Uzbekexpertiza” JSC service portal",
+   "Border checkpoint for plant quarantine",
+   "Place of loading / branch line",
+   "Railway station",
+   "Customs post of foreign trade activity",
+   "Personal cabinet of participant of foreign economic activity"
+  ]
+ },
+ "332": {
+  "id": "332",
+  "title": "Export of cotton yarn by train",
+  "direction": "export",
+  "goods": "cotton yarn",
+  "mode": "train",
+  "kind": "customs",
+  "timeframe": [
+   44,
+   130
   ],
-  "entityDirectory": [
-   {
-    "name": "Single portal of interactive state services",
-    "steps": "1",
-    "lane": "Other government",
-    "contact": "✉ epigu@egov.uz ☎ +998 55 501 36 19,  +998 55 501 36 17 🌐 https://my.gov.uz/, https://my.gov.uz/ru/site/feedback"
-   },
-   {
-    "name": "Uzbekistan railways Single window",
-    "steps": "2, 3, 5",
-    "lane": "Single Window & certification",
-    "contact": "✉ git@railway.uz ☎ +998 71 238 88 02 🌐 https://e-nakl.railway.uz/"
-   },
-   {
-    "name": "Bank",
-    "steps": "4, 9, 16, 20, 24, 33, 42",
-    "lane": "Bank",
-    "contact": ""
-   },
-   {
-    "name": "Tashkent regional railway junction",
-    "steps": "6",
-    "lane": "Transport & E-Tranzit",
-    "contact": "✉ rju-1@railway.uz ☎ +998 71 299 96 20 🌐 http://tashkent.railway.uz/en/"
-   },
-   {
-    "name": "Freight forwarding company",
-    "steps": "7, 8, 10",
-    "lane": "Transport & E-Tranzit",
-    "contact": ""
-   },
-   {
-    "name": "Joint Stock Company \"O'zbekiston temir yo'llari\"",
-    "steps": "11, 12, 13, 14",
-    "lane": "Transport & E-Tranzit",
-    "contact": "✉ info@uzrailway.uz ☎ +998 71 237 99 98, 1005 🌐 https://railway.uz/en/"
-   },
-   {
-    "name": "Agency of plant quarantine and protection Personal cabinet (Oferta)",
-    "steps": "15, 19, 32",
-    "lane": "Single Window & certification",
-    "contact": "✉ info@karantin.uz 🌐 https://efito.uz/invoice/, http://karantin.uz/"
-   },
-   {
-    "name": "Assalom Agro",
-    "steps": "17, 22",
-    "lane": "Single Window & certification",
-    "contact": "✉ assalomagro@gmail.com, info@5x5.uz ☎ +998 55 502 55 75, +998 98 198 14 02 🌐 https://assalomagro.uz/en"
-   },
-   {
-    "name": "Warehouse / Location of goods",
-    "steps": "18, 29, 44",
-    "lane": "Transport & E-Tranzit",
-    "contact": ""
-   },
-   {
-    "name": "Territorial Department of plant quarantine and protection",
-    "steps": "21",
-    "lane": "Single Window & certification",
-    "contact": ""
-   },
-   {
-    "name": "“Uzbekexpertiza” JSC",
-    "steps": "23, 25, 28, 30, 31",
-    "lane": "Single Window & certification",
-    "contact": "✉ info1@expertiza.uz, expertiza@exat.uz ☎ +998 71 230 23 64, +998 71 230 23 60 🌐 http://www.expertiza.uz/, http://t.me/uzbekexpertiza_bot"
-   },
-   {
-    "name": "“Uzbekexpertiza” JSC service portal",
-    "steps": "26",
-    "lane": "Single Window & certification",
-    "contact": "🌐 http://application.expertiza.uz/expertiza/#/, http://www.expertiza.uz/"
-   },
-   {
-    "name": "One-stop service system Single window",
-    "steps": "27, 34",
-    "lane": "Single Window & certification",
-    "contact": "☎ +998 78 120 76 08 (Int. 5603, 5646, 5606, 5885) , +998 78 120 76 00 (Int. 5603, 5646, 5606, 5885) 🌐 http://singlewindow.uz/index.jsp, http://sw2.customs.uz/"
-   },
-   {
-    "name": "Border checkpoint for plant quarantine",
-    "steps": "35, 36",
-    "lane": "Single Window & certification",
-    "contact": ""
-   },
-   {
-    "name": "Railway station",
-    "steps": "37, 38, 40, 47, 48",
-    "lane": "Transport & E-Tranzit",
-    "contact": ""
-   },
-   {
-    "name": "Place of loading / branch line",
-    "steps": "39",
-    "lane": "Transport & E-Tranzit",
-    "contact": ""
-   },
-   {
-    "name": "Personal cabinet of participant of foreign economic activity",
-    "steps": "41, 43, 45",
-    "lane": "Customs / SCC",
-    "contact": "🌐 http://ed1.customs.uz, http://ed2.customs.uz"
-   },
-   {
-    "name": "Customs post of foreign trade activity",
-    "steps": "46",
-    "lane": "Customs / SCC",
-    "contact": ""
-   }
+  "blocksCount": 8,
+  "stepsCount": 34,
+  "onlineCount": 14,
+  "entities": [
+   "Single portal of interactive state services",
+   "Uzbekistan railways Single window",
+   "Bank",
+   "Tashkent regional railway junction",
+   "Freight forwarding company",
+   "Joint Stock Company \"O'zbekiston temir yo'llari\"",
+   "Railway station",
+   "Place of loading / branch line",
+   "\"Uzbekexpertiza\" JSC",
+   "\"Uzbekexpertiza\" JSC service portal",
+   "One-stop service system Single window",
+   "Warehouse / Location of goods",
+   "Personal cabinet of participant of foreign economic activity",
+   "Customs post of foreign trade activity"
+  ]
+ },
+ "333": {
+  "id": "333",
+  "title": "Export of cotton yarn by road",
+  "direction": "export",
+  "goods": "cotton yarn",
+  "mode": "road",
+  "kind": "customs",
+  "timeframe": [
+   21,
+   116
+  ],
+  "blocksCount": 7,
+  "stepsCount": 31,
+  "onlineCount": 11,
+  "entities": [
+   "Single portal of interactive state services",
+   "\"Uzbekexpertiza\" JSC",
+   "Bank",
+   "\"Uzbekexpertiza\" JSC service portal",
+   "One-stop service system Single window",
+   "Warehouse / Location of goods",
+   "Transportation company",
+   "Agency of plant quarantine and protection Personal cabinet (Oferta)",
+   "Territorial Department of plant quarantine and protection",
+   "Personal cabinet of participant of foreign economic activity",
+   "Customs post of foreign trade activity",
+   "State border crossing point"
+  ]
+ },
+ "340": {
+  "id": "340",
+  "title": "Export of textile and garment by train",
+  "direction": "export",
+  "goods": "textile and garment",
+  "mode": "train",
+  "kind": "customs",
+  "timeframe": [
+   43,
+   125
+  ],
+  "blocksCount": 8,
+  "stepsCount": 33,
+  "onlineCount": 13,
+  "entities": [
+   "Single portal of interactive state services",
+   "Uzbekistan railways Single window",
+   "Bank",
+   "Tashkent regional railway junction",
+   "Freight forwarding company",
+   "Joint Stock Company \"O'zbekiston temir yo'llari\"",
+   "\"Uzbekexpertiza\" JSC",
+   "\"Uzbekexpertiza\" JSC service portal",
+   "One-stop service system Single window",
+   "Warehouse / Location of goods",
+   "Railway station",
+   "Place of loading / branch line",
+   "Personal cabinet of participant of foreign economic activity",
+   "Customs post of foreign trade activity"
+  ]
+ },
+ "344": {
+  "id": "344",
+  "title": "Arrange cargo transportation by road",
+  "direction": "export",
+  "goods": "any cargo",
+  "mode": "road",
+  "kind": "logistics",
+  "timeframe": [
+   16,
+   89
+  ],
+  "blocksCount": 3,
+  "stepsCount": 8,
+  "onlineCount": 2,
+  "entities": [
+   "Transportation company",
+   "Agency of plant quarantine and protection Personal cabinet (Oferta)",
+   "Bank",
+   "Territorial Department of plant quarantine and protection",
+   "Warehouse / Location of goods"
+  ]
+ },
+ "345": {
+  "id": "345",
+  "title": "Arrange cargo transportation by train physically",
+  "direction": "export",
+  "goods": "any cargo",
+  "mode": "train",
+  "kind": "logistics",
+  "timeframe": [
+   39,
+   109
+  ],
+  "blocksCount": 5,
+  "stepsCount": 20,
+  "onlineCount": 2,
+  "entities": [
+   "Tashkent Technological center for the processing of transport documents",
+   "Tashkent regional railway junction",
+   "Railway station",
+   "Bank",
+   "Freight forwarding company",
+   "Joint Stock Company \"O'zbekiston temir yo'llari\"",
+   "Place of loading / branch line"
+  ]
+ },
+ "347": {
+  "id": "347",
+  "title": "Clearance of cotton yarn by road",
+  "direction": "import",
+  "goods": "cotton yarn",
+  "mode": "road",
+  "kind": "customs",
+  "timeframe": [
+   4,
+   17
+  ],
+  "blocksCount": 2,
+  "stepsCount": 14,
+  "onlineCount": 5,
+  "entities": [
+   "Bank",
+   "Personal cabinet of participant of foreign economic activity",
+   "Customs post of foreign trade activity",
+   "State border crossing point"
+  ]
+ },
+ "348": {
+  "id": "348",
+  "title": "Clearance of cotton yarn by train",
+  "direction": "import",
+  "goods": "cotton yarn",
+  "mode": "train",
+  "kind": "customs",
+  "timeframe": [
+   3,
+   16
+  ],
+  "blocksCount": 1,
+  "stepsCount": 7,
+  "onlineCount": 5,
+  "entities": [
+   "Bank",
+   "Personal cabinet of participant of foreign economic activity",
+   "Warehouse / Location of goods",
+   "Customs post of foreign trade activity"
+  ]
+ },
+ "352": {
+  "id": "352",
+  "title": "Export of fabrics by road",
+  "direction": "export",
+  "goods": "fabrics",
+  "mode": "road",
+  "kind": "customs",
+  "timeframe": [
+   17,
+   57
+  ],
+  "blocksCount": 5,
+  "stepsCount": 28,
+  "onlineCount": 9,
+  "entities": [
+   "Single portal of interactive state services",
+   "\"Uzbekexpertiza\" JSC",
+   "Bank",
+   "\"Uzbekexpertiza\" JSC service portal",
+   "One-stop service system Single window",
+   "Warehouse / Location of goods",
+   "Transportation company",
+   "Personal cabinet of participant of foreign economic activity",
+   "Customs post of foreign trade activity",
+   "State border crossing point"
+  ]
+ },
+ "353": {
+  "id": "353",
+  "title": "Export of fabrics by train",
+  "direction": "export",
+  "goods": "fabrics",
+  "mode": "train",
+  "kind": "customs",
+  "timeframe": [
+   44,
+   130
+  ],
+  "blocksCount": 8,
+  "stepsCount": 34,
+  "onlineCount": 14,
+  "entities": [
+   "Single portal of interactive state services",
+   "Uzbekistan railways Single window",
+   "Bank",
+   "Tashkent regional railway junction",
+   "Freight forwarding company",
+   "Joint Stock Company \"O'zbekiston temir yo'llari\"",
+   "\"Uzbekexpertiza\" JSC",
+   "\"Uzbekexpertiza\" JSC service portal",
+   "One-stop service system Single window",
+   "Warehouse / Location of goods",
+   "Railway station",
+   "Place of loading / branch line",
+   "Personal cabinet of participant of foreign economic activity",
+   "Customs post of foreign trade activity"
+  ]
+ },
+ "354": {
+  "id": "354",
+  "title": "Obtain certificate of origin form CT-1",
+  "direction": "export",
+  "goods": "any cargo",
+  "mode": "any",
+  "kind": "service",
+  "timeframe": [
+   2,
+   11
+  ],
+  "blocksCount": 1,
+  "stepsCount": 9,
+  "onlineCount": 3,
+  "entities": [
+   "\"Uzbekexpertiza\" JSC",
+   "Bank",
+   "\"Uzbekexpertiza\" JSC service portal",
+   "One-stop service system Single window",
+   "Warehouse / Location of goods"
+  ]
+ },
+ "359": {
+  "id": "359",
+  "title": "Obtain certificate of origin form A",
+  "direction": "export",
+  "goods": "any cargo",
+  "mode": "any",
+  "kind": "service",
+  "timeframe": [
+   2,
+   11
+  ],
+  "blocksCount": 1,
+  "stepsCount": 9,
+  "onlineCount": 3,
+  "entities": [
+   "\"Uzbekexpertiza\" JSC",
+   "Bank",
+   "\"Uzbekexpertiza\" JSC service portal",
+   "One-stop service system Single window",
+   "Warehouse / Location of goods"
+  ]
+ },
+ "360": {
+  "id": "360",
+  "title": "Obtain certificate of origin General form",
+  "direction": "export",
+  "goods": "any cargo",
+  "mode": "any",
+  "kind": "service",
+  "timeframe": [
+   2,
+   11
+  ],
+  "blocksCount": 1,
+  "stepsCount": 9,
+  "onlineCount": 3,
+  "entities": [
+   "\"Uzbekexpertiza\" JSC",
+   "Bank",
+   "\"Uzbekexpertiza\" JSC service portal",
+   "One-stop service system Single window",
+   "Warehouse / Location of goods"
+  ]
+ },
+ "385": {
+  "id": "385",
+  "title": "Arrange cargo transportation by train physically",
+  "direction": "export",
+  "goods": "any cargo",
+  "mode": "train",
+  "kind": "logistics",
+  "timeframe": [
+   63,
+   189
+  ],
+  "blocksCount": 5,
+  "stepsCount": 21,
+  "onlineCount": 2,
+  "entities": [
+   "Tashkent Technological center for the processing of transport documents",
+   "Tashkent regional railway junction",
+   "Railway station",
+   "Bank",
+   "Freight forwarding company",
+   "Joint Stock Company \"O'zbekiston temir yo'llari\"",
+   "Place of loading / branch line"
+  ]
+ },
+ "400": {
+  "id": "400",
+  "title": "Export of confectionery by train",
+  "direction": "export",
+  "goods": "confectionery",
+  "mode": "train",
+  "kind": "customs",
+  "timeframe": [
+   67,
+   206
+  ],
+  "blocksCount": 8,
+  "stepsCount": 34,
+  "onlineCount": 13,
+  "entities": [
+   "Single portal of interactive state services",
+   "Uzbekistan railways Single window",
+   "Bank",
+   "Tashkent regional railway junction",
+   "Freight forwarding company",
+   "Joint Stock Company \"O'zbekiston temir yo'llari\"",
+   "Railway station",
+   "Place of loading / branch line",
+   "\"Uzbekexpertiza\" JSC",
+   "\"Uzbekexpertiza\" JSC service portal",
+   "One-stop service system Single window",
+   "Warehouse / Location of goods",
+   "Personal cabinet of participant of foreign economic activity",
+   "Customs post of foreign trade activity"
+  ]
+ },
+ "402": {
+  "id": "402",
+  "title": "Arrange cargo transportation by train physically",
+  "direction": "export",
+  "goods": "any cargo",
+  "mode": "train",
+  "kind": "logistics",
+  "timeframe": [
+   63,
+   189
+  ],
+  "blocksCount": 5,
+  "stepsCount": 21,
+  "onlineCount": 2,
+  "entities": [
+   "Tashkent Technological center for the processing of transport documents",
+   "Tashkent regional railway junction",
+   "Railway station",
+   "Bank",
+   "Freight forwarding company",
+   "Joint Stock Company \"O'zbekiston temir yo'llari\"",
+   "Place of loading / branch line"
+  ]
+ },
+ "412": {
+  "id": "412",
+  "title": "Export of seed oil by train",
+  "direction": "export",
+  "goods": "seed oil",
+  "mode": "train",
+  "kind": "customs",
+  "timeframe": [
+   66,
+   206
+  ],
+  "blocksCount": 8,
+  "stepsCount": 34,
+  "onlineCount": 13,
+  "entities": [
+   "Single portal of interactive state services",
+   "Uzbekistan railways Single window",
+   "Bank",
+   "Tashkent regional railway junction",
+   "Freight forwarding company",
+   "Joint Stock Company \"O'zbekiston temir yo'llari\"",
+   "Railway station",
+   "Place of loading / branch line",
+   "\"Uzbekexpertiza\" JSC",
+   "\"Uzbekexpertiza\" JSC service portal",
+   "One-stop service system Single window",
+   "Warehouse / Location of goods",
+   "Personal cabinet of participant of foreign economic activity",
+   "Customs post of foreign trade activity"
+  ]
+ },
+ "436": {
+  "id": "436",
+  "title": "Export of mineral fertilizers by train",
+  "direction": "export",
+  "goods": "mineral fertilizers",
+  "mode": "train",
+  "kind": "customs",
+  "timeframe": [
+   67,
+   206
+  ],
+  "blocksCount": 8,
+  "stepsCount": 34,
+  "onlineCount": 13,
+  "entities": [
+   "Single portal of interactive state services",
+   "Uzbekistan railways Single window",
+   "Bank",
+   "Tashkent regional railway junction",
+   "Freight forwarding company",
+   "Joint Stock Company \"O'zbekiston temir yo'llari\"",
+   "Railway station",
+   "Place of loading / branch line",
+   "\"Uzbekexpertiza\" JSC",
+   "\"Uzbekexpertiza\" JSC service portal",
+   "One-stop service system Single window",
+   "Warehouse / Location of goods",
+   "Personal cabinet of participant of foreign economic activity",
+   "Customs post of foreign trade activity"
+  ]
+ },
+ "440": {
+  "id": "440",
+  "title": "Arrange cargo transportation by train physically",
+  "direction": "export",
+  "goods": "any cargo",
+  "mode": "train",
+  "kind": "logistics",
+  "timeframe": [
+   63,
+   189
+  ],
+  "blocksCount": 5,
+  "stepsCount": 21,
+  "onlineCount": 2,
+  "entities": [
+   "Tashkent Technological center for the processing of transport documents",
+   "Tashkent regional railway junction",
+   "Railway station",
+   "Bank",
+   "Freight forwarding company",
+   "Joint Stock Company \"O'zbekiston temir yo'llari\"",
+   "Place of loading / branch line"
+  ]
+ },
+ "451": {
+  "id": "451",
+  "title": "Export of meat and meat products by train",
+  "direction": "export",
+  "goods": "meat and meat products",
+  "mode": "train",
+  "kind": "customs",
+  "timeframe": [
+   76,
+   235
+  ],
+  "blocksCount": 10,
+  "stepsCount": 41,
+  "onlineCount": 19,
+  "entities": [
+   "Single portal of interactive state services",
+   "One-stop service system Single window",
+   "Uzbekistan railways Single window",
+   "Bank",
+   "Tashkent regional railway junction",
+   "Freight forwarding company",
+   "Joint Stock Company \"O'zbekiston temir yo'llari\"",
+   "Railway station",
+   "Place of loading / branch line",
+   "\"Uzbekexpertiza\" JSC",
+   "\"Uzbekexpertiza\" JSC service portal",
+   "Warehouse / Location of goods",
+   "Personal cabinet of participant of foreign economic activity",
+   "Customs post of foreign trade activity"
+  ]
+ },
+ "458": {
+  "id": "458",
+  "title": "Export of animal or vegetable fertilizers by road",
+  "direction": "export",
+  "goods": "animal or vegetable fertilizers",
+  "mode": "road",
+  "kind": "customs",
+  "timeframe": [
+   30,
+   98
+  ],
+  "blocksCount": 8,
+  "stepsCount": 41,
+  "onlineCount": 17,
+  "entities": [
+   "Single portal of interactive state services",
+   "One-stop service system Single window",
+   "\"Uzbekexpertiza\" JSC",
+   "Bank",
+   "\"Uzbekexpertiza\" JSC service portal",
+   "Warehouse / Location of goods",
+   "Agency of plant quarantine and protection Personal cabinet (Oferta)",
+   "Border checkpoint for plant quarantine",
+   "Transportation company",
+   "Personal cabinet of participant of foreign economic activity",
+   "Customs post of foreign trade activity",
+   "State border crossing point"
+  ]
+ },
+ "459": {
+  "id": "459",
+  "title": "Export of animal or vegetable fertilizers by train",
+  "direction": "export",
+  "goods": "animal or vegetable fertilizers",
+  "mode": "train",
+  "kind": "customs",
+  "timeframe": [
+   82,
+   249
+  ],
+  "blocksCount": 11,
+  "stepsCount": 46,
+  "onlineCount": 22,
+  "entities": [
+   "Single portal of interactive state services",
+   "One-stop service system Single window",
+   "Uzbekistan railways Single window",
+   "Bank",
+   "Tashkent regional railway junction",
+   "Freight forwarding company",
+   "Joint Stock Company \"O'zbekiston temir yo'llari\"",
+   "Warehouse / Location of goods",
+   "Agency of plant quarantine and protection Personal cabinet (Oferta)",
+   "Border checkpoint for plant quarantine",
+   "Railway station",
+   "Place of loading / branch line",
+   "\"Uzbekexpertiza\" JSC",
+   "\"Uzbekexpertiza\" JSC service portal",
+   "Personal cabinet of participant of foreign economic activity",
+   "Customs post of foreign trade activity"
+  ]
+ },
+ "466": {
+  "id": "466",
+  "title": "Clearance of animal or vegetable fertilizers by road",
+  "direction": "import",
+  "goods": "animal or vegetable fertilizers",
+  "mode": "road",
+  "kind": "customs",
+  "timeframe": [
+   2,
+   15
+  ],
+  "blocksCount": 2,
+  "stepsCount": 15,
+  "onlineCount": 4,
+  "entities": [
+   "Personal cabinet of participant of foreign economic activity",
+   "Bank",
+   "Customs post of foreign trade activity",
+   "State border crossing point"
+  ]
+ },
+ "470": {
+  "id": "470",
+  "title": "Obtain veterinary certificate for export",
+  "direction": "export",
+  "goods": "any cargo",
+  "mode": "any",
+  "kind": "service",
+  "timeframe": [
+   2,
+   6
+  ],
+  "blocksCount": 1,
+  "stepsCount": 5,
+  "onlineCount": 4,
+  "entities": [
+   "One-stop service system Single window",
+   "Bank",
+   "Warehouse / Location of goods"
+  ]
+ },
+ "476": {
+  "id": "476",
+  "title": "Import of tea by road",
+  "direction": "import",
+  "goods": "tea",
+  "mode": "road",
+  "kind": "customs",
+  "timeframe": [
+   31,
+   169
+  ],
+  "blocksCount": 10,
+  "stepsCount": 50,
+  "onlineCount": 27,
+  "entities": [
+   "Agency of plant quarantine and protection Personal cabinet (Oferta)",
+   "Bank",
+   "One-stop service system Single window",
+   "Single portal of interactive state services",
+   "Customs warehouse",
+   "Automated information system \"E-tranzit\"",
+   "State border crossing point",
+   "Customs post of foreign trade activity",
+   "Personal cabinet of participant of foreign economic activity",
+   "Territorial Department of plant quarantine and protection",
+   "Regional center for sanitary-epidemiological service",
+   "Sanitary-epidemiological welfare and public health committee of the Republic of Uzbekistan",
+   "Online banking system"
   ]
  },
  "477": {
@@ -2471,1407 +2301,405 @@ export const PROCEDURES: Record<string, Procedure> = {
   "direction": "import",
   "goods": "tea",
   "mode": "train",
+  "kind": "customs",
   "timeframe": [
    34,
    183
   ],
+  "blocksCount": 15,
   "stepsCount": 53,
-  "blocks": [
-   {
-    "id": "b1",
-    "name": "Obtain quarantine permit for tea not in consumer packaging",
-    "dependsOn": [],
-    "level": 0,
-    "estDuration": [
-     12,
-     36
-    ],
-    "dependencyReason": "Independent track — can start as soon as the case opens, no upstream block required.",
-    "lane": "Single Window & certification",
-    "entities": [
-     "Agency of plant quarantine and protection Personal cabinet (Oferta)",
-     "Bank",
-     "One-stop service system Single window"
-    ],
-    "stepRange": [
-     1,
-     4
-    ],
-    "optionalSteps": [],
-    "altSteps": [],
-    "steps": [
-     {
-      "num": 1,
-      "title": "Obtain offer agreement",
-      "output": "Offer agreement",
-      "entity": "Agency of plant quarantine and protection Personal cabinet (Oferta)",
-      "channel": "Online: obtain",
-      "where": "eFito (phytosanitary) efito.uz",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Internet access",
-       "Data required to complete offer agreement",
-       "Tax Identification Number of the organization or individual",
-       "Name of the organization",
-       "Full name of an organization's manager",
-       "Type of organization (business entity, budgetary)",
-       "Contact phone number",
-       "Amount of consignment"
-      ]
-     },
-     {
-      "num": 2,
-      "title": "Pay for quarantine permit",
-      "output": "Receipt of payment",
-      "entity": "Bank",
-      "channel": "Online: pay",
-      "where": "Payment methods information page uzbekistan.tradeportal.org",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Offer agreement for quarantine permit",
-       "For physical payment",
-       "Physical presence",
-       "Passport",
-       "For online payment (without necessity to visit a bank)",
-       "Online banking account"
-      ]
-     },
-     {
-      "num": 3,
-      "title": "Apply for quarantine permit",
-      "output": "Application registration number",
-      "entity": "One-stop service system Single window",
-      "channel": "Online: apply",
-      "where": "Single Window singlewindow.uz",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Electronic digital signature",
-       "Quarantine permit application",
-       "Data required to complete application",
-       "Information about applicant",
-       "Information about importer",
-       "Information about exporter",
-       "General information",
-       "Information about product"
-      ]
-     },
-     {
-      "num": 4,
-      "title": "Obtain quarantine permit",
-      "output": "Quarantine permit",
-      "entity": "One-stop service system Single window",
-      "channel": "Online: obtain",
-      "where": "Single Window singlewindow.uz",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Electronic digital signature"
-      ]
-     }
-    ]
-   },
-   {
-    "id": "b2",
-    "name": "Registration of import contract",
-    "dependsOn": [],
-    "level": 0,
-    "estDuration": [
-     2,
-     8
-    ],
-    "dependencyReason": "Independent track — can start as soon as the case opens, no upstream block required.",
-    "lane": "Other government",
-    "entities": [
-     "Single portal of interactive state services"
-    ],
-    "stepRange": [
-     5,
-     5
-    ],
-    "optionalSteps": [],
-    "altSteps": [],
-    "steps": [
-     {
-      "num": 5,
-      "title": "Register foreign trade contract in UEISFTO",
-      "output": "Identification number of foreign trade contract",
-      "entity": "Single portal of interactive state services",
-      "channel": "Online: apply",
-      "where": "my.gov.uz — unified state services my.gov.uz",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Electronic digital signature",
-       "Electronic copy of foreign trade contract"
-      ]
-     }
-    ]
-   },
-   {
-    "id": "b3",
-    "name": "Prepare for cargo delivery by train online",
-    "dependsOn": [
-     "b2"
-    ],
-    "level": 1,
-    "estDuration": [
-     10,
-     30
-    ],
-    "dependencyReason": "Rail-side receiving prep references the registered import contract from b2.",
-    "lane": "Single Window & certification",
-    "entities": [
-     "Bank",
-     "Tashkent regional railway junction",
-     "Uzbekistan railways Single window"
-    ],
-    "stepRange": [
-     6,
-     10
-    ],
-    "optionalSteps": [],
-    "altSteps": [],
-    "steps": [
-     {
-      "num": 6,
-      "title": "Conclude online agreement with Technological Center and contract with Regional railway junction",
-      "output": "Agreement with Technological center (single window)",
-      "entity": "Uzbekistan railways Single window",
-      "channel": "Online: obtain",
-      "where": "Railway electronic waybill e-nakl.railway.uz",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Electronic digital signature",
-       "One ID account"
-      ]
-     },
-     {
-      "num": 7,
-      "title": "Obtain cost calculation for railway services",
-      "output": "Information on cost amount",
-      "entity": "Uzbekistan railways Single window",
-      "channel": "Online: obtain",
-      "where": "Railway electronic waybill e-nakl.railway.uz",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Electronic digital signature",
-       "One ID account"
-      ]
-     },
-     {
-      "num": 8,
-      "title": "Prepay for railway services (for green tea)",
-      "output": "Receipt of payment",
-      "entity": "Bank",
-      "channel": "Online: pay",
-      "where": "Payment methods information page uzbekistan.tradeportal.org",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Invoice for payment for railway services",
-       "Agreement with Technological center",
-       "For physical payment",
-       "Physical presence",
-       "For online payment (without necessity to visit a bank)",
-       "Online banking account"
-      ]
-     },
-     {
-      "num": 9,
-      "title": "Generate electronic certificate for railway station",
-      "output": "Electronic certificate for railway station",
-      "entity": "Uzbekistan railways Single window",
-      "channel": "Online: obtain",
-      "where": "Railway electronic waybill e-nakl.railway.uz",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Electronic digital signature"
-      ]
-     },
-     {
-      "num": 10,
-      "title": "Obtain approval for loading and unloading",
-      "output": "Passing examination",
-      "entity": "Tashkent regional railway junction",
-      "channel": "In person",
-      "where": "Inspectors of the Department on freight and commerce Room 402, 4th floor\"",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Physical presence",
-       "Passport",
-       "Power of attorney"
-      ]
-     }
-    ]
-   },
-   {
-    "id": "b4",
-    "name": "Obtain guiding letter",
-    "dependsOn": [
-     "b2"
-    ],
-    "level": 1,
-    "estDuration": [
-     10,
-     24
-    ],
-    "dependencyReason": "Booking customs-warehouse storage also references the contract from b2 — runs in parallel with b3.",
-    "lane": "Customs / SCC",
-    "entities": [
-     "Bank",
-     "Customs warehouse"
-    ],
-    "stepRange": [
-     11,
-     13
-    ],
-    "optionalSteps": [],
-    "altSteps": [],
-    "steps": [
-     {
-      "num": 11,
-      "title": "Contract customs warehouse",
-      "output": "Invoice for payment",
-      "entity": "Customs warehouse",
-      "channel": "In person",
-      "where": "Administration department",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Physical presence",
-       "Passport",
-       "Power of attorney",
-       "Certificate of state registration"
-      ]
-     },
-     {
-      "num": 12,
-      "title": "Prepay for customs warehouse services",
-      "output": "Receipt of payment",
-      "entity": "Bank",
-      "channel": "Online: pay",
-      "where": "Payment methods information page uzbekistan.tradeportal.org",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Invoice for payment",
-       "For physical payment",
-       "Physical presence",
-       "For online payment (without necessity to visit a bank)",
-       "Online banking account"
-      ]
-     },
-     {
-      "num": 13,
-      "title": "Obtain authorization of customs warehouse",
-      "output": "Guiding letter",
-      "entity": "Customs warehouse",
-      "channel": "In person",
-      "where": "Administration department",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Guiding letter (template)",
-       "Letter to railway station"
-      ]
-     }
-    ]
-   },
-   {
-    "id": "b5",
-    "name": "Obtain cargo transportation documents",
-    "dependsOn": [
-     "b3",
-     "b4"
-    ],
-    "level": 2,
-    "estDuration": [
-     8,
-     24
-    ],
-    "dependencyReason": "Picking up the arriving wagon needs both the rail prep (b3) and the customs-warehouse guiding letter (b4).",
-    "lane": "Transport & E-Tranzit",
-    "entities": [
-     "Railway station"
-    ],
-    "stepRange": [
-     14,
-     16
-    ],
-    "optionalSteps": [],
-    "altSteps": [],
-    "steps": [
-     {
-      "num": 14,
-      "title": "Obtain information on freight arrival",
-      "output": "Information on cargo arrival",
-      "entity": "Railway station",
-      "channel": "In person",
-      "where": "Freight acceptance and handover Room",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Availability by phone"
-      ]
-     },
-     {
-      "num": 15,
-      "title": "Submit guiding letter",
-      "output": "Acceptance of guiding letter",
-      "entity": "Railway station",
-      "channel": "In person",
-      "where": "Freight acceptance and handover Room",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Guiding letter",
-       "Letter to railway station"
-      ]
-     },
-     {
-      "num": 16,
-      "title": "Obtain package of documents",
-      "output": "Import railway bill",
-      "entity": "Railway station",
-      "channel": "In person",
-      "where": "Commodity cash desk",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Guiding letter",
-       "Certificate on availability of funds at client's account",
-       "Passport",
-       "Power of attorney for railway station"
-      ]
-     }
-    ]
-   },
-   {
-    "id": "b6",
-    "name": "Check in at customs post",
-    "dependsOn": [
-     "b5"
-    ],
-    "level": 3,
-    "estDuration": [
-     4,
-     12
-    ],
-    "dependencyReason": "Check-in at the customs post needs the import railway bill obtained in b5.",
-    "lane": "Customs / SCC",
-    "entities": [
-     "Customs post of foreign trade activity"
-    ],
-    "stepRange": [
-     17,
-     17
-    ],
-    "optionalSteps": [],
-    "altSteps": [],
-    "steps": [
-     {
-      "num": 17,
-      "title": "Obtain confirmation on cargo delivery to Customs post of destination",
-      "output": "Customs stamps and marks on documents",
-      "entity": "Customs post of foreign trade activity",
-      "channel": "In person",
-      "where": "Group of customs control and customs clearance",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Import railway bill",
-       "Commercial invoice",
-       "Packing list"
-      ]
-     }
-    ]
-   },
-   {
-    "id": "b7",
-    "name": "Undergo customs clearance (Temporary storage)",
-    "dependsOn": [
-     "b6",
-     "b1"
-    ],
-    "level": 4,
-    "estDuration": [
-     16,
-     48
-    ],
-    "dependencyReason": "Temporary-storage customs declaration follows check-in (b6); the quarantine-controlled goods also need the pre-arrival quarantine permit (b1).",
-    "lane": "Customs / SCC",
-    "entities": [
-     "Customs post of foreign trade activity",
-     "Personal cabinet of participant of foreign economic activity"
-    ],
-    "stepRange": [
-     18,
-     23
-    ],
-    "optionalSteps": [
-     18,
-     19,
-     22
-    ],
-    "altSteps": [],
-    "steps": [
-     {
-      "num": 18,
-      "title": "Apply for preliminary visual inspection",
-      "output": "Application registration number (preliminary inspection)",
-      "entity": "Personal cabinet of participant of foreign economic activity",
-      "channel": "Online: apply",
-      "where": "Customs e-declaration cabinet (SCC) ed1.customs.uz",
-      "performedBy": "",
-      "optional": true,
-      "alternative": false,
-      "inputs": [
-       "Electronic application for preliminary visual inspection",
-       "Documents required to fill the Application",
-       "Application for preliminary visual inspection",
-       "Warehouse license number",
-       "Import railway bill",
-       "Commercial invoice"
-      ]
-     },
-     {
-      "num": 19,
-      "title": "Preliminary visual inspection",
-      "output": "Preliminary inspection report",
-      "entity": "Customs post of foreign trade activity",
-      "channel": "In person",
-      "where": "Customs control zone",
-      "performedBy": "",
-      "optional": true,
-      "alternative": false,
-      "inputs": [
-       "Physical presence",
-       "Power of attorney",
-       "Physical presence",
-       "Physical presence",
-       "Required documents",
-       "Import railway bill",
-       "Commercial invoice",
-       "Packing list",
-       "Application for preliminary visual inspection"
-      ]
-     },
-     {
-      "num": 20,
-      "title": "Create cargo customs declaration",
-      "output": "Electronic form of customs declaration",
-      "entity": "Personal cabinet of participant of foreign economic activity",
-      "channel": "Online: apply",
-      "where": "Customs e-declaration cabinet (SCC) ed1.customs.uz",
-      "performedBy": "trader or customs broker",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Electronic digital signature",
-       "Documents requried to complete declaration",
-       "Commercial invoice",
-       "Import railway bill",
-       "Contract for customs warehouse services",
-       "Passport",
-       "Power of attorney",
-       "Application for preliminary visual inspection"
-      ]
-     },
-     {
-      "num": 21,
-      "title": "Submit customs declaration",
-      "output": "Customs declaration submitted",
-      "entity": "Personal cabinet of participant of foreign economic activity",
-      "channel": "Online: submit",
-      "where": "Customs e-declaration cabinet (SCC) ed1.customs.uz",
-      "performedBy": "trader or customs broker",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Electronic digital signature",
-       "Electronic form of customs declaration"
-      ]
-     },
-     {
-      "num": 22,
-      "title": "Undergo customs inspection in red corridor",
-      "output": "Unsealing of goods",
-      "entity": "Customs post of foreign trade activity",
-      "channel": "In person",
-      "where": "Customs control zone",
-      "performedBy": "",
-      "optional": true,
-      "alternative": false,
-      "inputs": [
-       "Cargo customs declaration (IM70)",
-       "Import railway bill",
-       "Commercial invoice",
-       "Physical presence",
-       "Passport",
-       "Power of attorney"
-      ]
-     },
-     {
-      "num": 23,
-      "title": "Obtain customs declaration",
-      "output": "Cargo customs declaration (IM70)",
-      "entity": "Personal cabinet of participant of foreign economic activity",
-      "channel": "Online: obtain",
-      "where": "Customs e-declaration cabinet (SCC) ed1.customs.uz",
-      "performedBy": "trader or customs broker",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Electronic digital signature"
-      ]
-     }
-    ]
-   },
-   {
-    "id": "b8",
-    "name": "Arrange cargo unloading",
-    "dependsOn": [
-     "b7"
-    ],
-    "level": 5,
-    "estDuration": [
-     6,
-     18
-    ],
-    "dependencyReason": "Unloading follows the temporary-storage customs clearance in b7.",
-    "lane": "Customs / SCC",
-    "entities": [
-     "Customs warehouse",
-     "Railway station"
-    ],
-    "stepRange": [
-     24,
-     25
-    ],
-    "optionalSteps": [],
-    "altSteps": [],
-    "steps": [
-     {
-      "num": 24,
-      "title": "Obtain wagons for unloading",
-      "output": "Signed GU-45 form",
-      "entity": "Railway station",
-      "channel": "In person",
-      "where": "Freight acceptance and handover Room",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Physical presence"
-      ]
-     },
-     {
-      "num": 25,
-      "title": "Arrange cargo unloading",
-      "output": "Report of the work done",
-      "entity": "Customs warehouse",
-      "channel": "In person",
-      "where": "Customs warehouse",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Physical presence",
-       "Power of attorney",
-       "Certificate on passing examination"
-      ]
-     }
-    ]
-   },
-   {
-    "id": "b9",
-    "name": "Place cargo at customs warehouse (train)",
-    "dependsOn": [
-     "b8"
-    ],
-    "level": 6,
-    "estDuration": [
-     2,
-     8
-    ],
-    "dependencyReason": "Goods are physically placed at the warehouse once unloaded (b8).",
-    "lane": "Customs / SCC",
-    "entities": [
-     "Customs warehouse"
-    ],
-    "stepRange": [
-     26,
-     26
-    ],
-    "optionalSteps": [],
-    "altSteps": [],
-    "steps": [
-     {
-      "num": 26,
-      "title": "Place cargo at customs warehouse (train)",
-      "output": "Place cargo at warehouse",
-      "entity": "Customs warehouse",
-      "channel": "In person",
-      "where": "Storage",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Import railway bill",
-       "Commercial invoice",
-       "Packing list",
-       "Cargo customs declaration (IM70)",
-       "Cargo delivery control book (railway)"
-      ]
-     }
-    ]
-   },
-   {
-    "id": "b10",
-    "name": "Obtain quarantine inspection act for tea not in consumer packaging",
-    "dependsOn": [
-     "b9"
-    ],
-    "level": 7,
-    "estDuration": [
-     24,
-     72
-    ],
-    "dependencyReason": "Quarantine inspectors need physical access to the goods, so this waits on b9.",
-    "lane": "Customs / SCC",
-    "entities": [
-     "Agency of plant quarantine and protection Personal cabinet (Oferta)",
-     "Bank",
-     "Customs warehouse",
-     "One-stop service system Single window",
-     "Territorial Department of plant quarantine and protection"
-    ],
-    "stepRange": [
-     27,
-     34
-    ],
-    "optionalSteps": [
-     31,
-     32,
-     33
-    ],
-    "altSteps": [],
-    "steps": [
-     {
-      "num": 27,
-      "title": "Obtain offer agreement",
-      "output": "Offer agreement",
-      "entity": "Agency of plant quarantine and protection Personal cabinet (Oferta)",
-      "channel": "Online: obtain",
-      "where": "eFito (phytosanitary) efito.uz",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Electronic digital signature",
-       "Data required to complete offer agreement",
-       "Tax Identification Number of the organization or individual",
-       "Name of the organization",
-       "Full name of an organization's manager",
-       "Type of organization (business entity, budgetary)",
-       "Contact phone number",
-       "Amount of consignment"
-      ]
-     },
-     {
-      "num": 28,
-      "title": "Pay for transport unit opening act",
-      "output": "Receipt of payment",
-      "entity": "Bank",
-      "channel": "Online: pay",
-      "where": "Payment methods information page uzbekistan.tradeportal.org",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Offer agreement for transport unit opening act",
-       "For physical payment",
-       "Physical presence",
-       "Passport",
-       "For online payment (without necessity to visit a bank)",
-       "Online banking account"
-      ]
-     },
-     {
-      "num": 29,
-      "title": "Apply for quarantine inspection act and transport unit opening act",
-      "output": "Appointment for inspection",
-      "entity": "One-stop service system Single window",
-      "channel": "Online: apply",
-      "where": "Single Window singlewindow.uz",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Electronic digital signature",
-       "Online application for quarantine inspection certificate",
-       "Quarantine permit",
-       "Phytosanitary certificate of the exporter's country",
-       "Data required to complete application",
-       "Information about applicant",
-       "Information about importer",
-       "Information about exporter",
-       "General information",
-       "Information about product"
-      ]
-     },
-     {
-      "num": 30,
-      "title": "Undergo quarantine inspection",
-      "output": "Transport unit opening act",
-      "entity": "Customs warehouse",
-      "channel": "In person",
-      "where": "Customs warehouse",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Physical presence",
-       "Physical presence",
-       "Phytosanitary certificate of the exporter's country",
-       "Quarantine permit"
-      ]
-     },
-     {
-      "num": 31,
-      "title": "Obtain offer agreement for fumigation",
-      "output": "Fumigation offer agreement",
-      "entity": "Agency of plant quarantine and protection Personal cabinet (Oferta)",
-      "channel": "Online: obtain",
-      "where": "eFito (phytosanitary) efito.uz",
-      "performedBy": "",
-      "optional": true,
-      "alternative": false,
-      "inputs": [
-       "Internet access",
-       "Data required to complete offer agreement",
-       "Tax Identification Number of the organization or individual",
-       "Name of the organization",
-       "Full name of an organization's manager",
-       "Type of organization (business entity, budgetary)",
-       "Contact phone number",
-       "Agency region",
-       "Cost on the contract"
-      ]
-     },
-     {
-      "num": 32,
-      "title": "Pay for fumigation",
-      "output": "Receipt of payment",
-      "entity": "Bank",
-      "channel": "Online: pay",
-      "where": "Payment methods information page uzbekistan.tradeportal.org",
-      "performedBy": "",
-      "optional": true,
-      "alternative": false,
-      "inputs": [
-       "Fumigation offer agreement",
-       "For physical payment",
-       "Physical presence",
-       "Passport",
-       "For online payment (without necessity to visit a bank)",
-       "Online banking account"
-      ]
-     },
-     {
-      "num": 33,
-      "title": "Undergo fumigation",
-      "output": "Certificate of disinfestation",
-      "entity": "Territorial Department of plant quarantine and protection",
-      "channel": "In person",
-      "where": "Fumigation (disinfection) division",
-      "performedBy": "",
-      "optional": true,
-      "alternative": false,
-      "inputs": [
-       "Physical presence"
-      ]
-     },
-     {
-      "num": 34,
-      "title": "Obtain quarantine inspection act",
-      "output": "Quarantine inspection act",
-      "entity": "One-stop service system Single window",
-      "channel": "Online: obtain",
-      "where": "Single Window singlewindow.uz",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Electronic digital signature"
-      ]
-     }
-    ]
-   },
-   {
-    "id": "b11",
-    "name": "Arrange return of empty wagons",
-    "dependsOn": [
-     "b8"
-    ],
-    "level": 6,
-    "estDuration": [
-     6,
-     18
-    ],
-    "dependencyReason": "Wagons are only empty and returnable once unloading (b8) is complete — runs parallel to b9/b10.",
-    "lane": "Transport & E-Tranzit",
-    "entities": [
-     "Railway station"
-    ],
-    "stepRange": [
-     35,
-     36
-    ],
-    "optionalSteps": [],
-    "altSteps": [],
-    "steps": [
-     {
-      "num": 35,
-      "title": "Hand over empty wagons",
-      "output": "Signed GU-45 form",
-      "entity": "Railway station",
-      "channel": "In person",
-      "where": "Freight acceptance and handover Room",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Physical presence",
-       "Application for wagon handover"
-      ]
-     },
-     {
-      "num": 36,
-      "title": "Arrange return of empty wagons",
-      "output": "Duplicate of railway bill with datestamp",
-      "entity": "Railway station",
-      "channel": "In person",
-      "where": "Commodity cash desk",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Physical presence",
-       "Application for returning empty wagons",
-       "Instruction on completing railway bill",
-       "Export railway bill (SMGS)"
-      ]
-     }
-    ]
-   },
-   {
-    "id": "b12",
-    "name": "Finalize mutual settlements with railway station",
-    "dependsOn": [
-     "b11"
-    ],
-    "level": 7,
-    "estDuration": [
-     2,
-     8
-    ],
-    "dependencyReason": "Settlement with the railway station closes out once the empty wagons are handed back (b11).",
-    "lane": "Transport & E-Tranzit",
-    "entities": [
-     "Railway station"
-    ],
-    "stepRange": [
-     37,
-     37
-    ],
-    "optionalSteps": [],
-    "altSteps": [],
-    "steps": [
-     {
-      "num": 37,
-      "title": "Finalize mutual settlements with railway station",
-      "output": "Complete procedure",
-      "entity": "Railway station",
-      "channel": "In person",
-      "where": "Commodity cash desk",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Physical presence",
-       "Import railway bill"
-      ]
-     }
-    ]
-   },
-   {
-    "id": "b13",
-    "name": "Obtain sanitary-epidemiological conclusion",
-    "dependsOn": [
-     "b9"
-    ],
-    "level": 7,
-    "estDuration": [
-     24,
-     72
-    ],
-    "dependencyReason": "Sanitary-epidemiological sampling needs the goods at the warehouse (b9) — runs parallel to the quarantine-inspection track (b10).",
-    "lane": "Customs / SCC",
-    "entities": [
-     "Bank",
-     "Customs warehouse",
-     "One-stop service system Single window",
-     "Regional center for sanitary-epidemiological service",
-     "Sanitary-epidemiological welfare and public health committee of the Republic of Uzbekistan"
-    ],
-    "stepRange": [
-     38,
-     44
-    ],
-    "optionalSteps": [],
-    "altSteps": [],
-    "steps": [
-     {
-      "num": 38,
-      "title": "Obtain offer agreement",
-      "output": "Offer agreement for sanitary-epidemiological conclusion",
-      "entity": "One-stop service system Single window",
-      "channel": "Online: obtain",
-      "where": "Single Window singlewindow.uz",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Electronic digital signature",
-       "Bank details"
-      ]
-     },
-     {
-      "num": 39,
-      "title": "Apply for sanitary-epidemiological conclusion",
-      "output": "Obtain application's registration number",
-      "entity": "One-stop service system Single window",
-      "channel": "Online: apply",
-      "where": "Single Window singlewindow.uz",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Electronic digital signature",
-       "Food test report from international accredited laboratories",
-       "Online application for sanitary-epidemiologocal conclusion",
-       "Data required to complete application",
-       "Information about applicant",
-       "Information about importer",
-       "Information about exporter",
-       "Supplier information",
-       "Payment information",
-       "General information",
-       "Information about product"
-      ]
-     },
-     {
-      "num": 40,
-      "title": "Select products samples",
-      "output": "Product sampling label",
-      "entity": "Customs warehouse",
-      "channel": "In person",
-      "where": "Customs warehouse",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Physical presence",
-       "Power of attorney"
-      ]
-     },
-     {
-      "num": 41,
-      "title": "Submit product samples for laboratory tests",
-      "output": "Submission of samples for testing",
-      "entity": "Regional center for sanitary-epidemiological service",
-      "channel": "In person",
-      "where": "Sanitary-epidemiological service laboratory",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Physical presence",
-       "Product sampling label"
-      ]
-     },
-     {
-      "num": 42,
-      "title": "Obtain invoice for payment",
-      "output": "Invoice for payment",
-      "entity": "Sanitary-epidemiological welfare and public health committee of the Republic of Uzbekistan",
-      "channel": "Online: obtain",
-      "where": "Tax portal (soliq) my.soliq.uz",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Product sampling label",
-       "Electronic digital signature"
-      ]
-     },
-     {
-      "num": 43,
-      "title": "Pay for sanitary-epidemiological conclusion",
-      "output": "Receipt of payment",
-      "entity": "Bank",
-      "channel": "Online: pay",
-      "where": "Payment methods information page uzbekistan.tradeportal.org",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Invoice for payment",
-       "Offer agreement for sanitary-epidemiological conclusion",
-       "For physical payment",
-       "Physical presence",
-       "Passport",
-       "For online payment (without necessity to visit a bank)",
-       "Online banking account"
-      ]
-     },
-     {
-      "num": 44,
-      "title": "Obtain sanitary-epidemiological conclusion",
-      "output": "Sanitary-epidemiological conclusion",
-      "entity": "One-stop service system Single window",
-      "channel": "Online: obtain",
-      "where": "Single Window singlewindow.uz",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Electronic digital signature"
-      ]
-     }
-    ]
-   },
-   {
-    "id": "b14",
-    "name": "Undergo customs clearance (Import)",
-    "dependsOn": [
-     "b10",
-     "b13"
-    ],
-    "level": 8,
-    "estDuration": [
-     16,
-     48
-    ],
-    "dependencyReason": "Final import declaration needs both certifying documents: the quarantine inspection act (b10) and the sanitary-epidemiological conclusion (b13).",
-    "lane": "Customs / SCC",
-    "entities": [
-     "Customs warehouse",
-     "Online banking system",
-     "Personal cabinet of participant of foreign economic activity"
-    ],
-    "stepRange": [
-     45,
-     49
-    ],
-    "optionalSteps": [
-     48
-    ],
-    "altSteps": [],
-    "steps": [
-     {
-      "num": 45,
-      "title": "Create import customs declaration",
-      "output": "Electronic form of customs declaration",
-      "entity": "Personal cabinet of participant of foreign economic activity",
-      "channel": "Online: apply",
-      "where": "Customs e-declaration cabinet (SCC) ed1.customs.uz",
-      "performedBy": "trader or customs broker",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Electronic digital signature",
-       "Documents required to complete declaration",
-       "Import railway bill",
-       "Commercial invoice",
-       "Identification number of foreign trade contract",
-       "Export declaration of the exporter's country",
-       "Certificates and permits",
-       "Certificate of origin of the exporter's country",
-       "Quarantine permit",
-       "Sanitary-epidemiological conclusion"
-      ]
-     },
-     {
-      "num": 46,
-      "title": "Pay Customs Payments And Taxes (General step)",
-      "output": "Payment cleared",
-      "entity": "Online banking system",
-      "channel": "In person",
-      "where": "Online banking system",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Bank details of territorial customs departments",
-       "Online banking account"
-      ]
-     },
-     {
-      "num": 47,
-      "title": "Submit import customs declaration",
-      "output": "Customs declaration submitted",
-      "entity": "Personal cabinet of participant of foreign economic activity",
-      "channel": "Online: submit",
-      "where": "Customs e-declaration cabinet (SCC) ed1.customs.uz",
-      "performedBy": "trader or customs broker",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Electronic digital signature",
-       "Electronic form of customs declaration"
-      ]
-     },
-     {
-      "num": 48,
-      "title": "Undergo customs inspection in red corridor",
-      "output": "Undergo documentary control",
-      "entity": "Customs warehouse",
-      "channel": "In person",
-      "where": "Storage",
-      "performedBy": "",
-      "optional": true,
-      "alternative": false,
-      "inputs": [
-       "Import customs declaration",
-       "Import railway bill",
-       "Commercial invoice",
-       "Physical presence",
-       "Passport",
-       "Power of attorney"
-      ]
-     },
-     {
-      "num": 49,
-      "title": "Obtain import customs declaration",
-      "output": "Import customs declaration",
-      "entity": "Personal cabinet of participant of foreign economic activity",
-      "channel": "Online: obtain",
-      "where": "Customs e-declaration cabinet (SCC) ed1.customs.uz",
-      "performedBy": "trader or customs broker",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Electronic digital signature"
-      ]
-     }
-    ]
-   },
-   {
-    "id": "b15",
-    "name": "Departure from customs warehouse",
-    "dependsOn": [
-     "b14"
-    ],
-    "level": 9,
-    "estDuration": [
-     10,
-     30
-    ],
-    "dependencyReason": "Goods can only leave the warehouse after the import declaration clears in b14.",
-    "lane": "Customs / SCC",
-    "entities": [
-     "Bank",
-     "Customs warehouse"
-    ],
-    "stepRange": [
-     50,
-     53
-    ],
-    "optionalSteps": [],
-    "altSteps": [],
-    "steps": [
-     {
-      "num": 50,
-      "title": "Obtain invoice for customs warehouse services",
-      "output": "Invoice for payment",
-      "entity": "Customs warehouse",
-      "channel": "In person",
-      "where": "Commodity cash desk",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Import customs declaration",
-       "Physical presence",
-       "Passport",
-       "Power of attorney"
-      ]
-     },
-     {
-      "num": 51,
-      "title": "Pay for customs warehouse services",
-      "output": "Receipt of payment for warehouse services",
-      "entity": "Bank",
-      "channel": "Online: pay",
-      "where": "Payment methods information page uzbekistan.tradeportal.org",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Invoice for payment",
-       "For physical payment",
-       "Physical presence",
-       "For online payment (without necessity to visit a bank)",
-       "Online banking account"
-      ]
-     },
-     {
-      "num": 52,
-      "title": "Obtain permit for exit",
-      "output": "Exit pass",
-      "entity": "Customs warehouse",
-      "channel": "In person",
-      "where": "Storage",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Receipt of payment",
-       "Import customs declaration",
-       "Physical presence",
-       "Passport",
-       "Power of attorney"
-      ]
-     },
-     {
-      "num": 53,
-      "title": "Departure from customs warehouse",
-      "output": "Permission to exit from customs warehouse",
-      "entity": "Customs warehouse",
-      "channel": "In person",
-      "where": "Customs warehouse checkpoint",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Exit pass",
-       "Physical presence"
-      ]
-     }
-    ]
-   }
+  "onlineCount": 29,
+  "entities": [
+   "Agency of plant quarantine and protection Personal cabinet (Oferta)",
+   "Bank",
+   "One-stop service system Single window",
+   "Single portal of interactive state services",
+   "Tashkent regional railway junction",
+   "Uzbekistan railways Single window",
+   "Customs warehouse",
+   "Railway station",
+   "Customs post of foreign trade activity",
+   "Personal cabinet of participant of foreign economic activity",
+   "Territorial Department of plant quarantine and protection",
+   "Regional center for sanitary-epidemiological service",
+   "Sanitary-epidemiological welfare and public health committee of the Republic of Uzbekistan",
+   "Online banking system"
+  ]
+ },
+ "482": {
+  "id": "482",
+  "title": "Import of coffee by road",
+  "direction": "import",
+  "goods": "coffee",
+  "mode": "road",
+  "kind": "customs",
+  "timeframe": [
+   31,
+   169
   ],
-  "entityDirectory": [
-   {
-    "name": "Agency of plant quarantine and protection Personal cabinet (Oferta)",
-    "steps": "1, 27, 31",
-    "lane": "Single Window & certification",
-    "contact": "✉ info@karantin.uz 🌐 https://efito.uz/invoice/, http://karantin.uz/"
-   },
-   {
-    "name": "Bank",
-    "steps": "2, 8, 12, 28, 32, 43, 51",
-    "lane": "Bank",
-    "contact": ""
-   },
-   {
-    "name": "One-stop service system Single window",
-    "steps": "3, 4, 29, 34, 38, 39, 44",
-    "lane": "Single Window & certification",
-    "contact": "☎ +998 78 120 76 08 (Int. 5603, 5646, 5606, 5885) , +998 78 120 76 00 (Int. 5603, 5646, 5606, 5885) 🌐 http://singlewindow.uz/index.jsp, http://sw2.customs.uz/"
-   },
-   {
-    "name": "Single portal of interactive state services",
-    "steps": "5",
-    "lane": "Other government",
-    "contact": "✉ epigu@egov.uz ☎ +998 55 501 36 19,  +998 55 501 36 17 🌐 https://my.gov.uz/, https://my.gov.uz/ru/site/feedback"
-   },
-   {
-    "name": "Uzbekistan railways Single window",
-    "steps": "6, 7, 9",
-    "lane": "Single Window & certification",
-    "contact": "✉ git@railway.uz ☎ +998 71 238 88 02 🌐 https://e-nakl.railway.uz/"
-   },
-   {
-    "name": "Tashkent regional railway junction",
-    "steps": "10",
-    "lane": "Transport & E-Tranzit",
-    "contact": "✉ rju-1@railway.uz ☎ +998 71 299 96 20 🌐 http://tashkent.railway.uz/en/"
-   },
-   {
-    "name": "Customs warehouse",
-    "steps": "11, 13, 25, 26, 30, 40, 48, 50, 52, 53",
-    "lane": "Customs / SCC",
-    "contact": ""
-   },
-   {
-    "name": "Railway station",
-    "steps": "14, 15, 16, 24, 35, 36, 37",
-    "lane": "Transport & E-Tranzit",
-    "contact": ""
-   },
-   {
-    "name": "Customs post of foreign trade activity",
-    "steps": "17, 19, 22",
-    "lane": "Customs / SCC",
-    "contact": ""
-   },
-   {
-    "name": "Personal cabinet of participant of foreign economic activity",
-    "steps": "18, 20, 21, 23, 45, 47, 49",
-    "lane": "Customs / SCC",
-    "contact": "🌐 http://ed1.customs.uz, http://ed2.customs.uz"
-   },
-   {
-    "name": "Territorial Department of plant quarantine and protection",
-    "steps": "33",
-    "lane": "Single Window & certification",
-    "contact": ""
-   },
-   {
-    "name": "Regional center for sanitary-epidemiological service",
-    "steps": "41",
-    "lane": "Single Window & certification",
-    "contact": ""
-   },
-   {
-    "name": "Sanitary-epidemiological welfare and public health committee of the Republic of Uzbekistan",
-    "steps": "42",
-    "lane": "Single Window & certification",
-    "contact": "✉ kancelyariyaresdsenm@minzdrav.uz ☎ + 998 78 888 01 01 🌐 http://sanepid.uz/en"
-   },
-   {
-    "name": "Online banking system",
-    "steps": "46",
-    "lane": "Bank",
-    "contact": ""
-   }
+  "blocksCount": 10,
+  "stepsCount": 50,
+  "onlineCount": 27,
+  "entities": [
+   "Agency of plant quarantine and protection Personal cabinet (Oferta)",
+   "Bank",
+   "One-stop service system Single window",
+   "Single portal of interactive state services",
+   "Customs warehouse",
+   "Automated information system \"E-tranzit\"",
+   "State border crossing point",
+   "Customs post of foreign trade activity",
+   "Personal cabinet of participant of foreign economic activity",
+   "Territorial Department of plant quarantine and protection",
+   "Regional center for sanitary-epidemiological service",
+   "Sanitary-epidemiological welfare and public health committee of the Republic of Uzbekistan",
+   "Online banking system"
+  ]
+ },
+ "483": {
+  "id": "483",
+  "title": "Import of coffee by train",
+  "direction": "import",
+  "goods": "coffee",
+  "mode": "train",
+  "kind": "customs",
+  "timeframe": [
+   35,
+   184
+  ],
+  "blocksCount": 15,
+  "stepsCount": 53,
+  "onlineCount": 30,
+  "entities": [
+   "Agency of plant quarantine and protection Personal cabinet (Oferta)",
+   "Bank",
+   "One-stop service system Single window",
+   "Single portal of interactive state services",
+   "Uzbekistan railways Single window",
+   "Tashkent regional railway junction",
+   "Customs warehouse",
+   "Railway station",
+   "Customs post of foreign trade activity",
+   "Personal cabinet of participant of foreign economic activity",
+   "Territorial Department of plant quarantine and protection",
+   "Regional center for sanitary-epidemiological service",
+   "Sanitary-epidemiological welfare and public health committee of the Republic of Uzbekistan"
+  ]
+ },
+ "487": {
+  "id": "487",
+  "title": "Obtain quarantine permit",
+  "direction": "export",
+  "goods": "any cargo",
+  "mode": "any",
+  "kind": "service",
+  "timeframe": [
+   4,
+   42
+  ],
+  "blocksCount": 1,
+  "stepsCount": 4,
+  "onlineCount": 4,
+  "entities": [
+   "Agency of plant quarantine and protection Personal cabinet (Oferta)",
+   "Bank",
+   "One-stop service system Single window"
+  ]
+ },
+ "488": {
+  "id": "488",
+  "title": "Obtain quarantine inspection act",
+  "direction": "export",
+  "goods": "any cargo",
+  "mode": "any",
+  "kind": "service",
+  "timeframe": [
+   5,
+   43
+  ],
+  "blocksCount": 1,
+  "stepsCount": 8,
+  "onlineCount": 6,
+  "entities": [
+   "Agency of plant quarantine and protection Personal cabinet (Oferta)",
+   "Bank",
+   "One-stop service system Single window",
+   "Customs warehouse",
+   "Territorial Department of plant quarantine and protection"
+  ]
+ },
+ "496": {
+  "id": "496",
+  "title": "Clearance of coffee by train",
+  "direction": "import",
+  "goods": "coffee",
+  "mode": "train",
+  "kind": "customs",
+  "timeframe": [
+   5,
+   28
+  ],
+  "blocksCount": 4,
+  "stepsCount": 16,
+  "onlineCount": 9,
+  "entities": [
+   "Customs post of foreign trade activity",
+   "Personal cabinet of participant of foreign economic activity",
+   "Bank",
+   "Customs warehouse"
+  ]
+ },
+ "497": {
+  "id": "497",
+  "title": "Import of confectionery by train",
+  "direction": "import",
+  "goods": "confectionery",
+  "mode": "train",
+  "kind": "customs",
+  "timeframe": [
+   25,
+   98
+  ],
+  "blocksCount": 13,
+  "stepsCount": 41,
+  "onlineCount": 19,
+  "entities": [
+   "Single portal of interactive state services",
+   "Uzbekistan railways Single window",
+   "Bank",
+   "Tashkent regional railway junction",
+   "Customs warehouse",
+   "Railway station",
+   "Customs post of foreign trade activity",
+   "Personal cabinet of participant of foreign economic activity",
+   "One-stop service system Single window",
+   "Regional center for sanitary-epidemiological service",
+   "Sanitary-epidemiological welfare and public health committee of the Republic of Uzbekistan",
+   "Online banking system"
+  ]
+ },
+ "499": {
+  "id": "499",
+  "title": "Obtain quarantine permit",
+  "direction": "export",
+  "goods": "any cargo",
+  "mode": "any",
+  "kind": "service",
+  "timeframe": [
+   4,
+   42
+  ],
+  "blocksCount": 1,
+  "stepsCount": 4,
+  "onlineCount": 4,
+  "entities": [
+   "Agency of plant quarantine and protection Personal cabinet (Oferta)",
+   "Bank",
+   "One-stop service system Single window"
+  ]
+ },
+ "500": {
+  "id": "500",
+  "title": "Obtain quarantine inspection act",
+  "direction": "export",
+  "goods": "any cargo",
+  "mode": "any",
+  "kind": "service",
+  "timeframe": [
+   5,
+   43
+  ],
+  "blocksCount": 1,
+  "stepsCount": 8,
+  "onlineCount": 6,
+  "entities": [
+   "Agency of plant quarantine and protection Personal cabinet (Oferta)",
+   "Bank",
+   "One-stop service system Single window",
+   "Customs warehouse",
+   "Territorial Department of plant quarantine and protection"
+  ]
+ },
+ "507": {
+  "id": "507",
+  "title": "Import of vegetable oils for consumers' use and consumption by train",
+  "direction": "import",
+  "goods": "vegetable oils for consumers' use and consumption",
+  "mode": "train",
+  "kind": "customs",
+  "timeframe": [
+   49,
+   98
+  ],
+  "blocksCount": 13,
+  "stepsCount": 41,
+  "onlineCount": 19,
+  "entities": [
+   "Single portal of interactive state services",
+   "Uzbekistan railways Single window",
+   "Bank",
+   "Tashkent regional railway junction",
+   "Customs warehouse",
+   "Railway station",
+   "Customs post of foreign trade activity",
+   "Personal cabinet of participant of foreign economic activity",
+   "One-stop service system Single window",
+   "Regional center for sanitary-epidemiological service",
+   "Sanitary-epidemiological welfare and public health committee of the Republic of Uzbekistan",
+   "Online banking system"
+  ]
+ },
+ "512": {
+  "id": "512",
+  "title": "Import of vegetable oils for technical or industrial use by train",
+  "direction": "import",
+  "goods": "vegetable oils for technical or industrial use",
+  "mode": "train",
+  "kind": "customs",
+  "timeframe": [
+   10,
+   41
+  ],
+  "blocksCount": 11,
+  "stepsCount": 28,
+  "onlineCount": 10,
+  "entities": [
+   "Single portal of interactive state services",
+   "Uzbekistan railways Single window",
+   "Bank",
+   "Tashkent regional railway junction",
+   "Customs warehouse",
+   "Railway station",
+   "Customs post of foreign trade activity",
+   "Personal cabinet of participant of foreign economic activity",
+   "Online banking system"
+  ]
+ },
+ "514": {
+  "id": "514",
+  "title": "Export of vegetable oils by train",
+  "direction": "export",
+  "goods": "vegetable oils",
+  "mode": "train",
+  "kind": "customs",
+  "timeframe": [
+   67,
+   206
+  ],
+  "blocksCount": 8,
+  "stepsCount": 34,
+  "onlineCount": 13,
+  "entities": [
+   "Single portal of interactive state services",
+   "Uzbekistan railways Single window",
+   "Bank",
+   "Tashkent regional railway junction",
+   "Freight forwarding company",
+   "Joint Stock Company \"O'zbekiston temir yo'llari\"",
+   "Railway station",
+   "Place of loading / branch line",
+   "\"Uzbekexpertiza\" JSC",
+   "\"Uzbekexpertiza\" JSC service portal",
+   "One-stop service system Single window",
+   "Warehouse / Location of goods",
+   "Personal cabinet of participant of foreign economic activity",
+   "Customs post of foreign trade activity"
+  ]
+ },
+ "518": {
+  "id": "518",
+  "title": "Arrange cargo transportation by train physically",
+  "direction": "export",
+  "goods": "any cargo",
+  "mode": "train",
+  "kind": "logistics",
+  "timeframe": [
+   63,
+   189
+  ],
+  "blocksCount": 5,
+  "stepsCount": 21,
+  "onlineCount": 2,
+  "entities": [
+   "Tashkent Technological center for the processing of transport documents",
+   "Tashkent regional railway junction",
+   "Railway station",
+   "Bank",
+   "Freight forwarding company",
+   "Joint Stock Company \"O'zbekiston temir yo'llari\"",
+   "Place of loading / branch line"
+  ]
+ },
+ "519": {
+  "id": "519",
+  "title": "Arrange cargo transportation by train physically",
+  "direction": "export",
+  "goods": "any cargo",
+  "mode": "train",
+  "kind": "logistics",
+  "timeframe": [
+   63,
+   189
+  ],
+  "blocksCount": 5,
+  "stepsCount": 21,
+  "onlineCount": 2,
+  "entities": [
+   "Tashkent Technological center for the processing of transport documents",
+   "Tashkent regional railway junction",
+   "Railway station",
+   "Bank",
+   "Freight forwarding company",
+   "Joint Stock Company \"O'zbekiston temir yo'llari\"",
+   "Place of loading / branch line"
+  ]
+ },
+ "522": {
+  "id": "522",
+  "title": "Clearance of seed oil by train",
+  "direction": "import",
+  "goods": "seed oil",
+  "mode": "train",
+  "kind": "customs",
+  "timeframe": [
+   1,
+   12
+  ],
+  "blocksCount": 1,
+  "stepsCount": 6,
+  "onlineCount": 4,
+  "entities": [
+   "Personal cabinet of participant of foreign economic activity",
+   "Bank",
+   "Warehouse / Location of goods",
+   "Customs post of foreign trade activity"
+  ]
+ },
+ "537": {
+  "id": "537",
+  "title": "Export of perfumery, cosmetic or toilet preparations by air",
+  "direction": "export",
+  "goods": "perfumery, cosmetic or toilet preparations",
+  "mode": "air",
+  "kind": "customs",
+  "timeframe": [
+   16,
+   72
+  ],
+  "blocksCount": 7,
+  "stepsCount": 32,
+  "onlineCount": 10,
+  "entities": [
+   "Single portal of interactive state services",
+   "Cargo sales agent",
+   "\"Uzbekexpertiza\" JSC",
+   "Bank",
+   "\"Uzbekexpertiza\" JSC service portal",
+   "One-stop service system Single window",
+   "Warehouse / Location of goods",
+   "Postal cargo complex at Tashkent International Airport named by Islam Karimov",
+   "Customs post \"Avia yuklar\" at the airport's warehouse",
+   "Personal cabinet of participant of foreign economic activity"
   ]
  },
  "540": {
@@ -3880,1113 +2708,2350 @@ export const PROCEDURES: Record<string, Procedure> = {
   "direction": "export",
   "goods": "tea",
   "mode": "air",
+  "kind": "customs",
   "timeframe": [
    30,
    108
   ],
+  "blocksCount": 9,
   "stepsCount": 47,
-  "blocks": [
-   {
-    "id": "b1",
-    "name": "Registration of export contract",
-    "dependsOn": [],
-    "level": 0,
-    "estDuration": [
-     2,
-     8
-    ],
-    "dependencyReason": "Independent track — can start as soon as the case opens, no upstream block required.",
-    "lane": "Other government",
-    "entities": [
-     "Single portal of interactive state services"
-    ],
-    "stepRange": [
-     1,
-     1
-    ],
-    "optionalSteps": [],
-    "altSteps": [],
-    "steps": [
-     {
-      "num": 1,
-      "title": "Register foreign trade contract in UEISFTO",
-      "output": "Identification number of foreign trade contract",
-      "entity": "Single portal of interactive state services",
-      "channel": "Online: apply",
-      "where": "my.gov.uz — unified state services my.gov.uz",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Electronic digital signature",
-       "Electronic copy of foreign trade contract"
-      ]
-     }
-    ]
-   },
-   {
-    "id": "b2",
-    "name": "Obtain air waybill",
-    "dependsOn": [],
-    "level": 0,
-    "estDuration": [
-     10,
-     30
-    ],
-    "dependencyReason": "Independent track — can start as soon as the case opens, no upstream block required.",
-    "lane": "Transport & E-Tranzit",
-    "entities": [
-     "Cargo sales agent"
-    ],
-    "stepRange": [
-     2,
-     5
-    ],
-    "optionalSteps": [],
-    "altSteps": [],
-    "steps": [
-     {
-      "num": 2,
-      "title": "Contract with cargo sales agent",
-      "output": "Agreement on the provision of air transportation services",
-      "entity": "Cargo sales agent",
-      "channel": "In person",
-      "where": "Cargo sales agent",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Guarantees and fees",
-       "Bank details"
-      ]
-     },
-     {
-      "num": 3,
-      "title": "Submit shipper’s letter of instruction",
-      "output": "Shipper’s letter of instruction",
-      "entity": "Cargo sales agent",
-      "channel": "In person",
-      "where": "Cargo sales agent",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Commercial invoice",
-       "Packing list"
-      ]
-     },
-     {
-      "num": 4,
-      "title": "Pay for transportation service",
-      "output": "Bank payment receipt",
-      "entity": "Cargo sales agent",
-      "channel": "Online: pay",
-      "where": "Payment methods information page uzbekistan.tradeportal.org",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Invoice for payment",
-       "For physical payment",
-       "Physical presence",
-       "For online payment (without necessity to visit a bank)",
-       "Online banking account"
-      ]
-     },
-     {
-      "num": 5,
-      "title": "Obtain air waybill",
-      "output": "Air waybill",
-      "entity": "Cargo sales agent",
-      "channel": "In person",
-      "where": "Cargo sales agent",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Shipper's letter of instruction",
-       "Bank payment receipt"
-      ]
-     }
-    ]
-   },
-   {
-    "id": "b3",
-    "name": "Contract with airport for cargo handling",
-    "dependsOn": [],
-    "level": 0,
-    "estDuration": [
-     12,
-     36
-    ],
-    "dependencyReason": "Independent track — can start as soon as the case opens, no upstream block required.",
-    "lane": "Transport & E-Tranzit",
-    "entities": [
-     "Bank",
-     "Postal cargo complex at Tashkent International Airport named by Islam Karimov"
-    ],
-    "stepRange": [
-     6,
-     9
-    ],
-    "optionalSteps": [],
-    "altSteps": [],
-    "steps": [
-     {
-      "num": 6,
-      "title": "Contract with airport for cargo handling",
-      "output": "Sign the contract",
-      "entity": "Postal cargo complex at Tashkent International Airport named by Islam Karimov",
-      "channel": "In person",
-      "where": "Contracting Department \"Room 212, 2nd floor\"",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Physical presence",
-       "Certificate of state registration",
-       "Stamp"
-      ]
-     },
-     {
-      "num": 7,
-      "title": "Obtain signed contract with airport for cargo handling",
-      "output": "Contract for handling and storage of cargo",
-      "entity": "Postal cargo complex at Tashkent International Airport named by Islam Karimov",
-      "channel": "In person",
-      "where": "Contracting Department \"Room 212, 2nd floor\"",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Physical presence",
-       "Power of attorney"
-      ]
-     },
-     {
-      "num": 8,
-      "title": "Obtain invoice for prepayment",
-      "output": "Invoice for prepayment for cargo handling",
-      "entity": "Postal cargo complex at Tashkent International Airport named by Islam Karimov",
-      "channel": "In person",
-      "where": "Cash desk \"First floor\"",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Contract for handling and storage of cargo",
-       "Air waybill"
-      ]
-     },
-     {
-      "num": 9,
-      "title": "Prepay for handling and storage of cargo",
-      "output": "Receipt of payment",
-      "entity": "Bank",
-      "channel": "Online: pay",
-      "where": "Payment methods information page uzbekistan.tradeportal.org",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Invoice for prepayment for cargo handling",
-       "For physical payment",
-       "Physical presence",
-       "For online payment (without necessity to visit a bank)",
-       "Online banking account"
-      ]
-     }
-    ]
-   },
-   {
-    "id": "b4",
-    "name": "Obtain internal phytosanitary certificate (for tea not in consumer packaging)",
-    "dependsOn": [],
-    "level": 0,
-    "estDuration": [
-     24,
-     72
-    ],
-    "dependencyReason": "Independent track — can start as soon as the case opens, no upstream block required.",
-    "lane": "Single Window & certification",
-    "entities": [
-     "Agency of plant quarantine and protection Personal cabinet (Oferta)",
-     "Assalom Agro",
-     "Bank",
-     "Territorial Department of plant quarantine and protection",
-     "Warehouse / Location of goods"
-    ],
-    "stepRange": [
-     10,
-     17
-    ],
-    "optionalSteps": [
-     14,
-     15,
-     16
-    ],
-    "altSteps": [],
-    "steps": [
-     {
-      "num": 10,
-      "title": "Obtain offer agreement",
-      "output": "Offer agreement for internal phytosanitary certificate",
-      "entity": "Agency of plant quarantine and protection Personal cabinet (Oferta)",
-      "channel": "Online: obtain",
-      "where": "eFito (phytosanitary) efito.uz",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Internet access",
-       "Data required to complete offer agreement",
-       "Tax Identification Number of the organization or individual",
-       "Name of the organization",
-       "Full name of an organization's manager",
-       "Contact phone number",
-       "Agency region",
-       "Payment sum"
-      ]
-     },
-     {
-      "num": 11,
-      "title": "Pay for internal phytosanitary certificate",
-      "output": "Receipt of payment",
-      "entity": "Bank",
-      "channel": "Online: pay",
-      "where": "Payment methods information page uzbekistan.tradeportal.org",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Offer agreement for internal phytosanitary certificate",
-       "For physical payment",
-       "Physical presence",
-       "Passport",
-       "For online payment (without necessity to visit a bank)",
-       "Online banking account"
-      ]
-     },
-     {
-      "num": 12,
-      "title": "Apply for internal phytosanitary certificate",
-      "output": "Appointment for inspection",
-      "entity": "Assalom Agro",
-      "channel": "Online: apply",
-      "where": "assalomagro.uz assalomagro.uz",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "To access the platform",
-       "One ID account",
-       "Contact phone number",
-       "Email"
-      ]
-     },
-     {
-      "num": 13,
-      "title": "Undergo phytosanitary inspection",
-      "output": "Sealing",
-      "entity": "Warehouse / Location of goods",
-      "channel": "In person",
-      "where": "Warehouse / Location of goods",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Physical presence"
-      ]
-     },
-     {
-      "num": 14,
-      "title": "Obtain offer agreement for fumigation",
-      "output": "Fumigation offer agreement",
-      "entity": "Agency of plant quarantine and protection Personal cabinet (Oferta)",
-      "channel": "Online: obtain",
-      "where": "eFito (phytosanitary) efito.uz",
-      "performedBy": "",
-      "optional": true,
-      "alternative": false,
-      "inputs": [
-       "Internet access",
-       "Data required to complete offer agreement",
-       "Tax Identification Number of the organization or individual",
-       "Name of the organization",
-       "Full name of an organization's manager",
-       "Type of organization (business entity, budgetary)",
-       "Contact phone number",
-       "Agency region",
-       "Cost on the contract"
-      ]
-     },
-     {
-      "num": 15,
-      "title": "Pay for fumigation",
-      "output": "Receipt of payment",
-      "entity": "Bank",
-      "channel": "Online: pay",
-      "where": "Payment methods information page uzbekistan.tradeportal.org",
-      "performedBy": "",
-      "optional": true,
-      "alternative": false,
-      "inputs": [
-       "Fumigation offer agreement",
-       "For physical payment",
-       "Physical presence",
-       "Passport",
-       "For online payment (without necessity to visit a bank)",
-       "Online banking account"
-      ]
-     },
-     {
-      "num": 16,
-      "title": "Undergo fumigation",
-      "output": "Certificate of disinfestation",
-      "entity": "Territorial Department of plant quarantine and protection",
-      "channel": "In person",
-      "where": "Fumigation (disinfection) division",
-      "performedBy": "",
-      "optional": true,
-      "alternative": false,
-      "inputs": [
-       "Physical presence"
-      ]
-     },
-     {
-      "num": 17,
-      "title": "Obtain internal phytosanitary certificate",
-      "output": "Internal phytosanitary certificate",
-      "entity": "Assalom Agro",
-      "channel": "Online: obtain",
-      "where": "assalomagro.uz assalomagro.uz",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "One ID account",
-       "Contact phone number",
-       "Email"
-      ]
-     }
-    ]
-   },
-   {
-    "id": "b5",
-    "name": "Obtain phytosanitary certificate (for tea not in consumer packaging)",
-    "dependsOn": [
-     "b4"
-    ],
-    "level": 1,
-    "estDuration": [
-     10,
-     30
-    ],
-    "dependencyReason": "Border phytosanitary cert follows the internal cert/sealing done in b4.",
-    "lane": "Single Window & certification",
-    "entities": [
-     "Agency of plant quarantine and protection Personal cabinet (Oferta)",
-     "Bank",
-     "Border checkpoint for plant quarantine",
-     "One-stop service system Single window"
-    ],
-    "stepRange": [
-     18,
-     22
-    ],
-    "optionalSteps": [],
-    "altSteps": [],
-    "steps": [
-     {
-      "num": 18,
-      "title": "Obtain offer agreement",
-      "output": "Offer agreement for phytosanitary certificate",
-      "entity": "Agency of plant quarantine and protection Personal cabinet (Oferta)",
-      "channel": "Online: obtain",
-      "where": "Quarantine cabinet cabinet.karantin.uz",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Electronic digital signature",
-       "Data required to complete offer agreement",
-       "Tax Identification Number of the organization or individual",
-       "Name of the organization",
-       "Full name of an organization's manager",
-       "Type of organization (business entity, budgetary)",
-       "Contact phone number",
-       "Agency region",
-       "Payment sum",
-       "Quantity of transport units"
-      ]
-     },
-     {
-      "num": 19,
-      "title": "Pay for phytosanitary certificate",
-      "output": "Receipt of payment",
-      "entity": "Bank",
-      "channel": "Online: pay",
-      "where": "Payment methods information page uzbekistan.tradeportal.org",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Offer agreement for phytosanitary certificate",
-       "For physical payment",
-       "Physical presence",
-       "Passport",
-       "For online payment (without necessity to visit a bank)",
-       "Online banking account"
-      ]
-     },
-     {
-      "num": 20,
-      "title": "Apply for phytosanitary certificate",
-      "output": "Appointment for phytosanitary control",
-      "entity": "One-stop service system Single window",
-      "channel": "Online: apply",
-      "where": "Single Window singlewindow.uz",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Electronic digital signature",
-       "Online application for phytosanitary certificate"
-      ]
-     },
-     {
-      "num": 21,
-      "title": "Undergo phytosanitary inspection",
-      "output": "Visual inspection",
-      "entity": "Border checkpoint for plant quarantine",
-      "channel": "In person",
-      "where": "Office of the inspector on the border checkpoint for plant quarantine",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Physical presence"
-      ]
-     },
-     {
-      "num": 22,
-      "title": "Obtain phytosanitary certificate",
-      "output": "Phytosanitary certificate",
-      "entity": "Border checkpoint for plant quarantine",
-      "channel": "In person",
-      "where": "Office of the inspector on the border checkpoint for plant quarantine",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Physical presence"
-      ]
-     }
-    ]
-   },
-   {
-    "id": "b6",
-    "name": "Obtain certificate of origin",
-    "dependsOn": [],
-    "level": 0,
-    "estDuration": [
-     24,
-     72
-    ],
-    "dependencyReason": "Independent track — can start as soon as the case opens, no upstream block required.",
-    "lane": "Single Window & certification",
-    "entities": [
-     "Bank",
-     "One-stop service system Single window",
-     "Warehouse / Location of goods",
-     "“Uzbekexpertiza” JSC",
-     "“Uzbekexpertiza” JSC service portal"
-    ],
-    "stepRange": [
-     23,
-     31
-    ],
-    "optionalSteps": [],
-    "altSteps": [
-     27,
-     31
-    ],
-    "steps": [
-     {
-      "num": 23,
-      "title": "Conclude contract for services",
-      "output": "Contract with Uzbekexpertiza",
-      "entity": "“Uzbekexpertiza” JSC",
-      "channel": "In person",
-      "where": "Deputy Chief of the Department of examination of preferential goods \"Room 36, 3rd floor\"",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Physical presence",
-       "Passport",
-       "Power of attorney"
-      ]
-     },
-     {
-      "num": 24,
-      "title": "Pay for certificate of origin",
-      "output": "Receipt of payment",
-      "entity": "Bank",
-      "channel": "Online: pay",
-      "where": "Payment methods information page uzbekistan.tradeportal.org",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Invoice for prepayment",
-       "For physical payment",
-       "Physical presence",
-       "Passport",
-       "For online payment (without necessity to visit a bank)",
-       "Online banking account"
-      ]
-     },
-     {
-      "num": 25,
-      "title": "Apply for certificate of origin",
-      "output": "Assignment of expert on certification",
-      "entity": "“Uzbekexpertiza” JSC",
-      "channel": "In person",
-      "where": "Deputy Chief of the Department of examination of preferential goods \"Room 36, 3rd floor\"",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Application for obtaining of Certificate of origin for exported goods",
-       "Application for obtaining of Certificate of origin for exported goods",
-       "Commercial invoice",
-       "Any document confirming the exporter's right to use a land plot",
-       "Any document confirming purchase of agricultural products"
-      ]
-     },
-     {
-      "num": 26,
-      "title": "Apply for certificate of origin via Uzbekexpertiza service portal",
-      "output": "Appointment with an expert on certification",
-      "entity": "“Uzbekexpertiza” JSC service portal",
-      "channel": "Online: apply",
-      "where": "Uzbekexpertiza service portal application.expertiza.uz",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Electronic digital signature",
-       "One ID account",
-       "Online application for certificate of origin",
-       "Commercial invoice",
-       "Any document confirming the exporter's right to use a land plot",
-       "Any document confirming purchase of agricultural products"
-      ]
-     },
-     {
-      "num": 27,
-      "title": "Apply for certificate of origin via Single Window",
-      "output": "Appointment with an expert on certification",
-      "entity": "One-stop service system Single window",
-      "channel": "Online: apply",
-      "where": "Single Window singlewindow.uz",
-      "performedBy": "",
-      "optional": false,
-      "alternative": true,
-      "inputs": [
-       "Electronic digital signature",
-       "Online application for certificate of origin",
-       "Commercial invoice",
-       "Any document confirming the exporter's right to use a land plot",
-       "Any document confirming purchase of agricultural products"
-      ]
-     },
-     {
-      "num": 28,
-      "title": "Assessment of application",
-      "output": "Appointment for cargo expertise",
-      "entity": "“Uzbekexpertiza” JSC",
-      "channel": "In person",
-      "where": "Department of Examination of Preferential Goods \"3rd floor\"",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Physical presence"
-      ]
-     },
-     {
-      "num": 29,
-      "title": "Undergo expertise of goods",
-      "output": "Undergo expertise",
-      "entity": "Warehouse / Location of goods",
-      "channel": "In person",
-      "where": "Warehouse / Location of goods",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Physical presence"
-      ]
-     },
-     {
-      "num": 30,
-      "title": "Obtain certificate of origin",
-      "output": "Certificate of origin",
-      "entity": "“Uzbekexpertiza” JSC",
-      "channel": "In person",
-      "where": "Department of Examination of Preferential Goods \"3rd floor\"",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Physical presence"
-      ]
-     },
-     {
-      "num": 31,
-      "title": "Obtain expert conclusion",
-      "output": "Expert conclusion",
-      "entity": "“Uzbekexpertiza” JSC",
-      "channel": "In person",
-      "where": "Department of Examination of Preferential Goods \"3rd floor\"",
-      "performedBy": "",
-      "optional": false,
-      "alternative": true,
-      "inputs": [
-       "Physical presence"
-      ]
-     }
-    ]
-   },
-   {
-    "id": "b7",
-    "name": "Arrange cargo handling and dispatch at airport's warehouse 1/2",
-    "dependsOn": [
-     "b2",
-     "b3",
-     "b5"
-    ],
-    "level": 2,
-    "estDuration": [
-     16,
-     48
-    ],
-    "dependencyReason": "Airport warehouse handling needs the air waybill (b2), the signed handling contract (b3), and the phytosanitary clearance (b5) — the airport re-checks quarantine status at its own checkpoint.",
-    "lane": "Customs / SCC",
-    "entities": [
-     "Border checkpoint for plant quarantine",
-     "Customs post \"Avia yuklar\" at the airport's warehouse",
-     "Postal cargo complex at Tashkent International Airport named by Islam Karimov"
-    ],
-    "stepRange": [
-     32,
-     38
-    ],
-    "optionalSteps": [],
-    "altSteps": [],
-    "steps": [
-     {
-      "num": 32,
-      "title": "Put cargo under customs control",
-      "output": "Stamp \"Cargo is under customs control\"",
-      "entity": "Customs post \"Avia yuklar\" at the airport's warehouse",
-      "channel": "In person",
-      "where": "Group of customs control and customs clearance",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Shipper's letter of instruction",
-       "Physical presence",
-       "Power of attorney"
-      ]
-     },
-     {
-      "num": 33,
-      "title": "Apply for permission to airport's cargo warehouse",
-      "output": "Permission granted",
-      "entity": "Postal cargo complex at Tashkent International Airport named by Islam Karimov",
-      "channel": "In person",
-      "where": "The agent in booking cargoes \"Room 102, 1st floor\"",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Air waybill",
-       "Shipper's letter of instruction",
-       "Passport",
-       "Vehicle registration certificate",
-       "Commercial invoice"
-      ]
-     },
-     {
-      "num": 34,
-      "title": "Obtain the pass to airport's cargo warehouse",
-      "output": "Pass card",
-      "entity": "Postal cargo complex at Tashkent International Airport named by Islam Karimov",
-      "channel": "In person",
-      "where": "Pass issuance room \"Room 109, 1st floor\"",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Physical presence",
-       "Passport",
-       "Vehicle registration certificate"
-      ]
-     },
-     {
-      "num": 35,
-      "title": "Undergo vehicle inspection at airport's Checkpoint",
-      "output": "Entrance to airport's warehouse",
-      "entity": "Postal cargo complex at Tashkent International Airport named by Islam Karimov",
-      "channel": "In person",
-      "where": "Airport's Checkpoint",
-      "performedBy": "vehicle driver",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Physical presence",
-       "Vehicle entrance permit"
-      ]
-     },
-     {
-      "num": 36,
-      "title": "Undergo phytosanitary control at airport",
-      "output": "Confirmation about passing quarantine control",
-      "entity": "Border checkpoint for plant quarantine",
-      "channel": "In person",
-      "where": "Office of the inspector on the border checkpoint for plant quarantine",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Phytosanitary certificate"
-      ]
-     },
-     {
-      "num": 37,
-      "title": "Undergo cargo weight and visual inspection",
-      "output": "Inspection passed",
-      "entity": "Postal cargo complex at Tashkent International Airport named by Islam Karimov",
-      "channel": "In person",
-      "where": "Cargo storage place",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Air waybill"
-      ]
-     },
-     {
-      "num": 38,
-      "title": "Undergo control for hidden dangerous goods",
-      "output": "Notes or stamps in the air waybill",
-      "entity": "Postal cargo complex at Tashkent International Airport named by Islam Karimov",
-      "channel": "In person",
-      "where": "Dangerous goods department \"Room 101, 1st floor\"",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Air waybill"
-      ]
-     }
-    ]
-   },
-   {
-    "id": "b8",
-    "name": "Undergo customs clearance",
-    "dependsOn": [
-     "b6",
-     "b7"
-    ],
-    "level": 3,
-    "estDuration": [
-     12,
-     40
-    ],
-    "dependencyReason": "Customs declaration needs the certificate of origin (b6) and the cargo already processed at the airport warehouse (b7).",
-    "lane": "Customs / SCC",
-    "entities": [
-     "Bank",
-     "Customs post \"Avia yuklar\" at the airport's warehouse",
-     "Personal cabinet of participant of foreign economic activity"
-    ],
-    "stepRange": [
-     39,
-     43
-    ],
-    "optionalSteps": [
-     42
-    ],
-    "altSteps": [],
-    "steps": [
-     {
-      "num": 39,
-      "title": "Create export customs declaration",
-      "output": "Electronic form of customs declaration",
-      "entity": "Personal cabinet of participant of foreign economic activity",
-      "channel": "Online: apply",
-      "where": "Customs e-declaration cabinet (SCC) ed1.customs.uz",
-      "performedBy": "trader or customs broker",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Electronic digital signature",
-       "Documents required to complete declaration",
-       "Identification number of foreign trade contract",
-       "Commercial invoice",
-       "Air waybill",
-       "Documents that are not obligatory to submit for export declaration",
-       "Phytosanitary certificate",
-       "Certificate of origin",
-       "Certificate of origin form A",
-       "Certificate of origin General form"
-      ]
-     },
-     {
-      "num": 40,
-      "title": "Pay for customs fee",
-      "output": "Receipt of payment",
-      "entity": "Bank",
-      "channel": "Online: pay",
-      "where": "Trade info portal uztradeinfo.uz",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Bank details of territorial customs departments",
-       "For physical payment",
-       "Physical presence",
-       "For online payment (without necessity to visit a bank)",
-       "Online banking account"
-      ]
-     },
-     {
-      "num": 41,
-      "title": "Submit export customs declaration",
-      "output": "Customs declaration submitted",
-      "entity": "Personal cabinet of participant of foreign economic activity",
-      "channel": "Online: submit",
-      "where": "Customs e-declaration cabinet (SCC) ed1.customs.uz",
-      "performedBy": "trader or customs broker",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Electronic digital signature",
-       "Electronic form of customs declaration"
-      ]
-     },
-     {
-      "num": 42,
-      "title": "Undergo customs inspection in red corridor",
-      "output": "Customs examination act",
-      "entity": "Customs post \"Avia yuklar\" at the airport's warehouse",
-      "channel": "In person",
-      "where": "Group of customs control and customs clearance",
-      "performedBy": "",
-      "optional": true,
-      "alternative": false,
-      "inputs": [
-       "Export customs declaration",
-       "Air waybill",
-       "Commercial invoice",
-       "Physical presence",
-       "Passport",
-       "Power of attorney"
-      ]
-     },
-     {
-      "num": 43,
-      "title": "Obtain export customs declaration",
-      "output": "Export customs declaration",
-      "entity": "Personal cabinet of participant of foreign economic activity",
-      "channel": "Online: obtain",
-      "where": "Customs e-declaration cabinet (SCC) ed1.customs.uz",
-      "performedBy": "trader or customs broker",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Electronic digital signature"
-      ]
-     }
-    ]
-   },
-   {
-    "id": "b9",
-    "name": "Arrange cargo handling and dispatch at airport's warehouse 2/2",
-    "dependsOn": [
-     "b8"
-    ],
-    "level": 4,
-    "estDuration": [
-     10,
-     30
-    ],
-    "dependencyReason": "Final handover to the carrier follows customs release in b8.",
-    "lane": "Customs / SCC",
-    "entities": [
-     "Customs post \"Avia yuklar\" at the airport's warehouse",
-     "Postal cargo complex at Tashkent International Airport named by Islam Karimov"
-    ],
-    "stepRange": [
-     44,
-     47
-    ],
-    "optionalSteps": [],
-    "altSteps": [],
-    "steps": [
-     {
-      "num": 44,
-      "title": "Complete mutual settlements with airport",
-      "output": "Cashdesk stamp on airwaybill",
-      "entity": "Postal cargo complex at Tashkent International Airport named by Islam Karimov",
-      "channel": "In person",
-      "where": "Cash desk \"First floor\"",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Air waybill",
-       "Contract for handling and storage of cargo"
-      ]
-     },
-     {
-      "num": 45,
-      "title": "Obtain customs approval to release cargo",
-      "output": "Stamp \"Release permited\" on airwaybill",
-      "entity": "Customs post \"Avia yuklar\" at the airport's warehouse",
-      "channel": "In person",
-      "where": "Department of customs clearance \"First Window, 1st floor in secured zone\"",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Air waybill",
-       "Commercial invoice"
-      ]
-     },
-     {
-      "num": 46,
-      "title": "Undergo air security inspection",
-      "output": "Aviation safety stamp",
-      "entity": "Postal cargo complex at Tashkent International Airport named by Islam Karimov",
-      "channel": "In person",
-      "where": "Aviation safety inspection department",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Air waybill",
-       "Physical presence"
-      ]
-     },
-     {
-      "num": 47,
-      "title": "Hand over cargo for dispatch",
-      "output": "Blue page of air waybill",
-      "entity": "Postal cargo complex at Tashkent International Airport named by Islam Karimov",
-      "channel": "In person",
-      "where": "Postal cargo complex at Tashkent International Airport named by Islam Karimov",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Air waybill",
-       "Package of documents"
-      ]
-     }
-    ]
-   }
+  "onlineCount": 19,
+  "entities": [
+   "Single portal of interactive state services",
+   "Cargo sales agent",
+   "Bank",
+   "Postal cargo complex at Tashkent International Airport named by Islam Karimov",
+   "Agency of plant quarantine and protection Personal cabinet (Oferta)",
+   "Assalom Agro",
+   "Territorial Department of plant quarantine and protection",
+   "Warehouse / Location of goods",
+   "Border checkpoint for plant quarantine",
+   "One-stop service system Single window",
+   "“Uzbekexpertiza” JSC",
+   "“Uzbekexpertiza” JSC service portal",
+   "Customs post \"Avia yuklar\" at the airport's warehouse",
+   "Personal cabinet of participant of foreign economic activity"
+  ]
+ },
+ "541": {
+  "id": "541",
+  "title": "Clearance of vegetable oils for consumers' use and consumption by train",
+  "direction": "import",
+  "goods": "vegetable oils for consumers' use and consumption",
+  "mode": "train",
+  "kind": "customs",
+  "timeframe": [
+   7,
+   33
   ],
-  "entityDirectory": [
-   {
-    "name": "Single portal of interactive state services",
-    "steps": "1",
-    "lane": "Other government",
-    "contact": "✉ epigu@egov.uz ☎ +998 55 501 36 19,  +998 55 501 36 17 🌐 https://my.gov.uz/, https://my.gov.uz/ru/site/feedback"
-   },
-   {
-    "name": "Cargo sales agent",
-    "steps": "2, 3, 4, 5",
-    "lane": "Transport & E-Tranzit",
-    "contact": ""
-   },
-   {
-    "name": "Postal cargo complex at Tashkent International Airport named by Islam Karimov",
-    "steps": "6, 7, 8, 33, 34, 35, 37, 38, 44, 46, 47",
-    "lane": "Transport & E-Tranzit",
-    "contact": "✉ pkg.tas@uzairports.com, tashairkanc@uzairports.com ☎ +990 78 140 28 25, +998 78 140 28 26 🌐 https://tashkent-airport.uz/"
-   },
-   {
-    "name": "Bank",
-    "steps": "9, 11, 15, 19, 24, 40",
-    "lane": "Bank",
-    "contact": ""
-   },
-   {
-    "name": "Agency of plant quarantine and protection Personal cabinet (Oferta)",
-    "steps": "10, 14, 18",
-    "lane": "Single Window & certification",
-    "contact": "✉ info@karantin.uz 🌐 https://efito.uz/invoice/, http://karantin.uz/"
-   },
-   {
-    "name": "Assalom Agro",
-    "steps": "12, 17",
-    "lane": "Single Window & certification",
-    "contact": "✉ assalomagro@gmail.com, info@5x5.uz ☎ +998 55 502 55 75, +998 98 198 14 02 🌐 https://assalomagro.uz/en"
-   },
-   {
-    "name": "Warehouse / Location of goods",
-    "steps": "13, 29",
-    "lane": "Transport & E-Tranzit",
-    "contact": ""
-   },
-   {
-    "name": "Territorial Department of plant quarantine and protection",
-    "steps": "16",
-    "lane": "Single Window & certification",
-    "contact": ""
-   },
-   {
-    "name": "One-stop service system Single window",
-    "steps": "20, 27",
-    "lane": "Single Window & certification",
-    "contact": "☎ +998 78 120 76 08 (Int. 5603, 5646, 5606, 5885) , +998 78 120 76 00 (Int. 5603, 5646, 5606, 5885) 🌐 http://singlewindow.uz/index.jsp, http://sw2.customs.uz/"
-   },
-   {
-    "name": "Border checkpoint for plant quarantine",
-    "steps": "21, 22, 36",
-    "lane": "Single Window & certification",
-    "contact": ""
-   },
-   {
-    "name": "“Uzbekexpertiza” JSC",
-    "steps": "23, 25, 28, 30, 31",
-    "lane": "Single Window & certification",
-    "contact": "✉ info1@expertiza.uz, expertiza@exat.uz ☎ +998 71 230 23 64, +998 71 230 23 60 🌐 http://www.expertiza.uz/, http://t.me/uzbekexpertiza_bot"
-   },
-   {
-    "name": "“Uzbekexpertiza” JSC service portal",
-    "steps": "26",
-    "lane": "Single Window & certification",
-    "contact": "🌐 http://application.expertiza.uz/expertiza/#/, http://www.expertiza.uz/"
-   },
-   {
-    "name": "Customs post \"Avia yuklar\" at the airport's warehouse",
-    "steps": "32, 42, 45",
-    "lane": "Customs / SCC",
-    "contact": "☎ +998 78 120 86 30, +998 71 255 83 89"
-   },
-   {
-    "name": "Personal cabinet of participant of foreign economic activity",
-    "steps": "39, 41, 43",
-    "lane": "Customs / SCC",
-    "contact": "🌐 http://ed1.customs.uz, http://ed2.customs.uz"
-   }
+  "blocksCount": 5,
+  "stepsCount": 19,
+  "onlineCount": 8,
+  "entities": [
+   "Customs post of foreign trade activity",
+   "Personal cabinet of participant of foreign economic activity",
+   "Tashkent regional railway junction",
+   "Customs warehouse",
+   "Online banking system",
+   "Bank"
+  ]
+ },
+ "543": {
+  "id": "543",
+  "title": "Clearance of vegetable oils for technical or industrial use by train",
+  "direction": "import",
+  "goods": "vegetable oils for technical or industrial use",
+  "mode": "train",
+  "kind": "customs",
+  "timeframe": [
+   3,
+   18
+  ],
+  "blocksCount": 3,
+  "stepsCount": 10,
+  "onlineCount": 4,
+  "entities": [
+   "Customs post of foreign trade activity",
+   "Personal cabinet of participant of foreign economic activity",
+   "Online banking system",
+   "Customs warehouse",
+   "Bank"
+  ]
+ },
+ "548": {
+  "id": "548",
+  "title": "Clearance of meat and meat products by road",
+  "direction": "import",
+  "goods": "meat and meat products",
+  "mode": "road",
+  "kind": "customs",
+  "timeframe": [
+   7,
+   33
+  ],
+  "blocksCount": 5,
+  "stepsCount": 28,
+  "onlineCount": 10,
+  "entities": [
+   "Automated information system \"E-tranzit\"",
+   "State border crossing point",
+   "Customs warehouse",
+   "Customs post of foreign trade activity",
+   "Personal cabinet of participant of foreign economic activity",
+   "Bank",
+   "Online banking system"
+  ]
+ },
+ "550": {
+  "id": "550",
+  "title": "Obtain internal phytosanitary certificate",
+  "direction": "export",
+  "goods": "any cargo",
+  "mode": "any",
+  "kind": "service",
+  "timeframe": [
+   9,
+   21
+  ],
+  "blocksCount": 1,
+  "stepsCount": 8,
+  "onlineCount": 6,
+  "entities": [
+   "Agency of plant quarantine and protection Personal cabinet (Oferta)",
+   "Bank",
+   "Assalom Agro",
+   "Warehouse / Location of goods",
+   "Territorial Department of plant quarantine and protection"
+  ]
+ },
+ "555": {
+  "id": "555",
+  "title": "Import of tea by air",
+  "direction": "import",
+  "goods": "tea",
+  "mode": "air",
+  "kind": "customs",
+  "timeframe": [
+   36,
+   196
+  ],
+  "blocksCount": 12,
+  "stepsCount": 46,
+  "onlineCount": 23,
+  "entities": [
+   "Agency of plant quarantine and protection Personal cabinet (Oferta)",
+   "Bank",
+   "One-stop service system Single window",
+   "Single portal of interactive state services",
+   "Postal cargo complex at Tashkent International Airport named by Islam Karimov",
+   "Personal cabinet of participant of foreign economic activity",
+   "Customs post \"Avia yuklar\" at the airport's warehouse",
+   "Customs warehouse",
+   "Territorial Department of plant quarantine and protection",
+   "Regional center for sanitary-epidemiological service",
+   "Sanitary-epidemiological welfare and public health committee of the Republic of Uzbekistan",
+   "Online banking system",
+   "Border checkpoint for plant quarantine"
+  ]
+ },
+ "556": {
+  "id": "556",
+  "title": "Import of coffee by air",
+  "direction": "import",
+  "goods": "coffee",
+  "mode": "air",
+  "kind": "customs",
+  "timeframe": [
+   36,
+   196
+  ],
+  "blocksCount": 12,
+  "stepsCount": 46,
+  "onlineCount": 23,
+  "entities": [
+   "Agency of plant quarantine and protection Personal cabinet (Oferta)",
+   "Bank",
+   "One-stop service system Single window",
+   "Single portal of interactive state services",
+   "Postal cargo complex at Tashkent International Airport named by Islam Karimov",
+   "Personal cabinet of participant of foreign economic activity",
+   "Customs post \"Avia yuklar\" at the airport's warehouse",
+   "Customs warehouse",
+   "Territorial Department of plant quarantine and protection",
+   "Regional center for sanitary-epidemiological service",
+   "Sanitary-epidemiological welfare and public health committee of the Republic of Uzbekistan",
+   "Online banking system",
+   "Border checkpoint for plant quarantine"
+  ]
+ },
+ "557": {
+  "id": "557",
+  "title": "Import of pharmaceutical products by train",
+  "direction": "import",
+  "goods": "pharmaceutical products",
+  "mode": "train",
+  "kind": "customs",
+  "timeframe": [
+   85,
+   290
+  ],
+  "blocksCount": 14,
+  "stepsCount": 41,
+  "onlineCount": 20,
+  "entities": [
+   "State center for expertise and standardization of medicines official web-site",
+   "Single portal of interactive state services",
+   "Uzbekistan railways Single window",
+   "Bank",
+   "Tashkent regional railway junction",
+   "Customs warehouse",
+   "Railway station",
+   "Customs post of foreign trade activity",
+   "Personal cabinet of participant of foreign economic activity",
+   "One-stop service system Single window",
+   "State center for expertise and standardization of medicines, medical devices and medical equipment",
+   "Electronic document management systems",
+   "Online banking system"
+  ]
+ },
+ "561": {
+  "id": "561",
+  "title": "Import of wood by road",
+  "direction": "import",
+  "goods": "wood",
+  "mode": "road",
+  "kind": "customs",
+  "timeframe": [
+   17,
+   122
+  ],
+  "blocksCount": 9,
+  "stepsCount": 43,
+  "onlineCount": 22,
+  "entities": [
+   "Agency of plant quarantine and protection Personal cabinet (Oferta)",
+   "Bank",
+   "One-stop service system Single window",
+   "Single portal of interactive state services",
+   "Customs warehouse",
+   "Automated information system \"E-tranzit\"",
+   "State border crossing point",
+   "Customs post of foreign trade activity",
+   "Personal cabinet of participant of foreign economic activity",
+   "Territorial Department of plant quarantine and protection",
+   "Online banking system"
+  ]
+ },
+ "562": {
+  "id": "562",
+  "title": "Import of wood by train",
+  "direction": "import",
+  "goods": "wood",
+  "mode": "train",
+  "kind": "customs",
+  "timeframe": [
+   21,
+   136
+  ],
+  "blocksCount": 14,
+  "stepsCount": 46,
+  "onlineCount": 24,
+  "entities": [
+   "Agency of plant quarantine and protection Personal cabinet (Oferta)",
+   "Bank",
+   "One-stop service system Single window",
+   "Single portal of interactive state services",
+   "Uzbekistan railways Single window",
+   "Tashkent regional railway junction",
+   "Customs warehouse",
+   "Railway station",
+   "Customs post of foreign trade activity",
+   "Personal cabinet of participant of foreign economic activity",
+   "Territorial Department of plant quarantine and protection",
+   "Online banking system"
+  ]
+ },
+ "563": {
+  "id": "563",
+  "title": "Clearance of tea by air",
+  "direction": "import",
+  "goods": "tea",
+  "mode": "air",
+  "kind": "customs",
+  "timeframe": [
+   5,
+   36
+  ],
+  "blocksCount": 5,
+  "stepsCount": 22,
+  "onlineCount": 6,
+  "entities": [
+   "Postal cargo complex at Tashkent International Airport named by Islam Karimov",
+   "Personal cabinet of participant of foreign economic activity",
+   "Customs post \"Avia yuklar\" at the airport's warehouse",
+   "Online banking system",
+   "Border checkpoint for plant quarantine"
+  ]
+ },
+ "570": {
+  "id": "570",
+  "title": "Arrange cargo transportation by air",
+  "direction": "export",
+  "goods": "any cargo",
+  "mode": "air",
+  "kind": "logistics",
+  "timeframe": [
+   12,
+   51
+  ],
+  "blocksCount": 4,
+  "stepsCount": 18,
+  "onlineCount": 2,
+  "entities": [
+   "Cargo sales agent",
+   "Postal cargo complex at Tashkent International Airport named by Islam Karimov",
+   "Bank",
+   "Customs post \"Avia yuklar\" at the airport's warehouse"
+  ]
+ },
+ "572": {
+  "id": "572",
+  "title": "Clearance of perfumery, cosmetic or toilet preparations by air",
+  "direction": "import",
+  "goods": "perfumery, cosmetic or toilet preparations",
+  "mode": "air",
+  "kind": "customs",
+  "timeframe": [
+   4,
+   28
+  ],
+  "blocksCount": 3,
+  "stepsCount": 15,
+  "onlineCount": 4,
+  "entities": [
+   "Customs post \"Avia yuklar\" at the airport's warehouse",
+   "Postal cargo complex at Tashkent International Airport named by Islam Karimov",
+   "Personal cabinet of participant of foreign economic activity",
+   "Bank"
+  ]
+ },
+ "576": {
+  "id": "576",
+  "title": "Export of furniture by train",
+  "direction": "export",
+  "goods": "furniture",
+  "mode": "train",
+  "kind": "customs",
+  "timeframe": [
+   43,
+   125
+  ],
+  "blocksCount": 8,
+  "stepsCount": 33,
+  "onlineCount": 13,
+  "entities": [
+   "Single portal of interactive state services",
+   "Uzbekistan railways Single window",
+   "Bank",
+   "Tashkent regional railway junction",
+   "Freight forwarding company",
+   "Joint Stock Company \"O'zbekiston temir yo'llari\"",
+   "Railway station",
+   "Place of loading / branch line",
+   "\"Uzbekexpertiza\" JSC",
+   "\"Uzbekexpertiza\" JSC service portal",
+   "One-stop service system Single window",
+   "Warehouse / Location of goods",
+   "Personal cabinet of participant of foreign economic activity",
+   "Customs post of foreign trade activity"
+  ]
+ },
+ "584": {
+  "id": "584",
+  "title": "Clearance of tea by air",
+  "direction": "import",
+  "goods": "tea",
+  "mode": "air",
+  "kind": "customs",
+  "timeframe": [
+   5,
+   28
+  ],
+  "blocksCount": 3,
+  "stepsCount": 16,
+  "onlineCount": 4,
+  "entities": [
+   "Customs post \"Avia yuklar\" at the airport's warehouse",
+   "Postal cargo complex at Tashkent International Airport named by Islam Karimov",
+   "Border checkpoint for plant quarantine",
+   "Personal cabinet of participant of foreign economic activity",
+   "Bank"
+  ]
+ },
+ "585": {
+  "id": "585",
+  "title": "Obtain phytosanitary certificate",
+  "direction": "export",
+  "goods": "any cargo",
+  "mode": "any",
+  "kind": "service",
+  "timeframe": [
+   5,
+   13
+  ],
+  "blocksCount": 1,
+  "stepsCount": 5,
+  "onlineCount": 3,
+  "entities": [
+   "Agency of plant quarantine and protection Personal cabinet (Oferta)",
+   "Bank",
+   "One-stop service system Single window",
+   "Border checkpoint for plant quarantine"
+  ]
+ },
+ "587": {
+  "id": "587",
+  "title": "Arrange cargo transportation by train physically",
+  "direction": "export",
+  "goods": "any cargo",
+  "mode": "train",
+  "kind": "logistics",
+  "timeframe": [
+   39,
+   109
+  ],
+  "blocksCount": 5,
+  "stepsCount": 20,
+  "onlineCount": 2,
+  "entities": [
+   "Tashkent Technological center for the processing of transport documents",
+   "Tashkent regional railway junction",
+   "Railway station",
+   "Bank",
+   "Freight forwarding company",
+   "Joint Stock Company \"O'zbekiston temir yo'llari\"",
+   "Place of loading / branch line"
+  ]
+ },
+ "591": {
+  "id": "591",
+  "title": "Export of jewelry by air",
+  "direction": "export",
+  "goods": "jewelry",
+  "mode": "air",
+  "kind": "customs",
+  "timeframe": [
+   16,
+   72
+  ],
+  "blocksCount": 7,
+  "stepsCount": 32,
+  "onlineCount": 10,
+  "entities": [
+   "Single portal of interactive state services",
+   "Cargo sales agent",
+   "Postal cargo complex at Tashkent International Airport named by Islam Karimov",
+   "Bank",
+   "\"Uzbekexpertiza\" JSC",
+   "\"Uzbekexpertiza\" JSC service portal",
+   "One-stop service system Single window",
+   "Warehouse / Location of goods",
+   "Customs post \"Avia yuklar\" at the airport's warehouse",
+   "Personal cabinet of participant of foreign economic activity"
+  ]
+ },
+ "593": {
+  "id": "593",
+  "title": "Clearance of pharmaceutical products by train",
+  "direction": "import",
+  "goods": "pharmaceutical products",
+  "mode": "train",
+  "kind": "customs",
+  "timeframe": [
+   7,
+   33
+  ],
+  "blocksCount": 6,
+  "stepsCount": 20,
+  "onlineCount": 8,
+  "entities": [
+   "Customs post of foreign trade activity",
+   "Personal cabinet of participant of foreign economic activity",
+   "Tashkent regional railway junction",
+   "Customs warehouse",
+   "Online banking system",
+   "Bank"
+  ]
+ },
+ "596": {
+  "id": "596",
+  "title": "Import of medical equipment by train",
+  "direction": "import",
+  "goods": "medical equipment",
+  "mode": "train",
+  "kind": "customs",
+  "timeframe": [
+   85,
+   290
+  ],
+  "blocksCount": 14,
+  "stepsCount": 41,
+  "onlineCount": 20,
+  "entities": [
+   "State center for expertise and standardization of medicines official web-site",
+   "Single portal of interactive state services",
+   "Uzbekistan railways Single window",
+   "Bank",
+   "Tashkent regional railway junction",
+   "Customs warehouse",
+   "Railway station",
+   "Customs post of foreign trade activity",
+   "Personal cabinet of participant of foreign economic activity",
+   "One-stop service system Single window",
+   "State center for expertise and standardization of medicines, medical devices and medical equipment",
+   "Electronic document management systems",
+   "Online banking system"
+  ]
+ },
+ "598": {
+  "id": "598",
+  "title": "Clearance of medical equipment by train",
+  "direction": "import",
+  "goods": "medical equipment",
+  "mode": "train",
+  "kind": "customs",
+  "timeframe": [
+   4,
+   25
+  ],
+  "blocksCount": 4,
+  "stepsCount": 13,
+  "onlineCount": 7,
+  "entities": [
+   "Customs post of foreign trade activity",
+   "Personal cabinet of participant of foreign economic activity",
+   "Online banking system",
+   "Customs warehouse"
+  ]
+ },
+ "600": {
+  "id": "600",
+  "title": "Obtain internal phytosanitary certificate",
+  "direction": "export",
+  "goods": "any cargo",
+  "mode": "any",
+  "kind": "service",
+  "timeframe": [
+   9,
+   21
+  ],
+  "blocksCount": 1,
+  "stepsCount": 8,
+  "onlineCount": 6,
+  "entities": [
+   "Agency of plant quarantine and protection Personal cabinet (Oferta)",
+   "Bank",
+   "Assalom Agro",
+   "Warehouse / Location of goods",
+   "Territorial Department of plant quarantine and protection"
+  ]
+ },
+ "611": {
+  "id": "611",
+  "title": "Arrange cargo transportation by train physically",
+  "direction": "export",
+  "goods": "any cargo",
+  "mode": "train",
+  "kind": "logistics",
+  "timeframe": [
+   63,
+   189
+  ],
+  "blocksCount": 5,
+  "stepsCount": 21,
+  "onlineCount": 2,
+  "entities": [
+   "Tashkent Technological center for the processing of transport documents",
+   "Tashkent regional railway junction",
+   "Railway station",
+   "Bank",
+   "Freight forwarding company",
+   "Joint Stock Company \"O'zbekiston temir yo'llari\"",
+   "Place of loading / branch line"
+  ]
+ },
+ "626": {
+  "id": "626",
+  "title": "Import of jewelry by air",
+  "direction": "import",
+  "goods": "jewelry",
+  "mode": "air",
+  "kind": "customs",
+  "timeframe": [
+   12,
+   50
+  ],
+  "blocksCount": 5,
+  "stepsCount": 22,
+  "onlineCount": 6,
+  "entities": [
+   "Single portal of interactive state services",
+   "Postal cargo complex at Tashkent International Airport named by Islam Karimov",
+   "Bank",
+   "Customs post of foreign trade activity",
+   "Online banking system",
+   "Personal cabinet of participant of foreign economic activity",
+   "Customs post \"Avia yuklar\" at the airport's warehouse"
+  ]
+ },
+ "660": {
+  "id": "660",
+  "title": "Clearance of jewelry by air",
+  "direction": "import",
+  "goods": "jewelry",
+  "mode": "air",
+  "kind": "customs",
+  "timeframe": [
+   4,
+   28
+  ],
+  "blocksCount": 3,
+  "stepsCount": 15,
+  "onlineCount": 4,
+  "entities": [
+   "Customs post \"Avia yuklar\" at the airport's warehouse",
+   "Postal cargo complex at Tashkent International Airport named by Islam Karimov",
+   "Personal cabinet of participant of foreign economic activity",
+   "Bank"
+  ]
+ },
+ "668": {
+  "id": "668",
+  "title": "Import of carbonated beverages by train",
+  "direction": "import",
+  "goods": "carbonated beverages",
+  "mode": "train",
+  "kind": "customs",
+  "timeframe": [
+   33,
+   138
+  ],
+  "blocksCount": 13,
+  "stepsCount": 41,
+  "onlineCount": 19,
+  "entities": [
+   "Single portal of interactive state services",
+   "Uzbekistan railways Single window",
+   "Bank",
+   "Tashkent regional railway junction",
+   "Customs warehouse",
+   "Railway station",
+   "Customs post of foreign trade activity",
+   "Personal cabinet of participant of foreign economic activity",
+   "One-stop service system Single window",
+   "Regional center for sanitary-epidemiological service",
+   "Sanitary-epidemiological welfare and public health committee of the Republic of Uzbekistan",
+   "Online banking system"
+  ]
+ },
+ "672": {
+  "id": "672",
+  "title": "Import of cereals by train",
+  "direction": "import",
+  "goods": "cereals",
+  "mode": "train",
+  "kind": "customs",
+  "timeframe": [
+   29,
+   155
+  ],
+  "blocksCount": 15,
+  "stepsCount": 53,
+  "onlineCount": 29,
+  "entities": [
+   "Agency of plant quarantine and protection Personal cabinet (Oferta)",
+   "Bank",
+   "One-stop service system Single window",
+   "Single portal of interactive state services",
+   "Uzbekistan railways Single window",
+   "Tashkent regional railway junction",
+   "Customs warehouse",
+   "Railway station",
+   "Customs post of foreign trade activity",
+   "Personal cabinet of participant of foreign economic activity",
+   "Territorial Department of plant quarantine and protection",
+   "Regional center for sanitary-epidemiological service",
+   "Sanitary-epidemiological welfare and public health committee of the Republic of Uzbekistan",
+   "Online banking system"
+  ]
+ },
+ "678": {
+  "id": "678",
+  "title": "Import of fruit and vegetable juices by train",
+  "direction": "import",
+  "goods": "fruit and vegetable juices",
+  "mode": "train",
+  "kind": "customs",
+  "timeframe": [
+   57,
+   138
+  ],
+  "blocksCount": 13,
+  "stepsCount": 41,
+  "onlineCount": 19,
+  "entities": [
+   "Single portal of interactive state services",
+   "Uzbekistan railways Single window",
+   "Bank",
+   "Tashkent regional railway junction",
+   "Customs warehouse",
+   "Railway station",
+   "Customs post of foreign trade activity",
+   "Personal cabinet of participant of foreign economic activity",
+   "One-stop service system Single window",
+   "Regional center for sanitary-epidemiological service",
+   "Sanitary-epidemiological welfare and public health committee of the Republic of Uzbekistan",
+   "Online banking system"
+  ]
+ },
+ "680": {
+  "id": "680",
+  "title": "Import of flour by train",
+  "direction": "import",
+  "goods": "flour",
+  "mode": "train",
+  "kind": "customs",
+  "timeframe": [
+   41,
+   178
+  ],
+  "blocksCount": 16,
+  "stepsCount": 48,
+  "onlineCount": 28,
+  "entities": [
+   "Agency of plant quarantine and protection Personal cabinet (Oferta)",
+   "Bank",
+   "One-stop service system Single window",
+   "Single portal of interactive state services",
+   "Uzbekistan railways Single window",
+   "Tashkent regional railway junction",
+   "Customs warehouse",
+   "Railway station",
+   "Customs post of foreign trade activity",
+   "Personal cabinet of participant of foreign economic activity",
+   "Regional center for sanitary-epidemiological service",
+   "Sanitary-epidemiological welfare and public health committee of the Republic of Uzbekistan"
+  ]
+ },
+ "685": {
+  "id": "685",
+  "title": "Arrange fumigation of transport",
+  "direction": "export",
+  "goods": "any cargo",
+  "mode": "any",
+  "kind": "service",
+  "timeframe": [
+   4,
+   59
+  ],
+  "blocksCount": 1,
+  "stepsCount": 3,
+  "onlineCount": 2,
+  "entities": [
+   "Agency of plant quarantine and protection Personal cabinet (Oferta)",
+   "Bank",
+   "Territorial Department of plant quarantine and protection"
+  ]
+ },
+ "687": {
+  "id": "687",
+  "title": "Import of mineral fertilizers by train",
+  "direction": "import",
+  "goods": "mineral fertilizers",
+  "mode": "train",
+  "kind": "customs",
+  "timeframe": [
+   30,
+   198
+  ],
+  "blocksCount": 13,
+  "stepsCount": 39,
+  "onlineCount": 17,
+  "entities": [
+   "Single portal of interactive state services",
+   "Uzbekistan railways Single window",
+   "Bank",
+   "Tashkent regional railway junction",
+   "Customs warehouse",
+   "Railway station",
+   "Customs post of foreign trade activity",
+   "Personal cabinet of participant of foreign economic activity",
+   "One-stop service system Single window",
+   "Certification body of fertilizers, pesticides and chemical protection of plants",
+   "Online banking system"
+  ]
+ },
+ "707": {
+  "id": "707",
+  "title": "Import of animal or vegetable fertilizers by train",
+  "direction": "import",
+  "goods": "animal or vegetable fertilizers",
+  "mode": "train",
+  "kind": "customs",
+  "timeframe": [
+   49,
+   531
+  ],
+  "blocksCount": 17,
+  "stepsCount": 60,
+  "onlineCount": 35,
+  "entities": [
+   "Agency of plant quarantine and protection Personal cabinet (Oferta)",
+   "Bank",
+   "One-stop service system Single window",
+   "Single portal of interactive state services",
+   "Uzbekistan railways Single window",
+   "Tashkent regional railway junction",
+   "Customs warehouse",
+   "Railway station",
+   "Customs post of foreign trade activity",
+   "Personal cabinet of participant of foreign economic activity",
+   "Territorial Department of plant quarantine and protection",
+   "Warehouse / Location of goods",
+   "Certification body of fertilizers, pesticides and chemical protection of plants",
+   "Online banking system"
+  ]
+ },
+ "710": {
+  "id": "710",
+  "title": "Clearance of animal or vegetable fertilizers by train",
+  "direction": "import",
+  "goods": "animal or vegetable fertilizers",
+  "mode": "train",
+  "kind": "customs",
+  "timeframe": [
+   4,
+   28
+  ],
+  "blocksCount": 4,
+  "stepsCount": 16,
+  "onlineCount": 8,
+  "entities": [
+   "Customs post of foreign trade activity",
+   "Customs warehouse",
+   "Bank",
+   "Personal cabinet of participant of foreign economic activity",
+   "Online banking system"
+  ]
+ },
+ "714": {
+  "id": "714",
+  "title": "Import of pharmaceutical products by air",
+  "direction": "import",
+  "goods": "pharmaceutical products",
+  "mode": "air",
+  "kind": "customs",
+  "timeframe": [
+   87,
+   301
+  ],
+  "blocksCount": 9,
+  "stepsCount": 33,
+  "onlineCount": 14,
+  "entities": [
+   "State center for expertise and standardization of medicines official web-site",
+   "Single portal of interactive state services",
+   "Postal cargo complex at Tashkent International Airport named by Islam Karimov",
+   "Bank",
+   "Personal cabinet of participant of foreign economic activity",
+   "Customs post \"Avia yuklar\" at the airport's warehouse",
+   "One-stop service system Single window",
+   "State center for expertise and standardization of medicines, medical devices and medical equipment",
+   "Customs warehouse",
+   "Electronic document management systems",
+   "Online banking system"
+  ]
+ },
+ "715": {
+  "id": "715",
+  "title": "Arrange cargo delivery by air",
+  "direction": "import",
+  "goods": "any cargo",
+  "mode": "air",
+  "kind": "logistics",
+  "timeframe": [
+   10,
+   38
+  ],
+  "blocksCount": 4,
+  "stepsCount": 16,
+  "onlineCount": 1,
+  "entities": [
+   "Postal cargo complex at Tashkent International Airport named by Islam Karimov",
+   "Bank",
+   "Customs post \"Avia yuklar\" at the airport's warehouse"
+  ]
+ },
+ "716": {
+  "id": "716",
+  "title": "Clearance of pharmaceutical products by air",
+  "direction": "import",
+  "goods": "pharmaceutical products",
+  "mode": "air",
+  "kind": "customs",
+  "timeframe": [
+   3,
+   24
+  ],
+  "blocksCount": 2,
+  "stepsCount": 9,
+  "onlineCount": 6,
+  "entities": [
+   "Personal cabinet of participant of foreign economic activity",
+   "Customs post \"Avia yuklar\" at the airport's warehouse",
+   "Online banking system"
+  ]
+ },
+ "718": {
+  "id": "718",
+  "title": "Obtain certificate of conformity",
+  "direction": "export",
+  "goods": "any cargo",
+  "mode": "any",
+  "kind": "service",
+  "timeframe": [
+   16,
+   245
+  ],
+  "blocksCount": 1,
+  "stepsCount": 6,
+  "onlineCount": 4,
+  "entities": [
+   "One-stop service system Single window",
+   "Uzbek Center for Research and Quality Control \"UzTest\"",
+   "Bank",
+   "Customs warehouse",
+   "Electronic document management systems"
+  ]
+ },
+ "720": {
+  "id": "720",
+  "title": "Clearance of flour by train",
+  "direction": "import",
+  "goods": "flour",
+  "mode": "train",
+  "kind": "customs",
+  "timeframe": [
+   6,
+   31
+  ],
+  "blocksCount": 5,
+  "stepsCount": 18,
+  "onlineCount": 9,
+  "entities": [
+   "Customs post of foreign trade activity",
+   "Personal cabinet of participant of foreign economic activity",
+   "Customs warehouse",
+   "Bank"
+  ]
+ },
+ "724": {
+  "id": "724",
+  "title": "Import of glass and glass products by road",
+  "direction": "import",
+  "goods": "glass and glass products",
+  "mode": "road",
+  "kind": "customs",
+  "timeframe": [
+   24,
+   281
+  ],
+  "blocksCount": 8,
+  "stepsCount": 36,
+  "onlineCount": 16,
+  "entities": [
+   "Single portal of interactive state services",
+   "Customs warehouse",
+   "Bank",
+   "Automated information system \"E-tranzit\"",
+   "State border crossing point",
+   "Customs post of foreign trade activity",
+   "Personal cabinet of participant of foreign economic activity",
+   "One-stop service system Single window",
+   "Uzbek Center for Research and Quality Control \"UzTest\"",
+   "Electronic document management systems",
+   "Online banking system"
+  ]
+ },
+ "725": {
+  "id": "725",
+  "title": "Import of glass and glass products by train",
+  "direction": "import",
+  "goods": "glass and glass products",
+  "mode": "train",
+  "kind": "customs",
+  "timeframe": [
+   27,
+   296
+  ],
+  "blocksCount": 13,
+  "stepsCount": 40,
+  "onlineCount": 18,
+  "entities": [
+   "Single portal of interactive state services",
+   "Uzbekistan railways Single window",
+   "Bank",
+   "Tashkent regional railway junction",
+   "Customs warehouse",
+   "Railway station",
+   "Customs post of foreign trade activity",
+   "Personal cabinet of participant of foreign economic activity",
+   "One-stop service system Single window",
+   "Uzbek Center for Research and Quality Control \"UzTest\"",
+   "Electronic document management systems",
+   "Online banking system"
+  ]
+ },
+ "735": {
+  "id": "735",
+  "title": "Arrange cargo delivery by train physically",
+  "direction": "import",
+  "goods": "any cargo",
+  "mode": "train",
+  "kind": "logistics",
+  "timeframe": [
+   7,
+   28
+  ],
+  "blocksCount": 7,
+  "stepsCount": 19,
+  "onlineCount": 2,
+  "entities": [
+   "Tashkent Technological center for the processing of transport documents",
+   "Tashkent regional railway junction",
+   "Railway station",
+   "Bank",
+   "Customs warehouse"
+  ]
+ },
+ "738": {
+  "id": "738",
+  "title": "Arrange cargo transportation by train physically",
+  "direction": "export",
+  "goods": "any cargo",
+  "mode": "train",
+  "kind": "logistics",
+  "timeframe": [
+   39,
+   109
+  ],
+  "blocksCount": 5,
+  "stepsCount": 20,
+  "onlineCount": 2,
+  "entities": [
+   "Tashkent Technological center for the processing of transport documents",
+   "Tashkent regional railway junction",
+   "Railway station",
+   "Bank",
+   "Freight forwarding company",
+   "Joint Stock Company \"O'zbekiston temir yo'llari\"",
+   "Place of loading / branch line"
+  ]
+ },
+ "739": {
+  "id": "739",
+  "title": "Arrange cargo transportation by train via Single Window online portal",
+  "direction": "export",
+  "goods": "any cargo",
+  "mode": "train",
+  "kind": "logistics",
+  "timeframe": [
+   33,
+   87
+  ],
+  "blocksCount": 5,
+  "stepsCount": 20,
+  "onlineCount": 14,
+  "entities": [
+   "Uzbekistan railways Single window",
+   "Bank",
+   "Tashkent regional railway junction",
+   "Freight forwarding company",
+   "Place of loading / branch line",
+   "Railway station"
+  ]
+ },
+ "740": {
+  "id": "740",
+  "title": "Arrange cargo delivery by train via Single Window online portal",
+  "direction": "import",
+  "goods": "any cargo",
+  "mode": "train",
+  "kind": "logistics",
+  "timeframe": [
+   13,
+   34
+  ],
+  "blocksCount": 3,
+  "stepsCount": 16,
+  "onlineCount": 12,
+  "entities": [
+   "Uzbekistan railways Single window",
+   "Bank",
+   "Tashkent regional railway junction",
+   "Railway station",
+   "Customs warehouse"
+  ]
+ },
+ "741": {
+  "id": "741",
+  "title": "Arrange cargo delivery by train via Single Window online portal",
+  "direction": "import",
+  "goods": "any cargo",
+  "mode": "train",
+  "kind": "logistics",
+  "timeframe": [
+   13,
+   34
+  ],
+  "blocksCount": 3,
+  "stepsCount": 16,
+  "onlineCount": 12,
+  "entities": [
+   "Uzbekistan railways Single window",
+   "Bank",
+   "Tashkent regional railway junction",
+   "Railway station",
+   "Customs warehouse"
+  ]
+ },
+ "742": {
+  "id": "742",
+  "title": "Arrange cargo delivery by train physically",
+  "direction": "import",
+  "goods": "any cargo",
+  "mode": "train",
+  "kind": "logistics",
+  "timeframe": [
+   7,
+   27
+  ],
+  "blocksCount": 6,
+  "stepsCount": 18,
+  "onlineCount": 2,
+  "entities": [
+   "Tashkent Technological center for the processing of transport documents",
+   "Tashkent regional railway junction",
+   "Railway station",
+   "Bank",
+   "Customs warehouse"
+  ]
+ },
+ "744": {
+  "id": "744",
+  "title": "Arrange cargo delivery by train via Single Window online portal",
+  "direction": "import",
+  "goods": "any cargo",
+  "mode": "train",
+  "kind": "logistics",
+  "timeframe": [
+   13,
+   34
+  ],
+  "blocksCount": 3,
+  "stepsCount": 16,
+  "onlineCount": 12,
+  "entities": [
+   "Uzbekistan railways Single window",
+   "Bank",
+   "Tashkent regional railway junction",
+   "Railway station",
+   "Customs warehouse"
+  ]
+ },
+ "746": {
+  "id": "746",
+  "title": "Arrange cargo delivery by train physically",
+  "direction": "import",
+  "goods": "any cargo",
+  "mode": "train",
+  "kind": "logistics",
+  "timeframe": [
+   7,
+   27
+  ],
+  "blocksCount": 6,
+  "stepsCount": 18,
+  "onlineCount": 2,
+  "entities": [
+   "Tashkent Technological center for the processing of transport documents",
+   "Tashkent regional railway junction",
+   "Railway station",
+   "Bank",
+   "Customs warehouse"
+  ]
+ },
+ "748": {
+  "id": "748",
+  "title": "Arrange cargo delivery by train physically",
+  "direction": "import",
+  "goods": "any cargo",
+  "mode": "train",
+  "kind": "logistics",
+  "timeframe": [
+   7,
+   28
+  ],
+  "blocksCount": 7,
+  "stepsCount": 19,
+  "onlineCount": 2,
+  "entities": [
+   "Tashkent Technological center for the processing of transport documents",
+   "Tashkent regional railway junction",
+   "Railway station",
+   "Bank",
+   "Customs warehouse"
+  ]
+ },
+ "750": {
+  "id": "750",
+  "title": "Arrange cargo delivery by train via Single Window online portal",
+  "direction": "import",
+  "goods": "any cargo",
+  "mode": "train",
+  "kind": "logistics",
+  "timeframe": [
+   13,
+   34
+  ],
+  "blocksCount": 3,
+  "stepsCount": 16,
+  "onlineCount": 12,
+  "entities": [
+   "Uzbekistan railways Single window",
+   "Bank",
+   "Tashkent regional railway junction",
+   "Railway station",
+   "Customs warehouse"
+  ]
+ },
+ "752": {
+  "id": "752",
+  "title": "Arrange cargo delivery by train via Single Window online portal",
+  "direction": "import",
+  "goods": "any cargo",
+  "mode": "train",
+  "kind": "logistics",
+  "timeframe": [
+   13,
+   34
+  ],
+  "blocksCount": 3,
+  "stepsCount": 16,
+  "onlineCount": 12,
+  "entities": [
+   "Uzbekistan railways Single window",
+   "Bank",
+   "Tashkent regional railway junction",
+   "Railway station",
+   "Customs warehouse"
+  ]
+ },
+ "753": {
+  "id": "753",
+  "title": "Arrange cargo delivery by train physically",
+  "direction": "import",
+  "goods": "any cargo",
+  "mode": "train",
+  "kind": "logistics",
+  "timeframe": [
+   7,
+   28
+  ],
+  "blocksCount": 7,
+  "stepsCount": 19,
+  "onlineCount": 2,
+  "entities": [
+   "Tashkent Technological center for the processing of transport documents",
+   "Tashkent regional railway junction",
+   "Railway station",
+   "Bank",
+   "Customs warehouse"
+  ]
+ },
+ "754": {
+  "id": "754",
+  "title": "Arrange cargo delivery by train physically",
+  "direction": "import",
+  "goods": "any cargo",
+  "mode": "train",
+  "kind": "logistics",
+  "timeframe": [
+   7,
+   28
+  ],
+  "blocksCount": 7,
+  "stepsCount": 19,
+  "onlineCount": 2,
+  "entities": [
+   "Tashkent Technological center for the processing of transport documents",
+   "Tashkent regional railway junction",
+   "Railway station",
+   "Bank",
+   "Customs warehouse"
+  ]
+ },
+ "755": {
+  "id": "755",
+  "title": "Arrange cargo delivery by train via Single Window online portal",
+  "direction": "import",
+  "goods": "any cargo",
+  "mode": "train",
+  "kind": "logistics",
+  "timeframe": [
+   13,
+   34
+  ],
+  "blocksCount": 3,
+  "stepsCount": 16,
+  "onlineCount": 12,
+  "entities": [
+   "Uzbekistan railways Single window",
+   "Bank",
+   "Tashkent regional railway junction",
+   "Railway station",
+   "Customs warehouse"
+  ]
+ },
+ "757": {
+  "id": "757",
+  "title": "Arrange cargo delivery by train physically",
+  "direction": "import",
+  "goods": "any cargo",
+  "mode": "train",
+  "kind": "logistics",
+  "timeframe": [
+   7,
+   28
+  ],
+  "blocksCount": 7,
+  "stepsCount": 19,
+  "onlineCount": 2,
+  "entities": [
+   "Tashkent Technological center for the processing of transport documents",
+   "Tashkent regional railway junction",
+   "Railway station",
+   "Bank",
+   "Customs warehouse"
+  ]
+ },
+ "758": {
+  "id": "758",
+  "title": "Arrange cargo delivery by train via Single Window online portal",
+  "direction": "import",
+  "goods": "any cargo",
+  "mode": "train",
+  "kind": "logistics",
+  "timeframe": [
+   13,
+   34
+  ],
+  "blocksCount": 3,
+  "stepsCount": 16,
+  "onlineCount": 12,
+  "entities": [
+   "Uzbekistan railways Single window",
+   "Bank",
+   "Tashkent regional railway junction",
+   "Railway station",
+   "Customs warehouse"
+  ]
+ },
+ "760": {
+  "id": "760",
+  "title": "Arrange cargo delivery by train physically",
+  "direction": "import",
+  "goods": "any cargo",
+  "mode": "train",
+  "kind": "logistics",
+  "timeframe": [
+   7,
+   28
+  ],
+  "blocksCount": 7,
+  "stepsCount": 19,
+  "onlineCount": 2,
+  "entities": [
+   "Tashkent Technological center for the processing of transport documents",
+   "Tashkent regional railway junction",
+   "Railway station",
+   "Bank",
+   "Customs warehouse"
+  ]
+ },
+ "761": {
+  "id": "761",
+  "title": "Arrange cargo delivery by train via Single Window online portal",
+  "direction": "import",
+  "goods": "any cargo",
+  "mode": "train",
+  "kind": "logistics",
+  "timeframe": [
+   13,
+   34
+  ],
+  "blocksCount": 3,
+  "stepsCount": 16,
+  "onlineCount": 12,
+  "entities": [
+   "Uzbekistan railways Single window",
+   "Bank",
+   "Tashkent regional railway junction",
+   "Railway station",
+   "Customs warehouse"
+  ]
+ },
+ "762": {
+  "id": "762",
+  "title": "Arrange cargo delivery by train physically",
+  "direction": "import",
+  "goods": "any cargo",
+  "mode": "train",
+  "kind": "logistics",
+  "timeframe": [
+   7,
+   28
+  ],
+  "blocksCount": 7,
+  "stepsCount": 19,
+  "onlineCount": 2,
+  "entities": [
+   "Tashkent Technological center for the processing of transport documents",
+   "Tashkent regional railway junction",
+   "Railway station",
+   "Bank",
+   "Customs warehouse"
+  ]
+ },
+ "763": {
+  "id": "763",
+  "title": "Arrange cargo delivery by train via Single Window online portal",
+  "direction": "import",
+  "goods": "any cargo",
+  "mode": "train",
+  "kind": "logistics",
+  "timeframe": [
+   13,
+   34
+  ],
+  "blocksCount": 3,
+  "stepsCount": 16,
+  "onlineCount": 12,
+  "entities": [
+   "Uzbekistan railways Single window",
+   "Bank",
+   "Tashkent regional railway junction",
+   "Railway station",
+   "Customs warehouse"
+  ]
+ },
+ "764": {
+  "id": "764",
+  "title": "Arrange cargo delivery by train physically",
+  "direction": "import",
+  "goods": "any cargo",
+  "mode": "train",
+  "kind": "logistics",
+  "timeframe": [
+   7,
+   28
+  ],
+  "blocksCount": 7,
+  "stepsCount": 19,
+  "onlineCount": 2,
+  "entities": [
+   "Tashkent Technological center for the processing of transport documents",
+   "Tashkent regional railway junction",
+   "Railway station",
+   "Bank",
+   "Customs warehouse"
+  ]
+ },
+ "765": {
+  "id": "765",
+  "title": "Arrange cargo delivery by train via Single Window online portal",
+  "direction": "import",
+  "goods": "any cargo",
+  "mode": "train",
+  "kind": "logistics",
+  "timeframe": [
+   13,
+   34
+  ],
+  "blocksCount": 3,
+  "stepsCount": 16,
+  "onlineCount": 12,
+  "entities": [
+   "Uzbekistan railways Single window",
+   "Bank",
+   "Tashkent regional railway junction",
+   "Railway station",
+   "Customs warehouse"
+  ]
+ },
+ "766": {
+  "id": "766",
+  "title": "Arrange cargo delivery by train physically",
+  "direction": "import",
+  "goods": "any cargo",
+  "mode": "train",
+  "kind": "logistics",
+  "timeframe": [
+   7,
+   28
+  ],
+  "blocksCount": 7,
+  "stepsCount": 19,
+  "onlineCount": 2,
+  "entities": [
+   "Tashkent Technological center for the processing of transport documents",
+   "Tashkent regional railway junction",
+   "Railway station",
+   "Bank",
+   "Customs warehouse"
+  ]
+ },
+ "767": {
+  "id": "767",
+  "title": "Arrange cargo delivery by train via Single Window online portal",
+  "direction": "import",
+  "goods": "any cargo",
+  "mode": "train",
+  "kind": "logistics",
+  "timeframe": [
+   13,
+   34
+  ],
+  "blocksCount": 3,
+  "stepsCount": 16,
+  "onlineCount": 12,
+  "entities": [
+   "Uzbekistan railways Single window",
+   "Bank",
+   "Tashkent regional railway junction",
+   "Railway station",
+   "Customs warehouse"
+  ]
+ },
+ "769": {
+  "id": "769",
+  "title": "Arrange cargo delivery by train physically",
+  "direction": "import",
+  "goods": "any cargo",
+  "mode": "train",
+  "kind": "logistics",
+  "timeframe": [
+   7,
+   28
+  ],
+  "blocksCount": 7,
+  "stepsCount": 19,
+  "onlineCount": 2,
+  "entities": [
+   "Tashkent Technological center for the processing of transport documents",
+   "Tashkent regional railway junction",
+   "Railway station",
+   "Bank",
+   "Customs warehouse"
+  ]
+ },
+ "770": {
+  "id": "770",
+  "title": "Arrange cargo delivery by train via Single Window online portal",
+  "direction": "import",
+  "goods": "any cargo",
+  "mode": "train",
+  "kind": "logistics",
+  "timeframe": [
+   13,
+   34
+  ],
+  "blocksCount": 3,
+  "stepsCount": 16,
+  "onlineCount": 12,
+  "entities": [
+   "Uzbekistan railways Single window",
+   "Bank",
+   "Tashkent regional railway junction",
+   "Railway station",
+   "Customs warehouse"
+  ]
+ },
+ "771": {
+  "id": "771",
+  "title": "Arrange cargo delivery by train physically",
+  "direction": "import",
+  "goods": "any cargo",
+  "mode": "train",
+  "kind": "logistics",
+  "timeframe": [
+   7,
+   28
+  ],
+  "blocksCount": 7,
+  "stepsCount": 19,
+  "onlineCount": 2,
+  "entities": [
+   "Tashkent Technological center for the processing of transport documents",
+   "Tashkent regional railway junction",
+   "Railway station",
+   "Bank",
+   "Customs warehouse"
+  ]
+ },
+ "772": {
+  "id": "772",
+  "title": "Arrange cargo delivery by train via Single Window online portal",
+  "direction": "import",
+  "goods": "any cargo",
+  "mode": "train",
+  "kind": "logistics",
+  "timeframe": [
+   13,
+   34
+  ],
+  "blocksCount": 3,
+  "stepsCount": 16,
+  "onlineCount": 12,
+  "entities": [
+   "Uzbekistan railways Single window",
+   "Bank",
+   "Tashkent regional railway junction",
+   "Railway station",
+   "Customs warehouse"
+  ]
+ },
+ "774": {
+  "id": "774",
+  "title": "Arrange cargo delivery by train physically",
+  "direction": "import",
+  "goods": "any cargo",
+  "mode": "train",
+  "kind": "logistics",
+  "timeframe": [
+   7,
+   28
+  ],
+  "blocksCount": 7,
+  "stepsCount": 19,
+  "onlineCount": 2,
+  "entities": [
+   "Tashkent Technological center for the processing of transport documents",
+   "Tashkent regional railway junction",
+   "Railway station",
+   "Bank",
+   "Customs warehouse"
+  ]
+ },
+ "775": {
+  "id": "775",
+  "title": "Arrange cargo delivery by train via Single Window online portal",
+  "direction": "import",
+  "goods": "any cargo",
+  "mode": "train",
+  "kind": "logistics",
+  "timeframe": [
+   13,
+   34
+  ],
+  "blocksCount": 3,
+  "stepsCount": 16,
+  "onlineCount": 12,
+  "entities": [
+   "Uzbekistan railways Single window",
+   "Bank",
+   "Tashkent regional railway junction",
+   "Railway station",
+   "Customs warehouse"
+  ]
+ },
+ "776": {
+  "id": "776",
+  "title": "Arrange cargo delivery by train physically",
+  "direction": "import",
+  "goods": "any cargo",
+  "mode": "train",
+  "kind": "logistics",
+  "timeframe": [
+   7,
+   28
+  ],
+  "blocksCount": 7,
+  "stepsCount": 19,
+  "onlineCount": 2,
+  "entities": [
+   "Tashkent Technological center for the processing of transport documents",
+   "Tashkent regional railway junction",
+   "Railway station",
+   "Bank",
+   "Customs warehouse"
+  ]
+ },
+ "777": {
+  "id": "777",
+  "title": "Arrange cargo delivery by train via Single Window online portal",
+  "direction": "import",
+  "goods": "any cargo",
+  "mode": "train",
+  "kind": "logistics",
+  "timeframe": [
+   13,
+   34
+  ],
+  "blocksCount": 3,
+  "stepsCount": 16,
+  "onlineCount": 12,
+  "entities": [
+   "Uzbekistan railways Single window",
+   "Bank",
+   "Tashkent regional railway junction",
+   "Railway station",
+   "Customs warehouse"
+  ]
+ },
+ "779": {
+  "id": "779",
+  "title": "Arrange cargo delivery by train physically",
+  "direction": "import",
+  "goods": "any cargo",
+  "mode": "train",
+  "kind": "logistics",
+  "timeframe": [
+   7,
+   28
+  ],
+  "blocksCount": 7,
+  "stepsCount": 19,
+  "onlineCount": 2,
+  "entities": [
+   "Tashkent Technological center for the processing of transport documents",
+   "Tashkent regional railway junction",
+   "Railway station",
+   "Bank",
+   "Customs warehouse"
+  ]
+ },
+ "780": {
+  "id": "780",
+  "title": "Arrange cargo delivery by train via Single Window online portal",
+  "direction": "import",
+  "goods": "any cargo",
+  "mode": "train",
+  "kind": "logistics",
+  "timeframe": [
+   13,
+   34
+  ],
+  "blocksCount": 3,
+  "stepsCount": 16,
+  "onlineCount": 12,
+  "entities": [
+   "Uzbekistan railways Single window",
+   "Bank",
+   "Tashkent regional railway junction",
+   "Railway station",
+   "Customs warehouse"
+  ]
+ },
+ "782": {
+  "id": "782",
+  "title": "Arrange cargo transportation by train via Single Window online portal",
+  "direction": "export",
+  "goods": "any cargo",
+  "mode": "train",
+  "kind": "logistics",
+  "timeframe": [
+   33,
+   87
+  ],
+  "blocksCount": 5,
+  "stepsCount": 20,
+  "onlineCount": 14,
+  "entities": [
+   "Uzbekistan railways Single window",
+   "Bank",
+   "Tashkent regional railway junction",
+   "Freight forwarding company",
+   "Place of loading / branch line",
+   "Railway station"
+  ]
+ },
+ "783": {
+  "id": "783",
+  "title": "Arrange cargo transportation by train via Single Window online portal",
+  "direction": "export",
+  "goods": "any cargo",
+  "mode": "train",
+  "kind": "logistics",
+  "timeframe": [
+   33,
+   87
+  ],
+  "blocksCount": 5,
+  "stepsCount": 20,
+  "onlineCount": 14,
+  "entities": [
+   "Uzbekistan railways Single window",
+   "Bank",
+   "Tashkent regional railway junction",
+   "Freight forwarding company",
+   "Place of loading / branch line",
+   "Railway station"
+  ]
+ },
+ "784": {
+  "id": "784",
+  "title": "Arrange cargo transportation by train via Single Window online portal",
+  "direction": "export",
+  "goods": "any cargo",
+  "mode": "train",
+  "kind": "logistics",
+  "timeframe": [
+   33,
+   87
+  ],
+  "blocksCount": 5,
+  "stepsCount": 20,
+  "onlineCount": 14,
+  "entities": [
+   "Uzbekistan railways Single window",
+   "Bank",
+   "Tashkent regional railway junction",
+   "Freight forwarding company",
+   "Place of loading / branch line",
+   "Railway station"
+  ]
+ },
+ "785": {
+  "id": "785",
+  "title": "Arrange cargo transportation by train via Single Window online portal",
+  "direction": "export",
+  "goods": "any cargo",
+  "mode": "train",
+  "kind": "logistics",
+  "timeframe": [
+   33,
+   87
+  ],
+  "blocksCount": 5,
+  "stepsCount": 20,
+  "onlineCount": 14,
+  "entities": [
+   "Uzbekistan railways Single window",
+   "Bank",
+   "Tashkent regional railway junction",
+   "Freight forwarding company",
+   "Place of loading / branch line",
+   "Railway station"
+  ]
+ },
+ "787": {
+  "id": "787",
+  "title": "Arrange cargo transportation by train via Single Window online portal",
+  "direction": "export",
+  "goods": "any cargo",
+  "mode": "train",
+  "kind": "logistics",
+  "timeframe": [
+   33,
+   87
+  ],
+  "blocksCount": 5,
+  "stepsCount": 20,
+  "onlineCount": 14,
+  "entities": [
+   "Uzbekistan railways Single window",
+   "Bank",
+   "Tashkent regional railway junction",
+   "Freight forwarding company",
+   "Place of loading / branch line",
+   "Railway station"
+  ]
+ },
+ "788": {
+  "id": "788",
+  "title": "Arrange cargo transportation by train via Single Window online portal",
+  "direction": "export",
+  "goods": "any cargo",
+  "mode": "train",
+  "kind": "logistics",
+  "timeframe": [
+   33,
+   87
+  ],
+  "blocksCount": 5,
+  "stepsCount": 20,
+  "onlineCount": 14,
+  "entities": [
+   "Uzbekistan railways Single window",
+   "Bank",
+   "Tashkent regional railway junction",
+   "Freight forwarding company",
+   "Place of loading / branch line",
+   "Railway station"
+  ]
+ },
+ "789": {
+  "id": "789",
+  "title": "Arrange cargo transportation by train via Single Window online portal",
+  "direction": "export",
+  "goods": "any cargo",
+  "mode": "train",
+  "kind": "logistics",
+  "timeframe": [
+   33,
+   87
+  ],
+  "blocksCount": 5,
+  "stepsCount": 20,
+  "onlineCount": 14,
+  "entities": [
+   "Uzbekistan railways Single window",
+   "Bank",
+   "Tashkent regional railway junction",
+   "Freight forwarding company",
+   "Place of loading / branch line",
+   "Railway station"
+  ]
+ },
+ "793": {
+  "id": "793",
+  "title": "Arrange cargo transportation by train via Single Window online portal",
+  "direction": "export",
+  "goods": "any cargo",
+  "mode": "train",
+  "kind": "logistics",
+  "timeframe": [
+   33,
+   87
+  ],
+  "blocksCount": 5,
+  "stepsCount": 20,
+  "onlineCount": 14,
+  "entities": [
+   "Uzbekistan railways Single window",
+   "Bank",
+   "Tashkent regional railway junction",
+   "Freight forwarding company",
+   "Place of loading / branch line",
+   "Railway station"
+  ]
+ },
+ "795": {
+  "id": "795",
+  "title": "Arrange cargo transportation by train via Single Window online portal",
+  "direction": "export",
+  "goods": "any cargo",
+  "mode": "train",
+  "kind": "logistics",
+  "timeframe": [
+   33,
+   87
+  ],
+  "blocksCount": 5,
+  "stepsCount": 20,
+  "onlineCount": 14,
+  "entities": [
+   "Uzbekistan railways Single window",
+   "Bank",
+   "Tashkent regional railway junction",
+   "Freight forwarding company",
+   "Place of loading / branch line",
+   "Railway station"
+  ]
+ },
+ "796": {
+  "id": "796",
+  "title": "Arrange cargo transportation by train via Single Window online portal",
+  "direction": "export",
+  "goods": "any cargo",
+  "mode": "train",
+  "kind": "logistics",
+  "timeframe": [
+   33,
+   87
+  ],
+  "blocksCount": 5,
+  "stepsCount": 20,
+  "onlineCount": 14,
+  "entities": [
+   "Uzbekistan railways Single window",
+   "Bank",
+   "Tashkent regional railway junction",
+   "Freight forwarding company",
+   "Place of loading / branch line",
+   "Railway station"
+  ]
+ },
+ "801": {
+  "id": "801",
+  "title": "Export of honey by road",
+  "direction": "export",
+  "goods": "honey",
+  "mode": "road",
+  "kind": "customs",
+  "timeframe": [
+   25,
+   83
+  ],
+  "blocksCount": 7,
+  "stepsCount": 35,
+  "onlineCount": 14,
+  "entities": [
+   "Single portal of interactive state services",
+   "One-stop service system Single window",
+   "\"Uzbekexpertiza\" JSC",
+   "Bank",
+   "\"Uzbekexpertiza\" JSC service portal",
+   "Warehouse / Location of goods",
+   "Transportation company",
+   "Personal cabinet of participant of foreign economic activity",
+   "Customs post of foreign trade activity",
+   "State border crossing point"
+  ]
+ },
+ "804": {
+  "id": "804",
+  "title": "Export of salt by train",
+  "direction": "export",
+  "goods": "salt",
+  "mode": "train",
+  "kind": "customs",
+  "timeframe": [
+   43,
+   125
+  ],
+  "blocksCount": 8,
+  "stepsCount": 33,
+  "onlineCount": 13,
+  "entities": [
+   "Single portal of interactive state services",
+   "Uzbekistan railways Single window",
+   "Bank",
+   "Tashkent regional railway junction",
+   "Freight forwarding company",
+   "Joint Stock Company \"O'zbekiston temir yo'llari\"",
+   "Railway station",
+   "Place of loading / branch line",
+   "\"Uzbekexpertiza\" JSC",
+   "\"Uzbekexpertiza\" JSC service portal",
+   "One-stop service system Single window",
+   "Warehouse / Location of goods",
+   "Personal cabinet of participant of foreign economic activity",
+   "Customs post of foreign trade activity"
+  ]
+ },
+ "805": {
+  "id": "805",
+  "title": "Export of dried fruits by air",
+  "direction": "export",
+  "goods": "dried fruits",
+  "mode": "air",
+  "kind": "customs",
+  "timeframe": [
+   30,
+   108
+  ],
+  "blocksCount": 9,
+  "stepsCount": 47,
+  "onlineCount": 19,
+  "entities": [
+   "Single portal of interactive state services",
+   "Cargo sales agent",
+   "Postal cargo complex at Tashkent International Airport named by Islam Karimov",
+   "Bank",
+   "Agency of plant quarantine and protection Personal cabinet (Oferta)",
+   "Assalom Agro",
+   "Warehouse / Location of goods",
+   "Territorial Department of plant quarantine and protection",
+   "One-stop service system Single window",
+   "Border checkpoint for plant quarantine",
+   "\"Uzbekexpertiza\" JSC",
+   "\"Uzbekexpertiza\" JSC service portal",
+   "Customs post \"Avia yuklar\" at the airport's warehouse",
+   "Personal cabinet of participant of foreign economic activity"
+  ]
+ },
+ "806": {
+  "id": "806",
+  "title": "Arrange cargo transportation by air",
+  "direction": "export",
+  "goods": "any cargo",
+  "mode": "air",
+  "kind": "logistics",
+  "timeframe": [
+   12,
+   52
+  ],
+  "blocksCount": 4,
+  "stepsCount": 19,
+  "onlineCount": 2,
+  "entities": [
+   "Cargo sales agent",
+   "Postal cargo complex at Tashkent International Airport named by Islam Karimov",
+   "Bank",
+   "Customs post \"Avia yuklar\" at the airport's warehouse",
+   "Border checkpoint for plant quarantine"
+  ]
+ },
+ "819": {
+  "id": "819",
+  "title": "Export of honey by air",
+  "direction": "export",
+  "goods": "honey",
+  "mode": "air",
+  "kind": "customs",
+  "timeframe": [
+   25,
+   102
+  ],
+  "blocksCount": 9,
+  "stepsCount": 39,
+  "onlineCount": 16,
+  "entities": [
+   "Single portal of interactive state services",
+   "One-stop service system Single window",
+   "Cargo sales agent",
+   "Postal cargo complex at Tashkent International Airport named by Islam Karimov",
+   "Bank",
+   "Warehouse / Location of goods",
+   "\"Uzbekexpertiza\" JSC",
+   "\"Uzbekexpertiza\" JSC service portal",
+   "Customs post \"Avia yuklar\" at the airport's warehouse",
+   "Personal cabinet of participant of foreign economic activity"
+  ]
+ },
+ "824": {
+  "id": "824",
+  "title": "Export of cement by train",
+  "direction": "export",
+  "goods": "cement",
+  "mode": "train",
+  "kind": "customs",
+  "timeframe": [
+   43,
+   125
+  ],
+  "blocksCount": 8,
+  "stepsCount": 33,
+  "onlineCount": 13,
+  "entities": [
+   "Single portal of interactive state services",
+   "Uzbekistan railways Single window",
+   "Bank",
+   "Tashkent regional railway junction",
+   "Freight forwarding company",
+   "Joint Stock Company \"O'zbekiston temir yo'llari\"",
+   "Railway station",
+   "Place of loading / branch line",
+   "\"Uzbekexpertiza\" JSC",
+   "\"Uzbekexpertiza\" JSC service portal",
+   "One-stop service system Single window",
+   "Warehouse / Location of goods",
+   "Personal cabinet of participant of foreign economic activity",
+   "Customs post of foreign trade activity"
+  ]
+ },
+ "827": {
+  "id": "827",
+  "title": "Import of meat and meat products by train",
+  "direction": "import",
+  "goods": "meat and meat products",
+  "mode": "train",
+  "kind": "customs",
+  "timeframe": [
+   64,
+   382
+  ],
+  "blocksCount": 14,
+  "stepsCount": 47,
+  "onlineCount": 26,
+  "entities": [
+   "One-stop service system Single window",
+   "Bank",
+   "Single portal of interactive state services",
+   "Uzbekistan railways Single window",
+   "Tashkent regional railway junction",
+   "Railway station",
+   "Customs post of foreign trade activity",
+   "Personal cabinet of participant of foreign economic activity",
+   "Customs warehouse",
+   "Warehouse / Location of goods",
+   "Regional center for sanitary-epidemiological service",
+   "Sanitary-epidemiological welfare and public health committee of the Republic of Uzbekistan",
+   "Online banking system"
+  ]
+ },
+ "828": {
+  "id": "828",
+  "title": "Obtain certificate of conformity for equipment requiring pre-installation",
+  "direction": "export",
+  "goods": "any cargo",
+  "mode": "any",
+  "kind": "service",
+  "timeframe": [
+   96,
+   319
+  ],
+  "blocksCount": 2,
+  "stepsCount": 11,
+  "onlineCount": 9,
+  "entities": [
+   "One-stop service system Single window",
+   "State center for expertise and standardization of medicines, medical devices and medical equipment",
+   "Customs warehouse",
+   "Electronic document management systems",
+   "Online banking system"
+  ]
+ },
+ "835": {
+  "id": "835",
+  "title": "Clearance of salt by train",
+  "direction": "import",
+  "goods": "salt",
+  "mode": "train",
+  "kind": "customs",
+  "timeframe": [
+   2,
+   12
+  ],
+  "blocksCount": 1,
+  "stepsCount": 6,
+  "onlineCount": 4,
+  "entities": [
+   "Personal cabinet of participant of foreign economic activity",
+   "Bank",
+   "Warehouse / Location of goods",
+   "Customs post of foreign trade activity"
+  ]
+ },
+ "838": {
+  "id": "838",
+  "title": "Import of paper and cardboard products by road",
+  "direction": "import",
+  "goods": "paper and cardboard products",
+  "mode": "road",
+  "kind": "customs",
+  "timeframe": [
+   24,
+   282
+  ],
+  "blocksCount": 8,
+  "stepsCount": 37,
+  "onlineCount": 16,
+  "entities": [
+   "Single portal of interactive state services",
+   "Customs warehouse",
+   "Bank",
+   "Automated information system \"E-tranzit\"",
+   "State border crossing point",
+   "Customs post of foreign trade activity",
+   "Personal cabinet of participant of foreign economic activity",
+   "One-stop service system Single window",
+   "Uzbek Center for Research and Quality Control \"UzTest\"",
+   "Electronic document management systems",
+   "Online banking system"
+  ]
+ },
+ "839": {
+  "id": "839",
+  "title": "Import of paper and cardboard products by train",
+  "direction": "import",
+  "goods": "paper and cardboard products",
+  "mode": "train",
+  "kind": "customs",
+  "timeframe": [
+   27,
+   301
+  ],
+  "blocksCount": 13,
+  "stepsCount": 42,
+  "onlineCount": 15,
+  "entities": [
+   "Single portal of interactive state services",
+   "Tashkent Technological center for the processing of transport documents",
+   "Tashkent regional railway junction",
+   "Railway station",
+   "Bank",
+   "Customs warehouse",
+   "Customs post of foreign trade activity",
+   "Personal cabinet of participant of foreign economic activity",
+   "One-stop service system Single window",
+   "Uzbek Center for Research and Quality Control \"UzTest\"",
+   "Electronic document management systems",
+   "Online banking system"
+  ]
+ },
+ "861": {
+  "id": "861",
+  "title": "Clearance of honey by road",
+  "direction": "import",
+  "goods": "honey",
+  "mode": "road",
+  "kind": "customs",
+  "timeframe": [
+   2,
+   13
+  ],
+  "blocksCount": 2,
+  "stepsCount": 14,
+  "onlineCount": 4,
+  "entities": [
+   "Personal cabinet of participant of foreign economic activity",
+   "Bank",
+   "Customs post of foreign trade activity",
+   "State border crossing point"
+  ]
+ },
+ "865": {
+  "id": "865",
+  "title": "Obtain veterinary certificate for export",
+  "direction": "export",
+  "goods": "any cargo",
+  "mode": "any",
+  "kind": "service",
+  "timeframe": [
+   1,
+   5
+  ],
+  "blocksCount": 1,
+  "stepsCount": 5,
+  "onlineCount": 4,
+  "entities": [
+   "One-stop service system Single window",
+   "Bank",
+   "Warehouse / Location of goods"
+  ]
+ },
+ "866": {
+  "id": "866",
+  "title": "Obtain ecological certificate (for waste and scrap of paper and paperboard)",
+  "direction": "export",
+  "goods": "any cargo",
+  "mode": "any",
+  "kind": "service",
+  "timeframe": [
+   32,
+   40
+  ],
+  "blocksCount": 1,
+  "stepsCount": 5,
+  "onlineCount": 4,
+  "entities": [
+   "One-stop service system Single window",
+   "Electronic document management systems",
+   "Bank",
+   "Customs warehouse"
   ]
  },
  "868": {
@@ -4995,1197 +5060,978 @@ export const PROCEDURES: Record<string, Procedure> = {
   "direction": "export",
   "goods": "tea",
   "mode": "train",
+  "kind": "customs",
   "timeframe": [
    81,
    244
   ],
+  "blocksCount": 10,
   "stepsCount": 48,
-  "blocks": [
-   {
-    "id": "b1",
-    "name": "Registration of export contract",
-    "dependsOn": [],
-    "level": 0,
-    "estDuration": [
-     2,
-     8
-    ],
-    "dependencyReason": "Independent track — can start as soon as the case opens, no upstream block required.",
-    "lane": "Other government",
-    "entities": [
-     "Single portal of interactive state services"
-    ],
-    "stepRange": [
-     1,
-     1
-    ],
-    "optionalSteps": [],
-    "altSteps": [],
-    "steps": [
-     {
-      "num": 1,
-      "title": "Register foreign trade contract in UEISFTO",
-      "output": "Identification number of foreign trade contract",
-      "entity": "Single portal of interactive state services",
-      "channel": "Online: apply",
-      "where": "my.gov.uz — unified state services my.gov.uz",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Electronic digital signature",
-       "Electronic copy of foreign trade contract"
-      ]
-     }
-    ]
-   },
-   {
-    "id": "b2",
-    "name": "Prepare for cargo delivery by train online",
-    "dependsOn": [],
-    "level": 0,
-    "estDuration": [
-     10,
-     30
-    ],
-    "dependencyReason": "Independent track — can start as soon as the case opens, no upstream block required.",
-    "lane": "Single Window & certification",
-    "entities": [
-     "Bank",
-     "Tashkent regional railway junction",
-     "Uzbekistan railways Single window"
-    ],
-    "stepRange": [
-     2,
-     6
-    ],
-    "optionalSteps": [],
-    "altSteps": [],
-    "steps": [
-     {
-      "num": 2,
-      "title": "Conclude online agreement with Technological Center and contract with Regional railway junction",
-      "output": "Contract for additional services (Single window)",
-      "entity": "Uzbekistan railways Single window",
-      "channel": "Online: obtain",
-      "where": "Railway electronic waybill e-nakl.railway.uz",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Electronic digital signature",
-       "One ID account"
-      ]
-     },
-     {
-      "num": 3,
-      "title": "Obtain cost calculation for railway services",
-      "output": "Information on cost amount",
-      "entity": "Uzbekistan railways Single window",
-      "channel": "Online: obtain",
-      "where": "Railway electronic waybill e-nakl.railway.uz",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Electronic digital signature",
-       "One ID account"
-      ]
-     },
-     {
-      "num": 4,
-      "title": "Prepay for railway services (General)",
-      "output": "Receipt of payment",
-      "entity": "Bank",
-      "channel": "Online: pay",
-      "where": "Payment methods information page uzbekistan.tradeportal.org",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Invoice for payment for railway services",
-       "Agreement with Technological center",
-       "For physical payment",
-       "Physical presence",
-       "For online payment (without necessity to visit a bank)",
-       "Online banking account"
-      ]
-     },
-     {
-      "num": 5,
-      "title": "Generate electronic certificate for railway station",
-      "output": "Electronic certificate for railway station",
-      "entity": "Uzbekistan railways Single window",
-      "channel": "Online: obtain",
-      "where": "Railway electronic waybill e-nakl.railway.uz",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Electronic digital signature"
-      ]
-     },
-     {
-      "num": 6,
-      "title": "Obtain approval for loading and unloading",
-      "output": "Passing examination",
-      "entity": "Tashkent regional railway junction",
-      "channel": "In person",
-      "where": "Inspectors of the Department on freight and commerce Room 402, 4th floor\"",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Physical presence",
-       "Passport",
-       "Power of attorney"
-      ]
-     }
-    ]
-   },
-   {
-    "id": "b3",
-    "name": "Obtain code notification",
-    "dependsOn": [],
-    "level": 0,
-    "estDuration": [
-     12,
-     36
-    ],
-    "dependencyReason": "Independent track — can start as soon as the case opens, no upstream block required.",
-    "lane": "Transport & E-Tranzit",
-    "entities": [
-     "Bank",
-     "Freight forwarding company"
-    ],
-    "stepRange": [
-     7,
-     10
-    ],
-    "optionalSteps": [],
-    "altSteps": [],
-    "steps": [
-     {
-      "num": 7,
-      "title": "Request for freight transportation by railway",
-      "output": "Transportation request",
-      "entity": "Freight forwarding company",
-      "channel": "In person",
-      "where": "Freight forwarding company",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Foreign economic activity contract",
-       "Supply contract"
-      ]
-     },
-     {
-      "num": 8,
-      "title": "Contract with freight forwarder",
-      "output": "Invoice for payment",
-      "entity": "Freight forwarding company",
-      "channel": "In person",
-      "where": "Freight forwarding company",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Passport",
-       "Power of attorney",
-       "Tax Identification Number of the organization or individual",
-       "Personal identification number of an individual",
-       "Bank details"
-      ]
-     },
-     {
-      "num": 9,
-      "title": "Pay for code assignment and freight forwarder service",
-      "output": "Receipt of payment",
-      "entity": "Bank",
-      "channel": "Online: pay",
-      "where": "Payment methods information page uzbekistan.tradeportal.org",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Invoice for payment",
-       "Agreement on railway transportation services",
-       "For physical payment",
-       "Physical presence",
-       "Passport",
-       "For online payment (without necessity to visit a bank)",
-       "Online banking account"
-      ]
-     },
-     {
-      "num": 10,
-      "title": "Obtain code notification",
-      "output": "Code notification from the forwarder that concluded the contract with JSC \"Uzbekistan railways\"",
-      "entity": "Freight forwarding company",
-      "channel": "In person",
-      "where": "Freight forwarding company",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Receipt of payment",
-       "Agreement on railway transportation services"
-      ]
-     }
-    ]
-   },
-   {
-    "id": "b4",
-    "name": "Obtain internal phytosanitary certificate (for tea not in consumer packaging)",
-    "dependsOn": [],
-    "level": 0,
-    "estDuration": [
-     24,
-     72
-    ],
-    "dependencyReason": "Independent track — can start as soon as the case opens, no upstream block required.",
-    "lane": "Single Window & certification",
-    "entities": [
-     "Agency of plant quarantine and protection Personal cabinet (Oferta)",
-     "Assalom Agro",
-     "Bank",
-     "Territorial Department of plant quarantine and protection",
-     "Warehouse / Location of goods"
-    ],
-    "stepRange": [
-     11,
-     18
-    ],
-    "optionalSteps": [
-     15,
-     16,
-     17
-    ],
-    "altSteps": [],
-    "steps": [
-     {
-      "num": 11,
-      "title": "Obtain offer agreement",
-      "output": "Offer agreement for internal phytosanitary certificate",
-      "entity": "Agency of plant quarantine and protection Personal cabinet (Oferta)",
-      "channel": "Online: obtain",
-      "where": "eFito (phytosanitary) efito.uz",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Internet access",
-       "Data required to complete offer agreement",
-       "Tax Identification Number of the organization or individual",
-       "Name of the organization",
-       "Full name of an organization's manager",
-       "Contact phone number",
-       "Agency region",
-       "Payment sum"
-      ]
-     },
-     {
-      "num": 12,
-      "title": "Pay for internal phytosanitary certificate",
-      "output": "Receipt of payment",
-      "entity": "Bank",
-      "channel": "Online: pay",
-      "where": "Payment methods information page uzbekistan.tradeportal.org",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Offer agreement for internal phytosanitary certificate",
-       "For physical payment",
-       "Physical presence",
-       "Passport",
-       "For online payment (without necessity to visit a bank)",
-       "Online banking account"
-      ]
-     },
-     {
-      "num": 13,
-      "title": "Apply for internal phytosanitary certificate",
-      "output": "Appointment for inspection",
-      "entity": "Assalom Agro",
-      "channel": "Online: apply",
-      "where": "assalomagro.uz assalomagro.uz",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "To access the platform",
-       "One ID account",
-       "Contact phone number",
-       "Email"
-      ]
-     },
-     {
-      "num": 14,
-      "title": "Undergo phytosanitary inspection",
-      "output": "Sealing",
-      "entity": "Warehouse / Location of goods",
-      "channel": "In person",
-      "where": "Warehouse / Location of goods",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Physical presence"
-      ]
-     },
-     {
-      "num": 15,
-      "title": "Obtain offer agreement for fumigation",
-      "output": "Fumigation offer agreement",
-      "entity": "Agency of plant quarantine and protection Personal cabinet (Oferta)",
-      "channel": "Online: obtain",
-      "where": "eFito (phytosanitary) efito.uz",
-      "performedBy": "",
-      "optional": true,
-      "alternative": false,
-      "inputs": [
-       "Internet access",
-       "Data required to complete offer agreement",
-       "Tax Identification Number of the organization or individual",
-       "Name of the organization",
-       "Full name of an organization's manager",
-       "Type of organization (business entity, budgetary)",
-       "Contact phone number",
-       "Agency region",
-       "Cost on the contract"
-      ]
-     },
-     {
-      "num": 16,
-      "title": "Pay for fumigation",
-      "output": "Receipt of payment",
-      "entity": "Bank",
-      "channel": "Online: pay",
-      "where": "Payment methods information page uzbekistan.tradeportal.org",
-      "performedBy": "",
-      "optional": true,
-      "alternative": false,
-      "inputs": [
-       "Fumigation offer agreement",
-       "For physical payment",
-       "Physical presence",
-       "Passport",
-       "For online payment (without necessity to visit a bank)",
-       "Online banking account"
-      ]
-     },
-     {
-      "num": 17,
-      "title": "Undergo fumigation",
-      "output": "Certificate of disinfestation",
-      "entity": "Territorial Department of plant quarantine and protection",
-      "channel": "In person",
-      "where": "Fumigation (disinfection) division",
-      "performedBy": "",
-      "optional": true,
-      "alternative": false,
-      "inputs": [
-       "Physical presence"
-      ]
-     },
-     {
-      "num": 18,
-      "title": "Obtain internal phytosanitary certificate",
-      "output": "Internal phytosanitary certificate",
-      "entity": "Assalom Agro",
-      "channel": "Online: obtain",
-      "where": "assalomagro.uz assalomagro.uz",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "One ID account",
-       "Contact phone number",
-       "Email"
-      ]
-     }
-    ]
-   },
-   {
-    "id": "b5",
-    "name": "Arrange freight transportation by railway",
-    "dependsOn": [
-     "b2",
-     "b3"
-    ],
-    "level": 1,
-    "estDuration": [
-     16,
-     48
-    ],
-    "dependencyReason": "Wagon booking needs the rail agreement (b2) and the forwarder code notification (b3).",
-    "lane": "Transport & E-Tranzit",
-    "entities": [
-     "Joint Stock Company \"O'zbekiston temir yo'llari\""
-    ],
-    "stepRange": [
-     19,
-     22
-    ],
-    "optionalSteps": [],
-    "altSteps": [],
-    "steps": [
-     {
-      "num": 19,
-      "title": "Apply for good transportation on specific conditions",
-      "output": "Acceptance of application",
-      "entity": "Joint Stock Company \"O'zbekiston temir yo'llari\"",
-      "channel": "In person",
-      "where": "Department of carriage conditions \"Room 313, 3rd Floor\"",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Application for good transportation on specific conditions"
-      ]
-     },
-     {
-      "num": 20,
-      "title": "Apply for freight transportation by railway",
-      "output": "Acceptance of application",
-      "entity": "Joint Stock Company \"O'zbekiston temir yo'llari\"",
-      "channel": "In person",
-      "where": "Transportation  Unit \"Room 128, 1st Floor\"",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "For submitting application by emails mpo@uzrailway.uz, mpo1@uzrailway.uz, mpo2@uzrailway.uz",
-       "Application for cargo transportation GU-12",
-       "Application for obtaining approval of cargo transportation",
-       "Islamic Republic of Iran approval letter",
-       "For submitting application physically",
-       "Application for cargo transportation GU-12",
-       "Application for obtaining approval of cargo transportation",
-       "Islamic Republic of Iran approval letter"
-      ]
-     },
-     {
-      "num": 21,
-      "title": "Obtain approval for freight transportation by railway",
-      "output": "Coordination of transportation with other countries",
-      "entity": "Joint Stock Company \"O'zbekiston temir yo'llari\"",
-      "channel": "In person",
-      "where": "Transportation  Unit \"Room 128, 1st Floor\"",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Availability by phone"
-      ]
-     },
-     {
-      "num": 22,
-      "title": "Obtain order for wagon supply",
-      "output": "Order for wagon supply for loading",
-      "entity": "Joint Stock Company \"O'zbekiston temir yo'llari\"",
-      "channel": "In person",
-      "where": "Transportation  Unit \"Room 128, 1st Floor\"",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "For submitting application by emails mpo@uzrailway.uz, mpo1@uzrailway.uz, mpo2@uzrailway.uz",
-       "Application on letterhead",
-       "Application on letterhead (own wagons)",
-       "Code notification from the forwarder that concluded the contract with JSC \"Uzbekistan railways\"",
-       "For submitting application physically",
-       "Power of attorney for Transportation Unit",
-       "Passport",
-       "Application on letterhead",
-       "Application on letterhead (own wagons)",
-       "Code notification from the forwarder that concluded the contract with JSC \"Uzbekistan railways\""
-      ]
-     }
-    ]
-   },
-   {
-    "id": "b6",
-    "name": "Complete freight loading",
-    "dependsOn": [
-     "b5",
-     "b4"
-    ],
-    "level": 2,
-    "estDuration": [
-     10,
-     30
-    ],
-    "dependencyReason": "Loading needs wagons ordered (b5) and goods sealed by the internal phytosanitary process (b4).",
-    "lane": "Transport & E-Tranzit",
-    "entities": [
-     "Place of loading / branch line",
-     "Railway station"
-    ],
-    "stepRange": [
-     23,
-     26
-    ],
-    "optionalSteps": [],
-    "altSteps": [],
-    "steps": [
-     {
-      "num": 23,
-      "title": "Apply for allotment of wagons",
-      "output": "Permit for allotment of wagons",
-      "entity": "Railway station",
-      "channel": "In person",
-      "where": "Commodity cash desk",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Physical presence",
-       "Application on letterhead for allotment of wagons",
-       "Order for wagon supply for loading",
-       "Certificate on availability of funds at client's account",
-       "Passport",
-       "Power of attorney for railway station",
-       "Certificate on passing examination"
-      ]
-     },
-     {
-      "num": 24,
-      "title": "Obtain wagons for loading",
-      "output": "Signed GU-45 form",
-      "entity": "Railway station",
-      "channel": "In person",
-      "where": "Freight acceptance and handover Room",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Physical presence"
-      ]
-     },
-     {
-      "num": 25,
-      "title": "Loading",
-      "output": "Report of the work done",
-      "entity": "Place of loading / branch line",
-      "channel": "In person",
-      "where": "Place of loading / branch line",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Physical presence",
-       "Power of attorney"
-      ]
-     },
-     {
-      "num": 26,
-      "title": "Obtain railway bill of lading",
-      "output": "Export railway bill (SMGS)",
-      "entity": "Railway station",
-      "channel": "In person",
-      "where": "Commodity cash desk",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Commercial invoice"
-      ]
-     }
-    ]
-   },
-   {
-    "id": "b7",
-    "name": "Obtain phytosanitary certificate (for tea not in consumer packaging)",
-    "dependsOn": [
-     "b6"
-    ],
-    "level": 3,
-    "estDuration": [
-     10,
-     30
-    ],
-    "dependencyReason": "Border phytosanitary certificate is issued on the loaded, sealed wagon from b6.",
-    "lane": "Single Window & certification",
-    "entities": [
-     "Agency of plant quarantine and protection Personal cabinet (Oferta)",
-     "Bank",
-     "Border checkpoint for plant quarantine",
-     "One-stop service system Single window"
-    ],
-    "stepRange": [
-     27,
-     31
-    ],
-    "optionalSteps": [],
-    "altSteps": [],
-    "steps": [
-     {
-      "num": 27,
-      "title": "Obtain offer agreement",
-      "output": "Offer agreement for phytosanitary certificate",
-      "entity": "Agency of plant quarantine and protection Personal cabinet (Oferta)",
-      "channel": "Online: obtain",
-      "where": "Quarantine cabinet cabinet.karantin.uz",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Electronic digital signature",
-       "Data required to complete offer agreement",
-       "Tax Identification Number of the organization or individual",
-       "Name of the organization",
-       "Full name of an organization's manager",
-       "Type of organization (business entity, budgetary)",
-       "Contact phone number",
-       "Agency region",
-       "Payment sum",
-       "Quantity of transport units"
-      ]
-     },
-     {
-      "num": 28,
-      "title": "Pay for phytosanitary certificate",
-      "output": "Receipt of payment",
-      "entity": "Bank",
-      "channel": "Online: pay",
-      "where": "Payment methods information page uzbekistan.tradeportal.org",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Offer agreement for phytosanitary certificate",
-       "For physical payment",
-       "Physical presence",
-       "Passport",
-       "For online payment (without necessity to visit a bank)",
-       "Online banking account"
-      ]
-     },
-     {
-      "num": 29,
-      "title": "Apply for phytosanitary certificate",
-      "output": "Appointment for phytosanitary control",
-      "entity": "One-stop service system Single window",
-      "channel": "Online: apply",
-      "where": "Single Window singlewindow.uz",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Electronic digital signature",
-       "Online application for phytosanitary certificate"
-      ]
-     },
-     {
-      "num": 30,
-      "title": "Undergo phytosanitary inspection",
-      "output": "Visual inspection",
-      "entity": "Border checkpoint for plant quarantine",
-      "channel": "In person",
-      "where": "Office of the inspector on the border checkpoint for plant quarantine",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Physical presence"
-      ]
-     },
-     {
-      "num": 31,
-      "title": "Obtain phytosanitary certificate",
-      "output": "Phytosanitary certificate",
-      "entity": "Border checkpoint for plant quarantine",
-      "channel": "In person",
-      "where": "Office of the inspector on the border checkpoint for plant quarantine",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Physical presence"
-      ]
-     }
-    ]
-   },
-   {
-    "id": "b8",
-    "name": "Obtain certificate of origin",
-    "dependsOn": [],
-    "level": 0,
-    "estDuration": [
-     24,
-     72
-    ],
-    "dependencyReason": "Independent track — can start as soon as the case opens, no upstream block required.",
-    "lane": "Single Window & certification",
-    "entities": [
-     "Bank",
-     "One-stop service system Single window",
-     "Warehouse / Location of goods",
-     "“Uzbekexpertiza” JSC",
-     "“Uzbekexpertiza” JSC service portal"
-    ],
-    "stepRange": [
-     32,
-     40
-    ],
-    "optionalSteps": [],
-    "altSteps": [
-     36,
-     40
-    ],
-    "steps": [
-     {
-      "num": 32,
-      "title": "Conclude contract for services",
-      "output": "Contract with Uzbekexpertiza",
-      "entity": "“Uzbekexpertiza” JSC",
-      "channel": "In person",
-      "where": "Deputy Chief of the Department of examination of preferential goods \"Room 36, 3rd floor\"",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Physical presence",
-       "Passport",
-       "Power of attorney"
-      ]
-     },
-     {
-      "num": 33,
-      "title": "Pay for certificate of origin",
-      "output": "Receipt of payment",
-      "entity": "Bank",
-      "channel": "Online: pay",
-      "where": "Payment methods information page uzbekistan.tradeportal.org",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Invoice for prepayment",
-       "For physical payment",
-       "Physical presence",
-       "Passport",
-       "For online payment (without necessity to visit a bank)",
-       "Online banking account"
-      ]
-     },
-     {
-      "num": 34,
-      "title": "Apply for certificate of origin",
-      "output": "Assignment of expert on certification",
-      "entity": "“Uzbekexpertiza” JSC",
-      "channel": "In person",
-      "where": "Deputy Chief of the Department of examination of preferential goods \"Room 36, 3rd floor\"",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Application for obtaining of Certificate of origin for exported goods",
-       "Application for obtaining of Certificate of origin for exported goods",
-       "Commercial invoice",
-       "Any document confirming the exporter's right to use a land plot",
-       "Any document confirming purchase of agricultural products"
-      ]
-     },
-     {
-      "num": 35,
-      "title": "Apply for certificate of origin via Uzbekexpertiza service portal",
-      "output": "Appointment with an expert on certification",
-      "entity": "“Uzbekexpertiza” JSC service portal",
-      "channel": "Online: apply",
-      "where": "Uzbekexpertiza service portal application.expertiza.uz",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Electronic digital signature",
-       "One ID account",
-       "Online application for certificate of origin",
-       "Commercial invoice",
-       "Any document confirming the exporter's right to use a land plot",
-       "Any document confirming purchase of agricultural products"
-      ]
-     },
-     {
-      "num": 36,
-      "title": "Apply for certificate of origin via Single Window",
-      "output": "Appointment with an expert on certification",
-      "entity": "One-stop service system Single window",
-      "channel": "Online: apply",
-      "where": "Single Window singlewindow.uz",
-      "performedBy": "",
-      "optional": false,
-      "alternative": true,
-      "inputs": [
-       "Electronic digital signature",
-       "Online application for certificate of origin",
-       "Commercial invoice",
-       "Any document confirming the exporter's right to use a land plot",
-       "Any document confirming purchase of agricultural products"
-      ]
-     },
-     {
-      "num": 37,
-      "title": "Assessment of application",
-      "output": "Appointment for cargo expertise",
-      "entity": "“Uzbekexpertiza” JSC",
-      "channel": "In person",
-      "where": "Department of Examination of Preferential Goods \"3rd floor\"",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Physical presence"
-      ]
-     },
-     {
-      "num": 38,
-      "title": "Undergo expertise of goods",
-      "output": "Undergo expertise",
-      "entity": "Warehouse / Location of goods",
-      "channel": "In person",
-      "where": "Warehouse / Location of goods",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Physical presence"
-      ]
-     },
-     {
-      "num": 39,
-      "title": "Obtain certificate of origin",
-      "output": "Certificate of origin",
-      "entity": "“Uzbekexpertiza” JSC",
-      "channel": "In person",
-      "where": "Department of Examination of Preferential Goods \"3rd floor\"",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Physical presence"
-      ]
-     },
-     {
-      "num": 40,
-      "title": "Obtain expert conclusion",
-      "output": "Expert conclusion",
-      "entity": "“Uzbekexpertiza” JSC",
-      "channel": "In person",
-      "where": "Department of Examination of Preferential Goods \"3rd floor\"",
-      "performedBy": "",
-      "optional": false,
-      "alternative": true,
-      "inputs": [
-       "Physical presence"
-      ]
-     }
-    ]
-   },
-   {
-    "id": "b9",
-    "name": "Undergo customs clearance",
-    "dependsOn": [
-     "b7",
-     "b8"
-    ],
-    "level": 4,
-    "estDuration": [
-     12,
-     40
-    ],
-    "dependencyReason": "Customs declaration needs the border phytosanitary certificate (b7) and the certificate of origin (b8, run as an independent paperwork track from day 0).",
-    "lane": "Customs / SCC",
-    "entities": [
-     "Bank",
-     "Customs post of foreign trade activity",
-     "Personal cabinet of participant of foreign economic activity",
-     "Warehouse / Location of goods"
-    ],
-    "stepRange": [
-     41,
-     46
-    ],
-    "optionalSteps": [
-     44
-    ],
-    "altSteps": [],
-    "steps": [
-     {
-      "num": 41,
-      "title": "Create export customs declaration",
-      "output": "Electronic form of customs declaration",
-      "entity": "Personal cabinet of participant of foreign economic activity",
-      "channel": "Online: apply",
-      "where": "Customs e-declaration cabinet (SCC) ed1.customs.uz",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Electronic digital signature",
-       "Identification number of foreign trade contract",
-       "Commercial invoice",
-       "Export railway bill (SMGS)",
-       "Documents that are not obligatory to submit for export declaration",
-       "Phytosanitary certificate",
-       "Certificate of origin",
-       "Certificate of origin form A",
-       "Certificate of origin General form"
-      ]
-     },
-     {
-      "num": 42,
-      "title": "Pay for customs fee",
-      "output": "Receipt of payment",
-      "entity": "Bank",
-      "channel": "Online: pay",
-      "where": "Trade info portal uztradeinfo.uz",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Bank details of territorial customs departments",
-       "For physical payment",
-       "Physical presence",
-       "For online payment (without necessity to visit a bank)",
-       "Online banking account"
-      ]
-     },
-     {
-      "num": 43,
-      "title": "Submit export customs declaration",
-      "output": "Customs declaration submitted",
-      "entity": "Personal cabinet of participant of foreign economic activity",
-      "channel": "Online: submit",
-      "where": "Customs e-declaration cabinet (SCC) ed1.customs.uz",
-      "performedBy": "trader or customs broker",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Electronic digital signature",
-       "Electronic form of customs declaration"
-      ]
-     },
-     {
-      "num": 44,
-      "title": "Undergo customs inspection in red corridor",
-      "output": "Undergo documentary control",
-      "entity": "Warehouse / Location of goods",
-      "channel": "In person",
-      "where": "Warehouse / Location of goods",
-      "performedBy": "",
-      "optional": true,
-      "alternative": false,
-      "inputs": [
-       "Export customs declaration",
-       "Export railway bill (SMGS)",
-       "Commercial invoice",
-       "Physical presence",
-       "Passport",
-       "Power of attorney"
-      ]
-     },
-     {
-      "num": 45,
-      "title": "Obtain export customs declaration",
-      "output": "Export customs declaration",
-      "entity": "Personal cabinet of participant of foreign economic activity",
-      "channel": "Online: obtain",
-      "where": "Customs e-declaration cabinet (SCC) ed1.customs.uz",
-      "performedBy": "trader or customs broker",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Electronic digital signature"
-      ]
-     },
-     {
-      "num": 46,
-      "title": "Obtain stamps on shipping documents",
-      "output": "Export railway bill stamped by customs inspector",
-      "entity": "Customs post of foreign trade activity",
-      "channel": "In person",
-      "where": "Group of customs control and customs clearance",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Physical presence",
-       "Export railway bill (SMGS)",
-       "Commercial invoice",
-       "Export customs declaration"
-      ]
-     }
-    ]
-   },
-   {
-    "id": "b10",
-    "name": "Dispatch freight",
-    "dependsOn": [
-     "b9"
-    ],
-    "level": 5,
-    "estDuration": [
-     4,
-     12
-    ],
-    "dependencyReason": "Dispatch follows the customs stamp obtained in b9.",
-    "lane": "Transport & E-Tranzit",
-    "entities": [
-     "Railway station"
-    ],
-    "stepRange": [
-     47,
-     48
-    ],
-    "optionalSteps": [],
-    "altSteps": [],
-    "steps": [
-     {
-      "num": 47,
-      "title": "Close memo of handover specialist",
-      "output": "Signed GU-45 form",
-      "entity": "Railway station",
-      "channel": "In person",
-      "where": "Freight acceptance and handover Room",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Physical presence",
-       "Application for wagon handover"
-      ]
-     },
-     {
-      "num": 48,
-      "title": "Dispatch freight",
-      "output": "Duplicate of railway bill with datestamp",
-      "entity": "Railway station",
-      "channel": "In person",
-      "where": "Commodity cash desk",
-      "performedBy": "",
-      "optional": false,
-      "alternative": false,
-      "inputs": [
-       "Export railway bill (SMGS)",
-       "Package of documents"
-      ]
-     }
-    ]
-   }
+  "onlineCount": 22,
+  "entities": [
+   "Single portal of interactive state services",
+   "Bank",
+   "Tashkent regional railway junction",
+   "Uzbekistan railways Single window",
+   "Freight forwarding company",
+   "Agency of plant quarantine and protection Personal cabinet (Oferta)",
+   "Assalom Agro",
+   "Territorial Department of plant quarantine and protection",
+   "Warehouse / Location of goods",
+   "Joint Stock Company \"O'zbekiston temir yo'llari\"",
+   "Place of loading / branch line",
+   "Railway station",
+   "Border checkpoint for plant quarantine",
+   "One-stop service system Single window",
+   "“Uzbekexpertiza” JSC",
+   "“Uzbekexpertiza” JSC service portal",
+   "Customs post of foreign trade activity",
+   "Personal cabinet of participant of foreign economic activity"
+  ]
+ },
+ "877": {
+  "id": "877",
+  "title": "Export of pasta by train",
+  "direction": "export",
+  "goods": "pasta",
+  "mode": "train",
+  "kind": "customs",
+  "timeframe": [
+   67,
+   209
   ],
-  "entityDirectory": [
-   {
-    "name": "Single portal of interactive state services",
-    "steps": "1",
-    "lane": "Other government",
-    "contact": "✉ epigu@egov.uz ☎ +998 55 501 36 19,  +998 55 501 36 17 🌐 https://my.gov.uz/, https://my.gov.uz/ru/site/feedback"
-   },
-   {
-    "name": "Uzbekistan railways Single window",
-    "steps": "2, 3, 5",
-    "lane": "Single Window & certification",
-    "contact": "✉ git@railway.uz ☎ +998 71 238 88 02 🌐 https://e-nakl.railway.uz/"
-   },
-   {
-    "name": "Bank",
-    "steps": "4, 9, 12, 16, 28, 33, 42",
-    "lane": "Bank",
-    "contact": ""
-   },
-   {
-    "name": "Tashkent regional railway junction",
-    "steps": "6",
-    "lane": "Transport & E-Tranzit",
-    "contact": "✉ rju-1@railway.uz ☎ +998 71 299 96 20 🌐 http://tashkent.railway.uz/en/"
-   },
-   {
-    "name": "Freight forwarding company",
-    "steps": "7, 8, 10",
-    "lane": "Transport & E-Tranzit",
-    "contact": ""
-   },
-   {
-    "name": "Agency of plant quarantine and protection Personal cabinet (Oferta)",
-    "steps": "11, 15, 27",
-    "lane": "Single Window & certification",
-    "contact": "✉ info@karantin.uz 🌐 https://efito.uz/invoice/, http://karantin.uz/"
-   },
-   {
-    "name": "Assalom Agro",
-    "steps": "13, 18",
-    "lane": "Single Window & certification",
-    "contact": "✉ assalomagro@gmail.com, info@5x5.uz ☎ +998 55 502 55 75, +998 98 198 14 02 🌐 https://assalomagro.uz/en"
-   },
-   {
-    "name": "Warehouse / Location of goods",
-    "steps": "14, 38, 44",
-    "lane": "Transport & E-Tranzit",
-    "contact": ""
-   },
-   {
-    "name": "Territorial Department of plant quarantine and protection",
-    "steps": "17",
-    "lane": "Single Window & certification",
-    "contact": ""
-   },
-   {
-    "name": "Joint Stock Company \"O'zbekiston temir yo'llari\"",
-    "steps": "19, 20, 21, 22",
-    "lane": "Transport & E-Tranzit",
-    "contact": "✉ info@uzrailway.uz ☎ +998 71 237 99 98, 1005 🌐 https://railway.uz/en/"
-   },
-   {
-    "name": "Railway station",
-    "steps": "23, 24, 26, 47, 48",
-    "lane": "Transport & E-Tranzit",
-    "contact": ""
-   },
-   {
-    "name": "Place of loading / branch line",
-    "steps": "25",
-    "lane": "Transport & E-Tranzit",
-    "contact": ""
-   },
-   {
-    "name": "One-stop service system Single window",
-    "steps": "29, 36",
-    "lane": "Single Window & certification",
-    "contact": "☎ +998 78 120 76 08 (Int. 5603, 5646, 5606, 5885) , +998 78 120 76 00 (Int. 5603, 5646, 5606, 5885) 🌐 http://singlewindow.uz/index.jsp, http://sw2.customs.uz/"
-   },
-   {
-    "name": "Border checkpoint for plant quarantine",
-    "steps": "30, 31",
-    "lane": "Single Window & certification",
-    "contact": ""
-   },
-   {
-    "name": "“Uzbekexpertiza” JSC",
-    "steps": "32, 34, 37, 39, 40",
-    "lane": "Single Window & certification",
-    "contact": "✉ info1@expertiza.uz, expertiza@exat.uz ☎ +998 71 230 23 64, +998 71 230 23 60 🌐 http://www.expertiza.uz/, http://t.me/uzbekexpertiza_bot"
-   },
-   {
-    "name": "“Uzbekexpertiza” JSC service portal",
-    "steps": "35",
-    "lane": "Single Window & certification",
-    "contact": "🌐 http://application.expertiza.uz/expertiza/#/, http://www.expertiza.uz/"
-   },
-   {
-    "name": "Personal cabinet of participant of foreign economic activity",
-    "steps": "41, 43, 45",
-    "lane": "Customs / SCC",
-    "contact": "🌐 http://ed1.customs.uz, http://ed2.customs.uz"
-   },
-   {
-    "name": "Customs post of foreign trade activity",
-    "steps": "46",
-    "lane": "Customs / SCC",
-    "contact": ""
-   }
+  "blocksCount": 8,
+  "stepsCount": 34,
+  "onlineCount": 13,
+  "entities": [
+   "Single portal of interactive state services",
+   "Uzbekistan railways Single window",
+   "Bank",
+   "Tashkent regional railway junction",
+   "Freight forwarding company",
+   "Joint Stock Company \"O'zbekiston temir yo'llari\"",
+   "Railway station",
+   "Place of loading / branch line",
+   "\"Uzbekexpertiza\" JSC",
+   "\"Uzbekexpertiza\" JSC service portal",
+   "One-stop service system Single window",
+   "Warehouse / Location of goods",
+   "Personal cabinet of participant of foreign economic activity",
+   "Customs post of foreign trade activity"
+  ]
+ },
+ "884": {
+  "id": "884",
+  "title": "Arrange cargo transportation by train via Single Window online portal",
+  "direction": "export",
+  "goods": "any cargo",
+  "mode": "train",
+  "kind": "logistics",
+  "timeframe": [
+   33,
+   90
+  ],
+  "blocksCount": 5,
+  "stepsCount": 20,
+  "onlineCount": 14,
+  "entities": [
+   "Uzbekistan railways Single window",
+   "Bank",
+   "Tashkent regional railway junction",
+   "Freight forwarding company",
+   "Place of loading / branch line",
+   "Railway station"
+  ]
+ },
+ "888": {
+  "id": "888",
+  "title": "Import of cement by train",
+  "direction": "import",
+  "goods": "cement",
+  "mode": "train",
+  "kind": "customs",
+  "timeframe": [
+   27,
+   296
+  ],
+  "blocksCount": 13,
+  "stepsCount": 40,
+  "onlineCount": 18,
+  "entities": [
+   "Single portal of interactive state services",
+   "Uzbekistan railways Single window",
+   "Bank",
+   "Tashkent regional railway junction",
+   "Customs warehouse",
+   "Railway station",
+   "Customs post of foreign trade activity",
+   "Personal cabinet of participant of foreign economic activity",
+   "One-stop service system Single window",
+   "Uzbek Center for Research and Quality Control \"UzTest\"",
+   "Electronic document management systems",
+   "Online banking system"
+  ]
+ },
+ "891": {
+  "id": "891",
+  "title": "Export of paper and cardboard products by road",
+  "direction": "export",
+  "goods": "paper and cardboard products",
+  "mode": "road",
+  "kind": "customs",
+  "timeframe": [
+   29,
+   87
+  ],
+  "blocksCount": 7,
+  "stepsCount": 39,
+  "onlineCount": 16,
+  "entities": [
+   "Single portal of interactive state services",
+   "Agency of plant quarantine and protection Personal cabinet (Oferta)",
+   "Bank",
+   "Assalom Agro",
+   "Warehouse / Location of goods",
+   "Territorial Department of plant quarantine and protection",
+   "\"Uzbekexpertiza\" JSC",
+   "\"Uzbekexpertiza\" JSC service portal",
+   "One-stop service system Single window",
+   "Border checkpoint for plant quarantine",
+   "Transportation company",
+   "Personal cabinet of participant of foreign economic activity",
+   "Customs post of foreign trade activity",
+   "State border crossing point"
+  ]
+ },
+ "911": {
+  "id": "911",
+  "title": "Export of paper and cardboard products by train",
+  "direction": "export",
+  "goods": "paper and cardboard products",
+  "mode": "train",
+  "kind": "customs",
+  "timeframe": [
+   81,
+   243
+  ],
+  "blocksCount": 10,
+  "stepsCount": 46,
+  "onlineCount": 21,
+  "entities": [
+   "Single portal of interactive state services",
+   "Uzbekistan railways Single window",
+   "Bank",
+   "Tashkent regional railway junction",
+   "Freight forwarding company",
+   "Agency of plant quarantine and protection Personal cabinet (Oferta)",
+   "Assalom Agro",
+   "Warehouse / Location of goods",
+   "Territorial Department of plant quarantine and protection",
+   "Joint Stock Company \"O'zbekiston temir yo'llari\"",
+   "Railway station",
+   "Place of loading / branch line",
+   "\"Uzbekexpertiza\" JSC",
+   "\"Uzbekexpertiza\" JSC service portal",
+   "One-stop service system Single window",
+   "Border checkpoint for plant quarantine",
+   "Personal cabinet of participant of foreign economic activity",
+   "Customs post of foreign trade activity"
+  ]
+ },
+ "924": {
+  "id": "924",
+  "title": "Arrange cargo delivery by train physically",
+  "direction": "import",
+  "goods": "any cargo",
+  "mode": "train",
+  "kind": "logistics",
+  "timeframe": [
+   7,
+   27
+  ],
+  "blocksCount": 6,
+  "stepsCount": 18,
+  "onlineCount": 2,
+  "entities": [
+   "Tashkent Technological center for the processing of transport documents",
+   "Tashkent regional railway junction",
+   "Railway station",
+   "Bank",
+   "Customs warehouse"
+  ]
+ },
+ "925": {
+  "id": "925",
+  "title": "Arrange cargo delivery by train via Single Window online portal",
+  "direction": "import",
+  "goods": "any cargo",
+  "mode": "train",
+  "kind": "logistics",
+  "timeframe": [
+   13,
+   34
+  ],
+  "blocksCount": 3,
+  "stepsCount": 16,
+  "onlineCount": 12,
+  "entities": [
+   "Uzbekistan railways Single window",
+   "Bank",
+   "Tashkent regional railway junction",
+   "Railway station",
+   "Customs warehouse"
+  ]
+ },
+ "934": {
+  "id": "934",
+  "title": "Arrange cargo transportation by train physically",
+  "direction": "export",
+  "goods": "any cargo",
+  "mode": "train",
+  "kind": "logistics",
+  "timeframe": [
+   39,
+   112
+  ],
+  "blocksCount": 5,
+  "stepsCount": 20,
+  "onlineCount": 2,
+  "entities": [
+   "Tashkent Technological center for the processing of transport documents",
+   "Tashkent regional railway junction",
+   "Railway station",
+   "Bank",
+   "Freight forwarding company",
+   "Joint Stock Company \"O'zbekiston temir yo'llari\"",
+   "Place of loading / branch line"
+  ]
+ },
+ "935": {
+  "id": "935",
+  "title": "Arrange cargo transportation by train via Single Window online portal",
+  "direction": "export",
+  "goods": "any cargo",
+  "mode": "train",
+  "kind": "logistics",
+  "timeframe": [
+   33,
+   87
+  ],
+  "blocksCount": 5,
+  "stepsCount": 20,
+  "onlineCount": 14,
+  "entities": [
+   "Uzbekistan railways Single window",
+   "Bank",
+   "Tashkent regional railway junction",
+   "Freight forwarding company",
+   "Place of loading / branch line",
+   "Railway station"
+  ]
+ },
+ "948": {
+  "id": "948",
+  "title": "Export of eggs  by road",
+  "direction": "export",
+  "goods": "eggs",
+  "mode": "road",
+  "kind": "customs",
+  "timeframe": [
+   24,
+   77
+  ],
+  "blocksCount": 7,
+  "stepsCount": 34,
+  "onlineCount": 13,
+  "entities": [
+   "Single portal of interactive state services",
+   "One-stop service system Single window",
+   "\"Uzbekexpertiza\" JSC",
+   "Bank",
+   "\"Uzbekexpertiza\" JSC service portal",
+   "Warehouse / Location of goods",
+   "Transportation company",
+   "Personal cabinet of participant of foreign economic activity",
+   "Customs post of foreign trade activity",
+   "State border crossing point"
+  ]
+ },
+ "949": {
+  "id": "949",
+  "title": "Export of eggs by train",
+  "direction": "export",
+  "goods": "eggs",
+  "mode": "train",
+  "kind": "customs",
+  "timeframe": [
+   76,
+   238
+  ],
+  "blocksCount": 10,
+  "stepsCount": 41,
+  "onlineCount": 19,
+  "entities": [
+   "Single portal of interactive state services",
+   "One-stop service system Single window",
+   "Uzbekistan railways Single window",
+   "Bank",
+   "Tashkent regional railway junction",
+   "Freight forwarding company",
+   "Joint Stock Company \"O'zbekiston temir yo'llari\"",
+   "Railway station",
+   "Place of loading / branch line",
+   "\"Uzbekexpertiza\" JSC",
+   "\"Uzbekexpertiza\" JSC service portal",
+   "Warehouse / Location of goods",
+   "Personal cabinet of participant of foreign economic activity",
+   "Customs post of foreign trade activity"
+  ]
+ },
+ "953": {
+  "id": "953",
+  "title": "Export of washing detergents by train",
+  "direction": "export",
+  "goods": "washing detergents",
+  "mode": "train",
+  "kind": "customs",
+  "timeframe": [
+   67,
+   209
+  ],
+  "blocksCount": 8,
+  "stepsCount": 34,
+  "onlineCount": 13,
+  "entities": [
+   "Single portal of interactive state services",
+   "Uzbekistan railways Single window",
+   "Bank",
+   "Tashkent regional railway junction",
+   "Freight forwarding company",
+   "Joint Stock Company \"O'zbekiston temir yo'llari\"",
+   "\"Uzbekexpertiza\" JSC",
+   "\"Uzbekexpertiza\" JSC service portal",
+   "One-stop service system Single window",
+   "Warehouse / Location of goods",
+   "Railway station",
+   "Place of loading / branch line",
+   "Personal cabinet of participant of foreign economic activity",
+   "Customs post of foreign trade activity"
+  ]
+ },
+ "983": {
+  "id": "983",
+  "title": "Arrange cargo transportation by train via Single Window online portal",
+  "direction": "export",
+  "goods": "any cargo",
+  "mode": "train",
+  "kind": "logistics",
+  "timeframe": [
+   33,
+   87
+  ],
+  "blocksCount": 5,
+  "stepsCount": 20,
+  "onlineCount": 14,
+  "entities": [
+   "Freight forwarding company",
+   "Bank",
+   "Uzbekistan railways Single window",
+   "Place of loading / branch line",
+   "Tashkent regional railway junction",
+   "Railway station"
+  ]
+ },
+ "984": {
+  "id": "984",
+  "title": "Clearance of eggs by road",
+  "direction": "import",
+  "goods": "eggs",
+  "mode": "road",
+  "kind": "customs",
+  "timeframe": [
+   1,
+   8
+  ],
+  "blocksCount": 2,
+  "stepsCount": 13,
+  "onlineCount": 3,
+  "entities": [
+   "Personal cabinet of participant of foreign economic activity",
+   "Customs post of foreign trade activity",
+   "State border crossing point"
+  ]
+ },
+ "993": {
+  "id": "993",
+  "title": "Import of pasta by road",
+  "direction": "import",
+  "goods": "pasta",
+  "mode": "road",
+  "kind": "customs",
+  "timeframe": [
+   55,
+   331
+  ],
+  "blocksCount": 10,
+  "stepsCount": 47,
+  "onlineCount": 25,
+  "entities": [
+   "One-stop service system Single window",
+   "Bank",
+   "Single portal of interactive state services",
+   "Customs warehouse",
+   "Automated information system \"E-tranzit\"",
+   "State border crossing point",
+   "Customs post of foreign trade activity",
+   "Personal cabinet of participant of foreign economic activity",
+   "Warehouse / Location of goods",
+   "Regional center for sanitary-epidemiological service",
+   "Sanitary-epidemiological welfare and public health committee of the Republic of Uzbekistan",
+   "Online banking system"
+  ]
+ },
+ "994": {
+  "id": "994",
+  "title": "Import of pasta by train",
+  "direction": "import",
+  "goods": "pasta",
+  "mode": "train",
+  "kind": "customs",
+  "timeframe": [
+   58,
+   346
+  ],
+  "blocksCount": 15,
+  "stepsCount": 50,
+  "onlineCount": 27,
+  "entities": [
+   "One-stop service system Single window",
+   "Bank",
+   "Single portal of interactive state services",
+   "Uzbekistan railways Single window",
+   "Tashkent regional railway junction",
+   "Customs warehouse",
+   "Railway station",
+   "Customs post of foreign trade activity",
+   "Personal cabinet of participant of foreign economic activity",
+   "Warehouse / Location of goods",
+   "Regional center for sanitary-epidemiological service",
+   "Sanitary-epidemiological welfare and public health committee of the Republic of Uzbekistan",
+   "Online banking system"
+  ]
+ },
+ "1000": {
+  "id": "1000",
+  "title": "Obtain sanitary and epidemiological conclusion",
+  "direction": "export",
+  "goods": "any cargo",
+  "mode": "any",
+  "kind": "service",
+  "timeframe": [
+   37,
+   48
+  ],
+  "blocksCount": 1,
+  "stepsCount": 7,
+  "onlineCount": 5,
+  "entities": [
+   "One-stop service system Single window",
+   "Customs warehouse",
+   "Regional center for sanitary-epidemiological service",
+   "Sanitary-epidemiological welfare and public health committee of the Republic of Uzbekistan",
+   "Bank"
+  ]
+ },
+ "1001": {
+  "id": "1001",
+  "title": "Transit by road through Uzbekistan",
+  "direction": "transit",
+  "goods": "any cargo",
+  "mode": "road",
+  "kind": "logistics",
+  "timeframe": [
+   1,
+   3
+  ],
+  "blocksCount": 3,
+  "stepsCount": 21,
+  "onlineCount": 2,
+  "entities": [
+   "Automated information system \"E-tranzit\"",
+   "State border crossing point"
+  ]
+ },
+ "1002": {
+  "id": "1002",
+  "title": "Transit by train through Uzbekistan",
+  "direction": "transit",
+  "goods": "any cargo",
+  "mode": "train",
+  "kind": "logistics",
+  "timeframe": [
+   3,
+   7
+  ],
+  "blocksCount": 3,
+  "stepsCount": 5,
+  "onlineCount": 1,
+  "entities": [
+   "Automated information system \"E-tranzit\"",
+   "Border crossing point by rail"
+  ]
+ },
+ "1007": {
+  "id": "1007",
+  "title": "Clearance of pasta by road",
+  "direction": "import",
+  "goods": "pasta",
+  "mode": "road",
+  "kind": "customs",
+  "timeframe": [
+   7,
+   33
+  ],
+  "blocksCount": 5,
+  "stepsCount": 28,
+  "onlineCount": 10,
+  "entities": [
+   "Automated information system \"E-tranzit\"",
+   "State border crossing point",
+   "Customs warehouse",
+   "Customs post of foreign trade activity",
+   "Personal cabinet of participant of foreign economic activity",
+   "Online banking system",
+   "Bank"
+  ]
+ },
+ "1012": {
+  "id": "1012",
+  "title": "Import of washing detergents by train",
+  "direction": "import",
+  "goods": "washing detergents",
+  "mode": "train",
+  "kind": "customs",
+  "timeframe": [
+   27,
+   296
+  ],
+  "blocksCount": 13,
+  "stepsCount": 40,
+  "onlineCount": 18,
+  "entities": [
+   "Single portal of interactive state services",
+   "Uzbekistan railways Single window",
+   "Bank",
+   "Tashkent regional railway junction",
+   "Customs warehouse",
+   "Railway station",
+   "Customs post of foreign trade activity",
+   "Personal cabinet of participant of foreign economic activity",
+   "One-stop service system Single window",
+   "Uzbek Center for Research and Quality Control \"UzTest\"",
+   "Electronic document management systems",
+   "Online banking system"
+  ]
+ },
+ "1046": {
+  "id": "1046",
+  "title": "Clearance of jewelry by air",
+  "direction": "import",
+  "goods": "jewelry",
+  "mode": "air",
+  "kind": "customs",
+  "timeframe": [
+   2,
+   15
+  ],
+  "blocksCount": 1,
+  "stepsCount": 7,
+  "onlineCount": 4,
+  "entities": [
+   "Customs post of foreign trade activity",
+   "Online banking system",
+   "Personal cabinet of participant of foreign economic activity",
+   "Customs post \"Avia yuklar\" at the airport's warehouse"
+  ]
+ },
+ "1047": {
+  "id": "1047",
+  "title": "Arrange cargo delivery by air",
+  "direction": "import",
+  "goods": "any cargo",
+  "mode": "air",
+  "kind": "logistics",
+  "timeframe": [
+   10,
+   36
+  ],
+  "blocksCount": 3,
+  "stepsCount": 14,
+  "onlineCount": 1,
+  "entities": [
+   "Postal cargo complex at Tashkent International Airport named by Islam Karimov",
+   "Bank",
+   "Customs post \"Avia yuklar\" at the airport's warehouse"
+  ]
+ },
+ "1051": {
+  "id": "1051",
+  "title": "Export of carpets by road",
+  "direction": "export",
+  "goods": "carpets",
+  "mode": "road",
+  "kind": "customs",
+  "timeframe": [
+   47,
+   92
+  ],
+  "blocksCount": 6,
+  "stepsCount": 32,
+  "onlineCount": 12,
+  "entities": [
+   "Single portal of interactive state services",
+   "Transportation company",
+   "Warehouse / Location of goods",
+   "One-stop service system Single window",
+   "Electronic document management systems",
+   "Bank",
+   "Customs warehouse",
+   "\"Uzbekexpertiza\" JSC",
+   "\"Uzbekexpertiza\" JSC service portal",
+   "Personal cabinet of participant of foreign economic activity",
+   "Customs post of foreign trade activity",
+   "State border crossing point"
+  ]
+ },
+ "1052": {
+  "id": "1052",
+  "title": "Export of carpets by train",
+  "direction": "export",
+  "goods": "carpets",
+  "mode": "train",
+  "kind": "customs",
+  "timeframe": [
+   75,
+   165
+  ],
+  "blocksCount": 9,
+  "stepsCount": 38,
+  "onlineCount": 17,
+  "entities": [
+   "Single portal of interactive state services",
+   "Uzbekistan railways Single window",
+   "Bank",
+   "Tashkent regional railway junction",
+   "Freight forwarding company",
+   "Joint Stock Company \"O'zbekiston temir yo'llari\"",
+   "Railway station",
+   "Place of loading / branch line",
+   "One-stop service system Single window",
+   "Electronic document management systems",
+   "Customs warehouse",
+   "\"Uzbekexpertiza\" JSC",
+   "\"Uzbekexpertiza\" JSC service portal",
+   "Warehouse / Location of goods",
+   "Personal cabinet of participant of foreign economic activity",
+   "Customs post of foreign trade activity"
+  ]
+ },
+ "1070": {
+  "id": "1070",
+  "title": "Export of shoes by train",
+  "direction": "export",
+  "goods": "shoes",
+  "mode": "train",
+  "kind": "customs",
+  "timeframe": [
+   67,
+   209
+  ],
+  "blocksCount": 8,
+  "stepsCount": 34,
+  "onlineCount": 13,
+  "entities": [
+   "Single portal of interactive state services",
+   "Uzbekistan railways Single window",
+   "Bank",
+   "Tashkent regional railway junction",
+   "Freight forwarding company",
+   "Joint Stock Company \"O'zbekiston temir yo'llari\"",
+   "\"Uzbekexpertiza\" JSC",
+   "\"Uzbekexpertiza\" JSC service portal",
+   "One-stop service system Single window",
+   "Warehouse / Location of goods",
+   "Railway station",
+   "Place of loading / branch line",
+   "Personal cabinet of participant of foreign economic activity",
+   "Customs post of foreign trade activity"
+  ]
+ },
+ "1092": {
+  "id": "1092",
+  "title": "Temporary import of medical equipment by road",
+  "direction": "import",
+  "goods": "medical equipment",
+  "mode": "road",
+  "kind": "customs",
+  "timeframe": [
+   6,
+   24
+  ],
+  "blocksCount": 5,
+  "stepsCount": 22,
+  "onlineCount": 8,
+  "entities": [
+   "Single portal of interactive state services",
+   "Automated information system \"E-tranzit\"",
+   "State border crossing point",
+   "Customs warehouse",
+   "Customs post of foreign trade activity",
+   "Personal cabinet of participant of foreign economic activity",
+   "Bank"
+  ]
+ },
+ "1096": {
+  "id": "1096",
+  "title": "Re-export of medical equipment by road",
+  "direction": "export",
+  "goods": "medical equipment",
+  "mode": "road",
+  "kind": "customs",
+  "timeframe": [
+   94,
+   203
+  ],
+  "blocksCount": 4,
+  "stepsCount": 21,
+  "onlineCount": 5,
+  "entities": [
+   "Transportation company",
+   "Warehouse / Location of goods",
+   "Personal cabinet of participant of foreign economic activity",
+   "Bank",
+   "Customs post of foreign trade activity",
+   "State border crossing point"
+  ]
+ },
+ "1101": {
+  "id": "1101",
+  "title": "Temporary export of reusable packaging by road",
+  "direction": "export",
+  "goods": "reusable packaging",
+  "mode": "road",
+  "kind": "customs",
+  "timeframe": [
+   14,
+   43
+  ],
+  "blocksCount": 4,
+  "stepsCount": 19,
+  "onlineCount": 5,
+  "entities": [
+   "Single portal of interactive state services",
+   "Transportation company",
+   "Warehouse / Location of goods",
+   "Personal cabinet of participant of foreign economic activity",
+   "Bank",
+   "Customs post of foreign trade activity",
+   "State border crossing point"
+  ]
+ },
+ "1104": {
+  "id": "1104",
+  "title": "Re-import of reusable packaging by road",
+  "direction": "import",
+  "goods": "reusable packaging",
+  "mode": "road",
+  "kind": "customs",
+  "timeframe": [
+   6,
+   25
+  ],
+  "blocksCount": 5,
+  "stepsCount": 22,
+  "onlineCount": 8,
+  "entities": [
+   "Single portal of interactive state services",
+   "Automated information system \"E-tranzit\"",
+   "State border crossing point",
+   "Customs warehouse",
+   "Customs post of foreign trade activity",
+   "Personal cabinet of participant of foreign economic activity",
+   "Bank"
+  ]
+ },
+ "1105": {
+  "id": "1105",
+  "title": "Registration of foreign trade contract",
+  "direction": "export",
+  "goods": "any cargo",
+  "mode": "any",
+  "kind": "service",
+  "timeframe": [
+   0,
+   0
+  ],
+  "blocksCount": 1,
+  "stepsCount": 1,
+  "onlineCount": 1,
+  "entities": [
+   "Single portal of interactive state services"
+  ]
+ },
+ "1108": {
+  "id": "1108",
+  "title": "Clearance of temporary import of medical equipment by road",
+  "direction": "import",
+  "goods": "temporary import of medical equipment",
+  "mode": "road",
+  "kind": "customs",
+  "timeframe": [
+   6,
+   23
+  ],
+  "blocksCount": 4,
+  "stepsCount": 21,
+  "onlineCount": 7,
+  "entities": [
+   "Automated information system \"E-tranzit\"",
+   "State border crossing point",
+   "Customs warehouse",
+   "Customs post of foreign trade activity",
+   "Personal cabinet of participant of foreign economic activity",
+   "Bank"
+  ]
+ },
+ "1113": {
+  "id": "1113",
+  "title": "Clearance of medical equipment by road",
+  "direction": "import",
+  "goods": "medical equipment",
+  "mode": "road",
+  "kind": "customs",
+  "timeframe": [
+   83,
+   173
+  ],
+  "blocksCount": 3,
+  "stepsCount": 16,
+  "onlineCount": 5,
+  "entities": [
+   "Personal cabinet of participant of foreign economic activity",
+   "Bank",
+   "Customs post of foreign trade activity",
+   "State border crossing point"
+  ]
+ },
+ "1116": {
+  "id": "1116",
+  "title": "Clearance of reusable packaging by road",
+  "direction": "import",
+  "goods": "reusable packaging",
+  "mode": "road",
+  "kind": "customs",
+  "timeframe": [
+   6,
+   24
+  ],
+  "blocksCount": 4,
+  "stepsCount": 21,
+  "onlineCount": 7,
+  "entities": [
+   "Automated information system \"E-tranzit\"",
+   "State border crossing point",
+   "Customs warehouse",
+   "Customs post of foreign trade activity",
+   "Personal cabinet of participant of foreign economic activity",
+   "Bank"
+  ]
+ },
+ "1122": {
+  "id": "1122",
+  "title": "Clearance of temporary export of reusable packaging by road",
+  "direction": "import",
+  "goods": "temporary export of reusable packaging",
+  "mode": "road",
+  "kind": "customs",
+  "timeframe": [
+   2,
+   12
+  ],
+  "blocksCount": 2,
+  "stepsCount": 13,
+  "onlineCount": 4,
+  "entities": [
+   "Personal cabinet of participant of foreign economic activity",
+   "Bank",
+   "Customs post of foreign trade activity",
+   "State border crossing point"
+  ]
+ },
+ "1141": {
+  "id": "1141",
+  "title": "Import of salt by train",
+  "direction": "import",
+  "goods": "salt",
+  "mode": "train",
+  "kind": "customs",
+  "timeframe": [
+   14,
+   54
+  ],
+  "blocksCount": 12,
+  "stepsCount": 34,
+  "onlineCount": 16,
+  "entities": [
+   "Single portal of interactive state services",
+   "Uzbekistan railways Single window",
+   "Bank",
+   "Tashkent regional railway junction",
+   "Customs warehouse",
+   "Railway station",
+   "Customs post of foreign trade activity",
+   "Personal cabinet of participant of foreign economic activity",
+   "One-stop service system Single window",
+   "Online banking system"
+  ]
+ },
+ "1155": {
+  "id": "1155",
+  "title": "Obtain sanitary-epidemiological conclusion",
+  "direction": "export",
+  "goods": "any cargo",
+  "mode": "any",
+  "kind": "service",
+  "timeframe": [
+   4,
+   9
+  ],
+  "blocksCount": 1,
+  "stepsCount": 2,
+  "onlineCount": 2,
+  "entities": [
+   "One-stop service system Single window"
+  ]
+ },
+ "1179": {
+  "id": "1179",
+  "title": "Test customs payment",
+  "direction": "export",
+  "goods": "any cargo",
+  "mode": "any",
+  "kind": "service",
+  "timeframe": [
+   56,
+   297
+  ],
+  "blocksCount": 2,
+  "stepsCount": 8,
+  "onlineCount": 2,
+  "entities": [
+   "Bank",
+   "Online banking system",
+   "State nature protection comittee",
+   "Single portal of interactive state services"
   ]
  }
 };

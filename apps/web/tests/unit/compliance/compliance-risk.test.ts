@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { PROCEDURES, PROCEDURE_IDS } from "../../../modules/procedures/data/procedures.generated";
+import { PROCEDURES, PROCEDURE_IDS } from "../../../modules/procedures/sync";
 import { assessCompliance, CERTIFICATE_RULES } from "../../../modules/compliance/compliance";
 
 const stackOf = (a: ReturnType<typeof assessCompliance>) =>

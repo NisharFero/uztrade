@@ -1,7 +1,9 @@
-import { env } from "cloudflare:workers";
+import { getRuntimeEnv } from "@/modules/runtime/env";
+const env = getRuntimeEnv();
 import { routeError } from "../../../../../../../modules/shared/http";
 import { loadCase } from "../../../../../../../modules/steps/context";
 import { buildLedger } from "../../../../../../../modules/steps/ledger";
+import { documentBucket } from "../../../../../../../modules/documents/storage";
 
 type Bucket = { get(key: string): Promise<{ body: ReadableStream; httpMetadata?: { contentType?: string } } | null> };
 type Ctx = { params: Promise<{ id: string; docId: string }> };
@@ -12,7 +14,7 @@ export async function GET(_request: Request, { params }: Ctx) {
     const { id, docId } = await params;
     const c = await loadCase(id);
     const doc = buildLedger((await c.repository.getProjection(c.runId)).artifacts).documents.find((d) => d.docId === docId);
-    const bucket = (env as unknown as { DOCS?: Bucket }).DOCS;
+    const bucket = documentBucket(env as unknown as { DOCS?: import("../../../../../../../modules/documents/ingest").DocsBucket }) as Bucket | null;
     if (!doc?.r2Key || !bucket) return Response.json({ error: "Original file not stored" }, { status: 404 });
     const object = await bucket.get(doc.r2Key);
     if (!object) return Response.json({ error: "Original file not found" }, { status: 404 });

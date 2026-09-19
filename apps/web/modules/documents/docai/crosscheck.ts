@@ -6,8 +6,15 @@ import type { DocType } from "../specs";
 import { fmtTonnes } from "../../intake/shipment-plan";
 import type { ExtractedField } from "./compose";
 import { countryOf, parseTonnes } from "./validate";
+import { partyChecks } from "./names";
 
-export type CrossCheck = { check: string; status: "ok" | "mismatch" | "unknown"; detail: string };
+export type CrossCheck = {
+  check: string;
+  status: "ok" | "mismatch" | "unknown";
+  detail: string;
+  /** The two company names a party check compared (names.ts). */
+  names?: [string, string];
+};
 
 export type LedgerDocument = { docType: DocType; label: string; fields: ExtractedField[]; stepNum?: number };
 
@@ -138,5 +145,7 @@ export function crossCheck(docType: DocType, fields: ExtractedField[], ctx: Chec
     }
   }
 
+  // Seller and buyer named on earlier documents: transliteration and legal forms aside.
+  checks.push(...partyChecks(fields, ctx.documents));
   return checks;
 }

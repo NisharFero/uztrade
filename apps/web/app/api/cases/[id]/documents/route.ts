@@ -1,27 +1,25 @@
-import { env } from "cloudflare:workers";
-import { blankFields } from "../../../../../modules/documents/docai/blank";
-import { DOCAI_URL_DEFAULT, parseWithDocai } from "../../../../../modules/documents/docai/client";
-import { composeDocument, type ParsedDocument } from "../../../../../modules/documents/docai/compose";
-import { crossCheck } from "../../../../../modules/documents/docai/crosscheck";
-import { docTypeOf, specFor } from "../../../../../modules/documents/specs";
+import { getRuntimeEnv } from "@/modules/runtime/env";
+const env = getRuntimeEnv();
+import { DOCAI_URL_DEFAULT } from "../../../../../modules/documents/docai/client";
+import { ingestDocument, type DocsBucket } from "../../../../../modules/documents/ingest";
+import { documentBucket } from "../../../../../modules/documents/storage";
+import { docTypeOf } from "../../../../../modules/documents/specs";
 import { HttpError, routeError } from "../../../../../modules/shared/http";
 import { syncCaseBlockProgress } from "../../../../../modules/cases/block-progress";
 import { assistantView } from "../../../../../modules/steps/assistant";
-import { checkContext, loadCase } from "../../../../../modules/steps/context";
-import { buildLedger, nextVersion, type DocumentRecord } from "../../../../../modules/steps/ledger";
-import { recordDocument } from "../../../../../modules/steps/service";
+import { loadCase } from "../../../../../modules/steps/context";
+import { llmFromEnv, type LlmEnv } from "../../../../../modules/ai/llm";
+import { agenticAiFromEnv } from "../../../../../modules/workflow/agentic-ai";
+import { portalsFromEnv, type PortalEnv } from "../../../../../modules/portals/client";
 
-type Bucket = {
-  put(key: string, value: ArrayBuffer, options?: { httpMetadata?: { contentType?: string } }): Promise<unknown>;
-};
 type Ctx = { params: Promise<{ id: string }> };
 
 const MAX_BYTES = 15 * 1024 * 1024;
-const bindings = env as unknown as { DOCS?: Bucket; DOCAI_URL?: string };
+const bindings = env as unknown as { DOCS?: DocsBucket; GROQ_API_KEY?: string; GROQ_MODEL?: string; DOCAI_URL?: string };
 
-/** Upload a document for a step: keep the original in R2, read it with the
- *  document AI, validate and cross-check the fields, and record it in the
- *  case ledger. A paused agent step resumes if this was what it needed. */
+/** Upload a document for a step: kept, read, cross-checked and recorded in the
+ *  case ledger (modules/documents/ingest.ts). A paused agent step resumes if
+ *  this was what it needed. */
 export async function POST(request: Request, { params }: Ctx) {
   try {
     const { id } = await params;
@@ -35,56 +33,27 @@ export async function POST(request: Request, { params }: Ctx) {
     if (!Number.isFinite(stepNum) || !label) throw new HttpError(400, "stepNum and label are required");
     if (file.size > MAX_BYTES) throw new HttpError(413, "Files up to 15 MB are accepted");
 
-    const bytes = await file.arrayBuffer();
-    const fileName = file.name || "document";
-    const contentType = file.type || "application/octet-stream";
-    const docType = docTypeOf(label);
-    const docId = `doc-${Date.now().toString(36)}${Math.random().toString(36).slice(2, 6)}`;
-
-    let r2Key: string | null = null;
-    if (bindings.DOCS) {
-      r2Key = `cases/${id}/${docId}/${fileName.replace(/[^\w.-]+/g, "_")}`;
-      await bindings.DOCS.put(r2Key, bytes, { httpMetadata: { contentType } });
-    }
-
     const projection = await c.repository.getProjection(c.runId);
-    const ledger = buildLedger(projection.artifacts);
-
-    let parsed: ParsedDocument | null = null;
-    let parseError: string | null = null;
-    if (docType) {
-      try {
-        const spec = specFor(docType);
-        parsed = composeDocument(spec, await parseWithDocai({ bytes, fileName, contentType, spec }, bindings.DOCAI_URL || DOCAI_URL_DEFAULT));
-        if (parsed.unreadable) parseError = parsed.unreadable;
-      } catch (error) {
-        parseError = error instanceof Error ? error.message : "The document could not be read";
-      }
-    }
-
-    const fields = parsed?.fields ?? (docType ? blankFields(specFor(docType)) : []);
-    const record: DocumentRecord = {
-      docId,
-      version: nextVersion(),
+    const { record, projection: after } = await ingestDocument({
+      repository: c.repository,
+      runId: c.runId,
+      caseId: id,
+      procedure: c.procedure,
+      query: c.found.query,
+      facts: projection.shipmentFacts,
+      bytes: await file.arrayBuffer(),
+      fileName: file.name || "document",
+      contentType: file.type || "application/octet-stream",
       label,
-      docType,
       stepNum,
-      fileName,
-      contentType,
-      size: bytes.byteLength,
-      r2Key,
-      fields,
-      checks: parsed && docType ? crossCheck(docType, fields, checkContext(c.procedure, projection.shipmentFacts, c.found.query, ledger, stepNum)) : [],
-      detectedType: parsed?.detectedType ?? null,
-      typeMatches: parsed?.typeMatches ?? true,
-      confirmed: false,
-      parseError,
-      pages: parsed?.pages ?? 0,
-      timingsMs: parsed?.timings?.total_ms ?? null,
-      parsedAt: new Date().toISOString(),
-    };
+      docType: docTypeOf(label),
+      bucket: documentBucket(bindings),
+      docaiUrl: bindings.DOCAI_URL || DOCAI_URL_DEFAULT,
+      llm: llmFromEnv(env as unknown as LlmEnv),
+      ai: agenticAiFromEnv(bindings),
+      portals: portalsFromEnv(env as unknown as PortalEnv),
+    });
 
-    const after = await recordDocument(c.repository, c.runId, record);
     await syncCaseBlockProgress(after);
     return Response.json({ document: record, view: assistantView(c.procedure, after, id) }, { status: 201 });
   } catch (error) {

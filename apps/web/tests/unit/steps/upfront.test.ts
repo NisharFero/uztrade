@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import { runOrchestrator } from "../../../modules/workflow/orchestrator";
-import { PROCEDURES } from "../../../modules/procedures/data/procedures.generated";
+import { PROCEDURES } from "../../../modules/procedures/sync";
 import { extractShipmentFacts, instantiateWorkflow } from "../../../modules/workflow/domain";
 import { specFor, type DocType } from "../../../modules/documents/specs";
 import { buildLedger, type DocumentRecord } from "../../../modules/steps/ledger";
@@ -54,7 +54,8 @@ test("868: what can be given at the start, and why the rest has to wait", () => 
   assert.match(later["Payment sum"], /offer/);
   assert.match(later["Agreement with Technological center"], /Technological Center/);
   assert.match(later["Online application for phytosanitary certificate"], /portal/);
-  assert.match(later["Receipt of payment"], /Produced/);
+  // Receipts come from the payment gateway when the agent pays - never asked of the trader.
+  assert.ok(!upfront.has("Receipt of payment"));
   assert.ok(!upfront.has("Invoice for prepayment"));
   assert.ok(!upfront.has("Package of documents"));
 

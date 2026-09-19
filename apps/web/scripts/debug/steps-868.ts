@@ -1,5 +1,5 @@
 /* 868 step by step: who does it, and each need the step assistant will ask for. */
-import { PROCEDURES } from "../../modules/procedures/data/procedures.generated";
+import { PROCEDURES } from "../../modules/procedures/sync";
 import { instantiateWorkflow } from "../../modules/workflow/domain";
 import { buildLedger } from "../../modules/steps/ledger";
 import { stepViewFor } from "../../modules/steps/next";

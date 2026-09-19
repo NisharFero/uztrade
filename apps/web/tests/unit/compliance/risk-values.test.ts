@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { PROCEDURES } from "../../../modules/procedures/data/procedures.generated";
+import { PROCEDURES } from "../../../modules/procedures/sync";
 import { assessRisk } from "../../../modules/compliance/risk";
 import type { Ledger } from "../../../modules/steps/ledger";
 

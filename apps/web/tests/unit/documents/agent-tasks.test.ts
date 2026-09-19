@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { PROCEDURES, PROCEDURE_IDS } from "../../../modules/procedures/data/procedures.generated";
+import { PROCEDURES, PROCEDURE_IDS } from "../../../modules/procedures/sync";
 import {
   AUTO_VERIFIED_NOTE,
   complianceTasks,
@@ -65,8 +65,14 @@ test("compliance analysis completes itself; filing checks follow their step", ()
     const template = complianceTasks(PROCEDURES[id]);
     const analysis = template.filter((t) => !t.key.startsWith("filing:"));
     const filings = template.filter((t) => t.key.startsWith("filing:"));
-    assert.ok(analysis.length >= 3, `${id} classifies, estimates duty and screens risk`);
     assert.ok(analysis.every((t) => t.status === "done"), `${id} analysis needs no confirmation`);
+    if (PROCEDURES[id].kind === "logistics") {
+      // Rail logistics: nothing to classify and no declaration to check.
+      assert.match(analysis[0].label, /No classification/);
+      assert.equal(filings.length, 0, `${id} files no customs declaration`);
+      continue;
+    }
+    assert.ok(analysis.length >= 3, `${id} classifies, estimates duty and screens risk`);
     assert.ok(filings.length > 0, `${id} has customs filings to check`);
     assert.ok(filings.every((t) => t.status === "pending"), `${id} filings wait for the case to reach them`);
   }

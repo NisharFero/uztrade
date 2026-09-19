@@ -1,10 +1,11 @@
-import { PROCEDURE_IDS, PROCEDURES } from "../procedures/data/procedures.generated";
+import { PROCEDURE_IDS, CATALOGUE as PROCEDURE_CATALOGUE } from "../procedures/data/procedures.generated";
+import { getProcedure } from "../procedures/registry";
 import { extractShipmentFacts, type ShipmentFacts } from "../workflow/domain";
 import { lookupProcedures, type Direction, type Mode } from "./lookup";
 import { buildStepPlan, type StepPlan } from "./plan";
-import { isTradeQuery } from "./relevance";
-import { CATEGORIES, commodityOf, type Category, type CommodityHit } from "./taxonomy";
-import { countryName, greatCircleKm, mentionedRoute, recommendMode, resolveRoute, toTonnes } from "./shipment-plan";
+import { isProcedureQuestion, isTradeQuery } from "./relevance";
+import { CATEGORIES, CATEGORY_LABEL, commodityOf, type Category, type CommodityHit } from "./taxonomy";
+import { countryName, greatCircleKm, mentionedRoute, recommendMode, resolveRoute, toTonnes, planningDirection, planningMode } from "./shipment-plan";
 
 /* Intake agent.
  *
@@ -65,10 +66,10 @@ export type IntakeOptions = {
 };
 
 const MAX_FOLLOW_UPS = 2;
-const OUT_OF_SCOPE = "Out of scope. This workspace covers five procedures only.";
+const OUT_OF_SCOPE = `Out of scope. This workspace covers ${PROCEDURE_IDS.length} published procedures only.`;
 
 const CATALOGUE = PROCEDURE_IDS.map((id) => {
-  const p = PROCEDURES[id];
+  const p = PROCEDURE_CATALOGUE[id];
   return `${id}: ${p.title} (${p.direction}, ${p.goods}, by ${p.mode})`;
 }).join("\n");
 
@@ -140,7 +141,7 @@ export function classifyByRules(query: string): Match {
   const slots = slotsOf(query, facts);
   const ids = slots.category ? lookupProcedures(slots.category, slots.direction, slots.mode) : [];
   const procedureId = ids.length === 1 ? ids[0] : null;
-  const p = procedureId ? PROCEDURES[procedureId] : null;
+  const p = procedureId ? PROCEDURE_CATALOGUE[procedureId] : null;
   return {
     status: p ? "resolved" : "declined",
     procedureId,
@@ -204,7 +205,7 @@ export async function classifyByLlm(query: string, apiKey: string): Promise<Matc
     return null;
   }
 
-  // Never trust the model's id: it must be one of the five we actually have.
+  // Never trust the model's id: it must be one of the procedures we actually have.
   const id = typeof parsed.procedureId === "string" ? parsed.procedureId : null;
   const procedureId = id && (PROCEDURE_IDS as readonly string[]).includes(id) ? id : null;
   const fallback = extractShipmentFacts(query);
@@ -249,7 +250,6 @@ export async function classifyByLlm(query: string, apiKey: string): Promise<Matc
 
 const unique = <T,>(xs: T[]) => [...new Set(xs)];
 const stem = (query: string) => query.trim().replace(/[.!?]$/, "");
-const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 
 type Base = Omit<Match, "status" | "procedureId" | "confidence" | "reason">;
 
@@ -261,7 +261,7 @@ function declined(base: Base, reason: string): Match {
  *  twice, stop asking and show the candidate procedures by title. */
 function ask(base: Base, missing: Slot, clarify: Clarification, pool: string[], followUps: number): Match {
   if (followUps >= MAX_FOLLOW_UPS && pool.length) {
-    const candidates = pool.slice(0, 3).map((id) => ({ id, title: PROCEDURES[id].title }));
+    const candidates = pool.slice(0, 3).map((id) => ({ id, title: PROCEDURE_CATALOGUE[id].title }));
     const question = "I still can't pin this down from the description — which of these procedures is it?";
     return {
       ...base,
@@ -274,7 +274,7 @@ function ask(base: Base, missing: Slot, clarify: Clarification, pool: string[], 
       clarify: {
         question,
         options: candidates.map((c) => {
-          const p = PROCEDURES[c.id];
+          const p = PROCEDURE_CATALOGUE[c.id];
           return { label: c.title, query: `I want to ${p.direction} ${p.goods} by ${p.mode}` };
         }),
       },
@@ -297,6 +297,9 @@ export function settleMatch(match: Match, query: string, options: IntakeOptions 
   };
 
   // 1. Relevance gate.
+  if (isProcedureQuestion(query)) {
+    return declined(base, "That sounds like a procedure question, not a shipment to create.");
+  }
   if (hit.kind === "none" && !match.procedureId && !isTradeQuery(query)) {
     return declined(base, "That doesn't read as a shipment. Tell me the goods, whether they leave or enter Uzbekistan, and how they travel.");
   }
@@ -319,30 +322,30 @@ export function settleMatch(match: Match, query: string, options: IntakeOptions 
   let category: string;
   if (hit.kind === "known") {
     category = hit.category;
-    rationale.push(`"${hit.term}" is ${hit.category} in the commodity table (HS ${hit.hs}).`);
+    rationale.push(`"${hit.term}" is ${hit.category} in the commodity table${hit.hs ? ` (HS ${hit.hs})` : ""}.`);
   } else if (match.procedureId) {
     // Genuinely novel wording: the only case where the model's reading is used.
-    category = PROCEDURES[match.procedureId].goods;
+    category = PROCEDURE_CATALOGUE[match.procedureId].goods;
     rationale.push(`"${facts.goods || "The goods"}" isn't in the commodity table; the classifier read it as ${category}.`);
   } else {
     return ask(base, "commodity", {
       question: "What goods are you moving?",
-      options: CATEGORIES.map((c) => ({ label: cap(c), query: `${stem(query)} — ${c}` })),
+      options: CATEGORIES.map((c) => ({ label: CATEGORY_LABEL[c], query: `${stem(query)} — ${c}` })),
     }, [...PROCEDURE_IDS], followUps);
   }
 
   // 4. Lookup.
-  const family = PROCEDURE_IDS.filter((id) => PROCEDURES[id].goods === category);
+  const family = PROCEDURE_IDS.filter((id) => PROCEDURE_CATALOGUE[id].goods === category);
   const fits = lookupProcedures(category, slots.direction, slots.mode);
 
   if (!fits.length) {
     const asked = [slots.direction, category, slots.mode ? `by ${slots.mode}` : ""].filter(Boolean).join(" ");
-    const published = family.map((id) => PROCEDURES[id].title.toLowerCase()).join("; ");
+    const published = family.map((id) => PROCEDURE_CATALOGUE[id].title.toLowerCase()).join("; ");
     return declined(base, `There's no published procedure for ${asked} — only ${published}.`);
   }
 
   // 5. Clarify the missing dimension.
-  const directions = unique(fits.map((id) => PROCEDURES[id].direction));
+  const directions = unique(fits.map((id) => PROCEDURE_CATALOGUE[id].direction));
   if (directions.length > 1) {
     return ask(base, "direction", {
       question: `Is the ${category} leaving Uzbekistan or coming in?`,
@@ -357,7 +360,7 @@ export function settleMatch(match: Match, query: string, options: IntakeOptions 
   let reason = "";
   let confidence = slots.direction && slots.mode ? 0.95 : 0.85;
 
-  const modes = unique(fits.map((id) => PROCEDURES[id].mode));
+  const modes = unique(fits.map((id) => PROCEDURE_CATALOGUE[id].mode));
   if (modes.length > 1) {
     const tonnes = toTonnes(facts.quantity, facts.unit, category);
     if (tonnes == null) {
@@ -366,16 +369,16 @@ export function settleMatch(match: Match, query: string, options: IntakeOptions 
         options: modes.map((m) => ({ label: m === "air" ? "By air" : m === "train" ? "By train" : `By ${m}`, query: `${stem(query)} by ${m}` })),
       }, fits, followUps);
     }
-    const ends = resolveRoute(directions[0], facts, query);
+    const ends = resolveRoute(planningDirection(directions[0]), facts, query);
     const km = ends.origin && ends.destination ? Math.round(greatCircleKm(ends.origin.place, ends.destination.place)) : null;
     const advice = recommendMode(category, tonnes, km);
-    pick = fits.find((id) => PROCEDURES[id].mode === advice.mode) ?? fits[0];
-    reason = `${PROCEDURES[pick].title}: no transport mode was stated, and ${advice.reason}.`;
+    pick = fits.find((id) => PROCEDURE_CATALOGUE[id].mode === advice.mode) ?? fits[0];
+    reason = `${PROCEDURE_CATALOGUE[pick].title}: no transport mode was stated, and ${advice.reason}.`;
     rationale.push(`No mode stated; the load decided: ${advice.reason}.`);
     confidence = 0.75;
   }
 
-  const p = PROCEDURES[pick];
+  const p = PROCEDURE_CATALOGUE[pick];
   if (!slots.direction) rationale.push(`Direction: ${p.direction} is the only one published for ${category}.`);
   else rationale.push(`Direction: ${slots.direction}.`);
   rationale.push(`Lookup (${category}, ${p.direction}, ${p.mode}) → procedure ${pick}.`);
@@ -384,22 +387,28 @@ export function settleMatch(match: Match, query: string, options: IntakeOptions 
   }
   if (hit.kind !== "known") confidence = Math.min(confidence, 0.7);
 
-  const plan = buildStepPlan(p);
   return {
     ...base,
     status: "resolved",
     procedureId: pick,
     confidence,
-    reason: reason || `Matched on ${p.goods}, ${p.direction} by ${p.mode}.`,
-    shipmentFacts: { ...facts, mode: p.mode },
-    slots: { ...slots, category: p.goods as Category, direction: p.direction, mode: p.mode },
-    plan,
+    reason: reason || `Matched on ${p.goods}, ${p.direction}${p.mode === "any" ? "" : ` by ${p.mode}`}.`,
+    shipmentFacts: { ...facts, mode: planningMode(p.mode) },
+    slots: { ...slots, category: p.goods as Category, direction: planningDirection(p.direction), mode: planningMode(p.mode) },
   };
 }
 
 /** LLM when a key is configured, deterministic rules otherwise or on failure;
  *  either way the proposal is settled against the commodity table. */
 export async function classify(query: string, apiKey?: string, options: IntakeOptions = {}): Promise<Match> {
+  const settled = await settleWithLlm(query, apiKey, options);
+  // The step plan needs the procedure's blocks, which are loaded on demand.
+  if (!settled.procedureId) return settled;
+  const procedure = await getProcedure(settled.procedureId);
+  return procedure ? { ...settled, plan: buildStepPlan(procedure) } : settled;
+}
+
+async function settleWithLlm(query: string, apiKey: string | undefined, options: IntakeOptions): Promise<Match> {
   if (apiKey) {
     try {
       const match = await classifyByLlm(query, apiKey);

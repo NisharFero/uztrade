@@ -3,14 +3,19 @@
  * step may run (orchestrator) and whether a trader step may complete (API), so
  * the chat and the engine can never disagree about what is missing. */
 
-import { ACTIONS, actionOfStep, type Lane } from "../procedures/delegation";
+import { ACTIONS, actionOfStep, isGatewayPayment, type Lane } from "../procedures/delegation";
 import type { Procedure, ProcedureStep } from "../procedures/data/procedures.generated";
 import { docTypeOf, specFor, type DocType } from "../documents/specs";
 import { needsOfStep, type StepInput } from "../procedures/requirements";
 import type { WorkflowNodeRecord, WorkflowProjection } from "../workflow/repository";
+import { formOfStep, groupOfLabel, groupsOfStep, resolveForm, type FormView } from "./application-forms";
+import { blockExtras, stepExtras, type Prefill } from "../workflow/tailor";
+import { portalStep } from "../portals/needs";
+import { PAYMENT_AUTHORISATION } from "./authorisation";
+import type { PortalView } from "../portals/records";
 import { documentComplete, documentFor, inputKey, labelKey, type DocumentRecord, type Ledger } from "./ledger";
 
-export type NeedKind = "document" | "value" | "confirm" | "earlier" | "info";
+export type NeedKind = "document" | "value" | "confirm" | "earlier" | "info" | "form";
 export type NeedStatus = "have" | "missing" | "review" | "waiting";
 
 export type Need = {
@@ -30,6 +35,14 @@ export type Need = {
   autoFilled: boolean;
   /** This step's own output, rather than an input. */
   output: boolean;
+  /** A portal application: its groups and the fields each asks for. */
+  form: FormView | null;
+  /** A published input this shipment doesn't need (e.g. a letter for a route it doesn't take). */
+  notApplicable: boolean;
+  /** Values that would satisfy it, each with where it comes from (an entity's answer, the HS nomenclature, the case). */
+  suggestions?: { value: string; label: string; source: string }[];
+  /** Why it is needed, in plain words (a model's explanation of an entity's answer). */
+  explanation?: string | null;
 };
 
 export type Variant = { label: string; chosen: boolean; needs: Need[] };
@@ -54,6 +67,10 @@ export type StepView = {
   variants: Variant[];
   ready: boolean;
   blocking: string[];
+  /** What this shipment's context says about the step and its block. */
+  notes: string[];
+  /** Where the step stands with its entity API, when the agent files it there. */
+  portal: PortalView | null;
 };
 
 /* Section 5 lines that are a value to type, not a document to upload. */
@@ -66,7 +83,7 @@ const PRESENCE_TEXT: [RegExp, string][] = [
   [/internet access/i, "You have internet access for the portal"],
 ];
 
-type Context = { ledger: Ledger; nodes: Map<number, WorkflowNodeRecord>; lane: Lane; stepNum: number };
+type Context = { ledger: Ledger; nodes: Map<number, WorkflowNodeRecord>; lane: Lane; stepNum: number; prefill: Record<string, Prefill> };
 
 function base(input: Pick<StepInput, "label" | "optional" | "docType">, stepNum: number): Omit<Need, "kind" | "status" | "detail"> {
   return {
@@ -80,6 +97,8 @@ function base(input: Pick<StepInput, "label" | "optional" | "docType">, stepNum:
     value: null,
     autoFilled: false,
     output: false,
+    form: null,
+    notApplicable: false,
   };
 }
 
@@ -161,6 +180,11 @@ function needOf(input: StepInput, ctx: Context): Need {
       if (input.docType) return documentNeed(input.label, input.docType, input.optional, ctx);
       if (VALUE_INPUT.test(input.label)) {
         const record = ctx.ledger.inputs.get(inputKey("value", 0, input.label));
+        // Known from the shipment's context (e.g. transport units from the quantity); typing a value overrides it.
+        const prefill = record ? undefined : ctx.prefill[input.label];
+        if (prefill) {
+          return { ...common, kind: "value", status: "have", value: prefill.value, autoFilled: true, detail: `From ${prefill.source} — type to change it` };
+        }
         return {
           ...common,
           kind: "value",
@@ -189,22 +213,83 @@ export function stepViewFor(procedure: Procedure, projection: WorkflowProjection
   const step = steps.find((s) => s.num === node.stepNum);
   if (!step) throw new Error(`Procedure ${procedure.id} has no step ${node.stepNum}`);
 
-  const ctx: Context = { ledger, nodes: new Map(projection.nodes.map((n) => [n.stepNum, n])), lane: node.lane, stepNum: node.stepNum };
+  const extras = stepExtras(step);
+  const block = procedure.blocks.find((b) => b.steps.some((s) => s.num === step.num));
+  const ctx: Context = { ledger, nodes: new Map(projection.nodes.map((n) => [n.stepNum, n])), lane: node.lane, stepNum: node.stepNum, prefill: extras.prefill };
   const raw = needsOfStep(step, steps.filter((s) => s.num < step.num));
-  const needs = raw.common.map((input) => needOf(input, ctx));
+  let needs = raw.common.map((input) => needOf(input, ctx));
+
+  // A portal application and its "Information about …" groups become one form
+  // with the fields the portal actually asks for (see application-forms.ts).
+  const form = formOfStep(step.inputs);
+  if (form) {
+    const view = resolveForm(form, groupsOfStep(step.inputs), { ledger, facts: projection.shipmentFacts });
+    needs = needs.filter((n) => !form.application.test(n.label) && !groupOfLabel(n.label));
+    needs.unshift({
+      ...base({ label: form.title, optional: false, docType: null }, step.num),
+      kind: "form",
+      status: view.complete ? "have" : "missing",
+      detail: view.complete
+        ? `Ready for ${form.portal}${view.prefilled ? ` — ${view.prefilled} details filled from the case` : ""}`
+        : `What ${form.portal} asks for — pre-filled where the case already knows it`,
+      autoFilled: view.complete && view.prefilled > 0,
+      form: view,
+    });
+  }
+
+  // The shipment workflow (modules/workflow/tailor.ts): published inputs the
+  // context rules out stop gating, and requirements it adds gate like any other.
+  const applyNotNeeded = (list: Need[]): Need[] =>
+    list.map((n) => {
+      const hit = extras.notNeeded.find((x) => labelKey(x.label) === labelKey(n.label));
+      return hit ? { ...n, kind: "info" as const, status: "have" as const, optional: true, notApplicable: true, autoFilled: false, detail: `Not needed: ${hit.reason}` } : n;
+    });
+  needs = applyNotNeeded(needs);
+  for (const extra of extras.extraNeeds) {
+    if (extra.kind === "document") {
+      const need = documentNeed(extra.label, extra.docType, false, ctx);
+      needs.push({ ...need, detail: `${extra.reason} — ${need.detail}` });
+    } else {
+      const done = ledger.inputs.has(inputKey("confirm", node.stepNum, extra.label));
+      needs.push({ ...base({ label: extra.label, optional: false, docType: null }, node.stepNum), kind: "confirm", status: done ? "have" : "missing", detail: `${extra.reason} (${extra.source})` });
+    }
+  }
 
   // A step you or the goods complete also hands over what it produces.
   const outputType = docTypeOf(step.output);
   if (node.lane !== "agent" && outputType) needs.push(documentNeed(step.output, outputType, false, ctx, true));
 
-  const chosenLabel = ledger.inputs.get(inputKey("variant", node.stepNum))?.value ?? (raw.variants.length === 1 ? raw.variants[0].label : null);
+  // Money moves only once the account holder has authorised this transfer.
+  const gateway = node.lane === "agent" && isGatewayPayment(step);
+  if (gateway) {
+    const done = ledger.inputs.has(inputKey("confirm", node.stepNum, PAYMENT_AUTHORISATION));
+    needs.push({
+      ...base({ label: PAYMENT_AUTHORISATION, optional: false, docType: null }, node.stepNum),
+      kind: "confirm",
+      status: done ? "have" : "missing",
+      detail: done
+        ? "Authorised — the agent sends the transfer to the payment gateway"
+        : "Authorise the agent to pay this from your account — the gateway checks the amount against the invoice before it books it",
+    });
+  }
+
+  // An agent step filed with an entity API: the fields the entity refused or sent back gate it (modules/portals).
+  const portal = portalStep(procedure, projection, ledger, step, node);
+  needs.push(...portal.needs);
+
+  // The agent pays online, so a gateway payment takes the online variant.
+  const onlineVariant = gateway ? raw.variants.find((v) => /online/i.test(v.label))?.label ?? null : null;
+  const chosenLabel =
+    ledger.inputs.get(inputKey("variant", node.stepNum))?.value ?? onlineVariant ?? (raw.variants.length === 1 ? raw.variants[0].label : null);
   const variants: Variant[] = raw.variants.map((v) => ({
     label: v.label,
     chosen: v.label === chosenLabel,
-    needs: v.inputs.map((input) => needOf(input, ctx)),
+    needs: applyNotNeeded(v.inputs.map((input) => needOf(input, ctx))),
   }));
 
-  const blocking = needs.filter((n) => !n.optional && n.status !== "have").map(describe);
+  const blocking = needs
+    .filter((n) => !n.optional && n.status !== "have")
+    .flatMap((n) => (n.form ? n.form.missing.map((m) => `${n.label} — ${m}`) : [describe(n)]));
   if (variants.length) {
     const chosen = variants.find((v) => v.chosen);
     if (!chosen) blocking.push(`Choose one: ${variants.map((v) => v.label).join(" or ")}`);
@@ -232,6 +317,8 @@ export function stepViewFor(procedure: Procedure, projection: WorkflowProjection
     variants,
     ready: blocking.length === 0,
     blocking,
+    notes: [...(block ? blockExtras(block).notes : []), ...extras.notes],
+    portal: portal.view,
   };
 }
 

@@ -12,7 +12,7 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, File, Form, HTTPException, UploadFile
 
-from . import pipeline
+from . import pipeline, providers
 
 MAX_BYTES = 15 * 1024 * 1024
 
@@ -20,7 +20,7 @@ MAX_BYTES = 15 * 1024 * 1024
 @asynccontextmanager
 async def lifespan(_app: FastAPI):
     # Load both models in the background so the first upload isn't the slow one.
-    if os.environ.get("DOCAI_WARM", "1") == "1":
+    if providers.provider_name() == "local_cpu" and os.environ.get("DOCAI_WARM", "1") == "1":
         threading.Thread(target=lambda: (pipeline.reader(), pipeline.qa()), daemon=True).start()
     yield
 
@@ -30,7 +30,7 @@ app = FastAPI(title="UzTrade Document AI", version="1.0", lifespan=lifespan)
 
 @app.get("/health")
 def health() -> dict:
-    return pipeline.health_info()
+    return {**pipeline.health_info(), "provider": providers.provider_name()}
 
 
 @app.post("/parse")
@@ -45,6 +45,7 @@ def parse(file: UploadFile = File(...), spec: str = Form("{}")) -> dict:
     except json.JSONDecodeError as error:
         raise HTTPException(status_code=400, detail=f"spec is not valid JSON: {error}") from error
     try:
-        return pipeline.parse(data, file.filename, file.content_type, spec_obj)
-    except Exception as error:  # unreadable image, broken PDF
-        raise HTTPException(status_code=415, detail=f"Could not read the document: {error}") from error
+        return providers.parse_document(data, file.filename, file.content_type, spec_obj)
+    except Exception as error:  # unreadable input or unavailable inference endpoint
+        status = 502 if providers.provider_name() == "hf_endpoint" else 415
+        raise HTTPException(status_code=status, detail=f"Could not read the document: {error}") from error

@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Icon } from "../../components/icons";
 import { delegationOfStep } from "../../modules/procedures/delegation";
-import { PROCEDURE_IDS, PROCEDURES, type ProcedureBlock } from "../../modules/procedures/data/procedures.generated";
+import { CATALOGUE, PROCEDURE_IDS, type Procedure, type ProcedureBlock } from "../../modules/procedures/data/procedures.generated";
+import { getProcedures } from "../../modules/procedures/registry";
 import type { ShipmentFacts } from "../../modules/workflow/domain";
 import { listCases } from "../../modules/cases/store";
 import { assessCompliance, CERTIFICATE_RULES } from "../../modules/compliance/compliance";
@@ -72,10 +73,10 @@ const AGENTS = [
   },
   {
     id: "rail",
-    name: "Transport Agent",
+    name: "Transit & Capacity Agent",
     icon: Icon.shipments,
-    covers: "Rail and air bookings, waybills and wagon orders",
-    match: /railway|temir|e-nakl|freight|air|cargo|station/i,
+    covers: "Capacity and equipment, bookings, wagon and flight references, and where the cargo is now",
+    match: /railway|temir|e-nakl|freight|air|cargo|station|wagon|loading|dispatch/i,
   },
   {
     id: "origin",
@@ -86,8 +87,10 @@ const AGENTS = [
   },
 ] as const;
 
-function agentForBlock(block: ProcedureBlock): (typeof AGENTS)[number] {
-  let best = AGENTS[0];
+type Agent = (typeof AGENTS)[number];
+
+function agentForBlock(block: ProcedureBlock): Agent {
+  let best: Agent = AGENTS[0];
   let bestScore = -1;
   for (const agent of AGENTS) {
     const score = block.steps.filter(
@@ -115,7 +118,12 @@ export default async function AgentsPage() {
   const history = new Map<string, { caseId: string; block: ProcedureBlock; hours: number | null; procedureId: string }[]>();
   const automatable = new Map<string, number>();
 
-  for (const p of Object.values(PROCEDURES))
+  // Only the procedures the open cases run on are loaded — the agent centre is
+  // about work in flight, not about all 243 published procedures.
+  const loaded = new Map<string, Procedure>(
+    (await getProcedures([...new Set(cases.map((c) => c.procedureId))])).map((p) => [p.id, p]),
+  );
+  for (const p of loaded.values())
     for (const b of p.blocks) {
       const agent = agentForBlock(b);
       const n = b.steps.filter((s) => delegationOfStep(s).lane === "agent").length;
@@ -123,7 +131,7 @@ export default async function AgentsPage() {
     }
 
   for (const c of cases) {
-    const procedure = PROCEDURES[c.procedureId];
+    const procedure = loaded.get(c.procedureId);
     if (!procedure) continue;
     for (const row of c.blocks) {
       const block = procedure.blocks.find((b) => b.id === row.blockId);
@@ -148,7 +156,7 @@ export default async function AgentsPage() {
   let verified = 0;
   let missingInputs = 0;
   for (const c of cases) {
-    const procedure = PROCEDURES[c.procedureId];
+    const procedure = loaded.get(c.procedureId);
     if (!procedure) continue;
     required += requiredOutputsForProcedure(procedure).filter((r) => !r.optional).length;
     verified += Object.values(parseDocumentState(c.documentState)).filter((s) => s.provided).length;
@@ -157,7 +165,7 @@ export default async function AgentsPage() {
     const partner = assessCompliance(procedure, factsOf(c.shipmentFacts), c.query).inputs.find((i) => i.key === "partner");
     if (!partner?.value) missingInputs++;
   }
-  const profileItems = new Set(PROCEDURE_IDS.flatMap((id) => collectOnce(PROCEDURES[id]).profile.map((i) => i.label))).size;
+  const profileItems = new Set([...loaded.values()].flatMap((p) => collectOnce(p).profile.map((i) => i.label))).size;
 
   const analysis = [
     {

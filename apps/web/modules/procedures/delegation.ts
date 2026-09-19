@@ -39,6 +39,13 @@ const AGENT_INTEGRATED = [
   /uzbekexpertiza.*(service portal|portal)/i,
   /assalom agro/i,
   /personal cabinet of participant of foreign economic activity/i,
+  /e-tranzit/i,
+  /sanitary-epidemiological welfare/i,
+  /centre? for expertise and standardization of medicines/i,
+  /nature protection/i,
+  /cargo sales agent/i,
+  /electronic document management/i,
+  /darmon/i,
 ];
 
 /* Portals bound to the trader's own identity or e-signature. Listed
@@ -65,16 +72,27 @@ const ADMIN_PREFIX = /^(obtain approval|apply|request|conclude|contract|close|cr
 
 export type Delegation = { lane: Lane; reason: string };
 
+/** An online bank transfer - made by the agent through the payment gateway. */
+export const isGatewayPayment = (step: Pick<ProcedureStep, "channel" | "entity">) =>
+  /^online:\s*pay/i.test(step.channel) && /^bank$|online banking system/i.test(step.entity.trim());
+
 export function delegationOfStep(step: Pick<ProcedureStep, "title" | "channel" | "entity">): Delegation {
-  const { title, channel, entity } = step;
+  const { channel, entity } = step;
+  // A tailored step carries the shipment in its title; lanes are decided on the published wording.
+  const title = (step as { publishedTitle?: string }).publishedTitle ?? step.title;
 
   // 3. The goods must be there.
   if (/^in person/i.test(channel) && PHYSICAL_ACT.test(title) && !ADMIN_PREFIX.test(title)) {
     return { lane: "physical", reason: "The goods must be physically present — this cannot be done remotely." };
   }
 
-  // 2a. Money is always the account holder's.
+  // 2a. Money moves only on the account holder's authorisation. A bank
+  // transfer the agent makes through the payment gateway once you authorise
+  // it; paying anyone else (a card, a sales agent) stays yours.
   if (/^online:\s*pay/i.test(channel)) {
+    if (isGatewayPayment(step)) {
+      return { lane: "agent", reason: "The agent pays through the payment gateway once you authorise the payment." };
+    }
     return { lane: "user", reason: "Payment must be authorized by the account holder." };
   }
 
@@ -191,7 +209,7 @@ export function laneBreakdown(blocks: Pick<ProcedureBlock, "steps">[]) {
  * paying, filing on a portal we can't reach, and turning up at a counter are
  * different jobs, and the agent's help differs for each. Sign, pay and
  * physical presence are structural gates - no agent capability removes them. */
-export type StepAction = "agent" | "sign" | "pay" | "submit" | "attend" | "goods" | "decide";
+export type StepAction = "agent" | "gateway" | "sign" | "pay" | "submit" | "attend" | "goods" | "decide";
 
 export const ACTIONS: Record<StepAction, { label: string; agent: string; confirm: string }> = {
   agent: { label: "Agent runs", agent: "Runs it end to end on an integrated portal.", confirm: "" },
@@ -202,8 +220,13 @@ export const ACTIONS: Record<StepAction, { label: string; agent: string; confirm
   },
   pay: {
     label: "You pay",
-    agent: "Generates the payment reference and waits for the receipt — it never moves money.",
+    agent: "Generates the payment reference and waits for the receipt — it has no access to this payment channel.",
     confirm: "Confirm payment receipt",
+  },
+  gateway: {
+    label: "Agent pays",
+    agent: "Sends the transfer to the payment gateway once you authorise it — the gateway checks it against the invoice and issues the receipt.",
+    confirm: "Authorise payment",
   },
   submit: {
     label: "You submit",
@@ -230,10 +253,10 @@ export const ACTIONS: Record<StepAction, { label: string; agent: string; confirm
 export function actionOfStep(step: Pick<ProcedureStep, "title" | "channel" | "entity" | "optional" | "alternative">): StepAction {
   if (step.optional || step.alternative) return "decide";
   const { lane } = delegationOfStep(step);
-  if (lane === "agent") return "agent";
+  if (lane === "agent") return isGatewayPayment(step) ? "gateway" : "agent";
   if (lane === "physical") return "goods";
   if (/^online:\s*pay/i.test(step.channel) || /\bbank\b|banking system/i.test(step.entity)) return "pay";
-  if (COMMITTING_ACT.some(([re]) => re.test(step.title))) return "sign";
+  if (COMMITTING_ACT.some(([re]) => re.test((step as { publishedTitle?: string }).publishedTitle ?? step.title))) return "sign";
   if (/^online:/i.test(step.channel)) {
     return IDENTITY_BOUND.some(([re]) => re.test(step.entity)) ? "sign" : "submit";
   }

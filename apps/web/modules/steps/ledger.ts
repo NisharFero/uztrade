@@ -32,6 +32,10 @@ export type DocumentRecord = {
   /** The trader confirmed the document (and every required field). */
   confirmed: boolean;
   parseError: string | null;
+  /** Who read it: the document AI service, the demo pack (service offline), the file's own text, or nobody. */
+  reader?: "docai" | "demo" | "text" | "blank";
+  /** The OCR and layout models, when the document AI read it. */
+  models?: { ocr: string; qa: string } | null;
   pages: number;
   timingsMs: number | null;
   parsedAt: string;

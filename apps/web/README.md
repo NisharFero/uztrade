@@ -1,5 +1,33 @@
 # vinext-starter
 
+## Vercel deployment (UzTrade)
+
+Create a Vercel project with root directory `apps/web`, framework `Next.js`,
+and build command `npm run build:vercel`. Connect a Neon Postgres database and
+a **private** Vercel Blob store to the project. Set `DATABASE_URL`,
+`BLOB_READ_WRITE_TOKEN`, `GROQ_API_KEY`, and `DOCAI_URL` (the public Railway
+DocAI URL) in the Vercel project variables. Keep these server-side; do not use
+`NEXT_PUBLIC_` for secrets. The first supported demo corpus is procedure IDs
+`57`, `161`, `306`, `325`, `477`, `540`, `707`, `782`, `868`, and `924`.
+
+Apply database migrations once before switching traffic to the deployment:
+
+```bash
+cd apps/web
+npm ci
+npm run db:migrate
+npm run build:vercel
+```
+
+For local testing of the Vercel path, put the same variables in `.env.local`
+and set `DOCAI_URL=http://127.0.0.1:8765` when running DocAI locally. The
+Postgres path requires a reachable Postgres database even on localhost.
+`npm run build` remains the Vinext build; Vercel uses `build:vercel`.
+
+To roll back, select a previous deployment in Vercel and Railway. Do not
+reverse a database migration until its data impact is reviewed. Rotate API
+keys in the Railway and Vercel variable settings, then redeploy both services.
+
 A clean full-stack starter running on
 [vinext](https://github.com/cloudflare/vinext), with optional Cloudflare D1 and
 Drizzle support.

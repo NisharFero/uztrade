@@ -14,8 +14,11 @@ async function seed() {
   for (const entity of mockEntities()) {
     await db.insert(entities).values({ ...entity, capabilities: JSON.stringify(entity.capabilities), contact: JSON.stringify(entity.contact) }).onConflictDoNothing();
   }
-  for (const procedure of procedureSeeds()) {
-    await db.insert(procedureVersions).values({ ...procedure, definition: JSON.stringify(procedure.definition) }).onConflictDoNothing();
+  const procedures = procedureSeeds();
+  for (let i = 0; i < procedures.length; i += 50) {
+    await db.insert(procedureVersions).values(
+      procedures.slice(i, i + 50).map((procedure) => ({ ...procedure, definition: JSON.stringify(procedure.definition) })),
+    ).onConflictDoNothing();
   }
 }
 

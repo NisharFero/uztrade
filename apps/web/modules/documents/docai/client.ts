@@ -3,7 +3,7 @@
 import type { DocSpec } from "../specs";
 import type { DocaiResponse } from "./compose";
 
-export const DOCAI_URL_DEFAULT = "http://127.0.0.1:8765";
+export const DOCAI_URL_DEFAULT = process.env.DOCAI_URL || (process.env.VERCEL ? "" : "http://127.0.0.1:8765");
 
 export class DocaiUnavailable extends Error {}
 
@@ -11,6 +11,7 @@ export async function parseWithDocai(
   input: { bytes: ArrayBuffer; fileName: string; contentType: string; spec: DocSpec },
   baseUrl = DOCAI_URL_DEFAULT,
 ): Promise<DocaiResponse> {
+  if (!baseUrl) throw new DocaiUnavailable("DOCAI_URL is required on Vercel");
   const form = new FormData();
   form.append("file", new Blob([input.bytes], { type: input.contentType || "application/octet-stream" }), input.fileName);
   form.append(

@@ -1,9 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Icon } from "../../components/icons";
-import { PROCEDURES } from "../../modules/procedures/data/procedures.generated";
+import CaseList, { type CaseRowData } from "../../components/cases/case-list";
+import { CATALOGUE } from "../../modules/procedures/data/procedures.generated";
+import { getProcedures } from "../../modules/procedures/registry";
 import { listCases } from "../../modules/cases/store";
 import { fmtHours, procedureStats } from "../../modules/procedures/dag";
+import type { ShipmentFacts } from "../../modules/workflow/domain";
+import { tailorProcedure } from "../../modules/workflow/tailor";
 
 export const metadata: Metadata = {
   title: "Cases & Shipments · UzTrade",
@@ -21,6 +25,25 @@ export default async function CasesPage() {
     error = e instanceof Error ? e.message : "Could not load cases";
   }
 
+  // One workflow per distinct procedure among the cases shown, not per case.
+  const loaded = new Map((await getProcedures([...new Set(cases.map((c) => c.procedureId))])).map((p) => [p.id, p]));
+  const rows: CaseRowData[] = cases.map((c) => {
+    const procedure = loaded.get(c.procedureId);
+    const stats = procedure ? procedureStats(procedure) : null;
+    const tailored = procedure ? tailorProcedure(procedure, factsOf(c.shipmentFacts), c.query) : null;
+    return {
+      id: c.id,
+      title: tailored?.title ?? c.title,
+      line: tailored?.shipment.line ?? "",
+      procedureId: c.procedureId,
+      plan: stats ? fmtHours(stats.pathHours) : null,
+      done: c.blocks.filter((b) => b.state === "done").length,
+      total: procedure?.blocks.length ?? c.blocks.length,
+      ready: c.blocks.filter((b) => b.state === "running").map((b) => procedure?.blocks.find((x) => x.id === b.blockId)?.name ?? b.blockId),
+      status: c.status,
+    };
+  });
+
   return (
     <>
       <header className="page-head">
@@ -28,7 +51,7 @@ export default async function CasesPage() {
           <span className="head-icon">{Icon.shipments}</span>
           Cases &amp; Shipments
         </p>
-        <h1>Open cases</h1>
+        <h1>All cases</h1>
         <p className="page-lede">
           Every case is one shipment moving through one procedure. Status is derived from the dependency graph — a block becomes ready
           only when all of its dependencies are done.
@@ -52,59 +75,16 @@ export default async function CasesPage() {
         </section>
       ) : null}
 
-      {cases.length ? (
-        <section className="agent-output" aria-label="Case list">
-          <div className="case-table" role="table">
-            <div className="case-row case-head" role="row">
-              <span role="columnheader">Reference</span>
-              <span role="columnheader">Procedure</span>
-              <span role="columnheader">Progress</span>
-              <span role="columnheader">Ready now</span>
-              <span role="columnheader">Status</span>
-            </div>
-            {cases.map((c) => {
-              const procedure = PROCEDURES[c.procedureId];
-              const total = procedure?.blocks.length ?? c.blocks.length;
-              const done = c.blocks.filter((b) => b.state === "done").length;
-              const ready = c.blocks.filter((b) => b.state === "running");
-              const stats = procedure ? procedureStats(procedure) : null;
-              return (
-                <Link className="case-row" role="row" href={`/cases/${c.id}`} key={c.id}>
-                  <span role="cell" className="case-ref">
-                    {c.id}
-                  </span>
-                  <span role="cell">
-                    <strong>{c.title}</strong>
-                    <small>
-                      Procedure {c.procedureId}
-                      {stats ? ` · plan ${fmtHours(stats.pathHours)}` : ""}
-                    </small>
-                  </span>
-                  <span role="cell" className="case-progress">
-                    <span className="case-bar">
-                      <span style={{ width: `${total ? (done / total) * 100 : 0}%` }} />
-                    </span>
-                    <small>
-                      {done}/{total} blocks
-                    </small>
-                  </span>
-                  <span role="cell" className="case-ready">
-                    {ready.length ? (
-                      ready.slice(0, 2).map((b) => <em key={b.blockId}>{procedure?.blocks.find((x) => x.id === b.blockId)?.name ?? b.blockId}</em>)
-                    ) : (
-                      <em className="is-muted">—</em>
-                    )}
-                    {ready.length > 2 ? <em className="is-muted">+{ready.length - 2} more</em> : null}
-                  </span>
-                  <span role="cell">
-                    <mark data-tone={c.status === "complete" ? "ok" : "info"}>{c.status}</mark>
-                  </span>
-                </Link>
-              );
-            })}
-          </div>
-        </section>
-      ) : null}
+      {cases.length ? <CaseList rows={rows} /> : null}
     </>
   );
+}
+
+function factsOf(raw: string | null | undefined): Partial<ShipmentFacts> | null {
+  try {
+    const parsed = JSON.parse(raw || "{}");
+    return parsed && typeof parsed === "object" ? parsed : null;
+  } catch {
+    return null;
+  }
 }

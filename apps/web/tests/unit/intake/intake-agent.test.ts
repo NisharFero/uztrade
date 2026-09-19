@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { PROCEDURES, PROCEDURE_IDS } from "../../../modules/procedures/data/procedures.generated";
+import { PROCEDURES, PROCEDURE_IDS } from "../../../modules/procedures/sync";
 import { classify, classifyByRules, settleMatch } from "../../../modules/intake/classify";
 
 const settle = (q: string, followUps = 0) => settleMatch(classifyByRules(q), q, { followUps });

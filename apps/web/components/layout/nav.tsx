@@ -9,10 +9,11 @@ const items = [
   { href: "/", label: "Dashboard", icon: Icon.dashboard, exact: true },
   { href: "/procedures", label: "Procedures", icon: Icon.procedures },
   { href: "/cases", label: "Cases & Shipments", icon: Icon.shipments },
-  { href: "/faq", label: "FAQ", icon: Icon.list },
+  { href: "/ledger", label: "Ledger", icon: Icon.list, children: ["Entity API records"] },
+  { href: "/faq", label: "FAQ", icon: Icon.sparkle },
   { href: "/entities", label: "Entities", icon: Icon.physical },
   { href: "/agents", label: "AI Agent Center", icon: Icon.agents, children: ["All Agents"] },
-  // Not in scope for the current five procedures; shown so the shape of the
+  // Not in scope for the current procedures; shown so the shape of the
   // product is visible, but not linked anywhere that would 404.
   { href: null, label: "Documents", icon: Icon.documents },
   { href: null, label: "Compliance & Risk", icon: Icon.compliance },

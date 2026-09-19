@@ -1,0 +1,896 @@
+{
+ "procedureId": "306",
+ "title": "Export of dried fruits by train — demo scenario",
+ "note": "Fictional demo data. Every company, person, number, amount and stamp is invented; nothing here is a real document.",
+ "shipment": {
+  "query": "Export 40 t of raisins from Samarkand to Moscow by train",
+  "goods": "Raisins (dried grapes)",
+  "goodsRu": "Изюм",
+  "hs": "0806 20 100 0",
+  "netKg": "40 000",
+  "grossKg": "40 800",
+  "cartons": "4000",
+  "packaging": "Cartons, 10 kg",
+  "unitKind": "wagon",
+  "wagons": [
+   "52816610"
+  ],
+  "seals": [
+   "UZ 220301"
+  ],
+  "departureStation": "Samarkand-Tovarny",
+  "destinationStation": "Moscow-Tovarnaya",
+  "borderStations": "Keles, Sary-Agash",
+  "from": "Samarkand, Uzbekistan",
+  "to": "Moscow, Russia",
+  "valueUsd": "96 000.00",
+  "incoterms": "FCA Samarkand",
+  "contractNo": "UZ-306/2026-01",
+  "contractDate": "01.09.2026",
+  "invoiceNo": "INV-306/2026-031",
+  "invoiceDate": "04.09.2026",
+  "caseLine": "export of dried fruits by train, 40 000 kg of raisins (dried grapes)"
+ },
+ "parties": {
+  "exporter": {
+   "name": "OOO \"Zarafshon Mevalari\"",
+   "address": "Samarkand, Dagbitskaya street 4, Uzbekistan",
+   "tin": "302118457",
+   "manager": "Nodira Yusupova",
+   "phone": "+998 91 204 11 22",
+   "email": "export.zarafshon@demo.uz",
+   "bank": "Demo Bank JSCB, account 20208000900222333001, MFO 00444"
+  },
+  "trader": {
+   "name": "OOO \"Zarafshon Mevalari\"",
+   "address": "Samarkand, Dagbitskaya street 4, Uzbekistan",
+   "tin": "302118457",
+   "manager": "Nodira Yusupova",
+   "phone": "+998 91 204 11 22",
+   "email": "export.zarafshon@demo.uz",
+   "bank": "Demo Bank JSCB, account 20208000900222333001, MFO 00444"
+  },
+  "seller": {
+   "name": "OOO \"Zarafshon Mevalari\"",
+   "address": "Samarkand, Dagbitskaya street 4, Uzbekistan",
+   "tin": "302118457",
+   "manager": "Nodira Yusupova",
+   "phone": "+998 91 204 11 22",
+   "email": "export.zarafshon@demo.uz",
+   "bank": "Demo Bank JSCB, account 20208000900222333001, MFO 00444"
+  },
+  "buyer": {
+   "name": "OOO \"Moskovskie Sukhofrukty\"",
+   "address": "Moscow, Profsoyuznaya street 21, Russia",
+   "tin": "—",
+   "manager": "A. Demo",
+   "phone": "—",
+   "email": "—",
+   "bank": "—"
+  },
+  "representative": {
+   "name": "Jasur Karimov",
+   "passport": "AC 3344556"
+  }
+ },
+ "values": {
+  "Tax Identification Number of the organization or individual": "302118457",
+  "Personal identification number of an individual": "31503850210045",
+  "Bank details": "Demo Bank JSCB, account 20208000900222333001, MFO 00444",
+  "Name of the organization": "OOO \"Zarafshon Mevalari\"",
+  "Full name of an organization's manager": "Nodira Yusupova",
+  "Contact phone number": "+998 91 204 11 22",
+  "Email": "export.zarafshon@demo.uz",
+  "Agency region": "Samarkand region",
+  "Payment sum": "245 000 UZS",
+  "Type of organization (business entity, budgetary)": "Business entity",
+  "Cost on the contract": "1 120 000 UZS",
+  "Quantity of transport units": "1"
+ },
+ "documents": [
+  {
+   "id": "commercial-invoice",
+   "template": "commercial_invoice",
+   "title": "Commercial invoice",
+   "docType": "commercial_invoice",
+   "labels": [
+    "Commercial invoice"
+   ],
+   "steps": [
+    25,
+    26,
+    27,
+    35,
+    41,
+    44,
+    46
+   ],
+   "output": false,
+   "fields": {
+    "invoice_no": "INV-306/2026-031",
+    "invoice_date": "04.09.2026",
+    "seller": "OOO \"Zarafshon Mevalari\"",
+    "buyer": "OOO \"Moskovskie Sukhofrukty\"",
+    "goods": "Raisins (dried grapes)",
+    "hs_code": "0806 20 100 0",
+    "quantity": "40 000 kg",
+    "total_value": "96 000.00 USD",
+    "origin_country": "Uzbekistan",
+    "gross_weight": "40 800 kg",
+    "currency": "USD",
+    "contract_no": "UZ-306/2026-01",
+    "incoterms": "FCA Samarkand",
+    "transport_doc": "SMGS 77306451"
+   },
+   "file": "306-01-commercial-invoice.png"
+  },
+  {
+   "id": "trade-contract",
+   "template": "contract",
+   "title": "Foreign trade contract",
+   "docType": "trade_contract",
+   "labels": [
+    "Electronic copy of foreign trade contract",
+    "Foreign economic activity contract",
+    "Supply contract"
+   ],
+   "steps": [
+    1,
+    7
+   ],
+   "output": false,
+   "fields": {
+    "contract_no": "UZ-306/2026-01",
+    "contract_date": "01.09.2026",
+    "seller": "OOO \"Zarafshon Mevalari\"",
+    "buyer": "OOO \"Moskovskie Sukhofrukty\"",
+    "goods": "Raisins (dried grapes)",
+    "hs_code": "0806 20 100 0",
+    "quantity": "40 000 kg",
+    "total_value": "96 000.00 USD",
+    "incoterms": "FCA Samarkand"
+   },
+   "file": "306-02-foreign-trade-contract.png"
+  },
+  {
+   "id": "passport",
+   "template": "passport",
+   "title": "Passport",
+   "docType": "passport",
+   "labels": [
+    "Passport"
+   ],
+   "steps": [
+    6,
+    8,
+    9,
+    14,
+    16,
+    20,
+    23,
+    24,
+    32,
+    37,
+    44
+   ],
+   "output": false,
+   "fields": {
+    "full_name": "KARIMOV JASUR",
+    "passport_no": "AC 3344556",
+    "expiry": "14.03.2031"
+   },
+   "file": "306-03-passport.png"
+  },
+  {
+   "id": "power-of-attorney",
+   "template": "poa",
+   "title": "Power of attorney",
+   "docType": "power_of_attorney",
+   "labels": [
+    "Power of attorney",
+    "Power of attorney for Transportation Unit",
+    "Power of attorney for railway station"
+   ],
+   "steps": [
+    6,
+    8,
+    14,
+    23,
+    32,
+    34,
+    44
+   ],
+   "output": false,
+   "fields": {
+    "poa_no": "16",
+    "issue_date": "02.09.2026",
+    "representative": "Jasur Karimov",
+    "passport": "AC 3344556",
+    "valid_until": "31.12.2026",
+    "scope": "Customs operations, cargo handling, signing and receiving documents"
+   },
+   "file": "306-04-power-of-attorney.png"
+  },
+  {
+   "id": "receipt-of-payment-4",
+   "template": "receipt",
+   "title": "Receipt of payment — step 4",
+   "docType": "receipt_of_payment",
+   "labels": [
+    "Receipt of payment"
+   ],
+   "steps": [
+    4
+   ],
+   "output": true,
+   "fields": {
+    "receipt_no": "R-306-004",
+    "payer": "OOO \"Zarafshon Mevalari\"",
+    "payer_inn": "302118457",
+    "recipient": "JSC Uzbekistan Temir Yo'llari",
+    "payment_type": "Prepay for railway services (dried fruits)",
+    "amount": "245 000",
+    "date": "03.09.2026"
+   },
+   "file": "306-05-receipt-of-payment-step-4.png"
+  },
+  {
+   "template": "invoice_for_payment",
+   "title": "Invoice for payment",
+   "docType": "invoice_for_payment",
+   "labels": [
+    "Invoice for payment"
+   ],
+   "steps": [
+    9
+   ],
+   "output": false,
+   "fields": {
+    "invoice_no": "IP-306/009",
+    "invoice_date": "06.09.2026",
+    "contract_no": "SRV-306-9",
+    "supplier": "OOO \"Demo Forwarding\"",
+    "supplier_inn": "200933140",
+    "customer": "OOO \"Zarafshon Mevalari\"",
+    "vat_rate": "12",
+    "total": "1 120 000"
+   },
+   "id": "invoice-for-payment",
+   "file": "306-06-invoice-for-payment.png"
+  },
+  {
+   "id": "receipt-of-payment-9",
+   "template": "receipt",
+   "title": "Receipt of payment — step 9",
+   "docType": "receipt_of_payment",
+   "labels": [
+    "Receipt of payment"
+   ],
+   "steps": [
+    9
+   ],
+   "output": true,
+   "fields": {
+    "receipt_no": "R-306-009",
+    "payer": "OOO \"Zarafshon Mevalari\"",
+    "payer_inn": "302118457",
+    "recipient": "OOO \"Demo Forwarding\"",
+    "payment_type": "code assignment and freight forwarder service",
+    "amount": "1 120 000",
+    "date": "06.09.2026"
+   },
+   "file": "306-07-receipt-of-payment-step-9.png"
+  },
+  {
+   "template": "letter",
+   "title": "Application for good transportation on specific conditions",
+   "docType": null,
+   "labels": [
+    "Application for good transportation on specific conditions"
+   ],
+   "steps": [
+    11
+   ],
+   "output": false,
+   "fields": {},
+   "body": "OOO \"Zarafshon Mevalari\" (TIN 302118457) applies for: application for good transportation on specific conditions. Shipment: 40 000 kg of raisins (dried grapes), Samarkand (Uzbekistan) → Moscow (Russia), 1 wagon 52816610. Contract UZ-306/2026-01 of 01.09.2026.",
+   "id": "application-for-good-transportation-on-specific-",
+   "file": "306-08-application-for-good-transportation-on-specific-.png"
+  },
+  {
+   "template": "letter",
+   "title": "Islamic Republic of Iran approval letter",
+   "docType": null,
+   "labels": [
+    "Islamic Republic of Iran approval letter"
+   ],
+   "steps": [
+    12
+   ],
+   "output": false,
+   "fields": {},
+   "body": "OOO \"Zarafshon Mevalari\" (TIN 302118457) applies for: islamic republic of iran approval letter. Shipment: 40 000 kg of raisins (dried grapes), Samarkand (Uzbekistan) → Moscow (Russia), 1 wagon 52816610. Contract UZ-306/2026-01 of 01.09.2026.",
+   "id": "islamic-republic-of-iran-approval-letter",
+   "file": "306-09-islamic-republic-of-iran-approval-letter.png"
+  },
+  {
+   "template": "letter",
+   "title": "Application for obtaining approval of cargo transportation",
+   "docType": null,
+   "labels": [
+    "Application for obtaining approval of cargo transportation"
+   ],
+   "steps": [
+    12
+   ],
+   "output": false,
+   "fields": {},
+   "body": "OOO \"Zarafshon Mevalari\" (TIN 302118457) applies for: application for obtaining approval of cargo transportation. Shipment: 40 000 kg of raisins (dried grapes), Samarkand (Uzbekistan) → Moscow (Russia), 1 wagon 52816610. Contract UZ-306/2026-01 of 01.09.2026.",
+   "id": "application-for-obtaining-approval-of-cargo-tran",
+   "file": "306-10-application-for-obtaining-approval-of-cargo-tran.png"
+  },
+  {
+   "template": "gu12",
+   "title": "Application for cargo transportation GU-12",
+   "docType": "cargo_transport_application",
+   "labels": [
+    "Application for cargo transportation GU-12"
+   ],
+   "steps": [
+    12
+   ],
+   "output": false,
+   "fields": {
+    "shipper": "OOO \"Zarafshon Mevalari\"",
+    "departure_station": "Samarkand-Tovarny",
+    "cargo": "Raisins (dried grapes)",
+    "etsng": "214095",
+    "destination_station": "Moscow-Tovarnaya",
+    "consignee": "OOO \"Moskovskie Sukhofrukty\"",
+    "tonnes": "40",
+    "wagons": "1"
+   },
+   "id": "application-for-cargo-transportation-gu-12",
+   "file": "306-11-application-for-cargo-transportation-gu-12.png"
+  },
+  {
+   "template": "letter",
+   "title": "Code notification from the forwarder that concluded the contract with JSC \"Uzbekistan railways\"",
+   "docType": null,
+   "labels": [
+    "Code notification from the forwarder that concluded the contract with JSC \"Uzbekistan railways\""
+   ],
+   "steps": [
+    14
+   ],
+   "output": false,
+   "fields": {},
+   "body": "Code notification from the forwarder that concluded the contract with JSC \"Uzbekistan railways\" for the shipment 40 000 kg of raisins (dried grapes), Samarkand (Uzbekistan) → Moscow (Russia), 1 wagon 52816610, contract UZ-306/2026-01 of 01.09.2026.",
+   "id": "code-notification-from-the-forwarder-that-conclu",
+   "file": "306-12-code-notification-from-the-forwarder-that-conclu.png"
+  },
+  {
+   "template": "letter",
+   "title": "Application on letterhead (own wagons)",
+   "docType": null,
+   "labels": [
+    "Application on letterhead (own wagons)"
+   ],
+   "steps": [
+    14
+   ],
+   "output": false,
+   "fields": {},
+   "body": "OOO \"Zarafshon Mevalari\" (TIN 302118457) applies for: application on letterhead (own wagons). Shipment: 40 000 kg of raisins (dried grapes), Samarkand (Uzbekistan) → Moscow (Russia), 1 wagon 52816610. Contract UZ-306/2026-01 of 01.09.2026.",
+   "id": "application-on-letterhead",
+   "file": "306-13-application-on-letterhead.png"
+  },
+  {
+   "template": "letter",
+   "title": "Application on letterhead",
+   "docType": null,
+   "labels": [
+    "Application on letterhead"
+   ],
+   "steps": [
+    14
+   ],
+   "output": false,
+   "fields": {},
+   "body": "OOO \"Zarafshon Mevalari\" (TIN 302118457) applies for: application on letterhead. Shipment: 40 000 kg of raisins (dried grapes), Samarkand (Uzbekistan) → Moscow (Russia), 1 wagon 52816610. Contract UZ-306/2026-01 of 01.09.2026.",
+   "id": "application-on-letterhead-14",
+   "file": "306-14-application-on-letterhead.png"
+  },
+  {
+   "id": "offer-agreement-for-internal-phytosanitary-certi-15",
+   "template": "offer",
+   "title": "Offer agreement for internal phytosanitary certificate — step 15",
+   "docType": "offer_agreement",
+   "labels": [
+    "Offer agreement for internal phytosanitary certificate"
+   ],
+   "steps": [
+    15
+   ],
+   "output": true,
+   "fields": {
+    "agreement_no": "26143060015",
+    "agreement_date": "09.09.2026",
+    "amount": "490 000",
+    "service": "internal phytosanitary certificate",
+    "units": "1"
+   },
+   "file": "306-15-offer-agreement-for-internal-phytosanitary-certi.png"
+  },
+  {
+   "id": "receipt-of-payment-16",
+   "template": "receipt",
+   "title": "Receipt of payment — step 16",
+   "docType": "receipt_of_payment",
+   "labels": [
+    "Receipt of payment"
+   ],
+   "steps": [
+    16
+   ],
+   "output": true,
+   "fields": {
+    "receipt_no": "R-306-016",
+    "payer": "OOO \"Zarafshon Mevalari\"",
+    "payer_inn": "302118457",
+    "recipient": "Agency of Plant Quarantine and Protection",
+    "payment_type": "internal phytosanitary certificate",
+    "amount": "490 000",
+    "date": "09.09.2026"
+   },
+   "file": "306-16-receipt-of-payment-step-16.png"
+  },
+  {
+   "id": "fumigation-offer-agreement-19",
+   "template": "offer",
+   "title": "Fumigation offer agreement — step 19",
+   "docType": "offer_agreement",
+   "labels": [
+    "Fumigation offer agreement"
+   ],
+   "steps": [
+    19
+   ],
+   "output": true,
+   "fields": {
+    "agreement_no": "26143060019",
+    "agreement_date": "11.09.2026",
+    "amount": "780 000",
+    "service": "Fumigation offer agreement",
+    "units": "1"
+   },
+   "file": "306-17-fumigation-offer-agreement-step-19.png"
+  },
+  {
+   "id": "receipt-of-payment-20",
+   "template": "receipt",
+   "title": "Receipt of payment — step 20",
+   "docType": "receipt_of_payment",
+   "labels": [
+    "Receipt of payment"
+   ],
+   "steps": [
+    20
+   ],
+   "output": true,
+   "fields": {
+    "receipt_no": "R-306-020",
+    "payer": "OOO \"Zarafshon Mevalari\"",
+    "payer_inn": "302118457",
+    "recipient": "Agency of Plant Quarantine and Protection",
+    "payment_type": "fumigation",
+    "amount": "780 000",
+    "date": "11.09.2026"
+   },
+   "file": "306-18-receipt-of-payment-step-20.png"
+  },
+  {
+   "template": "invoice_for_payment",
+   "title": "Invoice for prepayment",
+   "docType": "invoice_for_payment",
+   "labels": [
+    "Invoice for prepayment"
+   ],
+   "steps": [
+    24
+   ],
+   "output": false,
+   "fields": {
+    "invoice_no": "IP-306/024",
+    "invoice_date": "13.09.2026",
+    "contract_no": "SRV-306-24",
+    "supplier": "Uzbekexpertiza JSC (demo)",
+    "supplier_inn": "200933140",
+    "customer": "OOO \"Zarafshon Mevalari\"",
+    "vat_rate": "12",
+    "total": "1 500 000"
+   },
+   "id": "invoice-for-prepayment",
+   "file": "306-19-invoice-for-prepayment.png"
+  },
+  {
+   "id": "receipt-of-payment-24",
+   "template": "receipt",
+   "title": "Receipt of payment — step 24",
+   "docType": "receipt_of_payment",
+   "labels": [
+    "Receipt of payment"
+   ],
+   "steps": [
+    24
+   ],
+   "output": true,
+   "fields": {
+    "receipt_no": "R-306-024",
+    "payer": "OOO \"Zarafshon Mevalari\"",
+    "payer_inn": "302118457",
+    "recipient": "Uzbekexpertiza JSC (demo)",
+    "payment_type": "certificate of origin",
+    "amount": "1 500 000",
+    "date": "13.09.2026"
+   },
+   "file": "306-20-receipt-of-payment-step-24.png"
+  },
+  {
+   "template": "letter",
+   "title": "Any document confirming purchase of agricultural products",
+   "docType": null,
+   "labels": [
+    "Any document confirming purchase of agricultural products"
+   ],
+   "steps": [
+    25,
+    26,
+    27
+   ],
+   "output": false,
+   "fields": {},
+   "body": "Any document confirming purchase of agricultural products for the shipment 40 000 kg of raisins (dried grapes), Samarkand (Uzbekistan) → Moscow (Russia), 1 wagon 52816610, contract UZ-306/2026-01 of 01.09.2026.",
+   "id": "any-document-confirming-purchase-of-agricultural",
+   "file": "306-21-any-document-confirming-purchase-of-agricultural.png"
+  },
+  {
+   "template": "letter",
+   "title": "Any document confirming the exporter's right to use a land plot",
+   "docType": null,
+   "labels": [
+    "Any document confirming the exporter's right to use a land plot"
+   ],
+   "steps": [
+    25,
+    26,
+    27
+   ],
+   "output": false,
+   "fields": {},
+   "body": "Any document confirming the exporter's right to use a land plot for the shipment 40 000 kg of raisins (dried grapes), Samarkand (Uzbekistan) → Moscow (Russia), 1 wagon 52816610, contract UZ-306/2026-01 of 01.09.2026.",
+   "id": "any-document-confirming-the-exporter-s-right-to-",
+   "file": "306-22-any-document-confirming-the-exporter-s-right-to-.png"
+  },
+  {
+   "template": "letter",
+   "title": "Application for obtaining of Certificate of origin for exported goods",
+   "docType": null,
+   "labels": [
+    "Application for obtaining of Certificate of origin for exported goods"
+   ],
+   "steps": [
+    25
+   ],
+   "output": false,
+   "fields": {},
+   "body": "OOO \"Zarafshon Mevalari\" (TIN 302118457) applies for: application for obtaining of certificate of origin for exported goods. Shipment: 40 000 kg of raisins (dried grapes), Samarkand (Uzbekistan) → Moscow (Russia), 1 wagon 52816610. Contract UZ-306/2026-01 of 01.09.2026.",
+   "id": "application-for-obtaining-of-certificate-of-orig",
+   "file": "306-23-application-for-obtaining-of-certificate-of-orig.png"
+  },
+  {
+   "template": "letter",
+   "title": "Online application for certificate of origin",
+   "docType": null,
+   "labels": [
+    "Online application for certificate of origin"
+   ],
+   "steps": [
+    26,
+    27
+   ],
+   "output": false,
+   "fields": {},
+   "body": "OOO \"Zarafshon Mevalari\" (TIN 302118457) applies for: online application for certificate of origin. Shipment: 40 000 kg of raisins (dried grapes), Samarkand (Uzbekistan) → Moscow (Russia), 1 wagon 52816610. Contract UZ-306/2026-01 of 01.09.2026.",
+   "id": "online-application-for-certificate-of-origin",
+   "file": "306-24-online-application-for-certificate-of-origin.png"
+  },
+  {
+   "id": "certificate-of-origin-30",
+   "template": "ct1",
+   "title": "Certificate of origin — step 30",
+   "docType": "certificate_of_origin",
+   "labels": [
+    "Certificate of origin"
+   ],
+   "steps": [
+    30
+   ],
+   "output": true,
+   "fields": {
+    "cert_no": "UZ 04306811",
+    "exporter": "OOO \"Zarafshon Mevalari\"",
+    "consignee": "OOO \"Moskovskie Sukhofrukty\"",
+    "transport_route": "Rail, Samarkand – Keles, Sary-Agash – Moscow",
+    "goods": "Raisins (dried grapes), 4000 places",
+    "weight": "40 800 kg",
+    "invoice_ref": "INV-306/2026-031 of 04.09.2026",
+    "exported_to": "Russia"
+   },
+   "file": "306-25-certificate-of-origin-step-30.png"
+  },
+  {
+   "template": "letter",
+   "title": "Certificate on availability of funds at client's account",
+   "docType": null,
+   "labels": [
+    "Certificate on availability of funds at client's account"
+   ],
+   "steps": [
+    32
+   ],
+   "output": false,
+   "fields": {},
+   "body": "Certificate on availability of funds at client's account issued to OOO \"Zarafshon Mevalari\" (TIN 302118457). Demo record for the shipment: 40 000 kg of raisins (dried grapes), Samarkand (Uzbekistan) → Moscow (Russia), 1 wagon 52816610.",
+   "id": "certificate-on-availability-of-funds-at-client-s",
+   "file": "306-26-certificate-on-availability-of-funds-at-client-s.png"
+  },
+  {
+   "template": "letter",
+   "title": "Application on letterhead for allotment of wagons",
+   "docType": null,
+   "labels": [
+    "Application on letterhead for allotment of wagons"
+   ],
+   "steps": [
+    32
+   ],
+   "output": false,
+   "fields": {},
+   "body": "OOO \"Zarafshon Mevalari\" (TIN 302118457) applies for: application on letterhead for allotment of wagons. Shipment: 40 000 kg of raisins (dried grapes), Samarkand (Uzbekistan) → Moscow (Russia), 1 wagon 52816610. Contract UZ-306/2026-01 of 01.09.2026.",
+   "id": "application-on-letterhead-for-allotment-of-wagon",
+   "file": "306-27-application-on-letterhead-for-allotment-of-wagon.png"
+  },
+  {
+   "id": "export-railway-bill-35",
+   "template": "smgs",
+   "title": "Export railway bill (SMGS) — step 35",
+   "docType": "railway_bill",
+   "labels": [
+    "Export railway bill (SMGS)"
+   ],
+   "steps": [
+    35
+   ],
+   "output": true,
+   "fields": {
+    "dispatch_no": "77306451",
+    "sender": "OOO \"Zarafshon Mevalari\"",
+    "consignee": "OOO \"Moskovskie Sukhofrukty\"",
+    "departure_station": "Samarkand-Tovarny",
+    "destination_station": "Moscow-Tovarnaya",
+    "border_stations": "Keles, Sary-Agash",
+    "wagon_no": "52816610",
+    "cargo": "Изюм / Raisins (dried grapes)",
+    "packaging": "Cartons, 10 kg",
+    "places": "4000",
+    "weight": "40 800",
+    "seals": "UZ 220301",
+    "documents_attached": "Invoice INV-306/2026-031"
+   },
+   "file": "306-28-export-railway-bill-step-35.png"
+  },
+  {
+   "id": "offer-agreement-for-phytosanitary-certificate-36",
+   "template": "offer",
+   "title": "Offer agreement for phytosanitary certificate — step 36",
+   "docType": "offer_agreement",
+   "labels": [
+    "Offer agreement for phytosanitary certificate"
+   ],
+   "steps": [
+    36
+   ],
+   "output": true,
+   "fields": {
+    "agreement_no": "26143060036",
+    "agreement_date": "19.09.2026",
+    "amount": "2 350 000",
+    "service": "phytosanitary certificate",
+    "units": "1"
+   },
+   "file": "306-29-offer-agreement-for-phytosanitary-certificate-st.png"
+  },
+  {
+   "id": "receipt-of-payment-37",
+   "template": "receipt",
+   "title": "Receipt of payment — step 37",
+   "docType": "receipt_of_payment",
+   "labels": [
+    "Receipt of payment"
+   ],
+   "steps": [
+    37
+   ],
+   "output": true,
+   "fields": {
+    "receipt_no": "R-306-037",
+    "payer": "OOO \"Zarafshon Mevalari\"",
+    "payer_inn": "302118457",
+    "recipient": "Agency of Plant Quarantine and Protection",
+    "payment_type": "phytosanitary certificate",
+    "amount": "2 350 000",
+    "date": "20.09.2026"
+   },
+   "file": "306-30-receipt-of-payment-step-37.png"
+  },
+  {
+   "template": "letter",
+   "title": "Online application for phytosanitary certificate",
+   "docType": null,
+   "labels": [
+    "Online application for phytosanitary certificate"
+   ],
+   "steps": [
+    38
+   ],
+   "output": false,
+   "fields": {},
+   "body": "OOO \"Zarafshon Mevalari\" (TIN 302118457) applies for: online application for phytosanitary certificate. Shipment: 40 000 kg of raisins (dried grapes), Samarkand (Uzbekistan) → Moscow (Russia), 1 wagon 52816610. Contract UZ-306/2026-01 of 01.09.2026.",
+   "id": "online-application-for-phytosanitary-certificate",
+   "file": "306-31-online-application-for-phytosanitary-certificate.png"
+  },
+  {
+   "id": "phytosanitary-certificate-40",
+   "template": "phyto",
+   "title": "Phytosanitary certificate — step 40",
+   "docType": "phytosanitary_certificate",
+   "labels": [
+    "Phytosanitary certificate"
+   ],
+   "steps": [
+    40
+   ],
+   "output": true,
+   "fields": {
+    "cert_no": "UZ-EX 2026/30612",
+    "exporter": "OOO \"Zarafshon Mevalari\"",
+    "consignee": "OOO \"Moskovskie Sukhofrukty\"",
+    "destination_country": "Russia",
+    "point_of_entry": "Keles, Sary-Agash",
+    "place_of_origin": "Uzbekistan",
+    "produce": "Raisins (dried grapes)",
+    "botanical_name": "Vitis vinifera",
+    "quantity": "40 000 kg",
+    "treatment": "Not treated",
+    "issue_date": "21.09.2026"
+   },
+   "file": "306-32-phytosanitary-certificate-step-40.png"
+  },
+  {
+   "id": "receipt-of-payment-42",
+   "template": "receipt",
+   "title": "Receipt of payment — step 42",
+   "docType": "receipt_of_payment",
+   "labels": [
+    "Receipt of payment"
+   ],
+   "steps": [
+    42
+   ],
+   "output": true,
+   "fields": {
+    "receipt_no": "R-306-042",
+    "payer": "OOO \"Zarafshon Mevalari\"",
+    "payer_inn": "302118457",
+    "recipient": "State Customs Committee (demo)",
+    "payment_type": "customs fee",
+    "amount": "375 000",
+    "date": "22.09.2026"
+   },
+   "file": "306-33-receipt-of-payment-step-42.png"
+  },
+  {
+   "id": "export-railway-bill-stamped-by-customs-inspector-46",
+   "template": "smgs",
+   "title": "Export railway bill stamped by customs inspector — step 46",
+   "docType": "railway_bill",
+   "labels": [
+    "Export railway bill stamped by customs inspector"
+   ],
+   "steps": [
+    46
+   ],
+   "output": true,
+   "fields": {
+    "dispatch_no": "77306451",
+    "sender": "OOO \"Zarafshon Mevalari\"",
+    "consignee": "OOO \"Moskovskie Sukhofrukty\"",
+    "departure_station": "Samarkand-Tovarny",
+    "destination_station": "Moscow-Tovarnaya",
+    "border_stations": "Keles, Sary-Agash",
+    "wagon_no": "52816610",
+    "cargo": "Изюм / Raisins (dried grapes)",
+    "packaging": "Cartons, 10 kg",
+    "places": "4000",
+    "weight": "40 800",
+    "seals": "UZ 220301",
+    "documents_attached": "Invoice INV-306/2026-031"
+   },
+   "stamp": "customs",
+   "file": "306-34-export-railway-bill-stamped-by-customs-inspector.png"
+  },
+  {
+   "template": "letter",
+   "title": "Application for wagon handover",
+   "docType": null,
+   "labels": [
+    "Application for wagon handover"
+   ],
+   "steps": [
+    47
+   ],
+   "output": false,
+   "fields": {},
+   "body": "OOO \"Zarafshon Mevalari\" (TIN 302118457) applies for: application for wagon handover. Shipment: 40 000 kg of raisins (dried grapes), Samarkand (Uzbekistan) → Moscow (Russia), 1 wagon 52816610. Contract UZ-306/2026-01 of 01.09.2026.",
+   "id": "application-for-wagon-handover",
+   "file": "306-35-application-for-wagon-handover.png"
+  },
+  {
+   "template": "letter",
+   "title": "Package of documents",
+   "docType": null,
+   "labels": [
+    "Package of documents"
+   ],
+   "steps": [
+    48
+   ],
+   "output": false,
+   "fields": {},
+   "body": "Package of documents for the shipment 40 000 kg of raisins (dried grapes), Samarkand (Uzbekistan) → Moscow (Russia), 1 wagon 52816610, contract UZ-306/2026-01 of 01.09.2026.",
+   "id": "package-of-documents",
+   "file": "306-36-package-of-documents.png"
+  },
+  {
+   "id": "duplicate-of-railway-bill-with-datestamp-48",
+   "template": "smgs",
+   "title": "Duplicate of railway bill with datestamp — step 48",
+   "docType": "railway_bill",
+   "labels": [
+    "Duplicate of railway bill with datestamp"
+   ],
+   "steps": [
+    48
+   ],
+   "output": true,
+   "fields": {
+    "dispatch_no": "77306451",
+    "sender": "OOO \"Zarafshon Mevalari\"",
+    "consignee": "OOO \"Moskovskie Sukhofrukty\"",
+    "departure_station": "Samarkand-Tovarny",
+    "destination_station": "Moscow-Tovarnaya",
+    "border_stations": "Keles, Sary-Agash",
+    "wagon_no": "52816610",
+    "cargo": "Изюм / Raisins (dried grapes)",
+    "packaging": "Cartons, 10 kg",
+    "places": "4000",
+    "weight": "40 800",
+    "seals": "UZ 220301",
+    "documents_attached": "Invoice INV-306/2026-031"
+   },
+   "stamp": "datestamp",
+   "file": "306-37-duplicate-of-railway-bill-with-datestamp-step-48.png"
+  }
+ ]
+}

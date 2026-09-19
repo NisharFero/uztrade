@@ -1,15 +1,25 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { PROCEDURES, PROCEDURE_IDS } from "../../../modules/procedures/data/procedures.generated";
+import { PROCEDURES, PROCEDURE_IDS } from "../../../modules/procedures/sync";
 import { allInputs, collectOnce, isHeader, procedureNeeds, stepNeeds, waitingOn } from "../../../modules/procedures/requirements";
 
 test("section 5 inputs are carried on every step, as published", () => {
-  const expected: Record<string, number> = { "306": 181, "325": 181, "477": 218, "540": 160, "868": 181 };
+  // The ten procedures extracted and checked by hand keep their exact counts;
+  // across the whole corpus every step carries its own input list.
+  const expected: Record<string, number> = { "306": 181, "325": 181, "477": 218, "540": 160, "868": 181, "161": 52, "57": 257, "707": 239, "782": 47, "924": 52 };
+  for (const [id, count] of Object.entries(expected)) {
+    const steps = PROCEDURES[id].blocks.flatMap((b) => b.steps);
+    assert.equal(steps.reduce((n, s) => n + s.inputs.length, 0), count, id);
+  }
+
+  let stepsWithout = 0;
   for (const id of PROCEDURE_IDS) {
     const steps = PROCEDURES[id].blocks.flatMap((b) => b.steps);
     assert.ok(steps.every((s) => Array.isArray(s.inputs)), id);
-    assert.equal(steps.reduce((n, s) => n + s.inputs.length, 0), expected[id], id);
+    stepsWithout += steps.filter((s) => s.inputs.length === 0).length;
   }
+  // One step in the corpus (procedure 1143) lists no inputs in its own document.
+  assert.ok(stepsWithout <= 1, `${stepsWithout} steps have no section 5 inputs`);
 });
 
 test("the 325 export declaration needs documents that earlier steps produce", () => {

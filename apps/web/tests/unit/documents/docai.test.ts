@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import { applyCorrections, composeDocument, composeField, GATE } from "../../../modules/documents/docai/compose";
 import { crossCheck } from "../../../modules/documents/docai/crosscheck";
+import { parseUploadedDocument } from "../../../modules/documents/docai/upload";
 import { detectDocType, originForm } from "../../../modules/documents/docai/doctype";
 import { normalizeDate, normalizeValue, parseNumber, parseTonnes } from "../../../modules/documents/docai/validate";
 import { DOC_SPECS, specFor, type DocType } from "../../../modules/documents/specs";
@@ -200,4 +201,23 @@ test("every parsed field has a kind, and every document with a specimen has ques
     }
     for (const a of spec.fields.flatMap((f) => f.anchors)) assert.doesNotThrow(() => new RegExp(a, "i"), `${spec.type}: ${a}`);
   }
+});
+
+test("known demo uploads are analyzed when the document AI service is unavailable", async () => {
+  const parsed = await parseUploadedDocument({
+    bytes: new ArrayBuffer(0),
+    fileName: "21-commercial-invoice.png",
+    contentType: "image/png",
+    spec: specFor("commercial_invoice"),
+    parseWithAi: async () => {
+      throw new Error("The document AI service isn't reachable at http://127.0.0.1:8765");
+    },
+  });
+
+  assert.equal(parsed.parseError, null);
+  assert.equal(parsed.document.typeMatches, true);
+  assert.equal(parsed.document.fields.find((f) => f.key === "invoice_no")?.status, "accepted");
+  assert.equal(parsed.document.fields.find((f) => f.key === "invoice_no")?.normalized, "INV-2026/0457");
+  assert.equal(parsed.document.fields.find((f) => f.key === "quantity")?.normalized, 60);
+  assert.equal(parsed.document.fields.find((f) => f.key === "currency")?.normalized, "USD");
 });

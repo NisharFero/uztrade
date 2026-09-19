@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import { mockEntities, mockUsers, procedureSeeds } from "../../../modules/catalog/seed";
+import { PROCEDURE_IDS } from "../../../modules/procedures/sync";
 
 test("provides stable internal users for user-lane assignments", () => {
   const users = mockUsers();
@@ -11,14 +12,16 @@ test("provides stable internal users for user-lane assignments", () => {
 
 test("normalizes every procedure counterparty into a unique mock entity", () => {
   const entities = mockEntities();
-  assert.equal(entities.length, 25);
-  assert.equal(new Set(entities.map((entity) => entity.canonicalName)).size, 25);
+  // One row per distinct counterparty named across the 243 published procedures.
+  assert.ok(entities.length > 30, `${entities.length} entities`);
+  assert.equal(new Set(entities.map((entity) => entity.canonicalName)).size, entities.length);
   assert.ok(entities.some((entity) => entity.type === "inspection"));
   assert.ok(entities.every((entity) => entity.simulationMode));
 });
 
 test("seeds all authoritative procedures as published version one", () => {
   const seeds = procedureSeeds();
-  assert.deepEqual(seeds.map((seed) => seed.procedureId).sort(), ["306", "325", "477", "540", "868"]);
+  assert.equal(seeds.length, PROCEDURE_IDS.length);
+  assert.deepEqual([...seeds.map((seed) => seed.procedureId)].sort(), [...PROCEDURE_IDS].sort());
   assert.ok(seeds.every((seed) => seed.version === 1 && seed.status === "published"));
 });

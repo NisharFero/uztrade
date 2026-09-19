@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { PROCEDURES, type Procedure } from "../../../modules/procedures/data/procedures.generated";
+import { PROCEDURES, type Procedure } from "../../../modules/procedures/sync";
 import { extractShipmentFacts, instantiateWorkflow } from "../../../modules/workflow/domain";
 import { runOrchestrator } from "../../../modules/workflow/orchestrator";
 import { specialistFor, executeSpecialist } from "../../../modules/workflow/specialists";

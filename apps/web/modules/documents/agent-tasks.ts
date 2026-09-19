@@ -146,14 +146,23 @@ export function complianceTasks(
 ): AgentTask[] {
   const a = assessCompliance(procedure, facts, query);
 
+  const logistics = procedure.kind === "logistics";
   const analysis: AgentTask[] = [
-    {
-      key: "hs",
-      label: `Classify goods — HS ${a.hsCode}`,
-      detail: a.hsHeading,
-      status: "done",
-      note: "Suggested",
-    },
+    logistics
+      ? {
+          key: "hs",
+          label: "No classification — rail logistics",
+          detail: "This procedure moves the cargo; the goods are classified in their own customs procedure.",
+          status: "done",
+          note: "Not needed",
+        }
+      : {
+          key: "hs",
+          label: `Classify goods — HS ${a.hsCode}`,
+          detail: a.hsHeading,
+          status: "done",
+          note: "Suggested",
+        },
     ...a.riskFlags.map<AgentTask>((f) => ({
       key: `risk:${f.label}`,
       label: f.label,

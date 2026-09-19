@@ -1,0 +1,2189 @@
+[
+ {
+  "id": "32",
+  "title": "Export of fresh fruits and vegetables by road",
+  "timeframe": "29–89",
+  "blocks": 7,
+  "steps": 42,
+  "online": 17,
+  "entities": 14
+ },
+ {
+  "id": "33",
+  "title": "Export of fruit and vegetable juices by road",
+  "timeframe": "15–52",
+  "blocks": 5,
+  "steps": 27,
+  "online": 8,
+  "entities": 10
+ },
+ {
+  "id": "46",
+  "title": "Import of flour by road",
+  "timeframe": "39–169",
+  "blocks": 10,
+  "steps": 50,
+  "online": 27,
+  "entities": 13
+ },
+ {
+  "id": "49",
+  "title": "Import of pharmaceutical products by road",
+  "timeframe": "82–275",
+  "blocks": 9,
+  "steps": 37,
+  "online": 18,
+  "entities": 12
+ },
+ {
+  "id": "54",
+  "title": "Import of mineral fertilizers by road",
+  "timeframe": "27–183",
+  "blocks": 8,
+  "steps": 35,
+  "online": 15,
+  "entities": 10
+ },
+ {
+  "id": "55",
+  "title": "Import of medical equipment by road",
+  "timeframe": "82–275",
+  "blocks": 9,
+  "steps": 37,
+  "online": 18,
+  "entities": 12
+ },
+ {
+  "id": "57",
+  "title": "Import of animal or vegetable fertilizers by road",
+  "timeframe": "45–517",
+  "blocks": 12,
+  "steps": 58,
+  "online": 33,
+  "entities": 13
+ },
+ {
+  "id": "105",
+  "title": "Import of confectionery by road",
+  "timeframe": "21–83",
+  "blocks": 8,
+  "steps": 37,
+  "online": 17,
+  "entities": 11
+ },
+ {
+  "id": "109",
+  "title": "Import of dairy products by road",
+  "timeframe": "63–371",
+  "blocks": 10,
+  "steps": 47,
+  "online": 25,
+  "entities": 12
+ },
+ {
+  "id": "125",
+  "title": "Export of confectionery by road",
+  "timeframe": "15–52",
+  "blocks": 5,
+  "steps": 27,
+  "online": 8,
+  "entities": 10
+ },
+ {
+  "id": "126",
+  "title": "Contract customs broker",
+  "timeframe": "0–0",
+  "blocks": 1,
+  "steps": 1,
+  "online": 0,
+  "entities": 1
+ },
+ {
+  "id": "127",
+  "title": "Registration of export contract",
+  "timeframe": "0–0",
+  "blocks": 1,
+  "steps": 1,
+  "online": 1,
+  "entities": 1
+ },
+ {
+  "id": "128",
+  "title": "Obtain insurance policy",
+  "timeframe": "8–19",
+  "blocks": 1,
+  "steps": 4,
+  "online": 0,
+  "entities": 1
+ },
+ {
+  "id": "130",
+  "title": "Arrange cargo transportation by road",
+  "timeframe": "11–30",
+  "blocks": 1,
+  "steps": 5,
+  "online": 0,
+  "entities": 2
+ },
+ {
+  "id": "131",
+  "title": "Clearance of confectionery by road",
+  "timeframe": "2–12",
+  "blocks": 2,
+  "steps": 13,
+  "online": 4,
+  "entities": 4
+ },
+ {
+  "id": "135",
+  "title": "Clearance of confectionery by road",
+  "timeframe": "6–32",
+  "blocks": 5,
+  "steps": 27,
+  "online": 10,
+  "entities": 7
+ },
+ {
+  "id": "137",
+  "title": "Registration of import contract",
+  "timeframe": "0–0",
+  "blocks": 1,
+  "steps": 1,
+  "online": 1,
+  "entities": 1
+ },
+ {
+  "id": "138",
+  "title": "Contract customs warehouse",
+  "timeframe": "2–3",
+  "blocks": 1,
+  "steps": 2,
+  "online": 1,
+  "entities": 2
+ },
+ {
+  "id": "140",
+  "title": "Obtain sanitary-epidemiological conclusion",
+  "timeframe": "13–48",
+  "blocks": 1,
+  "steps": 7,
+  "online": 5,
+  "entities": 5
+ },
+ {
+  "id": "143",
+  "title": "Export of dairy products by road",
+  "timeframe": "26–84",
+  "blocks": 7,
+  "steps": 35,
+  "online": 14,
+  "entities": 10
+ },
+ {
+  "id": "145",
+  "title": "Export of seed oil by road",
+  "timeframe": "14–52",
+  "blocks": 5,
+  "steps": 27,
+  "online": 8,
+  "entities": 10
+ },
+ {
+  "id": "158",
+  "title": "Obtain phytosanitary certificate for package and pallets",
+  "timeframe": "5–13",
+  "blocks": 1,
+  "steps": 8,
+  "online": 5,
+  "entities": 5
+ },
+ {
+  "id": "161",
+  "title": "Clearance of fruit and vegetable juices by road",
+  "timeframe": "2–12",
+  "blocks": 2,
+  "steps": 13,
+  "online": 4,
+  "entities": 4
+ },
+ {
+  "id": "165",
+  "title": "Export of meat and meat products by road",
+  "timeframe": "25–82",
+  "blocks": 7,
+  "steps": 35,
+  "online": 14,
+  "entities": 10
+ },
+ {
+  "id": "169",
+  "title": "Clearance of meat and meat products by road",
+  "timeframe": "2–12",
+  "blocks": 2,
+  "steps": 14,
+  "online": 4,
+  "entities": 4
+ },
+ {
+  "id": "175",
+  "title": "Clearance of dairy products by road",
+  "timeframe": "4–15",
+  "blocks": 2,
+  "steps": 14,
+  "online": 4,
+  "entities": 4
+ },
+ {
+  "id": "176",
+  "title": "Clearance of seed oil by road",
+  "timeframe": "1–12",
+  "blocks": 2,
+  "steps": 13,
+  "online": 4,
+  "entities": 4
+ },
+ {
+  "id": "178",
+  "title": "Obtain veterinary certificate for export",
+  "timeframe": "1–5",
+  "blocks": 1,
+  "steps": 5,
+  "online": 4,
+  "entities": 3
+ },
+ {
+  "id": "184",
+  "title": "Import of meat and meat products by road",
+  "timeframe": "63–371",
+  "blocks": 10,
+  "steps": 47,
+  "online": 25,
+  "entities": 12
+ },
+ {
+  "id": "191",
+  "title": "Recover transportation costs for export of poultry meat and edible offal",
+  "timeframe": "48–113",
+  "blocks": 1,
+  "steps": 3,
+  "online": 1,
+  "entities": 2
+ },
+ {
+  "id": "198",
+  "title": "Obtain phytosanitary certificate",
+  "timeframe": "5–13",
+  "blocks": 1,
+  "steps": 5,
+  "online": 3,
+  "entities": 4
+ },
+ {
+  "id": "202",
+  "title": "Obtain veterinary permit",
+  "timeframe": "8–24",
+  "blocks": 1,
+  "steps": 2,
+  "online": 2,
+  "entities": 1
+ },
+ {
+  "id": "208",
+  "title": "Obtain veterinary permit",
+  "timeframe": "8–243",
+  "blocks": 1,
+  "steps": 4,
+  "online": 4,
+  "entities": 2
+ },
+ {
+  "id": "209",
+  "title": "Obtain certificate of origin form CT-1",
+  "timeframe": "2–10",
+  "blocks": 1,
+  "steps": 8,
+  "online": 3,
+  "entities": 5
+ },
+ {
+  "id": "210",
+  "title": "Obtain certificate of origin form A",
+  "timeframe": "2–10",
+  "blocks": 1,
+  "steps": 8,
+  "online": 3,
+  "entities": 5
+ },
+ {
+  "id": "217",
+  "title": "Clearance of dairy products by road",
+  "timeframe": "7–33",
+  "blocks": 5,
+  "steps": 28,
+  "online": 10,
+  "entities": 7
+ },
+ {
+  "id": "219",
+  "title": "Obtain veterinary certificate for import",
+  "timeframe": "1–5",
+  "blocks": 1,
+  "steps": 5,
+  "online": 4,
+  "entities": 3
+ },
+ {
+  "id": "220",
+  "title": "Obtain sanitary and epidemiological conclusion",
+  "timeframe": "45–88",
+  "blocks": 1,
+  "steps": 7,
+  "online": 5,
+  "entities": 5
+ },
+ {
+  "id": "223",
+  "title": "Import of vegetable oils for consumers' use and consumption by road",
+  "timeframe": "45–83",
+  "blocks": 8,
+  "steps": 37,
+  "online": 17,
+  "entities": 11
+ },
+ {
+  "id": "224",
+  "title": "Import of vegetable oils for technical or industrial use by road",
+  "timeframe": "4–20",
+  "blocks": 4,
+  "steps": 20,
+  "online": 7,
+  "entities": 7
+ },
+ {
+  "id": "229",
+  "title": "Clearance of vegetable oils for consumers' use and consumption by road",
+  "timeframe": "6–32",
+  "blocks": 5,
+  "steps": 27,
+  "online": 10,
+  "entities": 7
+ },
+ {
+  "id": "230",
+  "title": "Clearance of vegetable oils for technical or industrial use by road",
+  "timeframe": "4–20",
+  "blocks": 3,
+  "steps": 19,
+  "online": 6,
+  "entities": 6
+ },
+ {
+  "id": "233",
+  "title": "Obtain certificate of origin General form",
+  "timeframe": "2–10",
+  "blocks": 1,
+  "steps": 8,
+  "online": 3,
+  "entities": 5
+ },
+ {
+  "id": "244",
+  "title": "Obtain quarantine permit",
+  "timeframe": "4–42",
+  "blocks": 1,
+  "steps": 4,
+  "online": 4,
+  "entities": 3
+ },
+ {
+  "id": "251",
+  "title": "Clearance of animal or vegetable fertilizers by road",
+  "timeframe": "6–33",
+  "blocks": 5,
+  "steps": 29,
+  "online": 10,
+  "entities": 7
+ },
+ {
+  "id": "252",
+  "title": "Obtain quarantine inspection act",
+  "timeframe": "5–43",
+  "blocks": 1,
+  "steps": 8,
+  "online": 6,
+  "entities": 5
+ },
+ {
+  "id": "254",
+  "title": "Obtain certificate of conformity",
+  "timeframe": "19–148",
+  "blocks": 1,
+  "steps": 5,
+  "online": 3,
+  "entities": 4
+ },
+ {
+  "id": "260",
+  "title": "Clearance of flour by road",
+  "timeframe": "6–33",
+  "blocks": 5,
+  "steps": 28,
+  "online": 10,
+  "entities": 7
+ },
+ {
+  "id": "264",
+  "title": "Obtain registration certificate for pharmaceutical products",
+  "timeframe": "450–1524",
+  "blocks": 1,
+  "steps": 8,
+  "online": 2,
+  "entities": 3
+ },
+ {
+  "id": "271",
+  "title": "Obtain certificate of conformity",
+  "timeframe": "74–239",
+  "blocks": 1,
+  "steps": 6,
+  "online": 5,
+  "entities": 5
+ },
+ {
+  "id": "273",
+  "title": "Obtain registration certificate",
+  "timeframe": "162–1514",
+  "blocks": 1,
+  "steps": 7,
+  "online": 0,
+  "entities": 3
+ },
+ {
+  "id": "280",
+  "title": "Obtain certificate of conformity for equipment not requiring pre-installation",
+  "timeframe": "74–239",
+  "blocks": 1,
+  "steps": 6,
+  "online": 5,
+  "entities": 5
+ },
+ {
+  "id": "281",
+  "title": "Export of dairy products by train",
+  "timeframe": "76–235",
+  "blocks": 10,
+  "steps": 41,
+  "online": 19,
+  "entities": 14
+ },
+ {
+  "id": "284",
+  "title": "Clearance of dairy products by train",
+  "timeframe": "2–12",
+  "blocks": 1,
+  "steps": 6,
+  "online": 4,
+  "entities": 4
+ },
+ {
+  "id": "286",
+  "title": "Arrange cargo transportation by train physically",
+  "timeframe": "63–189",
+  "blocks": 5,
+  "steps": 21,
+  "online": 2,
+  "entities": 7
+ },
+ {
+  "id": "288",
+  "title": "Import of dairy products by train",
+  "timeframe": "66–386",
+  "blocks": 15,
+  "steps": 50,
+  "online": 27,
+  "entities": 13
+ },
+ {
+  "id": "290",
+  "title": "Register in the REX system to export to the European Union",
+  "timeframe": "2–10",
+  "blocks": 3,
+  "steps": 7,
+  "online": 1,
+  "entities": 3
+ },
+ {
+  "id": "292",
+  "title": "Obtain veterinary certificate for export",
+  "timeframe": "1–5",
+  "blocks": 1,
+  "steps": 5,
+  "online": 4,
+  "entities": 3
+ },
+ {
+  "id": "295",
+  "title": "Clearance of dairy products by train",
+  "timeframe": "4–28",
+  "blocks": 4,
+  "steps": 16,
+  "online": 8,
+  "entities": 5
+ },
+ {
+  "id": "303",
+  "title": "Arrange cargo transportation by train physically",
+  "timeframe": "63–189",
+  "blocks": 5,
+  "steps": 21,
+  "online": 2,
+  "entities": 7
+ },
+ {
+  "id": "304",
+  "title": "Export of fruit and vegetable juices by train",
+  "timeframe": "67–206",
+  "blocks": 8,
+  "steps": 34,
+  "online": 13,
+  "entities": 14
+ },
+ {
+  "id": "306",
+  "title": "Export of dried fruits by train",
+  "timeframe": "81–241",
+  "blocks": 10,
+  "steps": 48,
+  "online": 22,
+  "entities": 18
+ },
+ {
+  "id": "318",
+  "title": "Arrange cargo transportation by train physically",
+  "timeframe": "63–189",
+  "blocks": 5,
+  "steps": 21,
+  "online": 2,
+  "entities": 7
+ },
+ {
+  "id": "320",
+  "title": "Clearance of dried fruits by road",
+  "timeframe": "2–13",
+  "blocks": 2,
+  "steps": 14,
+  "online": 4,
+  "entities": 4
+ },
+ {
+  "id": "321",
+  "title": "Clearance of dried fruits by train",
+  "timeframe": "2–12",
+  "blocks": 1,
+  "steps": 6,
+  "online": 4,
+  "entities": 4
+ },
+ {
+  "id": "325",
+  "title": "Export of fresh fruits and vegetables by train",
+  "timeframe": "81–241",
+  "blocks": 10,
+  "steps": 48,
+  "online": 22,
+  "entities": 18
+ },
+ {
+  "id": "332",
+  "title": "Export of cotton yarn by train",
+  "timeframe": "44–130",
+  "blocks": 8,
+  "steps": 34,
+  "online": 14,
+  "entities": 14
+ },
+ {
+  "id": "333",
+  "title": "Export of cotton yarn by road",
+  "timeframe": "21–116",
+  "blocks": 7,
+  "steps": 31,
+  "online": 11,
+  "entities": 12
+ },
+ {
+  "id": "340",
+  "title": "Export of textile and garment by train",
+  "timeframe": "43–125",
+  "blocks": 8,
+  "steps": 33,
+  "online": 13,
+  "entities": 14
+ },
+ {
+  "id": "344",
+  "title": "Arrange cargo transportation by road",
+  "timeframe": "16–89",
+  "blocks": 3,
+  "steps": 8,
+  "online": 2,
+  "entities": 5
+ },
+ {
+  "id": "345",
+  "title": "Arrange cargo transportation by train physically",
+  "timeframe": "39–109",
+  "blocks": 5,
+  "steps": 20,
+  "online": 2,
+  "entities": 7
+ },
+ {
+  "id": "347",
+  "title": "Clearance of cotton yarn by road",
+  "timeframe": "4–17",
+  "blocks": 2,
+  "steps": 14,
+  "online": 5,
+  "entities": 4
+ },
+ {
+  "id": "348",
+  "title": "Clearance of cotton yarn by train",
+  "timeframe": "3–16",
+  "blocks": 1,
+  "steps": 7,
+  "online": 5,
+  "entities": 4
+ },
+ {
+  "id": "352",
+  "title": "Export of fabrics by road",
+  "timeframe": "17–57",
+  "blocks": 5,
+  "steps": 28,
+  "online": 9,
+  "entities": 10
+ },
+ {
+  "id": "353",
+  "title": "Export of fabrics by train",
+  "timeframe": "44–130",
+  "blocks": 8,
+  "steps": 34,
+  "online": 14,
+  "entities": 14
+ },
+ {
+  "id": "354",
+  "title": "Obtain certificate of origin form CT-1",
+  "timeframe": "2–11",
+  "blocks": 1,
+  "steps": 9,
+  "online": 3,
+  "entities": 5
+ },
+ {
+  "id": "359",
+  "title": "Obtain certificate of origin form A",
+  "timeframe": "2–11",
+  "blocks": 1,
+  "steps": 9,
+  "online": 3,
+  "entities": 5
+ },
+ {
+  "id": "360",
+  "title": "Obtain certificate of origin General form",
+  "timeframe": "2–11",
+  "blocks": 1,
+  "steps": 9,
+  "online": 3,
+  "entities": 5
+ },
+ {
+  "id": "385",
+  "title": "Arrange cargo transportation by train physically",
+  "timeframe": "63–189",
+  "blocks": 5,
+  "steps": 21,
+  "online": 2,
+  "entities": 7
+ },
+ {
+  "id": "400",
+  "title": "Export of confectionery by train",
+  "timeframe": "67–206",
+  "blocks": 8,
+  "steps": 34,
+  "online": 13,
+  "entities": 14
+ },
+ {
+  "id": "402",
+  "title": "Arrange cargo transportation by train physically",
+  "timeframe": "63–189",
+  "blocks": 5,
+  "steps": 21,
+  "online": 2,
+  "entities": 7
+ },
+ {
+  "id": "412",
+  "title": "Export of seed oil by train",
+  "timeframe": "66–206",
+  "blocks": 8,
+  "steps": 34,
+  "online": 13,
+  "entities": 14
+ },
+ {
+  "id": "436",
+  "title": "Export of mineral fertilizers by train",
+  "timeframe": "67–206",
+  "blocks": 8,
+  "steps": 34,
+  "online": 13,
+  "entities": 14
+ },
+ {
+  "id": "440",
+  "title": "Arrange cargo transportation by train physically",
+  "timeframe": "63–189",
+  "blocks": 5,
+  "steps": 21,
+  "online": 2,
+  "entities": 7
+ },
+ {
+  "id": "451",
+  "title": "Export of meat and meat products by train",
+  "timeframe": "76–235",
+  "blocks": 10,
+  "steps": 41,
+  "online": 19,
+  "entities": 14
+ },
+ {
+  "id": "458",
+  "title": "Export of animal or vegetable fertilizers by road",
+  "timeframe": "30–98",
+  "blocks": 8,
+  "steps": 41,
+  "online": 17,
+  "entities": 12
+ },
+ {
+  "id": "459",
+  "title": "Export of animal or vegetable fertilizers by train",
+  "timeframe": "82–249",
+  "blocks": 11,
+  "steps": 46,
+  "online": 22,
+  "entities": 16
+ },
+ {
+  "id": "466",
+  "title": "Clearance of animal or vegetable fertilizers by road",
+  "timeframe": "2–15",
+  "blocks": 2,
+  "steps": 15,
+  "online": 4,
+  "entities": 4
+ },
+ {
+  "id": "470",
+  "title": "Obtain veterinary certificate for export",
+  "timeframe": "2–6",
+  "blocks": 1,
+  "steps": 5,
+  "online": 4,
+  "entities": 3
+ },
+ {
+  "id": "476",
+  "title": "Import of tea by road",
+  "timeframe": "31–169",
+  "blocks": 10,
+  "steps": 50,
+  "online": 27,
+  "entities": 13
+ },
+ {
+  "id": "477",
+  "title": "Import of tea by train",
+  "timeframe": "34–183",
+  "blocks": 15,
+  "steps": 53,
+  "online": 29,
+  "entities": 14
+ },
+ {
+  "id": "482",
+  "title": "Import of coffee by road",
+  "timeframe": "31–169",
+  "blocks": 10,
+  "steps": 50,
+  "online": 27,
+  "entities": 13
+ },
+ {
+  "id": "483",
+  "title": "Import of coffee by train",
+  "timeframe": "35–184",
+  "blocks": 15,
+  "steps": 53,
+  "online": 30,
+  "entities": 13
+ },
+ {
+  "id": "487",
+  "title": "Obtain quarantine permit",
+  "timeframe": "4–42",
+  "blocks": 1,
+  "steps": 4,
+  "online": 4,
+  "entities": 3
+ },
+ {
+  "id": "488",
+  "title": "Obtain quarantine inspection act",
+  "timeframe": "5–43",
+  "blocks": 1,
+  "steps": 8,
+  "online": 6,
+  "entities": 5
+ },
+ {
+  "id": "496",
+  "title": "Clearance of coffee by train",
+  "timeframe": "5–28",
+  "blocks": 4,
+  "steps": 16,
+  "online": 9,
+  "entities": 4
+ },
+ {
+  "id": "497",
+  "title": "Import of confectionery by train",
+  "timeframe": "25–98",
+  "blocks": 13,
+  "steps": 41,
+  "online": 19,
+  "entities": 12
+ },
+ {
+  "id": "499",
+  "title": "Obtain quarantine permit",
+  "timeframe": "4–42",
+  "blocks": 1,
+  "steps": 4,
+  "online": 4,
+  "entities": 3
+ },
+ {
+  "id": "500",
+  "title": "Obtain quarantine inspection act",
+  "timeframe": "5–43",
+  "blocks": 1,
+  "steps": 8,
+  "online": 6,
+  "entities": 5
+ },
+ {
+  "id": "507",
+  "title": "Import of vegetable oils for consumers' use and consumption by train",
+  "timeframe": "49–98",
+  "blocks": 13,
+  "steps": 41,
+  "online": 19,
+  "entities": 12
+ },
+ {
+  "id": "512",
+  "title": "Import of vegetable oils for technical or industrial use by train",
+  "timeframe": "10–41",
+  "blocks": 11,
+  "steps": 28,
+  "online": 10,
+  "entities": 9
+ },
+ {
+  "id": "514",
+  "title": "Export of vegetable oils by train",
+  "timeframe": "67–206",
+  "blocks": 8,
+  "steps": 34,
+  "online": 13,
+  "entities": 14
+ },
+ {
+  "id": "518",
+  "title": "Arrange cargo transportation by train physically",
+  "timeframe": "63–189",
+  "blocks": 5,
+  "steps": 21,
+  "online": 2,
+  "entities": 7
+ },
+ {
+  "id": "519",
+  "title": "Arrange cargo transportation by train physically",
+  "timeframe": "63–189",
+  "blocks": 5,
+  "steps": 21,
+  "online": 2,
+  "entities": 7
+ },
+ {
+  "id": "522",
+  "title": "Clearance of seed oil by train",
+  "timeframe": "1–12",
+  "blocks": 1,
+  "steps": 6,
+  "online": 4,
+  "entities": 4
+ },
+ {
+  "id": "537",
+  "title": "Export of perfumery, cosmetic or toilet preparations by air",
+  "timeframe": "16–72",
+  "blocks": 7,
+  "steps": 32,
+  "online": 10,
+  "entities": 10
+ },
+ {
+  "id": "540",
+  "title": "Export of tea by air",
+  "timeframe": "30–108",
+  "blocks": 9,
+  "steps": 47,
+  "online": 19,
+  "entities": 14
+ },
+ {
+  "id": "541",
+  "title": "Clearance of vegetable oils for consumers' use and consumption by train",
+  "timeframe": "7–33",
+  "blocks": 5,
+  "steps": 19,
+  "online": 8,
+  "entities": 6
+ },
+ {
+  "id": "543",
+  "title": "Clearance of vegetable oils for technical or industrial use by train",
+  "timeframe": "3–18",
+  "blocks": 3,
+  "steps": 10,
+  "online": 4,
+  "entities": 5
+ },
+ {
+  "id": "548",
+  "title": "Clearance of meat and meat products by road",
+  "timeframe": "7–33",
+  "blocks": 5,
+  "steps": 28,
+  "online": 10,
+  "entities": 7
+ },
+ {
+  "id": "550",
+  "title": "Obtain internal phytosanitary certificate",
+  "timeframe": "9–21",
+  "blocks": 1,
+  "steps": 8,
+  "online": 6,
+  "entities": 5
+ },
+ {
+  "id": "555",
+  "title": "Import of tea by air",
+  "timeframe": "36–196",
+  "blocks": 12,
+  "steps": 46,
+  "online": 23,
+  "entities": 13
+ },
+ {
+  "id": "556",
+  "title": "Import of coffee by air",
+  "timeframe": "36–196",
+  "blocks": 12,
+  "steps": 46,
+  "online": 23,
+  "entities": 13
+ },
+ {
+  "id": "557",
+  "title": "Import of pharmaceutical products by train",
+  "timeframe": "85–290",
+  "blocks": 14,
+  "steps": 41,
+  "online": 20,
+  "entities": 13
+ },
+ {
+  "id": "561",
+  "title": "Import of wood by road",
+  "timeframe": "17–122",
+  "blocks": 9,
+  "steps": 43,
+  "online": 22,
+  "entities": 11
+ },
+ {
+  "id": "562",
+  "title": "Import of wood by train",
+  "timeframe": "21–136",
+  "blocks": 14,
+  "steps": 46,
+  "online": 24,
+  "entities": 12
+ },
+ {
+  "id": "563",
+  "title": "Clearance of tea by air",
+  "timeframe": "5–36",
+  "blocks": 5,
+  "steps": 22,
+  "online": 6,
+  "entities": 5
+ },
+ {
+  "id": "570",
+  "title": "Arrange cargo transportation by air",
+  "timeframe": "12–51",
+  "blocks": 4,
+  "steps": 18,
+  "online": 2,
+  "entities": 4
+ },
+ {
+  "id": "572",
+  "title": "Clearance of perfumery, cosmetic or toilet preparations by air",
+  "timeframe": "4–28",
+  "blocks": 3,
+  "steps": 15,
+  "online": 4,
+  "entities": 4
+ },
+ {
+  "id": "576",
+  "title": "Export of furniture by train",
+  "timeframe": "43–125",
+  "blocks": 8,
+  "steps": 33,
+  "online": 13,
+  "entities": 14
+ },
+ {
+  "id": "584",
+  "title": "Clearance of tea by air",
+  "timeframe": "5–28",
+  "blocks": 3,
+  "steps": 16,
+  "online": 4,
+  "entities": 5
+ },
+ {
+  "id": "585",
+  "title": "Obtain phytosanitary certificate",
+  "timeframe": "5–13",
+  "blocks": 1,
+  "steps": 5,
+  "online": 3,
+  "entities": 4
+ },
+ {
+  "id": "587",
+  "title": "Arrange cargo transportation by train physically",
+  "timeframe": "39–109",
+  "blocks": 5,
+  "steps": 20,
+  "online": 2,
+  "entities": 7
+ },
+ {
+  "id": "591",
+  "title": "Export of jewelry by air",
+  "timeframe": "16–72",
+  "blocks": 7,
+  "steps": 32,
+  "online": 10,
+  "entities": 10
+ },
+ {
+  "id": "593",
+  "title": "Clearance of pharmaceutical products by train",
+  "timeframe": "7–33",
+  "blocks": 6,
+  "steps": 20,
+  "online": 8,
+  "entities": 6
+ },
+ {
+  "id": "596",
+  "title": "Import of medical equipment by train",
+  "timeframe": "85–290",
+  "blocks": 14,
+  "steps": 41,
+  "online": 20,
+  "entities": 13
+ },
+ {
+  "id": "598",
+  "title": "Clearance of medical equipment by train",
+  "timeframe": "4–25",
+  "blocks": 4,
+  "steps": 13,
+  "online": 7,
+  "entities": 4
+ },
+ {
+  "id": "600",
+  "title": "Obtain internal phytosanitary certificate",
+  "timeframe": "9–21",
+  "blocks": 1,
+  "steps": 8,
+  "online": 6,
+  "entities": 5
+ },
+ {
+  "id": "611",
+  "title": "Arrange cargo transportation by train physically",
+  "timeframe": "63–189",
+  "blocks": 5,
+  "steps": 21,
+  "online": 2,
+  "entities": 7
+ },
+ {
+  "id": "626",
+  "title": "Import of jewelry by air",
+  "timeframe": "12–50",
+  "blocks": 5,
+  "steps": 22,
+  "online": 6,
+  "entities": 7
+ },
+ {
+  "id": "660",
+  "title": "Clearance of jewelry by air",
+  "timeframe": "4–28",
+  "blocks": 3,
+  "steps": 15,
+  "online": 4,
+  "entities": 4
+ },
+ {
+  "id": "668",
+  "title": "Import of carbonated beverages by train",
+  "timeframe": "33–138",
+  "blocks": 13,
+  "steps": 41,
+  "online": 19,
+  "entities": 12
+ },
+ {
+  "id": "672",
+  "title": "Import of cereals by train",
+  "timeframe": "29–155",
+  "blocks": 15,
+  "steps": 53,
+  "online": 29,
+  "entities": 14
+ },
+ {
+  "id": "678",
+  "title": "Import of fruit and vegetable juices by train",
+  "timeframe": "57–138",
+  "blocks": 13,
+  "steps": 41,
+  "online": 19,
+  "entities": 12
+ },
+ {
+  "id": "680",
+  "title": "Import of flour by train",
+  "timeframe": "41–178",
+  "blocks": 16,
+  "steps": 48,
+  "online": 28,
+  "entities": 12
+ },
+ {
+  "id": "685",
+  "title": "Arrange fumigation of transport",
+  "timeframe": "4–59",
+  "blocks": 1,
+  "steps": 3,
+  "online": 2,
+  "entities": 3
+ },
+ {
+  "id": "687",
+  "title": "Import of mineral fertilizers by train",
+  "timeframe": "30–198",
+  "blocks": 13,
+  "steps": 39,
+  "online": 17,
+  "entities": 11
+ },
+ {
+  "id": "707",
+  "title": "Import of animal or vegetable fertilizers by train",
+  "timeframe": "49–531",
+  "blocks": 17,
+  "steps": 60,
+  "online": 35,
+  "entities": 14
+ },
+ {
+  "id": "710",
+  "title": "Clearance of animal or vegetable fertilizers by train",
+  "timeframe": "4–28",
+  "blocks": 4,
+  "steps": 16,
+  "online": 8,
+  "entities": 5
+ },
+ {
+  "id": "714",
+  "title": "Import of pharmaceutical products by air",
+  "timeframe": "87–301",
+  "blocks": 9,
+  "steps": 33,
+  "online": 14,
+  "entities": 11
+ },
+ {
+  "id": "715",
+  "title": "Arrange cargo delivery by air",
+  "timeframe": "10–38",
+  "blocks": 4,
+  "steps": 16,
+  "online": 1,
+  "entities": 3
+ },
+ {
+  "id": "716",
+  "title": "Clearance of pharmaceutical products by air",
+  "timeframe": "3–24",
+  "blocks": 2,
+  "steps": 9,
+  "online": 6,
+  "entities": 3
+ },
+ {
+  "id": "718",
+  "title": "Obtain certificate of conformity",
+  "timeframe": "16–245",
+  "blocks": 1,
+  "steps": 6,
+  "online": 4,
+  "entities": 5
+ },
+ {
+  "id": "720",
+  "title": "Clearance of flour by train",
+  "timeframe": "6–31",
+  "blocks": 5,
+  "steps": 18,
+  "online": 9,
+  "entities": 4
+ },
+ {
+  "id": "724",
+  "title": "Import of glass and glass products by road",
+  "timeframe": "24–281",
+  "blocks": 8,
+  "steps": 36,
+  "online": 16,
+  "entities": 11
+ },
+ {
+  "id": "725",
+  "title": "Import of glass and glass products by train",
+  "timeframe": "27–296",
+  "blocks": 13,
+  "steps": 40,
+  "online": 18,
+  "entities": 12
+ },
+ {
+  "id": "735",
+  "title": "Arrange cargo delivery by train physically",
+  "timeframe": "7–28",
+  "blocks": 7,
+  "steps": 19,
+  "online": 2,
+  "entities": 5
+ },
+ {
+  "id": "738",
+  "title": "Arrange cargo transportation by train physically",
+  "timeframe": "39–109",
+  "blocks": 5,
+  "steps": 20,
+  "online": 2,
+  "entities": 7
+ },
+ {
+  "id": "739",
+  "title": "Arrange cargo transportation by train via Single Window online portal",
+  "timeframe": "33–87",
+  "blocks": 5,
+  "steps": 20,
+  "online": 14,
+  "entities": 6
+ },
+ {
+  "id": "740",
+  "title": "Arrange cargo delivery by train via Single Window online portal",
+  "timeframe": "13–34",
+  "blocks": 3,
+  "steps": 16,
+  "online": 12,
+  "entities": 5
+ },
+ {
+  "id": "741",
+  "title": "Arrange cargo delivery by train via Single Window online portal",
+  "timeframe": "13–34",
+  "blocks": 3,
+  "steps": 16,
+  "online": 12,
+  "entities": 5
+ },
+ {
+  "id": "742",
+  "title": "Arrange cargo delivery by train physically",
+  "timeframe": "7–27",
+  "blocks": 6,
+  "steps": 18,
+  "online": 2,
+  "entities": 5
+ },
+ {
+  "id": "744",
+  "title": "Arrange cargo delivery by train via Single Window online portal",
+  "timeframe": "13–34",
+  "blocks": 3,
+  "steps": 16,
+  "online": 12,
+  "entities": 5
+ },
+ {
+  "id": "746",
+  "title": "Arrange cargo delivery by train physically",
+  "timeframe": "7–27",
+  "blocks": 6,
+  "steps": 18,
+  "online": 2,
+  "entities": 5
+ },
+ {
+  "id": "748",
+  "title": "Arrange cargo delivery by train physically",
+  "timeframe": "7–28",
+  "blocks": 7,
+  "steps": 19,
+  "online": 2,
+  "entities": 5
+ },
+ {
+  "id": "750",
+  "title": "Arrange cargo delivery by train via Single Window online portal",
+  "timeframe": "13–34",
+  "blocks": 3,
+  "steps": 16,
+  "online": 12,
+  "entities": 5
+ },
+ {
+  "id": "752",
+  "title": "Arrange cargo delivery by train via Single Window online portal",
+  "timeframe": "13–34",
+  "blocks": 3,
+  "steps": 16,
+  "online": 12,
+  "entities": 5
+ },
+ {
+  "id": "753",
+  "title": "Arrange cargo delivery by train physically",
+  "timeframe": "7–28",
+  "blocks": 7,
+  "steps": 19,
+  "online": 2,
+  "entities": 5
+ },
+ {
+  "id": "754",
+  "title": "Arrange cargo delivery by train physically",
+  "timeframe": "7–28",
+  "blocks": 7,
+  "steps": 19,
+  "online": 2,
+  "entities": 5
+ },
+ {
+  "id": "755",
+  "title": "Arrange cargo delivery by train via Single Window online portal",
+  "timeframe": "13–34",
+  "blocks": 3,
+  "steps": 16,
+  "online": 12,
+  "entities": 5
+ },
+ {
+  "id": "757",
+  "title": "Arrange cargo delivery by train physically",
+  "timeframe": "7–28",
+  "blocks": 7,
+  "steps": 19,
+  "online": 2,
+  "entities": 5
+ },
+ {
+  "id": "758",
+  "title": "Arrange cargo delivery by train via Single Window online portal",
+  "timeframe": "13–34",
+  "blocks": 3,
+  "steps": 16,
+  "online": 12,
+  "entities": 5
+ },
+ {
+  "id": "760",
+  "title": "Arrange cargo delivery by train physically",
+  "timeframe": "7–28",
+  "blocks": 7,
+  "steps": 19,
+  "online": 2,
+  "entities": 5
+ },
+ {
+  "id": "761",
+  "title": "Arrange cargo delivery by train via Single Window online portal",
+  "timeframe": "13–34",
+  "blocks": 3,
+  "steps": 16,
+  "online": 12,
+  "entities": 5
+ },
+ {
+  "id": "762",
+  "title": "Arrange cargo delivery by train physically",
+  "timeframe": "7–28",
+  "blocks": 7,
+  "steps": 19,
+  "online": 2,
+  "entities": 5
+ },
+ {
+  "id": "763",
+  "title": "Arrange cargo delivery by train via Single Window online portal",
+  "timeframe": "13–34",
+  "blocks": 3,
+  "steps": 16,
+  "online": 12,
+  "entities": 5
+ },
+ {
+  "id": "764",
+  "title": "Arrange cargo delivery by train physically",
+  "timeframe": "7–28",
+  "blocks": 7,
+  "steps": 19,
+  "online": 2,
+  "entities": 5
+ },
+ {
+  "id": "765",
+  "title": "Arrange cargo delivery by train via Single Window online portal",
+  "timeframe": "13–34",
+  "blocks": 3,
+  "steps": 16,
+  "online": 12,
+  "entities": 5
+ },
+ {
+  "id": "766",
+  "title": "Arrange cargo delivery by train physically",
+  "timeframe": "7–28",
+  "blocks": 7,
+  "steps": 19,
+  "online": 2,
+  "entities": 5
+ },
+ {
+  "id": "767",
+  "title": "Arrange cargo delivery by train via Single Window online portal",
+  "timeframe": "13–34",
+  "blocks": 3,
+  "steps": 16,
+  "online": 12,
+  "entities": 5
+ },
+ {
+  "id": "769",
+  "title": "Arrange cargo delivery by train physically",
+  "timeframe": "7–28",
+  "blocks": 7,
+  "steps": 19,
+  "online": 2,
+  "entities": 5
+ },
+ {
+  "id": "770",
+  "title": "Arrange cargo delivery by train via Single Window online portal",
+  "timeframe": "13–34",
+  "blocks": 3,
+  "steps": 16,
+  "online": 12,
+  "entities": 5
+ },
+ {
+  "id": "771",
+  "title": "Arrange cargo delivery by train physically",
+  "timeframe": "7–28",
+  "blocks": 7,
+  "steps": 19,
+  "online": 2,
+  "entities": 5
+ },
+ {
+  "id": "772",
+  "title": "Arrange cargo delivery by train via Single Window online portal",
+  "timeframe": "13–34",
+  "blocks": 3,
+  "steps": 16,
+  "online": 12,
+  "entities": 5
+ },
+ {
+  "id": "774",
+  "title": "Arrange cargo delivery by train physically",
+  "timeframe": "7–28",
+  "blocks": 7,
+  "steps": 19,
+  "online": 2,
+  "entities": 5
+ },
+ {
+  "id": "775",
+  "title": "Arrange cargo delivery by train via Single Window online portal",
+  "timeframe": "13–34",
+  "blocks": 3,
+  "steps": 16,
+  "online": 12,
+  "entities": 5
+ },
+ {
+  "id": "776",
+  "title": "Arrange cargo delivery by train physically",
+  "timeframe": "7–28",
+  "blocks": 7,
+  "steps": 19,
+  "online": 2,
+  "entities": 5
+ },
+ {
+  "id": "777",
+  "title": "Arrange cargo delivery by train via Single Window online portal",
+  "timeframe": "13–34",
+  "blocks": 3,
+  "steps": 16,
+  "online": 12,
+  "entities": 5
+ },
+ {
+  "id": "779",
+  "title": "Arrange cargo delivery by train physically",
+  "timeframe": "7–28",
+  "blocks": 7,
+  "steps": 19,
+  "online": 2,
+  "entities": 5
+ },
+ {
+  "id": "780",
+  "title": "Arrange cargo delivery by train via Single Window online portal",
+  "timeframe": "13–34",
+  "blocks": 3,
+  "steps": 16,
+  "online": 12,
+  "entities": 5
+ },
+ {
+  "id": "782",
+  "title": "Arrange cargo transportation by train via Single Window online portal",
+  "timeframe": "33–87",
+  "blocks": 5,
+  "steps": 20,
+  "online": 14,
+  "entities": 6
+ },
+ {
+  "id": "783",
+  "title": "Arrange cargo transportation by train via Single Window online portal",
+  "timeframe": "33–87",
+  "blocks": 5,
+  "steps": 20,
+  "online": 14,
+  "entities": 6
+ },
+ {
+  "id": "784",
+  "title": "Arrange cargo transportation by train via Single Window online portal",
+  "timeframe": "33–87",
+  "blocks": 5,
+  "steps": 20,
+  "online": 14,
+  "entities": 6
+ },
+ {
+  "id": "785",
+  "title": "Arrange cargo transportation by train via Single Window online portal",
+  "timeframe": "33–87",
+  "blocks": 5,
+  "steps": 20,
+  "online": 14,
+  "entities": 6
+ },
+ {
+  "id": "787",
+  "title": "Arrange cargo transportation by train via Single Window online portal",
+  "timeframe": "33–87",
+  "blocks": 5,
+  "steps": 20,
+  "online": 14,
+  "entities": 6
+ },
+ {
+  "id": "788",
+  "title": "Arrange cargo transportation by train via Single Window online portal",
+  "timeframe": "33–87",
+  "blocks": 5,
+  "steps": 20,
+  "online": 14,
+  "entities": 6
+ },
+ {
+  "id": "789",
+  "title": "Arrange cargo transportation by train via Single Window online portal",
+  "timeframe": "33–87",
+  "blocks": 5,
+  "steps": 20,
+  "online": 14,
+  "entities": 6
+ },
+ {
+  "id": "793",
+  "title": "Arrange cargo transportation by train via Single Window online portal",
+  "timeframe": "33–87",
+  "blocks": 5,
+  "steps": 20,
+  "online": 14,
+  "entities": 6
+ },
+ {
+  "id": "795",
+  "title": "Arrange cargo transportation by train via Single Window online portal",
+  "timeframe": "33–87",
+  "blocks": 5,
+  "steps": 20,
+  "online": 14,
+  "entities": 6
+ },
+ {
+  "id": "796",
+  "title": "Arrange cargo transportation by train via Single Window online portal",
+  "timeframe": "33–87",
+  "blocks": 5,
+  "steps": 20,
+  "online": 14,
+  "entities": 6
+ },
+ {
+  "id": "801",
+  "title": "Export of honey by road",
+  "timeframe": "25–83",
+  "blocks": 7,
+  "steps": 35,
+  "online": 14,
+  "entities": 10
+ },
+ {
+  "id": "804",
+  "title": "Export of salt by train",
+  "timeframe": "43–125",
+  "blocks": 8,
+  "steps": 33,
+  "online": 13,
+  "entities": 14
+ },
+ {
+  "id": "805",
+  "title": "Export of dried fruits by air",
+  "timeframe": "30–108",
+  "blocks": 9,
+  "steps": 47,
+  "online": 19,
+  "entities": 14
+ },
+ {
+  "id": "806",
+  "title": "Arrange cargo transportation by air",
+  "timeframe": "12–52",
+  "blocks": 4,
+  "steps": 19,
+  "online": 2,
+  "entities": 5
+ },
+ {
+  "id": "819",
+  "title": "Export of honey by air",
+  "timeframe": "25–102",
+  "blocks": 9,
+  "steps": 39,
+  "online": 16,
+  "entities": 10
+ },
+ {
+  "id": "824",
+  "title": "Export of cement by train",
+  "timeframe": "43–125",
+  "blocks": 8,
+  "steps": 33,
+  "online": 13,
+  "entities": 14
+ },
+ {
+  "id": "827",
+  "title": "Import of meat and meat products by train",
+  "timeframe": "64–382",
+  "blocks": 14,
+  "steps": 47,
+  "online": 26,
+  "entities": 13
+ },
+ {
+  "id": "828",
+  "title": "Obtain certificate of conformity for equipment requiring pre-installation",
+  "timeframe": "96–319",
+  "blocks": 2,
+  "steps": 11,
+  "online": 9,
+  "entities": 5
+ },
+ {
+  "id": "835",
+  "title": "Clearance of salt by train",
+  "timeframe": "2–12",
+  "blocks": 1,
+  "steps": 6,
+  "online": 4,
+  "entities": 4
+ },
+ {
+  "id": "838",
+  "title": "Import of paper and cardboard products by road",
+  "timeframe": "24–282",
+  "blocks": 8,
+  "steps": 37,
+  "online": 16,
+  "entities": 11
+ },
+ {
+  "id": "839",
+  "title": "Import of paper and cardboard products by train",
+  "timeframe": "27–301",
+  "blocks": 13,
+  "steps": 42,
+  "online": 15,
+  "entities": 12
+ },
+ {
+  "id": "861",
+  "title": "Clearance of honey by road",
+  "timeframe": "2–13",
+  "blocks": 2,
+  "steps": 14,
+  "online": 4,
+  "entities": 4
+ },
+ {
+  "id": "865",
+  "title": "Obtain veterinary certificate for export",
+  "timeframe": "1–5",
+  "blocks": 1,
+  "steps": 5,
+  "online": 4,
+  "entities": 3
+ },
+ {
+  "id": "866",
+  "title": "Obtain ecological certificate (for waste and scrap of paper and paperboard)",
+  "timeframe": "32–40",
+  "blocks": 1,
+  "steps": 5,
+  "online": 4,
+  "entities": 4
+ },
+ {
+  "id": "868",
+  "title": "Export of tea by train",
+  "timeframe": "81–244",
+  "blocks": 10,
+  "steps": 48,
+  "online": 22,
+  "entities": 18
+ },
+ {
+  "id": "877",
+  "title": "Export of pasta by train",
+  "timeframe": "67–209",
+  "blocks": 8,
+  "steps": 34,
+  "online": 13,
+  "entities": 14
+ },
+ {
+  "id": "884",
+  "title": "Arrange cargo transportation by train via Single Window online portal",
+  "timeframe": "33–90",
+  "blocks": 5,
+  "steps": 20,
+  "online": 14,
+  "entities": 6
+ },
+ {
+  "id": "888",
+  "title": "Import of cement by train",
+  "timeframe": "27–296",
+  "blocks": 13,
+  "steps": 40,
+  "online": 18,
+  "entities": 12
+ },
+ {
+  "id": "891",
+  "title": "Export of paper and cardboard products by road",
+  "timeframe": "29–87",
+  "blocks": 7,
+  "steps": 39,
+  "online": 16,
+  "entities": 14
+ },
+ {
+  "id": "911",
+  "title": "Export of paper and cardboard products by train",
+  "timeframe": "81–243",
+  "blocks": 10,
+  "steps": 46,
+  "online": 21,
+  "entities": 18
+ },
+ {
+  "id": "924",
+  "title": "Arrange cargo delivery by train physically",
+  "timeframe": "7–27",
+  "blocks": 6,
+  "steps": 18,
+  "online": 2,
+  "entities": 5
+ },
+ {
+  "id": "925",
+  "title": "Arrange cargo delivery by train via Single Window online portal",
+  "timeframe": "13–34",
+  "blocks": 3,
+  "steps": 16,
+  "online": 12,
+  "entities": 5
+ },
+ {
+  "id": "934",
+  "title": "Arrange cargo transportation by train physically",
+  "timeframe": "39–112",
+  "blocks": 5,
+  "steps": 20,
+  "online": 2,
+  "entities": 7
+ },
+ {
+  "id": "935",
+  "title": "Arrange cargo transportation by train via Single Window online portal",
+  "timeframe": "33–87",
+  "blocks": 5,
+  "steps": 20,
+  "online": 14,
+  "entities": 6
+ },
+ {
+  "id": "948",
+  "title": "Export of eggs  by road",
+  "timeframe": "24–77",
+  "blocks": 7,
+  "steps": 34,
+  "online": 13,
+  "entities": 10
+ },
+ {
+  "id": "949",
+  "title": "Export of eggs by train",
+  "timeframe": "76–238",
+  "blocks": 10,
+  "steps": 41,
+  "online": 19,
+  "entities": 14
+ },
+ {
+  "id": "953",
+  "title": "Export of washing detergents by train",
+  "timeframe": "67–209",
+  "blocks": 8,
+  "steps": 34,
+  "online": 13,
+  "entities": 14
+ },
+ {
+  "id": "983",
+  "title": "Arrange cargo transportation by train via Single Window online portal",
+  "timeframe": "33–87",
+  "blocks": 5,
+  "steps": 20,
+  "online": 14,
+  "entities": 6
+ },
+ {
+  "id": "984",
+  "title": "Clearance of eggs by road",
+  "timeframe": "1–8",
+  "blocks": 2,
+  "steps": 13,
+  "online": 3,
+  "entities": 3
+ },
+ {
+  "id": "993",
+  "title": "Import of pasta by road",
+  "timeframe": "55–331",
+  "blocks": 10,
+  "steps": 47,
+  "online": 25,
+  "entities": 12
+ },
+ {
+  "id": "994",
+  "title": "Import of pasta by train",
+  "timeframe": "58–346",
+  "blocks": 15,
+  "steps": 50,
+  "online": 27,
+  "entities": 13
+ },
+ {
+  "id": "1000",
+  "title": "Obtain sanitary and epidemiological conclusion",
+  "timeframe": "37–48",
+  "blocks": 1,
+  "steps": 7,
+  "online": 5,
+  "entities": 5
+ },
+ {
+  "id": "1001",
+  "title": "Transit by road through Uzbekistan",
+  "timeframe": "1–3",
+  "blocks": 3,
+  "steps": 21,
+  "online": 2,
+  "entities": 2
+ },
+ {
+  "id": "1002",
+  "title": "Transit by train through Uzbekistan",
+  "timeframe": "3–7",
+  "blocks": 3,
+  "steps": 5,
+  "online": 1,
+  "entities": 2
+ },
+ {
+  "id": "1007",
+  "title": "Clearance of pasta by road",
+  "timeframe": "7–33",
+  "blocks": 5,
+  "steps": 28,
+  "online": 10,
+  "entities": 7
+ },
+ {
+  "id": "1012",
+  "title": "Import of washing detergents by train",
+  "timeframe": "27–296",
+  "blocks": 13,
+  "steps": 40,
+  "online": 18,
+  "entities": 12
+ },
+ {
+  "id": "1046",
+  "title": "Clearance of jewelry by air",
+  "timeframe": "2–15",
+  "blocks": 1,
+  "steps": 7,
+  "online": 4,
+  "entities": 4
+ },
+ {
+  "id": "1047",
+  "title": "Arrange cargo delivery by air",
+  "timeframe": "10–36",
+  "blocks": 3,
+  "steps": 14,
+  "online": 1,
+  "entities": 3
+ },
+ {
+  "id": "1051",
+  "title": "Export of carpets by road",
+  "timeframe": "47–92",
+  "blocks": 6,
+  "steps": 32,
+  "online": 12,
+  "entities": 12
+ },
+ {
+  "id": "1052",
+  "title": "Export of carpets by train",
+  "timeframe": "75–165",
+  "blocks": 9,
+  "steps": 38,
+  "online": 17,
+  "entities": 16
+ },
+ {
+  "id": "1070",
+  "title": "Export of shoes by train",
+  "timeframe": "67–209",
+  "blocks": 8,
+  "steps": 34,
+  "online": 13,
+  "entities": 14
+ },
+ {
+  "id": "1092",
+  "title": "Temporary import of medical equipment by road",
+  "timeframe": "6–24",
+  "blocks": 5,
+  "steps": 22,
+  "online": 8,
+  "entities": 7
+ },
+ {
+  "id": "1096",
+  "title": "Re-export of medical equipment by road",
+  "timeframe": "94–203",
+  "blocks": 4,
+  "steps": 21,
+  "online": 5,
+  "entities": 6
+ },
+ {
+  "id": "1101",
+  "title": "Temporary export of reusable packaging by road",
+  "timeframe": "14–43",
+  "blocks": 4,
+  "steps": 19,
+  "online": 5,
+  "entities": 7
+ },
+ {
+  "id": "1104",
+  "title": "Re-import of reusable packaging by road",
+  "timeframe": "6–25",
+  "blocks": 5,
+  "steps": 22,
+  "online": 8,
+  "entities": 7
+ },
+ {
+  "id": "1105",
+  "title": "Registration of foreign trade contract",
+  "timeframe": "0–0",
+  "blocks": 1,
+  "steps": 1,
+  "online": 1,
+  "entities": 1
+ },
+ {
+  "id": "1108",
+  "title": "Clearance of temporary import of medical equipment by road",
+  "timeframe": "6–23",
+  "blocks": 4,
+  "steps": 21,
+  "online": 7,
+  "entities": 6
+ },
+ {
+  "id": "1113",
+  "title": "Clearance of medical equipment by road",
+  "timeframe": "83–173",
+  "blocks": 3,
+  "steps": 16,
+  "online": 5,
+  "entities": 4
+ },
+ {
+  "id": "1116",
+  "title": "Clearance of reusable packaging by road",
+  "timeframe": "6–24",
+  "blocks": 4,
+  "steps": 21,
+  "online": 7,
+  "entities": 6
+ },
+ {
+  "id": "1122",
+  "title": "Clearance of temporary export of reusable packaging by road",
+  "timeframe": "2–12",
+  "blocks": 2,
+  "steps": 13,
+  "online": 4,
+  "entities": 4
+ },
+ {
+  "id": "1141",
+  "title": "Import of salt by train",
+  "timeframe": "14–54",
+  "blocks": 12,
+  "steps": 34,
+  "online": 16,
+  "entities": 10
+ },
+ {
+  "id": "1155",
+  "title": "Obtain sanitary-epidemiological conclusion",
+  "timeframe": "4–9",
+  "blocks": 1,
+  "steps": 2,
+  "online": 2,
+  "entities": 1
+ },
+ {
+  "id": "1179",
+  "title": "Test customs payment",
+  "timeframe": "56–297",
+  "blocks": 2,
+  "steps": 8,
+  "online": 2,
+  "entities": 4
+ }
+]

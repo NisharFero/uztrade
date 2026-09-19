@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { PROCEDURES } from "../../../modules/procedures/data/procedures.generated";
+import { CATALOGUE } from "../../../modules/procedures/data/procedures.generated";
 import { demoFileUrl, demoFor } from "../../../modules/demo/demo";
 
 export const dynamic = "force-dynamic";
@@ -15,7 +15,7 @@ export async function generateMetadata({ params }: { params: Promise<{ procedure
 export default async function DemoPage({ params }: { params: Promise<{ procedureId: string }> }) {
   const { procedureId } = await params;
   const scenario = demoFor(procedureId);
-  const procedure = PROCEDURES[procedureId];
+  const procedure = CATALOGUE[procedureId];
   if (!scenario || !procedure) notFound();
 
   return (

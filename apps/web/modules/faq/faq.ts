@@ -3,7 +3,7 @@
  * that the app can't back. */
 
 import { PARTNER_COUNTRIES } from "../intake/data/countries";
-import { PROCEDURE_IDS, PROCEDURES } from "../procedures/data/procedures.generated";
+import { CATALOGUE, PROCEDURE_IDS } from "../procedures/data/procedures.generated";
 import { AGENT_STEP_MINUTES, AUTOFILL_MINUTES } from "../steps/kpis";
 
 export type FaqEntry = {
@@ -15,7 +15,7 @@ export type FaqEntry = {
 };
 
 const procedures = PROCEDURE_IDS.map((id) => {
-  const p = PROCEDURES[id];
+  const p = CATALOGUE[id];
   return `${p.title} (procedure ${id}, ${p.stepsCount} steps, published ${p.timeframe[0]}–${p.timeframe[1]} h)`;
 });
 
@@ -32,8 +32,8 @@ export const FAQ: FaqEntry[] = [
   {
     id: "supported",
     question: "Which shipments are supported?",
-    answer: ["Five published procedures:", ...procedures],
-    keywords: ["supported", "procedure", "procedures", "goods", "tea", "fruit", "fruits", "vegetables", "dried", "which", "shipments", "cover"],
+    answer: [`${procedures.length} published procedures:`, ...procedures],
+    keywords: ["supported", "procedure", "procedures", "goods", "tea", "fruit", "fruits", "vegetables", "dried", "juice", "juices", "fertilizer", "fertilizers", "cargo", "which", "shipments", "cover", "move"],
     link: { href: "/procedures", label: "See the procedures" },
   },
   {
@@ -100,8 +100,11 @@ export const FAQ: FaqEntry[] = [
   {
     id: "privacy",
     question: "Do my documents leave this machine?",
-    answer: ["No. The OCR and layout models run locally; the original files are kept in the app's own storage."],
-    keywords: ["privacy", "private", "leave", "cloud", "external", "data", "secure", "security"],
+    answer: [
+      "No. The OCR and layout models run locally; the original files are kept in the app's own storage.",
+      "Where a language model helps with what documents say — a second reading of unsure fields, matching company names, ranking HS codes against the invoice description — only a model running on this machine is used. Without one, those checks run on rules alone. Your typed chat messages and questions about the procedures may go to the hosted model.",
+    ],
+    keywords: ["privacy", "private", "leave", "cloud", "external", "data", "secure", "security", "ai", "llm", "model", "groq"],
   },
   {
     id: "payments",
@@ -127,9 +130,11 @@ export const FAQ: FaqEntry[] = [
   {
     id: "demo",
     question: "Is there demo data I can try?",
-    answer: ["Yes, for export of tea by train (868): invented documents and values for every step, usable from the “Use demo” buttons or downloadable."],
+    answer: [
+      `Yes, for every procedure (${PROCEDURE_IDS.join(", ")}): invented documents and values for every step, usable from the “Demo” buttons in a case or downloadable from the procedure's demo pack.`,
+    ],
     keywords: ["demo", "sample", "example", "test", "try"],
-    link: { href: "/demo/868", label: "Open the demo pack" },
+    link: { href: "/procedures", label: "Pick a procedure, then its demo pack" },
   },
 ];
 

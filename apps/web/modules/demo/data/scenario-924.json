@@ -1,0 +1,398 @@
+{
+ "procedureId": "924",
+ "title": "Arrange cargo delivery by train physically — demo scenario",
+ "note": "Fictional demo data. Every company, person, number, amount and stamp is invented; nothing here is a real document.",
+ "shipment": {
+  "query": "Take delivery of 60 t of steel pipes arriving from Moscow at Tashkent by rail",
+  "goods": "Seamless steel pipes",
+  "goodsRu": "Трубы стальные бесшовные",
+  "hs": "7304 19 100 0",
+  "netKg": "60 000",
+  "grossKg": "61 200",
+  "cartons": "24",
+  "packaging": "Bundles",
+  "unitKind": "wagon",
+  "wagons": [
+   "62055013"
+  ],
+  "seals": [
+   "RU 5530912"
+  ],
+  "departureStation": "Moscow-Tovarnaya",
+  "destinationStation": "Tashkent-Tovarny",
+  "borderStations": "Sary-Agash, Keles",
+  "from": "Moscow, Russia",
+  "to": "Tashkent, Uzbekistan",
+  "valueUsd": "78 000.00",
+  "incoterms": "CPT Tashkent",
+  "contractNo": "UZ-924/2026-01",
+  "contractDate": "01.09.2026",
+  "invoiceNo": "INV-924/2026-031",
+  "invoiceDate": "04.09.2026",
+  "caseLine": "arrange cargo delivery by train physically, 60 000 kg of seamless steel pipes"
+ },
+ "parties": {
+  "exporter": {
+   "name": "OOO \"Quvur Qurilish Ta'minot\"",
+   "address": "Tashkent, Yashnobod district, Parkent street 250, Uzbekistan",
+   "tin": "310123478",
+   "manager": "Zafar Tojiev",
+   "phone": "+998 93 118 72 64",
+   "email": "supply.quvur@demo.uz",
+   "bank": "Demo Bank JSCB, account 20208000900111222001, MFO 00444"
+  },
+  "trader": {
+   "name": "OOO \"Quvur Qurilish Ta'minot\"",
+   "address": "Tashkent, Yashnobod district, Parkent street 250, Uzbekistan",
+   "tin": "310123478",
+   "manager": "Zafar Tojiev",
+   "phone": "+998 93 118 72 64",
+   "email": "supply.quvur@demo.uz",
+   "bank": "Demo Bank JSCB, account 20208000900111222001, MFO 00444"
+  },
+  "seller": {
+   "name": "OOO \"Volzhsky Trubny Demo\"",
+   "address": "Moscow, Leninsky avenue 30, Russia",
+   "tin": "—",
+   "manager": "A. Demo",
+   "phone": "—",
+   "email": "—",
+   "bank": "—"
+  },
+  "buyer": {
+   "name": "OOO \"Quvur Qurilish Ta'minot\"",
+   "address": "Tashkent, Yashnobod district, Parkent street 250, Uzbekistan",
+   "tin": "310123478",
+   "manager": "Zafar Tojiev",
+   "phone": "+998 93 118 72 64",
+   "email": "supply.quvur@demo.uz",
+   "bank": "Demo Bank JSCB, account 20208000900111222001, MFO 00444"
+  },
+  "representative": {
+   "name": "Olim Hasanov",
+   "passport": "AD 9900112"
+  }
+ },
+ "values": {},
+ "documents": [
+  {
+   "id": "commercial-invoice",
+   "template": "commercial_invoice",
+   "title": "Commercial invoice",
+   "docType": "commercial_invoice",
+   "labels": [
+    "Commercial invoice"
+   ],
+   "steps": [
+    3
+   ],
+   "output": false,
+   "fields": {
+    "invoice_no": "INV-924/2026-031",
+    "invoice_date": "04.09.2026",
+    "seller": "OOO \"Volzhsky Trubny Demo\"",
+    "buyer": "OOO \"Quvur Qurilish Ta'minot\"",
+    "goods": "Seamless steel pipes",
+    "hs_code": "7304 19 100 0",
+    "quantity": "60 000 kg",
+    "total_value": "78 000.00 USD",
+    "origin_country": "Russia",
+    "gross_weight": "61 200 kg",
+    "currency": "USD",
+    "contract_no": "UZ-924/2026-01",
+    "incoterms": "CPT Tashkent",
+    "transport_doc": "SMGS 77924451"
+   },
+   "file": "924-01-commercial-invoice.png"
+  },
+  {
+   "id": "passport",
+   "template": "passport",
+   "title": "Passport",
+   "docType": "passport",
+   "labels": [
+    "Passport"
+   ],
+   "steps": [
+    5,
+    7,
+    8,
+    13
+   ],
+   "output": false,
+   "fields": {
+    "full_name": "HASANOV OLIM",
+    "passport_no": "AD 9900112",
+    "expiry": "14.03.2031"
+   },
+   "file": "924-02-passport.png"
+  },
+  {
+   "id": "power-of-attorney",
+   "template": "poa",
+   "title": "Power of attorney",
+   "docType": "power_of_attorney",
+   "labels": [
+    "Power of attorney for railway station",
+    "Power of attorney"
+   ],
+   "steps": [
+    5,
+    7,
+    8,
+    13,
+    15
+   ],
+   "output": false,
+   "fields": {
+    "poa_no": "34",
+    "issue_date": "02.09.2026",
+    "representative": "Olim Hasanov",
+    "passport": "AD 9900112",
+    "valid_until": "31.12.2026",
+    "scope": "Customs operations, cargo handling, signing and receiving documents"
+   },
+   "file": "924-03-power-of-attorney.png"
+  },
+  {
+   "id": "receipt-of-payment-4",
+   "template": "receipt",
+   "title": "Receipt of payment — step 4",
+   "docType": "receipt_of_payment",
+   "labels": [
+    "Receipt of payment"
+   ],
+   "steps": [
+    4
+   ],
+   "output": true,
+   "fields": {
+    "receipt_no": "R-924-004",
+    "payer": "OOO \"Quvur Qurilish Ta'minot\"",
+    "payer_inn": "310123478",
+    "recipient": "JSC Uzbekistan Temir Yo'llari",
+    "payment_type": "Prepay for railway services (General)",
+    "amount": "245 000",
+    "date": "03.09.2026"
+   },
+   "file": "924-04-receipt-of-payment-step-4.png"
+  },
+  {
+   "template": "letter",
+   "title": "Certificate of state registration",
+   "docType": null,
+   "labels": [
+    "Certificate of state registration"
+   ],
+   "steps": [
+    5,
+    8
+   ],
+   "output": false,
+   "fields": {},
+   "body": "Certificate of state registration issued to OOO \"Quvur Qurilish Ta'minot\" (TIN 310123478). Demo record for the shipment: 60 000 kg of seamless steel pipes, Moscow (Russia) → Tashkent (Uzbekistan), 1 wagon 62055013.",
+   "id": "certificate-of-state-registration",
+   "file": "924-05-certificate-of-state-registration.png"
+  },
+  {
+   "template": "letter",
+   "title": "Application for conclusion of agreement with Technological Center",
+   "docType": null,
+   "labels": [
+    "Application for conclusion of agreement with Technological Center"
+   ],
+   "steps": [
+    5
+   ],
+   "output": false,
+   "fields": {},
+   "body": "OOO \"Quvur Qurilish Ta'minot\" (TIN 310123478) applies for: application for conclusion of agreement with technological center. Shipment: 60 000 kg of seamless steel pipes, Moscow (Russia) → Tashkent (Uzbekistan), 1 wagon 62055013. Contract UZ-924/2026-01 of 01.09.2026.",
+   "id": "application-for-conclusion-of-agreement-with-tec",
+   "file": "924-06-application-for-conclusion-of-agreement-with-tec.png"
+  },
+  {
+   "id": "invoice-for-payment-8",
+   "template": "invoice_for_payment",
+   "title": "Invoice for payment — step 8",
+   "docType": "invoice_for_payment",
+   "labels": [
+    "Invoice for payment"
+   ],
+   "steps": [
+    8
+   ],
+   "output": true,
+   "fields": {
+    "invoice_no": "IP-924/008",
+    "invoice_date": "05.09.2026",
+    "contract_no": "SRV-924-8",
+    "supplier": "Demo Customs Warehouse LLC",
+    "supplier_inn": "200933140",
+    "customer": "OOO \"Quvur Qurilish Ta'minot\"",
+    "vat_rate": "12",
+    "total": "1 120 000"
+   },
+   "file": "924-07-invoice-for-payment-step-8.png"
+  },
+  {
+   "id": "receipt-of-payment-9",
+   "template": "receipt",
+   "title": "Receipt of payment — step 9",
+   "docType": "receipt_of_payment",
+   "labels": [
+    "Receipt of payment"
+   ],
+   "steps": [
+    9
+   ],
+   "output": true,
+   "fields": {
+    "receipt_no": "R-924-009",
+    "payer": "OOO \"Quvur Qurilish Ta'minot\"",
+    "payer_inn": "310123478",
+    "recipient": "Demo Customs Warehouse LLC",
+    "payment_type": "Prepay for customs warehouse services",
+    "amount": "1 120 000",
+    "date": "06.09.2026"
+   },
+   "file": "924-08-receipt-of-payment-step-9.png"
+  },
+  {
+   "template": "letter",
+   "title": "Letter to railway station",
+   "docType": null,
+   "labels": [
+    "Letter to railway station"
+   ],
+   "steps": [
+    10,
+    12
+   ],
+   "output": false,
+   "fields": {},
+   "body": "OOO \"Quvur Qurilish Ta'minot\" (TIN 310123478) applies for: letter to railway station. Shipment: 60 000 kg of seamless steel pipes, Moscow (Russia) → Tashkent (Uzbekistan), 1 wagon 62055013. Contract UZ-924/2026-01 of 01.09.2026.",
+   "id": "letter-to-railway-station",
+   "file": "924-09-letter-to-railway-station.png"
+  },
+  {
+   "template": "letter",
+   "title": "Application for wagon handover",
+   "docType": null,
+   "labels": [
+    "Application for wagon handover"
+   ],
+   "steps": [
+    16
+   ],
+   "output": false,
+   "fields": {},
+   "body": "OOO \"Quvur Qurilish Ta'minot\" (TIN 310123478) applies for: application for wagon handover. Shipment: 60 000 kg of seamless steel pipes, Moscow (Russia) → Tashkent (Uzbekistan), 1 wagon 62055013. Contract UZ-924/2026-01 of 01.09.2026.",
+   "id": "application-for-wagon-handover",
+   "file": "924-10-application-for-wagon-handover.png"
+  },
+  {
+   "template": "smgs",
+   "title": "Export railway bill (SMGS)",
+   "docType": "railway_bill",
+   "labels": [
+    "Export railway bill (SMGS)"
+   ],
+   "steps": [
+    17
+   ],
+   "output": false,
+   "fields": {
+    "dispatch_no": "77924451",
+    "sender": "OOO \"Volzhsky Trubny Demo\"",
+    "consignee": "OOO \"Quvur Qurilish Ta'minot\"",
+    "departure_station": "Moscow-Tovarnaya",
+    "destination_station": "Tashkent-Tovarny",
+    "border_stations": "Sary-Agash, Keles",
+    "wagon_no": "62055013",
+    "cargo": "Трубы стальные бесшовные / Seamless steel pipes",
+    "packaging": "Bundles",
+    "places": "24",
+    "weight": "61 200",
+    "seals": "RU 5530912",
+    "documents_attached": "Invoice INV-924/2026-031"
+   },
+   "id": "export-railway-bill",
+   "file": "924-11-export-railway-bill.png"
+  },
+  {
+   "template": "letter",
+   "title": "Application for returning empty wagons",
+   "docType": null,
+   "labels": [
+    "Application for returning empty wagons"
+   ],
+   "steps": [
+    17
+   ],
+   "output": false,
+   "fields": {},
+   "body": "OOO \"Quvur Qurilish Ta'minot\" (TIN 310123478) applies for: application for returning empty wagons. Shipment: 60 000 kg of seamless steel pipes, Moscow (Russia) → Tashkent (Uzbekistan), 1 wagon 62055013. Contract UZ-924/2026-01 of 01.09.2026.",
+   "id": "application-for-returning-empty-wagons",
+   "file": "924-12-application-for-returning-empty-wagons.png"
+  },
+  {
+   "id": "duplicate-of-railway-bill-with-datestamp-17",
+   "template": "smgs",
+   "title": "Duplicate of railway bill with datestamp — step 17",
+   "docType": "railway_bill",
+   "labels": [
+    "Duplicate of railway bill with datestamp"
+   ],
+   "steps": [
+    17
+   ],
+   "output": true,
+   "fields": {
+    "dispatch_no": "77924451",
+    "sender": "OOO \"Volzhsky Trubny Demo\"",
+    "consignee": "OOO \"Quvur Qurilish Ta'minot\"",
+    "departure_station": "Moscow-Tovarnaya",
+    "destination_station": "Tashkent-Tovarny",
+    "border_stations": "Sary-Agash, Keles",
+    "wagon_no": "62055013",
+    "cargo": "Трубы стальные бесшовные / Seamless steel pipes",
+    "packaging": "Bundles",
+    "places": "24",
+    "weight": "61 200",
+    "seals": "RU 5530912",
+    "documents_attached": "Invoice INV-924/2026-031"
+   },
+   "stamp": "datestamp",
+   "file": "924-13-duplicate-of-railway-bill-with-datestamp-step-17.png"
+  },
+  {
+   "template": "smgs",
+   "title": "Import railway bill",
+   "docType": "railway_bill",
+   "labels": [
+    "Import railway bill"
+   ],
+   "steps": [
+    18
+   ],
+   "output": false,
+   "fields": {
+    "dispatch_no": "77924451",
+    "sender": "OOO \"Volzhsky Trubny Demo\"",
+    "consignee": "OOO \"Quvur Qurilish Ta'minot\"",
+    "departure_station": "Moscow-Tovarnaya",
+    "destination_station": "Tashkent-Tovarny",
+    "border_stations": "Sary-Agash, Keles",
+    "wagon_no": "62055013",
+    "cargo": "Трубы стальные бесшовные / Seamless steel pipes",
+    "packaging": "Bundles",
+    "places": "24",
+    "weight": "61 200",
+    "seals": "RU 5530912",
+    "documents_attached": "Invoice INV-924/2026-031"
+   },
+   "id": "import-railway-bill",
+   "file": "924-14-import-railway-bill.png"
+  }
+ ]
+}

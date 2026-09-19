@@ -53,7 +53,11 @@ export type StepNeeds = {
 };
 
 const VARIANT = /^for (physical payment|online payment|submitting application)/i;
-const GROUP = /^(data required|documents? requi|required documents|documents that are not obligatory|to access the platform|certificates and permits)/i;
+/* Road procedures (161, 57) add their own headings: "Information required to
+ * complete transit declaration", "Documents related to the vehicle", "For
+ * issuance of Cargo delivery control book", "Not obligatory documents". */
+const GROUP =
+  /^(data required|documents? requi|required documents|documents that are not obligatory|not obligatory documents|to access the platform|certificates and permits|information required to complete|documents (related to|of the|attached to)|for (issuance|clearance|concluding)|if cargo operat)/i;
 const OPTIONAL_GROUP = /not obligatory/i;
 
 const PRESENCE = /^(physical presence|availability by phone|internet access)$/i;

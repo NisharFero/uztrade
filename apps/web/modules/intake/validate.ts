@@ -5,7 +5,7 @@
  * ask; these decide what is valid. */
 
 import { COUNTRIES, HOME_COUNTRY, PARTNER_COUNTRIES, type CountryProfile } from "./data/countries";
-import { PROCEDURE_IDS, PROCEDURES } from "../procedures/data/procedures.generated";
+import { PROCEDURE_IDS, CATALOGUE } from "../procedures/data/procedures.generated";
 import { countryName, fmtTonnes, unitsFor } from "./shipment-plan";
 import type { DraftEnd } from "./draft";
 import type { Direction, Mode } from "./lookup";
@@ -16,12 +16,17 @@ export type ModeOption = { mode: Mode; directions: Direction[]; procedureIds: st
 export function modesFor(category: string, direction: Direction | null): ModeOption[] {
   const byMode = new Map<Mode, ModeOption>();
   for (const id of PROCEDURE_IDS) {
-    const p = PROCEDURES[id];
+    const p = CATALOGUE[id];
+    // Service procedures have no mode of their own, and transit is not something
+    // intake opens a case for.
+    if (p.mode === "any" || p.direction === "transit") continue;
     if (p.goods !== category || (direction && p.direction !== direction)) continue;
-    const option = byMode.get(p.mode) ?? { mode: p.mode, directions: [], procedureIds: [] };
-    if (!option.directions.includes(p.direction)) option.directions.push(p.direction);
+    const mode: Mode = p.mode;
+    const dir: Direction = p.direction;
+    const option = byMode.get(mode) ?? { mode, directions: [], procedureIds: [] };
+    if (!option.directions.includes(dir)) option.directions.push(dir);
     option.procedureIds.push(id);
-    byMode.set(p.mode, option);
+    byMode.set(mode, option);
   }
   return [...byMode.values()].sort((a, b) => (a.mode === "train" ? -1 : b.mode === "train" ? 1 : 0));
 }
@@ -38,6 +43,10 @@ export const QUANTITY_LIMITS = {
   bellyT: 10,
   /** Below this a wagon travels mostly empty. */
   railMinT: 1,
+  /** About fifty trucks - a convoy, not one case. */
+  roadMaxT: 1000,
+  /** Beyond this, rail is the realistic mode where a rail procedure exists. */
+  roadRailT: 200,
 };
 
 export type QuantityCheck = { level: "ok" | "warn" | "reject"; message: string; suggest: Mode | null };
@@ -48,7 +57,7 @@ export function checkQuantity(tonnes: number | null, mode: Mode, category: strin
   }
   const L = QUANTITY_LIMITS;
   const t = fmtTonnes(tonnes);
-  const units = unitsFor(mode === "air" ? "air" : "train", category, tonnes);
+  const units = unitsFor(mode, category, tonnes);
   const approx = `${t} ≈ ${units.count} ${units.kind}${units.count > 1 ? "s" : ""}.`;
 
   if (mode === "air") {
@@ -60,6 +69,16 @@ export function checkQuantity(tonnes: number | null, mode: Mode, category: strin
     }
     if (tonnes > L.bellyT) {
       return { level: "warn", message: `${t} is more than passenger-aircraft holds take (~${L.bellyT} t) — it needs a freighter or charter.`, suggest: "train" };
+    }
+    return { level: "ok", message: approx, suggest: null };
+  }
+
+  if (mode === "road") {
+    if (tonnes > L.roadMaxT) {
+      return { level: "reject", message: `${t} is about ${units.count} trucks — more than one case should carry (limit ${L.roadMaxT.toLocaleString("en-US")} t). Split it into several shipments.`, suggest: "train" };
+    }
+    if (tonnes > L.roadRailT) {
+      return { level: "warn", message: `${t} needs ${units.count} trucks — rail would carry it in far fewer units.`, suggest: "train" };
     }
     return { level: "ok", message: approx, suggest: null };
   }
@@ -127,6 +146,24 @@ export function checkRoute(origin: DraftEnd | null, destination: DraftEnd | null
       };
     }
     const exporting = home(origin);
+    if (origin.assumed) {
+      return {
+        level: "ask",
+        message: `Which city in ${countryName(origin.country)} is it from?`,
+        direction: exporting ? "export" : "import",
+        partner: COUNTRIES[exporting ? destination.country : origin.country],
+        missing: "origin",
+      };
+    }
+    if (destination.assumed) {
+      return {
+        level: "ask",
+        message: `Which city in ${countryName(destination.country)} is it going to?`,
+        direction: exporting ? "export" : "import",
+        partner: COUNTRIES[exporting ? destination.country : origin.country],
+        missing: "destination",
+      };
+    }
     return {
       level: "ok",
       message: `${origin.name} → ${destination.name}`,

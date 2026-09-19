@@ -1,13 +1,13 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import CaseLedger from "./case-ledger";
 import CompliancePanel from "../compliance/compliance-panel";
 import Dag, { type CaseBlockState, type WorkflowDag } from "./dag";
 import DocumentPanel from "../documents/document-panel";
-import ShipmentPlanPanel from "./shipment-plan";
+import TransitPanel from "../transit/transit-panel";
 import type { ShipmentFacts } from "../../modules/workflow/domain";
-import { PROCEDURES } from "../../modules/procedures/data/procedures.generated";
+import type { Procedure } from "../../modules/procedures/data/procedures.generated";
+import { tailorProcedure } from "../../modules/workflow/tailor";
 import { AUTO_VERIFIED_NOTE, dueOutputs, stepPhaseResolver } from "../../modules/documents/agent-tasks";
 import {
   outputKey,
@@ -40,6 +40,7 @@ const pause = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 export default function CaseBoard({
   caseId,
   procedureId,
+  publishedProcedure,
   initialProgress,
   initialDocumentState,
   initialWorkflow,
@@ -48,6 +49,9 @@ export default function CaseBoard({
 }: {
   caseId: string;
   procedureId: string;
+  /** The published procedure, loaded by the page (a client component has no
+   *  access to the workflow files). */
+  publishedProcedure: Procedure;
   initialProgress: Progress;
   initialDocumentState: DocumentState;
   initialWorkflow?: WorkflowDag;
@@ -71,7 +75,10 @@ export default function CaseBoard({
     return run;
   };
 
-  const procedure = PROCEDURES[procedureId];
+  // The workflow shown is this shipment's: every published step, named, sized and checked for it.
+  const published = publishedProcedure;
+  const facts = shipment ?? workflow?.shipment;
+  const procedure = useMemo(() => (published ? tailorProcedure(published, facts, query) : undefined), [published, facts, query]);
 
   const phaseOf = useMemo(
     () =>
@@ -145,7 +152,7 @@ export default function CaseBoard({
 
   // Steps are completed in the step assistant above, which checks every need
   // first; this board shows the workflow and runs document verification.
-  if (!procedure) return null;
+  if (!procedure || !published) return null;
 
   return (
     <>
@@ -155,27 +162,31 @@ export default function CaseBoard({
         </p>
       ) : null}
 
-      <ShipmentPlanPanel
-        procedure={procedure}
-        facts={shipment ?? workflow?.shipment ?? { goods: procedure.goods, quantity: null, unit: null, origin: null, destination: null, mode: null }}
-        query={query}
-      />
-
-      <Dag
-        procedure={procedure}
-        progress={progress}
-        documentState={documentState}
-        busy={busy}
-        workflow={workflow}
-        caseId={caseId}
-      />
-
-      <div className="case-columns">
-        <DocumentPanel procedure={procedure} documentState={documentState} phaseOf={phaseOf} verifying={verifying} />
-        <CompliancePanel procedure={procedure} facts={shipment ?? workflow?.shipment} query={query} caseId={caseId} />
+      <div id="case-workflow" className="case-anchor">
+        <Dag
+          procedure={procedure}
+          progress={progress}
+          documentState={documentState}
+          busy={busy}
+          workflow={workflow}
+          caseId={caseId}
+          showTitle={false}
+        />
       </div>
 
-      <CaseLedger caseId={caseId} procedure={procedure} version={workflow} />
+      <div className="case-columns">
+        <div id="case-documents" className="case-anchor">
+          <DocumentPanel procedure={procedure} documentState={documentState} phaseOf={phaseOf} verifying={verifying} />
+        </div>
+        <div id="case-risk" className="case-anchor">
+          <CompliancePanel procedure={procedure} facts={shipment ?? workflow?.shipment} query={query} caseId={caseId} />
+        </div>
+      </div>
+
+      <div id="case-transit" className="case-anchor">
+        <TransitPanel caseId={caseId} />
+      </div>
+
     </>
   );
 }
