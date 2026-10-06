@@ -1,4 +1,5 @@
 import { completeBlock, getCase, setOutputProvided } from "../../../../modules/cases/store";
+import { jsonBody, routeError } from "../../../../modules/shared/http";
 
 type Ctx = { params: Promise<{ id: string }> };
 
@@ -9,10 +10,7 @@ export async function GET(_request: Request, { params }: Ctx) {
     if (!found) return Response.json({ error: "case not found" }, { status: 404 });
     return Response.json({ case: found });
   } catch (error) {
-    return Response.json(
-      { error: error instanceof Error ? error.message : "Unexpected error" },
-      { status: 500 },
-    );
+    return routeError(error);
   }
 }
 
@@ -30,7 +28,7 @@ type Body =
 export async function PATCH(request: Request, { params }: Ctx) {
   try {
     const { id } = await params;
-    const payload = (await request.json()) as Body;
+    const payload = await jsonBody(request) as Body;
 
     if (payload.action === "provide-output") {
       const blockId = payload.blockId?.trim() ?? "";
@@ -49,13 +47,10 @@ export async function PATCH(request: Request, { params }: Ctx) {
     if (!result) return Response.json({ error: "case not found" }, { status: 404 });
     if (!result.ok) {
       // The agent found something missing rather than the request being wrong.
-      return Response.json({ needsAmendment: true, checklist: result.checklist }, { status: 409 });
+      return Response.json({ error: "Step requirements are incomplete", needsAmendment: true, checklist: result.checklist }, { status: 409 });
     }
     return Response.json({ case: result.case });
   } catch (error) {
-    return Response.json(
-      { error: error instanceof Error ? error.message : "Unexpected error" },
-      { status: 500 },
-    );
+    return routeError(error);
   }
 }

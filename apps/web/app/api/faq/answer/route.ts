@@ -4,6 +4,11 @@ import { llmFromEnv, type LlmEnv } from "../../../../modules/ai/llm";
 import { answerQuestion } from "../../../../modules/faq/answer";
 import { HttpError, jsonBody, routeError } from "../../../../modules/shared/http";
 
+/* Vercel's default function timeout is shorter than a model call plus the work
+ * around it: answers with a model.
+ * 60 s is the Hobby plan's ceiling and well inside Pro's. */
+export const maxDuration = 60;
+
 /** A question answered only from the published procedures, with its sources. */
 export async function POST(request: Request) {
   try {

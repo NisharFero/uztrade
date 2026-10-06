@@ -32,9 +32,9 @@ const OUT_JSON = fileURLToPath(new URL("../../public/data/procedures/", import.m
  *  and 924 are rail logistics for any cargo — dispatching it, and taking
  *  delivery of it — rather than customs procedures for particular goods. */
 const OVERRIDES = {
-  161: { direction: "export", goods: "fruit and vegetable juices", mode: "road", kind: "customs" },
-  782: { direction: "export", goods: "any cargo", mode: "train", kind: "logistics" },
-  924: { direction: "import", goods: "any cargo", mode: "train", kind: "logistics" },
+  161: { direction: "export", goods: "fruit and vegetable juices", mode: "road", kind: "customs", regime: "standard" },
+  782: { direction: "export", goods: "any cargo", mode: "train", kind: "logistics", regime: "standard" },
+  924: { direction: "import", goods: "any cargo", mode: "train", kind: "logistics", regime: "standard" },
 };
 
 /** What a procedure is about, from its published title.
@@ -51,16 +51,32 @@ function parseTitle(id, title) {
   const customs = t.match(/^(Export|Import|Clearance|Re-?export|Re-?import|Temporary import|Temporary export)\s+of\s+(.+?)\s+by\s+(train|air|road)$/i);
   if (customs) {
     const verb = customs[1].toLowerCase();
+    // "Clearance of X" starts at the border: the permits and certificates an
+    // "Import of X" produces along the way are presupposed, not issued here.
+    const regime = verb.startsWith("clearance")
+      ? "clearance"
+      : verb.startsWith("temporary")
+        ? "temporary"
+        : /^re-?(export|import)/.test(verb)
+          ? "re-export"
+          : "standard";
+    // "Clearance of temporary import of medical equipment" is medical
+    // equipment cleared on a temporary-import basis - the basis is not the
+    // goods, and folding it into the goods would split the category.
+    const named = customs[2].toLowerCase().replace(/\s+/g, " ").trim();
+    const withBasis = named.match(/^(temporary import|temporary export|re-export|re-import) of (.+)$/);
     return {
       direction: /export/.test(verb) ? "export" : "import",
-      goods: customs[2].toLowerCase().replace(/\s+/g, " ").trim(),
+      goods: withBasis ? withBasis[2] : named,
       mode: customs[3].toLowerCase(),
       kind: "customs",
+      regime,
+      ...(withBasis ? { basis: withBasis[1] } : {}),
     };
   }
 
   const transit = t.match(/^Transit\s+by\s+(train|air|road)/i);
-  if (transit) return { direction: "transit", goods: "any cargo", mode: transit[1].toLowerCase(), kind: "logistics" };
+  if (transit) return { direction: "transit", goods: "any cargo", mode: transit[1].toLowerCase(), kind: "logistics", regime: "transit" };
 
   const arrange = t.match(/^Arrange\s+cargo\s+(delivery|transportation)\s+by\s+(train|air|road)/i);
   if (arrange) {
@@ -69,6 +85,7 @@ function parseTitle(id, title) {
       goods: "any cargo",
       mode: arrange[2].toLowerCase(),
       kind: "logistics",
+      regime: "standard",
     };
   }
 
@@ -80,6 +97,7 @@ function parseTitle(id, title) {
     goods: "any cargo",
     mode: mode ? mode[1].toLowerCase() : "any",
     kind: "service",
+    regime: "service",
   };
 }
 
@@ -254,6 +272,11 @@ export type TransportMode = "train" | "air" | "road" | "any";
  *  document or registering one contract. */
 export type ProcedureKind = "customs" | "logistics" | "service";
 
+/** How the goods cross: a full import or export, a clearance that starts at the
+ *  border with its permits already in hand, temporary admission, a re-export,
+ *  transit through the country, or a service procedure. */
+export type ProcedureRegime = "standard" | "clearance" | "temporary" | "re-export" | "transit" | "service";
+
 /** What the catalogue knows about every procedure without loading its workflow. */
 export type ProcedureSummary = {
   id: string;
@@ -262,6 +285,10 @@ export type ProcedureSummary = {
   goods: string;
   mode: TransportMode;
   kind: ProcedureKind;
+  regime: ProcedureRegime;
+  /** Only when the goods are cleared on a special basis: "temporary import",
+   *  "temporary export", "re-export", "re-import". */
+  basis?: string;
   /** [min, max] hours end to end, as published. */
   timeframe: [number, number];
   blocksCount: number;
@@ -277,6 +304,8 @@ export type Procedure = {
   goods: string;
   mode: TransportMode;
   kind: ProcedureKind;
+  regime: ProcedureRegime;
+  basis?: string;
   timeframe: [number, number];
   stepsCount: number;
   blocks: ProcedureBlock[];

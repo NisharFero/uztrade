@@ -1,0 +1,37 @@
+# Render blueprint for the services that sit beside the Vercel app.
+#
+# Only the entity APIs are deployed here. They are the sandbox counterparties
+# the agent files with (Single Window, railways, customs, the payment gateway
+# and the rest); the web app reaches them over PORTALS_URL, and without that
+# variable a deployed app simulates those steps instead.
+#
+# The document AI service (apps/docai) is deliberately NOT here. Reading an
+# uploaded page is now one call to a Groq vision model from the web app, and
+# the only thing the Python service would still add is rasterizing PDFs - which
+# needs either a Hugging Face endpoint (being retired) or ~3 GB of RAM for
+# torch, EasyOCR and LayoutLM. Deploy it later if PDFs matter; a demo that
+# accepts photos and PNGs does not need it.
+services:
+  - type: web
+    name: uztrade-entity-apis
+    runtime: node
+    rootDir: apps/portals
+    plan: free
+    # No dependencies: the service is plain Node with TypeScript stripped at
+    # runtime, so there is nothing to build.
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /health
+    envVars:
+      # The service needs Node 22 for --experimental-strip-types.
+      - key: NODE_VERSION
+        value: 22.13.0
+      # How long an application stays "under review" before a decision. The
+      # default 4 s is right for a demo: long enough to be visible, short
+      # enough that nobody waits.
+      - key: PORTALS_REVIEW_MS
+        value: "4000"
+      # Applications live on the instance's own disk and reset when it
+      # restarts, which is what a sandbox should do.
+      - key: PORTALS_DATA
+        value: /tmp/applications.json

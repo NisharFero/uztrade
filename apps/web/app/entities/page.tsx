@@ -4,7 +4,20 @@ import { Icon } from "../../components/icons";
 import { listEntityQueues } from "../../modules/catalog/catalog";
 import EntityAction from "../../components/entities/entity-action";
 
-export const metadata: Metadata = { title: "Entities · UzTrade" };
+export const metadata: Metadata = { title: "Entities · Uzbekistan Trade Platform" };
+
+/** What kind of body it is, at a glance (types: modules/catalog/seed.ts). */
+const TYPE_ICON: Record<string, React.ReactNode> = {
+  government: Icon.landmark,
+  customs: Icon.lock,
+  inspection: Icon.compliance,
+  certification: Icon.documents,
+  portal: Icon.compose,
+  bank: Icon.receipt,
+  transport: Icon.truck,
+  facility: Icon.home,
+  service: Icon.user,
+};
 export const dynamic = "force-dynamic";
 
 export default async function EntitiesPage() {
@@ -20,7 +33,7 @@ export default async function EntitiesPage() {
   return (
     <>
       <header className="page-head">
-        <p><span className="head-icon">{Icon.physical}</span> Workflow counterparties</p>
+        <p><span className="head-icon">{Icon.landmark}</span> Workflow counterparties</p>
         <h1>External entities</h1>
         <p className="page-lede">{entities.length || 25} organizations and facilities · {openCount} physical action{openCount === 1 ? "" : "s"} ready</p>
       </header>
@@ -34,7 +47,7 @@ export default async function EntitiesPage() {
         {entities.map((entity) => (
           <article className="entity-row" key={entity.id} data-active={entity.openTasks.length ? "true" : "false"}>
             <div className="entity-name">
-              <span className="agent-icon">{Icon.physical}</span>
+              <span className="agent-icon">{TYPE_ICON[entity.type] ?? Icon.landmark}</span>
               <div><strong>{entity.canonicalName}</strong><small>{entity.simulationMode ? "Mock connection" : "Connected"}</small></div>
             </div>
             <span className="entity-type">{entity.type}</span>

@@ -39,7 +39,6 @@ const pause = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
  *  itself and persists it - the trader is never asked to confirm it. */
 export default function CaseBoard({
   caseId,
-  procedureId,
   publishedProcedure,
   initialProgress,
   initialDocumentState,
@@ -48,7 +47,6 @@ export default function CaseBoard({
   query,
 }: {
   caseId: string;
-  procedureId: string;
   /** The published procedure, loaded by the page (a client component has no
    *  access to the workflow files). */
   publishedProcedure: Procedure;

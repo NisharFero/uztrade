@@ -155,27 +155,19 @@
    "file": "924-03-power-of-attorney.png"
   },
   {
-   "id": "receipt-of-payment-4",
-   "template": "receipt",
-   "title": "Receipt of payment — step 4",
-   "docType": "receipt_of_payment",
+   "id": "agreement-with-technological-center-1",
+   "template": "letter",
+   "title": "Agreement with Technological center — step 1",
+   "docType": "service_contract",
    "labels": [
-    "Receipt of payment"
+    "Agreement with Technological center"
    ],
    "steps": [
-    4
+    1
    ],
    "output": true,
-   "fields": {
-    "receipt_no": "R-924-004",
-    "payer": "OOO \"Quvur Qurilish Ta'minot\"",
-    "payer_inn": "310123478",
-    "recipient": "JSC Uzbekistan Temir Yo'llari",
-    "payment_type": "Prepay for railway services (General)",
-    "amount": "245 000",
-    "date": "03.09.2026"
-   },
-   "file": "924-04-receipt-of-payment-step-4.png"
+   "fields": {},
+   "file": "924-04-agreement-with-technological-center-step-1.png"
   },
   {
    "template": "letter",
@@ -211,6 +203,21 @@
    "file": "924-06-application-for-conclusion-of-agreement-with-tec.png"
   },
   {
+   "id": "certificate-on-availability-of-funds-at-client-s-5",
+   "template": "letter",
+   "title": "Certificate on availability of funds at client's account — step 5",
+   "docType": "funds_certificate",
+   "labels": [
+    "Certificate on availability of funds at client's account"
+   ],
+   "steps": [
+    5
+   ],
+   "output": true,
+   "fields": {},
+   "file": "924-07-certificate-on-availability-of-funds-at-client-s.png"
+  },
+  {
    "id": "invoice-for-payment-8",
    "template": "invoice_for_payment",
    "title": "Invoice for payment — step 8",
@@ -230,32 +237,9 @@
     "supplier_inn": "200933140",
     "customer": "OOO \"Quvur Qurilish Ta'minot\"",
     "vat_rate": "12",
-    "total": "1 120 000"
+    "total": "245 000"
    },
-   "file": "924-07-invoice-for-payment-step-8.png"
-  },
-  {
-   "id": "receipt-of-payment-9",
-   "template": "receipt",
-   "title": "Receipt of payment — step 9",
-   "docType": "receipt_of_payment",
-   "labels": [
-    "Receipt of payment"
-   ],
-   "steps": [
-    9
-   ],
-   "output": true,
-   "fields": {
-    "receipt_no": "R-924-009",
-    "payer": "OOO \"Quvur Qurilish Ta'minot\"",
-    "payer_inn": "310123478",
-    "recipient": "Demo Customs Warehouse LLC",
-    "payment_type": "Prepay for customs warehouse services",
-    "amount": "1 120 000",
-    "date": "06.09.2026"
-   },
-   "file": "924-08-receipt-of-payment-step-9.png"
+   "file": "924-08-invoice-for-payment-step-8.png"
   },
   {
    "template": "letter",

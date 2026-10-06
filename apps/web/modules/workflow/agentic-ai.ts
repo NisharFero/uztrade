@@ -39,6 +39,7 @@ export function createAgenticAiClient(input: {
   groqModel?: string | null;
   docaiUrl?: string | null;
   fetcher?: Fetcher;
+  timeoutMs?: number;
 }): AgenticAiClient {
   const fetcher = input.fetcher ?? fetch;
   const client: AgenticAiClient = {};
@@ -60,6 +61,7 @@ export function createAgenticAiClient(input: {
             { role: "user", content: request.prompt },
           ],
         }),
+        signal: AbortSignal.timeout(input.timeoutMs ?? 12_000),
       });
       if (!response.ok) return null;
       const body = (await response.json().catch(() => ({}))) as {

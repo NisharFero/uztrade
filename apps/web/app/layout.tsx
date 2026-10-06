@@ -7,9 +7,9 @@ import "./styles/globals.css";
    for it, which browsers block as file:// requests from an http origin. */
 
 export const metadata: Metadata = {
-  title: "UzTrade Trade Agent",
+  title: "Uzbekistan Trade Platform",
   description:
-    "A case workspace for validated trade-procedure planning and agent-assisted execution.",
+    "Plan and run Uzbekistan export and import procedures with AI agents that file the online steps for you.",
   icons: {
     icon: "/favicon.svg",
     shortcut: "/favicon.svg",

@@ -55,6 +55,9 @@ function feed(projection: WorkflowProjection): FeedItem[] {
     const where = event.nodeId ? title.get(event.nodeId) ?? "" : "";
     const data = event.data as Record<string, unknown>;
     switch (event.eventType) {
+      case "portal_unavailable":
+        items.push({ actor: "system", text: `The entity service is unavailable for ${where}. This step is saved for retry; it has not completed.` });
+        break;
       case "agent_node_completed":
         items.push({ actor: "agent", text: `Agent completed ${where}${data.reference ? ` — ${String(data.portal)} issued ${String(data.reference)}` : ""}` });
         break;
@@ -66,6 +69,9 @@ function feed(projection: WorkflowProjection): FeedItem[] {
         break;
       case "work_item_completed":
         items.push({ actor: event.actorType, text: `Completed ${where}` });
+        break;
+      case "step_auto_completed":
+        items.push({ actor: "agent", text: `Completed ${where} — ${(data.documents as string[] | undefined)?.join(", ") ?? "its documents"} read and verified` });
         break;
       case "optional_node_skipped":
         items.push({ actor: "system", text: `Skipped ${where} (optional route)` });

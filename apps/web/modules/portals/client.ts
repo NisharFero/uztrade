@@ -74,6 +74,11 @@ export type PortalEnv = LlmEnv & {
 
 export function portalsFromEnv(env: PortalEnv): PortalClient | undefined {
   if (env.PORTALS_DISABLED === "1") return undefined;
+  // Deployed with no entity API configured: the default is a loopback address
+  // that only exists on a developer's machine, and dialling it would cost the
+  // client timeout on every agent step before falling back. Simulate instead,
+  // which is what the fallback does anyway - only immediately.
+  if (!env.PORTALS_URL && (process.env.VERCEL || process.env.RENDER || process.env.NODE_ENV === "production")) return undefined;
   return createPortalClient({
     baseUrl: env.PORTALS_URL || PORTALS_URL_DEFAULT,
     keys: {

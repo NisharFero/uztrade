@@ -73,7 +73,10 @@
    "passport": "AA 2233445"
   }
  },
- "values": {},
+ "values": {
+  "Vehicle registration number": "01 A 777 BA / trailer 01 1234 XA",
+  "Identification number of foreign trade contract": "UZ-FTC-2026-1610418"
+ },
  "documents": [
   {
    "id": "commercial-invoice",
@@ -114,10 +117,14 @@
    "title": "Passport",
    "docType": "passport",
    "labels": [
-    "Passport"
+    "Passport",
+    "International passport"
    ],
    "steps": [
-    4
+    4,
+    7,
+    11,
+    12
    ],
    "output": false,
    "fields": {
@@ -253,47 +260,8 @@
   },
   {
    "template": "letter",
-   "title": "Identification number of foreign trade contract",
-   "docType": null,
-   "labels": [
-    "Identification number of foreign trade contract"
-   ],
-   "steps": [
-    1
-   ],
-   "output": false,
-   "fields": {},
-   "body": "Identification number of foreign trade contract for the shipment 20 000 kg of apple juice, not concentrated, Namangan (Uzbekistan) → Almaty (Kazakhstan), 1 truck 01 A 777 BA / trailer 01 1234 XA, contract UZ-161/2026-01 of 01.09.2026.",
-   "id": "identification-number-of-foreign-trade-contract",
-   "file": "161-08-identification-number-of-foreign-trade-contract.png"
-  },
-  {
-   "id": "receipt-of-payment-2",
-   "template": "receipt",
-   "title": "Receipt of payment — step 2",
-   "docType": "receipt_of_payment",
-   "labels": [
-    "Receipt of payment"
-   ],
-   "steps": [
-    2
-   ],
-   "output": true,
-   "fields": {
-    "receipt_no": "R-161-002",
-    "payer": "OOO \"Namangan Sharbatlari\"",
-    "payer_inn": "306789034",
-    "recipient": "State Customs Committee (demo)",
-    "payment_type": "customs fee",
-    "amount": "245 000",
-    "date": "02.09.2026"
-   },
-   "file": "161-09-receipt-of-payment-step-2.png"
-  },
-  {
-   "template": "letter",
    "title": "TIR Carnet - \"Transport International Routier\"",
-   "docType": null,
+   "docType": "tir_carnet",
    "labels": [
     "TIR Carnet - \"Transport International Routier\""
    ],
@@ -303,14 +271,13 @@
    ],
    "output": false,
    "fields": {},
-   "body": "TIR Carnet - \"Transport International Routier\" for 01 A 777 BA / trailer 01 1234 XA, operated by OOO \"Demo Trans Logistic\" (TIR carrier). Shipment: 20 000 kg of apple juice, not concentrated, Namangan (Uzbekistan) → Almaty (Kazakhstan), 1 truck 01 A 777 BA / trailer 01 1234 XA.",
    "id": "tir-carnet-transport-international-routier",
-   "file": "161-10-tir-carnet-transport-international-routier.png"
+   "file": "161-08-tir-carnet-transport-international-routier.png"
   },
   {
    "template": "letter",
    "title": "Driver's license",
-   "docType": null,
+   "docType": "drivers_licence",
    "labels": [
     "Driver's license"
    ],
@@ -319,14 +286,13 @@
    ],
    "output": false,
    "fields": {},
-   "body": "Driver's license of Ilhom Nazarov, driver of the shipment (passport AA 2233445). Shipment: 20 000 kg of apple juice, not concentrated, Namangan (Uzbekistan) → Almaty (Kazakhstan), 1 truck 01 A 777 BA / trailer 01 1234 XA.",
    "id": "driver-s-license",
-   "file": "161-11-driver-s-license.png"
+   "file": "161-09-driver-s-license.png"
   },
   {
    "template": "letter",
    "title": "Vehicle registration certificate",
-   "docType": null,
+   "docType": "vehicle_registration",
    "labels": [
     "Vehicle registration certificate"
    ],
@@ -336,48 +302,28 @@
    ],
    "output": false,
    "fields": {},
-   "body": "Vehicle registration certificate for 01 A 777 BA / trailer 01 1234 XA, operated by OOO \"Demo Trans Logistic\" (TIR carrier). Shipment: 20 000 kg of apple juice, not concentrated, Namangan (Uzbekistan) → Almaty (Kazakhstan), 1 truck 01 A 777 BA / trailer 01 1234 XA.",
    "id": "vehicle-registration-certificate",
-   "file": "161-12-vehicle-registration-certificate.png"
+   "file": "161-10-vehicle-registration-certificate.png"
   },
   {
+   "id": "tir-carnet-stamped-6",
    "template": "letter",
-   "title": "Vehicle registration number",
-   "docType": null,
+   "title": "TIR carnet stamped — step 6",
+   "docType": "tir_carnet",
    "labels": [
-    "Vehicle registration number"
+    "TIR carnet stamped"
    ],
    "steps": [
-    7
+    6
    ],
-   "output": false,
+   "output": true,
    "fields": {},
-   "body": "Vehicle registration number for 01 A 777 BA / trailer 01 1234 XA, operated by OOO \"Demo Trans Logistic\" (TIR carrier). Shipment: 20 000 kg of apple juice, not concentrated, Namangan (Uzbekistan) → Almaty (Kazakhstan), 1 truck 01 A 777 BA / trailer 01 1234 XA.",
-   "id": "vehicle-registration-number",
-   "file": "161-13-vehicle-registration-number.png"
-  },
-  {
-   "template": "letter",
-   "title": "International passport",
-   "docType": null,
-   "labels": [
-    "International passport"
-   ],
-   "steps": [
-    7,
-    11,
-    12
-   ],
-   "output": false,
-   "fields": {},
-   "body": "International passport of Ilhom Nazarov, driver of the shipment (passport AA 2233445). Shipment: 20 000 kg of apple juice, not concentrated, Namangan (Uzbekistan) → Almaty (Kazakhstan), 1 truck 01 A 777 BA / trailer 01 1234 XA.",
-   "id": "international-passport",
-   "file": "161-14-international-passport.png"
+   "file": "161-11-tir-carnet-stamped-step-6.png"
   },
   {
    "template": "letter",
    "title": "Cargo delivery control book",
-   "docType": null,
+   "docType": "cargo_control_book",
    "labels": [
     "Cargo delivery control book"
    ],
@@ -386,14 +332,13 @@
    ],
    "output": false,
    "fields": {},
-   "body": "Cargo delivery control book for 01 A 777 BA / trailer 01 1234 XA, operated by OOO \"Demo Trans Logistic\" (TIR carrier). Shipment: 20 000 kg of apple juice, not concentrated, Namangan (Uzbekistan) → Almaty (Kazakhstan), 1 truck 01 A 777 BA / trailer 01 1234 XA.",
    "id": "cargo-delivery-control-book",
-   "file": "161-15-cargo-delivery-control-book.png"
+   "file": "161-12-cargo-delivery-control-book.png"
   },
   {
    "template": "letter",
    "title": "ATP certificate",
-   "docType": null,
+   "docType": "atp_certificate",
    "labels": [
     "ATP certificate"
    ],
@@ -402,14 +347,13 @@
    ],
    "output": false,
    "fields": {},
-   "body": "ATP certificate for 01 A 777 BA / trailer 01 1234 XA, operated by OOO \"Demo Trans Logistic\" (TIR carrier). Shipment: 20 000 kg of apple juice, not concentrated, Namangan (Uzbekistan) → Almaty (Kazakhstan), 1 truck 01 A 777 BA / trailer 01 1234 XA.",
    "id": "atp-certificate",
-   "file": "161-16-atp-certificate.png"
+   "file": "161-13-atp-certificate.png"
   },
   {
    "template": "letter",
    "title": "Authorization for international carriage of goods",
-   "docType": null,
+   "docType": "carriage_permit",
    "labels": [
     "Authorization for international carriage of goods"
    ],
@@ -418,9 +362,8 @@
    ],
    "output": false,
    "fields": {},
-   "body": "Authorization for international carriage of goods for 01 A 777 BA / trailer 01 1234 XA, operated by OOO \"Demo Trans Logistic\" (TIR carrier). Shipment: 20 000 kg of apple juice, not concentrated, Namangan (Uzbekistan) → Almaty (Kazakhstan), 1 truck 01 A 777 BA / trailer 01 1234 XA.",
    "id": "authorization-for-international-carriage-of-good",
-   "file": "161-17-authorization-for-international-carriage-of-good.png"
+   "file": "161-14-authorization-for-international-carriage-of-good.png"
   }
  ]
 }

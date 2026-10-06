@@ -10,6 +10,11 @@ import { llmFromEnv, type LlmEnv } from "../../../../../modules/ai/llm";
 import { agenticAiFromEnv } from "../../../../../modules/workflow/agentic-ai";
 import { portalsFromEnv, type PortalEnv } from "../../../../../modules/portals/client";
 
+/* Vercel's default function timeout is shorter than a model call plus the work
+ * around it: runs an orchestrator pass, which can file with an entity API.
+ * 60 s is the Hobby plan's ceiling and well inside Pro's. */
+export const maxDuration = 60;
+
 type Ctx = { params: Promise<{ id: string }> };
 
 /** The step assistant: KPIs, the next step and what it needs. */

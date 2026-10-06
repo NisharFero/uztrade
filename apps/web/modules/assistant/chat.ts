@@ -2,8 +2,12 @@
  * the app that can answer it - intake, the trader's cases, or the published
  * procedures - and report each stage as it happens so the chat can stream it.
  *
- *   route  -> shipment   intake turn (a turn intake declines after all is
- *                        answered as a question instead)
+ *   route  -> shipment   intention first (intention.ts): someone finding out
+ *                        gets what it involves and one question; someone
+ *                        starting gets intake. A turn intake declines after
+ *                        all is answered as a question instead. Nothing here
+ *                        opens a case - only the trader's yes does.
+ *          -> estimate   how long, from the published timeframe and the route
  *          -> cases      digests of the selected cases, answered from them
  *          -> knowledge  cited answer from the procedures, plus FAQ entries
  *          -> other      what the assistant can help with */
@@ -14,19 +18,30 @@ import { matchFaq, type FaqEntry } from "../faq/faq";
 import type { IntakeTurn } from "../intake/conversation";
 import type { IntakeDraft, Slot } from "../intake/draft";
 import { intakeTurn } from "../intake/turn";
+import { correctTypos } from "../intake/typos";
 import { PROCEDURE_IDS, CATALOGUE } from "../procedures/data/procedures.generated";
 import type { WorkflowProjection } from "../workflow/repository";
 import { answerAboutCases, digestCase, selectCases, type CasesAnswer } from "./cases";
 import { CASE_REF, routeMessage, type Routed } from "./router";
+import { brief, say, chunksOf, type ReplyActions } from "./say";
+import { answerWithCaseTools } from "./tools";
+import { ESTIMATE_QUESTION, estimateFor, goalOf, needsOf, overviewFor, type Estimate, type Overview, type ShipmentNeeds } from "./intention";
 
 export type StageId = "route" | "intake" | "cases" | "knowledge";
 export type Stage = { id: StageId; label: string; state: "running" | "done" | "failed"; detail?: string };
 
 export type ChatResult =
-  | { kind: "intake"; turn: IntakeTurn }
+  /** `needs` is filled once the shipment is complete: what the procedure will
+   *  ask the trader for, so the summary can say it before the case exists.
+   *  `overview` is filled for someone finding out: every way the goods can go,
+   *  how long each takes, and what the likeliest one needs. */
+  | { kind: "intake"; turn: IntakeTurn; needs?: ShipmentNeeds; overview?: Overview }
+  | { kind: "estimate"; estimate: Estimate }
   | { kind: "cases"; answer: CasesAnswer }
   | { kind: "knowledge"; answer: FaqAnswer; faq: FaqEntry[] }
   | { kind: "other"; message: string; suggestions: string[] };
+
+export type { ShipmentNeeds };
 
 /** A next message the trader can send with one click. */
 export type FollowUp = { label: string; text: string };
@@ -34,6 +49,12 @@ export type FollowUp = { label: string; text: string };
 export type ChatEvent =
   | { type: "stage"; stage: Stage }
   | { type: "route"; routed: Routed }
+  /** The answer as it is written, a few words at a time. */
+  | { type: "text"; chunk: string }
+  /** What the finished reply offers: a case to open, a case to look at, taps. */
+  | { type: "actions"; actions: ReplyActions }
+  /** The whole result, for the parts of the client that still need the data
+   *  (the intake draft the next message is read against). */
   | { type: "result"; result: ChatResult; followUps: FollowUp[] }
   | { type: "error"; message: string }
   | { type: "done" };
@@ -47,7 +68,7 @@ export type ChatDeps = {
   projection: (runId: string) => Promise<WorkflowProjection | null>;
 };
 
-export type ChatInput = { message: string; draft: IntakeDraft; expecting: Slot | null };
+export type ChatInput = { message: string; draft: IntakeDraft; expecting: Slot | null; caseId?: string | null; presentation?: "cards" | "text" };
 
 const SUGGESTIONS = ["Which shipments are currently active?", "Who issues the phytosanitary certificate for tea?", "I want to export dried apricots by train"];
 
@@ -94,10 +115,12 @@ export function knowledgeFollowUps(answer: FaqAnswer, drafting = false): FollowU
 
 const INTENT_LABEL: Record<Routed["intent"], string> = {
   shipment: "Shipment details",
+  estimate: "How long it takes",
   cases: "About your cases",
   knowledge: "About the procedures",
   other: "Outside what I cover",
 };
+const ACTIVE_CASE_TURN = /\b(yes|confirm|confirmed|waiting|next|step|status|progress|what now|what is needed|what's needed|do now)\b/i;
 
 /** "export tea by train" for the shipment being described, if any. */
 export function draftContext(draft: IntakeDraft): string {
@@ -130,47 +153,163 @@ async function answerCases(message: string, routed: Routed, deps: ChatDeps, emit
   const unknown = [...new Set((message.match(new RegExp(CASE_REF.source, "gi")) ?? []).map((m) => m.toUpperCase()))].filter((m) => !known.has(m));
   // A question about a case that doesn't exist is answered about that, not about every case.
   const selected = unknown.length && !routed.caseIds.length ? [] : selectCases(rows, routed).slice(0, 12);
-  const digests = await Promise.all(
+  const prepared = await Promise.all(
     selected.map(async (row) => {
       const projection = row.workflowRunId ? await deps.projection(row.workflowRunId).catch(() => null) : null;
-      return digestCase(row, projection);
+      const digest = await digestCase(row, projection);
+      return { row, projection, digest };
     }),
   );
+  const digests = prepared.map((item) => item.digest);
   emit({
     type: "stage",
     stage: { id: "cases", label: "Looked up your cases", state: "done", detail: `${digests.length} of ${rows.length} case${rows.length === 1 ? "" : "s"} match` },
   });
-  const answer = await answerAboutCases(message, digests, routed.caseIds.length ? "any" : routed.filter, deps.llm, unknown);
+  const toolAnswer = unknown.length
+    ? null
+    : await answerWithCaseTools(
+        message,
+        prepared.map(({ row, projection, digest }) => ({ id: row.id, procedureId: row.procedureId, projection, digest })),
+      );
+  const answer: CasesAnswer = toolAnswer
+    ? { question: message, cases: digests, unknown, answer: toolAnswer, by: "summary", model: null }
+    : await answerAboutCases(message, digests, routed.caseIds.length ? "any" : routed.filter, deps.llm, unknown);
   emit({ type: "result", result: { kind: "cases", answer }, followUps: caseFollowUps(answer) });
 }
 
-export async function runChat(input: ChatInput, given: ChatDeps, emit: (e: ChatEvent) => void): Promise<void> {
-  const { message, draft, expecting } = input;
+/** How long moving the goods takes, from the published procedure and the
+ *  route. Answers the question; opens nothing and asks nothing first. */
+async function answerEstimate(message: string, draft: IntakeDraft, deps: ChatDeps, emit: (e: ChatEvent) => void): Promise<void> {
+  emit({ type: "stage", stage: { id: "knowledge", label: "Finding the published procedure and the route", state: "running" } });
+  const estimate = await estimateFor(message, draft);
+  if (!estimate || !estimate.options.length) {
+    emit({ type: "stage", stage: { id: "knowledge", label: "No published procedure fits these goods", state: "failed" } });
+    await answerKnowledge(message, draft, deps, emit);
+    return;
+  }
+  const [first] = estimate.options;
+  emit({
+    type: "stage",
+    stage: {
+      id: "knowledge",
+      label: `Estimated from ${estimate.options.length === 1 ? `procedure ${first.procedureId}` : `${estimate.options.length} procedures`}${first.distanceKm ? ` and ~${first.distanceKm.toLocaleString("en-US")} km of route` : ""}`,
+      state: "done",
+    },
+  });
+  const start = first.direction === "export" ? "export" : "import";
+  const route = estimate.from && estimate.to ? ` from ${estimate.from} to ${estimate.to}` : "";
+  emit({
+    type: "result",
+    result: { kind: "estimate", estimate },
+    followUps: [
+      { label: "Plan this shipment", text: `I want to ${start} ${estimate.goods} by ${first.mode}${route}` },
+      { label: "What documents will I need?", text: `What documents do I need to ${start} ${estimate.goods} by ${first.mode}?` },
+    ],
+  });
+}
+
+/** Wraps an emitter so every result is spoken before it is sent: the words
+ *  first, then what the reply offers, then the result itself for the client's
+ *  own bookkeeping. */
+function speaking(emit: (e: ChatEvent) => void, presentation: ChatInput["presentation"]): (e: ChatEvent) => void {
+  return (event) => {
+    if (event.type !== "result") {
+      emit(event);
+      return;
+    }
+    // Short replies only when the caller explicitly renders the result cards.
+    const spoken = presentation === "cards" ? brief(event.result) : say(event.result);
+    for (const chunk of chunksOf(spoken.text)) emit({ type: "text", chunk });
+    emit({ type: "actions", actions: spoken.actions });
+    emit(event);
+  };
+}
+
+export async function runChat(input: ChatInput, given: ChatDeps, rawEmit: (e: ChatEvent) => void): Promise<void> {
+  // Every result is said in words before it is sent.
+  const emit = speaking(rawEmit, input.presentation);
+  const { draft, expecting } = input;
+  // Misspelt goods, places and modes are put right before anything reads them.
+  const read = correctTypos(input.message);
+  const message = read.text;
   // Routing and the cases answer read the same list once.
   let listed: Promise<CaseRow[]> | null = null;
   const deps: ChatDeps = { ...given, listCases: () => (listed ??= given.listCases()) };
   try {
     emit({ type: "stage", stage: { id: "route", label: "Working out what you're asking", state: "running" } });
+    if (read.fixes.length) {
+      const fixed = read.fixes.map((f) => `“${f.from}” as “${f.to}”`).join(", ");
+      emit({ type: "stage", stage: { id: "route", label: `Read ${fixed}`, state: "done" } });
+    }
     let refs: { id: string; title: string; status: string }[] = [];
     try {
       refs = (await deps.listCases()).map((c) => ({ id: c.id, title: c.title, status: c.status }));
     } catch {
       refs = [];
     }
-    const routed = await routeMessage(message, { draft, expecting, cases: refs }, deps.llm);
+    let routed = await routeMessage(message, { draft, expecting, cases: refs }, deps.llm);
+    if (
+      input.caseId &&
+      !routed.caseIds.length &&
+      !message.match(new RegExp(CASE_REF.source, "i")) &&
+      (routed.intent === "cases" || ACTIVE_CASE_TURN.test(message) || ACTIVE_CASE_TURN.test(input.message))
+    ) {
+      routed = { ...routed, intent: "cases", caseIds: [input.caseId.toUpperCase()], filter: "any", reasoning: `Using the active shipment in this chat: ${input.caseId}.` };
+    }
     emit({ type: "stage", stage: { id: "route", label: INTENT_LABEL[routed.intent], state: "done", detail: routed.reasoning } });
     emit({ type: "route", routed });
 
-    if (routed.intent === "shipment") {
+    if (routed.intent === "estimate") {
+      await answerEstimate(message, draft, deps, emit);
+    } else if (routed.intent === "shipment") {
+      // Intention first: a question about timing is answered, not taken in.
+      const goal = goalOf(message, draft, expecting);
+      if (goal === "estimate") {
+        await answerEstimate(message, draft, deps, emit);
+        emit({ type: "done" });
+        return;
+      }
       emit({ type: "stage", stage: { id: "intake", label: "Reading the shipment details", state: "running" } });
       const turn = await intakeTurn(draft, message, expecting, deps.llm);
       if (turn.status === "declined") {
         emit({ type: "stage", stage: { id: "intake", label: "Not a shipment after all", state: "failed", detail: turn.message } });
         await answerKnowledge(message, draft, deps, emit);
+      } else if (ESTIMATE_QUESTION.test(message) && turn.draft.commodity && !draft.commodity) {
+        // The goods only became clear once intake read them ("taea by tarain"):
+        // the question was still how long, so it still gets an estimate.
+        emit({ type: "stage", stage: { id: "intake", label: `Read the goods as ${turn.draft.commodity.term}`, state: "done" } });
+        await answerEstimate(message, turn.draft, deps, emit);
       } else {
-        const label = turn.status === "confirm" ? "Every shipment detail checks out" : "One more detail needed";
+        const label =
+          turn.status === "confirm" ? "Every shipment detail checks out" : goal === "explore" ? "You're finding out, so nothing gets opened" : "Worked out what is still missing";
         emit({ type: "stage", stage: { id: "intake", label, state: "done" } });
-        emit({ type: "result", result: { kind: "intake", turn }, followUps: turn.options.map((o) => ({ label: o.label, text: o.reply })) });
+        let needs: ShipmentNeeds | undefined;
+        let overview: Overview | undefined;
+        if (turn.status === "confirm" && turn.summary) {
+          emit({ type: "stage", stage: { id: "knowledge", label: `Reading procedure ${turn.summary.procedureId}`, state: "running" } });
+          needs = (await needsOf(turn.summary.procedureId, turn.draft)) ?? undefined;
+          emit({
+            type: "stage",
+            stage: {
+              id: "knowledge",
+              label: `Listed what procedure ${turn.summary.procedureId} needs from you`,
+              state: "done",
+              detail: needs ? `${needs.documents.length} documents, ${needs.details.length} details` : undefined,
+            },
+          });
+        } else if (goal === "explore" && turn.draft.commodity) {
+          emit({ type: "stage", stage: { id: "knowledge", label: `Looking up the procedures for ${turn.draft.commodity.term}`, state: "running" } });
+          overview = (await overviewFor(turn.draft, message)) ?? undefined;
+          emit({
+            type: "stage",
+            stage: {
+              id: "knowledge",
+              label: overview ? `Found ${overview.options.length} published way${overview.options.length === 1 ? "" : "s"} to move ${overview.goods}` : "No published procedure fits yet",
+              state: "done",
+            },
+          });
+        }
+        emit({ type: "result", result: { kind: "intake", turn, needs, overview }, followUps: turn.options.map((o) => ({ label: o.label, text: o.reply })) });
       }
     } else if (routed.intent === "cases") {
       await answerCases(message, routed, deps, emit);

@@ -23,6 +23,7 @@ import type { ShipmentFacts } from "../workflow/domain";
 import { commodityOf } from "../intake/taxonomy";
 import { stepNeeds } from "../procedures/requirements";
 import { countryName, planRoute, resolveRoute, type Route, planningDirection } from "../intake/shipment-plan";
+import { isPerishable } from "../intake/goods-handling";
 
 export type RiskFlag = {
   label: string;
@@ -205,7 +206,7 @@ export function assessCompliance(procedure: Procedure, facts: Facts = {}, query 
       key: "perishability",
       label: "Perishability",
       why: "Sets how much clearance delay the goods tolerate.",
-      value: procedure.goods === "fresh fruits and vegetables" ? "Perishable" : "Shelf-stable",
+      value: isPerishable(procedure.goods) ? "Perishable" : "Shelf-stable",
     },
   ];
 
@@ -218,6 +219,18 @@ export function assessCompliance(procedure: Procedure, facts: Facts = {}, query 
     packaging: "Whether ISPM 15 treatment evidence is needed for wooden packaging.",
   };
   const unresolved = inputs.filter((i) => !i.value && BLOCKS[i.key]).map((i) => ({ input: i.label, blocks: BLOCKS[i.key] }));
+
+  /* The certificate rules were written for the goods the first procedures
+     covered. The corpus now publishes far more categories than there are
+     rules, and an empty certificate list reads like "nothing is required" -
+     so where there is no rule, the agent says there is no rule. */
+  if (!rule) {
+    unresolved.push({
+      input: `Certificate rule for ${procedure.goods} ${procedure.direction}s`,
+      blocks:
+        "Which certificates this consignment must end up holding. The agent still checks every document the procedure's own steps produce, but it cannot say what else the goods need until a rule for them is written.",
+    });
+  }
 
   /* ---- risk flags with evidence ---- */
   const flags: RiskFlag[] = [];
@@ -244,11 +257,11 @@ export function assessCompliance(procedure: Procedure, facts: Facts = {}, query 
     });
   }
 
-  if (procedure.goods === "fresh fruits and vegetables") {
+  if (isPerishable(procedure.goods)) {
     flags.push({
       label: "Perishable — time-sensitive",
       severity: "high",
-      reason: "Fresh produce has no slack for clearance delay; the critical path is the whole shelf life.",
+      reason: `These goods (${procedure.goods}) have no slack for clearance delay; the critical path is the whole shelf life.`,
       evidence: inspections.concat(steps.filter((s) => /^loading$/i.test(s.title))).map((s) => `${s.title} — step ${s.num}`),
     });
   }

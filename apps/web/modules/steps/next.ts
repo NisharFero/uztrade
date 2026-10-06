@@ -6,7 +6,7 @@
 import { ACTIONS, actionOfStep, isGatewayPayment, type Lane } from "../procedures/delegation";
 import type { Procedure, ProcedureStep } from "../procedures/data/procedures.generated";
 import { docTypeOf, specFor, type DocType } from "../documents/specs";
-import { needsOfStep, type StepInput } from "../procedures/requirements";
+import { needsOfStep, VALUE_INPUT, type StepInput } from "../procedures/requirements";
 import type { WorkflowNodeRecord, WorkflowProjection } from "../workflow/repository";
 import { formOfStep, groupOfLabel, groupsOfStep, resolveForm, type FormView } from "./application-forms";
 import { blockExtras, stepExtras, type Prefill } from "../workflow/tailor";
@@ -73,9 +73,8 @@ export type StepView = {
   portal: PortalView | null;
 };
 
-/* Section 5 lines that are a value to type, not a document to upload. */
-const VALUE_INPUT =
-  /^(payment sum|quantity of transport units|amount of consignment|cost on the contract|agency region|type of organi[sz]ation|name of the organi[sz]ation|full name of an organi[sz]ation'?s manager|contact phone number|email|tax identification number|personal identification number|bank details|warehouse license number|information about|general information|supplier information|payment information)/i;
+/* Section 5 lines that are a value to type, not a document to upload, are
+ * VALUE_INPUT in modules/procedures/requirements.ts. */
 
 const PRESENCE_TEXT: [RegExp, string][] = [
   [/physical presence/i, "You or your representative attend in person"],
@@ -112,8 +111,11 @@ function documentNeed(label: string, docType: DocType | null, optional: boolean,
   const requiredFields = spec ? spec.fields.filter((f) => f.required && (f.questions.length || f.anchors.length)).map((f) => f.name) : [];
   const doc = documentFor(ctx.ledger, label, docType, output ? ctx.stepNum : undefined);
   // Confirmed at this step, or at the start of the case (step 0) as an upfront input.
+  // A document with no published specimen (its spec is standard practice only)
+  // can still be confirmed as provided; an upload of it is read all the same.
+  const confirmable = !spec || spec.fields.every((f) => f.source === "reference");
   const confirmedOutside =
-    !docType && (ctx.ledger.inputs.has(inputKey("confirm", ctx.stepNum, label)) || ctx.ledger.inputs.has(inputKey("confirm", 0, label)));
+    confirmable && (ctx.ledger.inputs.has(inputKey("confirm", ctx.stepNum, label)) || ctx.ledger.inputs.has(inputKey("confirm", 0, label)));
   const common = { ...base({ label, optional, docType }, ctx.stepNum), requiredFields, document: doc, output };
 
   if (confirmedOutside) return { ...common, kind: "document", status: "have", detail: "Confirmed as provided" };
@@ -320,6 +322,40 @@ export function stepViewFor(procedure: Procedure, projection: WorkflowProjection
     notes: [...(block ? blockExtras(block).notes : []), ...extras.notes],
     portal: portal.view,
   };
+}
+
+/** A document Document Intelligence has read and verified: every required
+ *  field accepted or confirmed, and no cross-document check disagrees. */
+export function documentVerified(doc: DocumentRecord | null): boolean {
+  return Boolean(doc && documentComplete(doc) && !doc.checks.some((c) => c.status === "mismatch"));
+}
+
+/**
+ * Whether a trader step can complete itself, and on which documents.
+ *
+ * Document Intelligence may close a step only when a document is the proof:
+ *   - the step's own output (the certificate, the registration) was uploaded
+ *     and verified - evidence the step happened; or
+ *   - everything the step asks for is documents (or earlier steps' outputs
+ *     and published information), every one of them is verified, and at
+ *     least one was uploaded at this step.
+ * A step that also asks the trader to sign, choose, type a value or submit a
+ * portal form waits for their "Complete step": those happen outside the
+ * platform, and a document cannot say they were done.
+ */
+export function autoCompletable(view: StepView): { ok: boolean; documents: string[] } {
+  const no = { ok: false, documents: [] };
+  if (view.lane !== "user" || view.state !== "needs_input" || !view.ready || !view.workItemId) return no;
+  const chosen = view.variants.find((v) => v.chosen);
+  const needs = [...view.needs, ...(chosen?.needs ?? [])].filter((n) => !n.optional && !n.notApplicable);
+  const documents = needs.filter((n) => n.kind === "document" && n.document);
+  if (!documents.length || !documents.every((n) => documentVerified(n.document))) return no;
+  const proof = documents.some((n) => n.output);
+  // Documents reused from earlier steps alone never close a step the trader
+  // has not handed anything to: one of them must have been given here.
+  const handedHere = documents.some((n) => n.document!.stepNum === view.stepNum);
+  const onlyDocuments = handedHere && needs.every((n) => n.kind === "document" || n.kind === "earlier" || n.kind === "info");
+  return proof || onlyDocuments ? { ok: true, documents: documents.map((n) => n.label) } : no;
 }
 
 /** Steps waiting on someone, lowest step number first. */

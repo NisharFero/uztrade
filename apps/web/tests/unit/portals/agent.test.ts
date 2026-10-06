@@ -35,6 +35,18 @@ async function entityApis(reviewMs = 0) {
 
 const node = (projection: WorkflowProjection, stepNum: number) => projection.nodes.find((n) => n.stepNum === stepNum)!;
 
+test("an unavailable configured entity retains the step for retry instead of simulated completion", async () => {
+  const portals = createPortalClient({ baseUrl: "http://unavailable.test", fetch: (async () => { throw new Error("offline"); }) as typeof fetch, timeoutMs: 1 });
+  const { repository, runId, projection } = await openTeaCase(portals);
+  assert.equal(node(projection, 3).state, "ready");
+  assert.equal(projection.agentRuns.filter((a) => a.nodeId === node(projection, 3).id).length, 0);
+  assert.ok(projection.auditEvents.some((e) => e.eventType === "portal_unavailable"));
+  const { portals: available } = await entityApis();
+  const resumed = await runOrchestrator(repository, runId, { portals: available });
+  assert.equal(node(resumed, 3).state, "needs_input");
+  assert.equal(latestRecords(resumed).get(3)?.status, "rejected", "The entity, rather than a local simulation, evaluates the retried application");
+});
+
 /** Case 868 - tea by train to Urumqi - with step 2 done, so the railway steps come up. */
 async function openTeaCase(portals: PortalClient, query = "export 20 tonnes of tea from Tashkent to Urumqi by train", before?: (repository: WorkflowRepository, runId: string) => Promise<void>) {
   const repository = createMemoryWorkflowRepository();
@@ -133,12 +145,13 @@ test("an application under review keeps its step running; changes the entity req
   assert.equal(node(projection, 3).state, "completed");
 });
 
-test("an unreachable entity API falls back to simulating the step", async () => {
+test("an unreachable entity API records a retryable state without claiming approval", async () => {
   const down = createPortalClient({ baseUrl: "http://entities.test", fetch: (async () => { throw new TypeError("fetch failed"); }) as typeof fetch });
   const { projection } = await openTeaCase(down);
-  assert.equal(node(projection, 3).state, "completed");
+  assert.equal(node(projection, 3).state, "ready");
   assert.equal(latestRecords(projection).size, 0);
-  assert.match(String(node(projection, 3).result?.portal), /unreachable/);
+  assert.equal(node(projection, 3).result?.retryable, true);
+  assert.match(String(node(projection, 3).result?.reason), /unavailable/);
 });
 
 test("every online agent step of every procedure has a published entity API service; bank transfers go to the gateway", async () => {
@@ -146,6 +159,7 @@ test("every online agent step of every procedure has a published entity API serv
   const published = (await (await handle(new Request("http://entities.test/entities"))).json()) as { entities: { id: string; services: { id: string }[] }[] };
   const services = new Set(published.entities.flatMap((e) => e.services.map((s) => `${e.id}/${s.id}`)));
   let mapped = 0;
+  let agentSteps = 0;
   for (const procedure of Object.values(PROCEDURES)) {
     for (const step of procedure.blocks.flatMap((b) => b.steps)) {
       const target = portalTargetOf(step);
@@ -153,13 +167,16 @@ test("every online agent step of every procedure has a published entity API serv
         assert.equal(`${target?.entity}/${target?.service}`, "payments/transfer", `${procedure.id}#${step.num} is a bank transfer`);
       }
       if (delegationOfStep(step).lane !== "agent") continue;
+      agentSteps++;
       assert.ok(target, `${procedure.id}#${step.num} ${step.title} (${step.entity}) has an entity API`);
       assert.ok(services.has(`${target.entity}/${target.service}`), `${target.entity}/${target.service} is published`);
       mapped++;
     }
   }
-  // 94 filings (306, 325 and 868: 9 each; 477: 13; 540: 7; 57: 16; 707: 18; 782: 11; 161: 2; 924: 0) and 56 bank transfers.
-  assert.equal(mapped, 150);
+  // Every agent-lane online step across all 243 published procedures files with
+  // one of the twelve entity APIs - none is left without a service.
+  assert.equal(mapped, agentSteps, `${agentSteps - mapped} agent steps have no entity API`);
+  assert.ok(mapped > 1800, `${mapped} steps mapped`);
   const cargo = PROCEDURES["477"].blocks.flatMap((b) => b.steps).find((s) => s.num === 20)!;
   assert.deepEqual(portalTargetOf(cargo)?.fixed, { regime: "IM70" });
 });

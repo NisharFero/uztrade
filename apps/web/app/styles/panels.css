@@ -916,7 +916,7 @@
 }
 
 .tr-track li[data-state="done"] span {
-  background: var(--lane-agent, #4338ca);
+  background: var(--lane-agent, var(--accent));
 }
 
 .tr-track li[data-state="now"] span {

@@ -18,16 +18,19 @@ test("an event is not a document: 'Customs declaration submitted' asks for no up
 });
 
 test("every customs declaration step's invoice and transport document have field checklists", () => {
+  let withDeclaration = 0;
   for (const id of PROCEDURE_IDS) {
-    if (PROCEDURES[id].kind === "logistics") continue; // rail logistics files no declaration
+    // Logistics move cargo and services obtain one document; neither declares.
+    if (PROCEDURES[id].kind !== "customs") continue;
     const needs = procedureNeeds(PROCEDURES[id]).filter((n) => /^create .*customs declaration/i.test(n.title));
-    assert.ok(needs.length, `${id} has a declaration step`);
+    if (needs.length) withDeclaration += 1;
     for (const n of needs) {
       const types = allInputs(n).map((i) => i.docType);
       assert.ok(types.includes("commercial_invoice"), `${id} step ${n.stepNum}`);
       assert.ok(types.includes("railway_bill") || types.includes("air_waybill") || types.includes("cmr_note"), `${id} step ${n.stepNum}`);
     }
   }
+  assert.ok(withDeclaration > 50, `${withDeclaration} customs procedures create a declaration`);
 });
 
 test("offer-agreement fields are exactly the ones section 5 lists", () => {

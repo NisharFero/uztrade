@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Icon } from "../../components/icons";
 import CaseList, { type CaseRowData } from "../../components/cases/case-list";
-import { CATALOGUE } from "../../modules/procedures/data/procedures.generated";
 import { getProcedures } from "../../modules/procedures/registry";
 import { listCases } from "../../modules/cases/store";
 import { fmtHours, procedureStats } from "../../modules/procedures/dag";
@@ -10,7 +9,7 @@ import type { ShipmentFacts } from "../../modules/workflow/domain";
 import { tailorProcedure } from "../../modules/workflow/tailor";
 
 export const metadata: Metadata = {
-  title: "Cases & Shipments · UzTrade",
+  title: "Cases & Shipments · Uzbekistan Trade Platform",
   description: "Open cases and their progress through each procedure.",
 };
 

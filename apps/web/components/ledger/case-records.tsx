@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import CaseLedger from "../workflow/case-ledger";
-import { PORTAL_STATUS, type PortalRow } from "../chat/step-assistant";
+import { PORTAL_STATUS, type PortalRow } from "../chat/portal-status";
 import type { AssistantView } from "../../modules/steps/assistant";
 import type { ShipmentFacts } from "../../modules/workflow/domain";
 import type { Procedure } from "../../modules/procedures/data/procedures.generated";
@@ -12,13 +12,11 @@ import { tailorProcedure } from "../../modules/workflow/tailor";
  *  agent filed with an entity API, with the latest answer per step. */
 export default function CaseRecords({
   caseId,
-  procedureId,
   publishedProcedure,
   shipment,
   query,
 }: {
   caseId: string;
-  procedureId: string;
   /** Loaded by the page; a client component cannot read a workflow file. */
   publishedProcedure: Procedure;
   shipment?: ShipmentFacts;
@@ -29,10 +27,10 @@ export default function CaseRecords({
   const published = publishedProcedure;
   const procedure = useMemo(() => (published ? tailorProcedure(published, shipment, query) : undefined), [published, shipment, query]);
 
+  // The page gives this component a key per case, so a different case
+  // remounts it - the effect only has to fetch, never to reset.
   useEffect(() => {
     let live = true;
-    setPortals(null);
-    setFailed(false);
     fetch(`/api/cases/${caseId}/assistant`)
       .then((r) => (r.ok ? r.json() : Promise.reject(new Error(String(r.status)))))
       .then((view: AssistantView) => live && setPortals(view.portals ?? []))

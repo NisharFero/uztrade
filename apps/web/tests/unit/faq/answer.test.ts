@@ -14,8 +14,10 @@ const model = (answer: object) =>
 test("retrieval finds the procedure steps that answer the question", () => {
   const hits = retrieve(QUESTION, 8);
   assert.ok(hits.length > 0);
+  // One passage per published procedure: the question about a phytosanitary
+  // certificate for dried fruits finds the procedures that issue one.
   assert.ok(
-    hits.some((h) => h.passage.id.startsWith("step:306:") && /phytosanitary/i.test(h.passage.title)),
+    hits.some((h) => h.passage.id.startsWith("procedure:") && /dried fruits/i.test(h.passage.title)),
     hits.map((h) => h.passage.title).join("\n"),
   );
   assert.equal(retrieve("zzqx qqzz").length, 0);

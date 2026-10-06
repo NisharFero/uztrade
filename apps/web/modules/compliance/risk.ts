@@ -16,6 +16,7 @@ import { commodityOf } from "../intake/taxonomy";
 import { countryName, fmtTonnes, planRoute, resolveRoute, toTonnes, unitsFor, planningDirection } from "../intake/shipment-plan";
 import type { Ledger } from "../steps/ledger";
 import type { WorkflowProjection } from "../workflow/repository";
+import { isPerishable } from "../intake/goods-handling";
 
 export type RiskStatus = "ok" | "pending" | "caution" | "high" | "unknown";
 export type RiskRow = {
@@ -159,7 +160,17 @@ export function assessRisk(input: {
   }
 
   /* Certificates the rule set needs */
-  for (const certificate of CERTIFICATE_RULES[compliance.ruleKey]?.certificates ?? []) {
+  const rule = CERTIFICATE_RULES[compliance.ruleKey];
+  if (!rule) {
+    rows.push({
+      key: "certificates:no-rule",
+      title: "Required certificates",
+      value: "No rule published for these goods",
+      status: "unknown",
+      reason: `The certificate rules cover ${Object.keys(CERTIFICATE_RULES).length} goods-and-direction pairs; ${compliance.ruleKey.replace("×", " ")} is not one of them. Documents the procedure's own steps produce are still checked.`,
+    });
+  }
+  for (const certificate of rule?.certificates ?? []) {
     const step = steps.find((s) => s.output.toLowerCase() === certificate.toLowerCase());
     const node = step ? nodes.get(step.num) : undefined;
     const doc = docs.find((d) => d.label.toLowerCase() === certificate.toLowerCase());
@@ -199,7 +210,7 @@ export function assessRisk(input: {
   }
 
   /* Perishability */
-  if (procedure.goods === "fresh fruits and vegetables") {
+  if (isPerishable(procedure.goods)) {
     const maxDays = route ? days(route.transit[1]) : null;
     rows.push({
       key: "perishable",

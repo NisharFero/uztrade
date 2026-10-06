@@ -88,7 +88,11 @@
   "Information about carrier (for legal entities)": "OcOO \"Demo Kyrgyz Transit\" (TIR carrier)",
   "Information about the carrier (for physical entities)": "Not applicable — the carrier is a company",
   "Information about driver": "Doniyor Rakhimov, passport AB 4455667",
-  "Information about shipping documents": "CMR 57-2026/014, invoice INV-57/2026-031"
+  "Information about shipping documents": "CMR 57-2026/014, invoice INV-57/2026-031",
+  "Vehicle Information": "Truck 01 KG 555 ABC / trailer 01 KG 99 AB, refrigerated semi-trailer",
+  "Vehicle registration number": "01 KG 555 ABC / trailer 01 KG 99 AB",
+  "Description of goods": "Biohumus (vermicompost), organic fertilizer, HS 3101 00 000 0, 22 000 kg net",
+  "Bank card number": "8600 1234 5678 9012"
  },
  "documents": [
   {
@@ -163,11 +167,16 @@
    "title": "Passport",
    "docType": "passport",
    "labels": [
-    "Passport"
+    "Passport",
+    "International passport"
    ],
    "steps": [
     2,
     10,
+    12,
+    14,
+    16,
+    21,
     28,
     30,
     33,
@@ -329,29 +338,6 @@
    "file": "57-08-offer-agreement-step-1.png"
   },
   {
-   "id": "receipt-of-payment-2",
-   "template": "receipt",
-   "title": "Receipt of payment — step 2",
-   "docType": "receipt_of_payment",
-   "labels": [
-    "Receipt of payment"
-   ],
-   "steps": [
-    2
-   ],
-   "output": true,
-   "fields": {
-    "receipt_no": "R-57-002",
-    "payer": "OOO \"Agro Yer Unumdorlik\"",
-    "payer_inn": "307890145",
-    "recipient": "Agency of Plant Quarantine and Protection",
-    "payment_type": "quarantine permit",
-    "amount": "245 000",
-    "date": "02.09.2026"
-   },
-   "file": "57-09-receipt-of-payment-step-2.png"
-  },
-  {
    "template": "letter",
    "title": "Certificate of state registration",
    "docType": null,
@@ -365,7 +351,7 @@
    "fields": {},
    "body": "Certificate of state registration issued to OOO \"Agro Yer Unumdorlik\" (TIN 307890145). Demo record for the shipment: 22 000 kg of biohumus (vermicompost), organic fertilizer, Bishkek (Kyrgyzstan) → Tashkent (Uzbekistan), 1 truck 01 KG 555 ABC / trailer 01 KG 99 AB.",
    "id": "certificate-of-state-registration",
-   "file": "57-10-certificate-of-state-registration.png"
+   "file": "57-09-certificate-of-state-registration.png"
   },
   {
    "id": "invoice-for-payment-10",
@@ -389,35 +375,12 @@
     "vat_rate": "12",
     "total": "1 120 000"
    },
-   "file": "57-11-invoice-for-payment-step-10.png"
-  },
-  {
-   "id": "receipt-of-payment-11",
-   "template": "receipt",
-   "title": "Receipt of payment — step 11",
-   "docType": "receipt_of_payment",
-   "labels": [
-    "Receipt of payment"
-   ],
-   "steps": [
-    11
-   ],
-   "output": true,
-   "fields": {
-    "receipt_no": "R-57-011",
-    "payer": "OOO \"Agro Yer Unumdorlik\"",
-    "payer_inn": "307890145",
-    "recipient": "Demo Customs Warehouse LLC",
-    "payment_type": "Prepay for customs warehouse services",
-    "amount": "1 120 000",
-    "date": "07.09.2026"
-   },
-   "file": "57-12-receipt-of-payment-step-11.png"
+   "file": "57-10-invoice-for-payment-step-10.png"
   },
   {
    "template": "letter",
    "title": "Authorization for international carriage of goods",
-   "docType": null,
+   "docType": "carriage_permit",
    "labels": [
     "Authorization for international carriage of goods"
    ],
@@ -427,33 +390,13 @@
    ],
    "output": false,
    "fields": {},
-   "body": "Authorization for international carriage of goods for 01 KG 555 ABC / trailer 01 KG 99 AB, operated by OcOO \"Demo Kyrgyz Transit\" (TIR carrier). Shipment: 22 000 kg of biohumus (vermicompost), organic fertilizer, Bishkek (Kyrgyzstan) → Tashkent (Uzbekistan), 1 truck 01 KG 555 ABC / trailer 01 KG 99 AB.",
    "id": "authorization-for-international-carriage-of-good",
-   "file": "57-13-authorization-for-international-carriage-of-good.png"
-  },
-  {
-   "template": "letter",
-   "title": "International passport",
-   "docType": null,
-   "labels": [
-    "International passport"
-   ],
-   "steps": [
-    12,
-    14,
-    16,
-    21
-   ],
-   "output": false,
-   "fields": {},
-   "body": "International passport of Doniyor Rakhimov, driver of the shipment (passport AB 4455667). Shipment: 22 000 kg of biohumus (vermicompost), organic fertilizer, Bishkek (Kyrgyzstan) → Tashkent (Uzbekistan), 1 truck 01 KG 555 ABC / trailer 01 KG 99 AB.",
-   "id": "international-passport",
-   "file": "57-14-international-passport.png"
+   "file": "57-11-authorization-for-international-carriage-of-good.png"
   },
   {
    "template": "letter",
    "title": "Vehicle registration certificate",
-   "docType": null,
+   "docType": "vehicle_registration",
    "labels": [
     "Vehicle registration certificate"
    ],
@@ -463,73 +406,8 @@
    ],
    "output": false,
    "fields": {},
-   "body": "Vehicle registration certificate for 01 KG 555 ABC / trailer 01 KG 99 AB, operated by OcOO \"Demo Kyrgyz Transit\" (TIR carrier). Shipment: 22 000 kg of biohumus (vermicompost), organic fertilizer, Bishkek (Kyrgyzstan) → Tashkent (Uzbekistan), 1 truck 01 KG 555 ABC / trailer 01 KG 99 AB.",
    "id": "vehicle-registration-certificate",
-   "file": "57-15-vehicle-registration-certificate.png"
-  },
-  {
-   "template": "letter",
-   "title": "Non-tariff measures",
-   "docType": null,
-   "labels": [
-    "Non-tariff measures"
-   ],
-   "steps": [
-    12
-   ],
-   "output": false,
-   "fields": {},
-   "body": "Non-tariff measures for the shipment 22 000 kg of biohumus (vermicompost), organic fertilizer, Bishkek (Kyrgyzstan) → Tashkent (Uzbekistan), 1 truck 01 KG 555 ABC / trailer 01 KG 99 AB, contract UZ-57/2026-01 of 01.09.2026.",
-   "id": "non-tariff-measures",
-   "file": "57-16-non-tariff-measures.png"
-  },
-  {
-   "template": "letter",
-   "title": "Description of goods",
-   "docType": null,
-   "labels": [
-    "Description of goods"
-   ],
-   "steps": [
-    12
-   ],
-   "output": false,
-   "fields": {},
-   "body": "Description of goods for the shipment 22 000 kg of biohumus (vermicompost), organic fertilizer, Bishkek (Kyrgyzstan) → Tashkent (Uzbekistan), 1 truck 01 KG 555 ABC / trailer 01 KG 99 AB, contract UZ-57/2026-01 of 01.09.2026.",
-   "id": "description-of-goods",
-   "file": "57-17-description-of-goods.png"
-  },
-  {
-   "template": "letter",
-   "title": "Vehicle Information",
-   "docType": null,
-   "labels": [
-    "Vehicle Information"
-   ],
-   "steps": [
-    12
-   ],
-   "output": false,
-   "fields": {},
-   "body": "Vehicle Information for 01 KG 555 ABC / trailer 01 KG 99 AB, operated by OcOO \"Demo Kyrgyz Transit\" (TIR carrier). Shipment: 22 000 kg of biohumus (vermicompost), organic fertilizer, Bishkek (Kyrgyzstan) → Tashkent (Uzbekistan), 1 truck 01 KG 555 ABC / trailer 01 KG 99 AB.",
-   "id": "vehicle-information",
-   "file": "57-18-vehicle-information.png"
-  },
-  {
-   "template": "letter",
-   "title": "Bank card number",
-   "docType": null,
-   "labels": [
-    "Bank card number"
-   ],
-   "steps": [
-    13
-   ],
-   "output": false,
-   "fields": {},
-   "body": "Bank card number for the shipment 22 000 kg of biohumus (vermicompost), organic fertilizer, Bishkek (Kyrgyzstan) → Tashkent (Uzbekistan), 1 truck 01 KG 555 ABC / trailer 01 KG 99 AB, contract UZ-57/2026-01 of 01.09.2026.",
-   "id": "bank-card-number",
-   "file": "57-19-bank-card-number.png"
+   "file": "57-12-vehicle-registration-certificate.png"
   },
   {
    "template": "invoice_for_payment",
@@ -553,23 +431,7 @@
     "total": "490 000"
    },
    "id": "invoice-for-payment-for-entrance-and-transit",
-   "file": "57-20-invoice-for-payment-for-entrance-and-transit.png"
-  },
-  {
-   "template": "letter",
-   "title": "Vehicle registration number",
-   "docType": null,
-   "labels": [
-    "Vehicle registration number"
-   ],
-   "steps": [
-    14
-   ],
-   "output": false,
-   "fields": {},
-   "body": "Vehicle registration number for 01 KG 555 ABC / trailer 01 KG 99 AB, operated by OcOO \"Demo Kyrgyz Transit\" (TIR carrier). Shipment: 22 000 kg of biohumus (vermicompost), organic fertilizer, Bishkek (Kyrgyzstan) → Tashkent (Uzbekistan), 1 truck 01 KG 555 ABC / trailer 01 KG 99 AB.",
-   "id": "vehicle-registration-number",
-   "file": "57-21-vehicle-registration-number.png"
+   "file": "57-13-invoice-for-payment-for-entrance-and-transit.png"
   },
   {
    "template": "phyto",
@@ -598,7 +460,7 @@
     "issue_date": "10.09.2026"
    },
    "id": "phytosanitary-certificate-of-the-exporter-s-coun",
-   "file": "57-22-phytosanitary-certificate-of-the-exporter-s-coun.png"
+   "file": "57-14-phytosanitary-certificate-of-the-exporter-s-coun.png"
   },
   {
    "template": "vet_cert",
@@ -623,12 +485,12 @@
     "vet_permit_no": "VP-57-2026"
    },
    "id": "veterinary-certificate-from-the-exporter-s-count",
-   "file": "57-23-veterinary-certificate-from-the-exporter-s-count.png"
+   "file": "57-15-veterinary-certificate-from-the-exporter-s-count.png"
   },
   {
-   "template": "letter",
+   "template": "declaration",
    "title": "Export declaration of the exporter's country",
-   "docType": null,
+   "docType": "customs_declaration",
    "labels": [
     "Export declaration of the exporter's country"
    ],
@@ -637,15 +499,27 @@
     50
    ],
    "output": false,
-   "fields": {},
-   "body": "Export declaration of the exporter's country for the shipment 22 000 kg of biohumus (vermicompost), organic fertilizer, Bishkek (Kyrgyzstan) → Tashkent (Uzbekistan), 1 truck 01 KG 555 ABC / trailer 01 KG 99 AB, contract UZ-57/2026-01 of 01.09.2026.",
+   "fields": {
+    "decl_type": "IM40",
+    "exporter": "OcOO \"Kyrgyz Bio Organic\"",
+    "consignee": "OOO \"Agro Yer Unumdorlik\"",
+    "origin_country": "Kyrgyzstan",
+    "destination_country": "Uzbekistan",
+    "delivery_terms": "DAP Tashkent",
+    "invoice_amount": "6 600.00 USD",
+    "hs_code": "3101 00 000 0",
+    "gross_weight": "22 440",
+    "net_weight": "22 000",
+    "procedure_code": "40",
+    "customs_value": "6 600.00 USD"
+   },
    "id": "export-declaration-of-the-exporter-s-country",
-   "file": "57-24-export-declaration-of-the-exporter-s-country.png"
+   "file": "57-16-export-declaration-of-the-exporter-s-country.png"
   },
   {
    "template": "letter",
    "title": "ATP certificate",
-   "docType": null,
+   "docType": "atp_certificate",
    "labels": [
     "ATP certificate"
    ],
@@ -654,14 +528,13 @@
    ],
    "output": false,
    "fields": {},
-   "body": "ATP certificate for 01 KG 555 ABC / trailer 01 KG 99 AB, operated by OcOO \"Demo Kyrgyz Transit\" (TIR carrier). Shipment: 22 000 kg of biohumus (vermicompost), organic fertilizer, Bishkek (Kyrgyzstan) → Tashkent (Uzbekistan), 1 truck 01 KG 555 ABC / trailer 01 KG 99 AB.",
    "id": "atp-certificate",
-   "file": "57-25-atp-certificate.png"
+   "file": "57-17-atp-certificate.png"
   },
   {
    "template": "letter",
    "title": "TIR Carnet - \"Transport International Routier\"",
-   "docType": null,
+   "docType": "tir_carnet",
    "labels": [
     "TIR Carnet - \"Transport International Routier\""
    ],
@@ -673,9 +546,8 @@
    ],
    "output": false,
    "fields": {},
-   "body": "TIR Carnet - \"Transport International Routier\" for 01 KG 555 ABC / trailer 01 KG 99 AB, operated by OcOO \"Demo Kyrgyz Transit\" (TIR carrier). Shipment: 22 000 kg of biohumus (vermicompost), organic fertilizer, Bishkek (Kyrgyzstan) → Tashkent (Uzbekistan), 1 truck 01 KG 555 ABC / trailer 01 KG 99 AB.",
    "id": "tir-carnet-transport-international-routier",
-   "file": "57-26-tir-carnet-transport-international-routier.png"
+   "file": "57-18-tir-carnet-transport-international-routier.png"
   },
   {
    "template": "letter",
@@ -693,7 +565,7 @@
    "fields": {},
    "body": "OOO \"Agro Yer Unumdorlik\" (TIN 307890145) applies for: application for preliminary visual inspection. Shipment: 22 000 kg of biohumus (vermicompost), organic fertilizer, Bishkek (Kyrgyzstan) → Tashkent (Uzbekistan), 1 truck 01 KG 555 ABC / trailer 01 KG 99 AB. Contract UZ-57/2026-01 of 01.09.2026.",
    "id": "application-for-preliminary-visual-inspection",
-   "file": "57-27-application-for-preliminary-visual-inspection.png"
+   "file": "57-19-application-for-preliminary-visual-inspection.png"
   },
   {
    "template": "letter",
@@ -709,12 +581,12 @@
    "fields": {},
    "body": "OOO \"Agro Yer Unumdorlik\" (TIN 307890145) applies for: electronic application for preliminary visual inspection. Shipment: 22 000 kg of biohumus (vermicompost), organic fertilizer, Bishkek (Kyrgyzstan) → Tashkent (Uzbekistan), 1 truck 01 KG 555 ABC / trailer 01 KG 99 AB. Contract UZ-57/2026-01 of 01.09.2026.",
    "id": "electronic-application-for-preliminary-visual-in",
-   "file": "57-28-electronic-application-for-preliminary-visual-in.png"
+   "file": "57-20-electronic-application-for-preliminary-visual-in.png"
   },
   {
    "template": "letter",
    "title": "Contract for customs warehouse services",
-   "docType": null,
+   "docType": "service_contract",
    "labels": [
     "Contract for customs warehouse services"
    ],
@@ -723,14 +595,13 @@
    ],
    "output": false,
    "fields": {},
-   "body": "Contract for customs warehouse services for the shipment 22 000 kg of biohumus (vermicompost), organic fertilizer, Bishkek (Kyrgyzstan) → Tashkent (Uzbekistan), 1 truck 01 KG 555 ABC / trailer 01 KG 99 AB, contract UZ-57/2026-01 of 01.09.2026.",
    "id": "contract-for-customs-warehouse-services",
-   "file": "57-29-contract-for-customs-warehouse-services.png"
+   "file": "57-21-contract-for-customs-warehouse-services.png"
   },
   {
    "template": "letter",
    "title": "Cargo delivery control book",
-   "docType": null,
+   "docType": "cargo_control_book",
    "labels": [
     "Cargo delivery control book"
    ],
@@ -739,14 +610,13 @@
    ],
    "output": false,
    "fields": {},
-   "body": "Cargo delivery control book for 01 KG 555 ABC / trailer 01 KG 99 AB, operated by OcOO \"Demo Kyrgyz Transit\" (TIR carrier). Shipment: 22 000 kg of biohumus (vermicompost), organic fertilizer, Bishkek (Kyrgyzstan) → Tashkent (Uzbekistan), 1 truck 01 KG 555 ABC / trailer 01 KG 99 AB.",
    "id": "cargo-delivery-control-book",
-   "file": "57-30-cargo-delivery-control-book.png"
+   "file": "57-22-cargo-delivery-control-book.png"
   },
   {
    "template": "letter",
    "title": "Transit declaration",
-   "docType": null,
+   "docType": "transit_declaration",
    "labels": [
     "Transit declaration"
    ],
@@ -755,26 +625,8 @@
    ],
    "output": false,
    "fields": {},
-   "body": "Transit declaration for the shipment 22 000 kg of biohumus (vermicompost), organic fertilizer, Bishkek (Kyrgyzstan) → Tashkent (Uzbekistan), 1 truck 01 KG 555 ABC / trailer 01 KG 99 AB, contract UZ-57/2026-01 of 01.09.2026.",
    "id": "transit-declaration",
-   "file": "57-31-transit-declaration.png"
-  },
-  {
-   "template": "letter",
-   "title": "Documents requried to complete declaration",
-   "docType": null,
-   "labels": [
-    "Documents requried to complete declaration"
-   ],
-   "steps": [
-    28,
-    50
-   ],
-   "output": false,
-   "fields": {},
-   "body": "Documents requried to complete declaration for the shipment 22 000 kg of biohumus (vermicompost), organic fertilizer, Bishkek (Kyrgyzstan) → Tashkent (Uzbekistan), 1 truck 01 KG 555 ABC / trailer 01 KG 99 AB, contract UZ-57/2026-01 of 01.09.2026.",
-   "id": "documents-requried-to-complete-declaration",
-   "file": "57-32-documents-requried-to-complete-declaration.png"
+   "file": "57-23-transit-declaration.png"
   },
   {
    "template": "declaration",
@@ -802,7 +654,7 @@
     "customs_value": "6 600.00 USD"
    },
    "id": "cargo-customs-declaration",
-   "file": "57-33-cargo-customs-declaration.png"
+   "file": "57-24-cargo-customs-declaration.png"
   },
   {
    "id": "offer-agreement-32",
@@ -823,30 +675,7 @@
     "service": "Inspection services",
     "units": "1"
    },
-   "file": "57-34-offer-agreement-step-32.png"
-  },
-  {
-   "id": "receipt-of-payment-33",
-   "template": "receipt",
-   "title": "Receipt of payment — step 33",
-   "docType": "receipt_of_payment",
-   "labels": [
-    "Receipt of payment"
-   ],
-   "steps": [
-    33
-   ],
-   "output": true,
-   "fields": {
-    "receipt_no": "R-57-033",
-    "payer": "OOO \"Agro Yer Unumdorlik\"",
-    "payer_inn": "307890145",
-    "recipient": "Agency of Plant Quarantine and Protection",
-    "payment_type": "transport unit opening act",
-    "amount": "780 000",
-    "date": "18.09.2026"
-   },
-   "file": "57-35-receipt-of-payment-step-33.png"
+   "file": "57-25-offer-agreement-step-32.png"
   },
   {
    "id": "fumigation-offer-agreement-36",
@@ -867,30 +696,7 @@
     "service": "Fumigation offer agreement",
     "units": "1"
    },
-   "file": "57-36-fumigation-offer-agreement-step-36.png"
-  },
-  {
-   "id": "receipt-of-payment-37",
-   "template": "receipt",
-   "title": "Receipt of payment — step 37",
-   "docType": "receipt_of_payment",
-   "labels": [
-    "Receipt of payment"
-   ],
-   "steps": [
-    37
-   ],
-   "output": true,
-   "fields": {
-    "receipt_no": "R-57-037",
-    "payer": "OOO \"Agro Yer Unumdorlik\"",
-    "payer_inn": "307890145",
-    "recipient": "Agency of Plant Quarantine and Protection",
-    "payment_type": "fumigation",
-    "amount": "1 500 000",
-    "date": "20.09.2026"
-   },
-   "file": "57-37-receipt-of-payment-step-37.png"
+   "file": "57-26-fumigation-offer-agreement-step-36.png"
   },
   {
    "id": "offer-agreement-for-veterinary-certificate-40",
@@ -911,7 +717,7 @@
     "service": "veterinary certificate",
     "units": "1"
    },
-   "file": "57-38-offer-agreement-for-veterinary-certificate-step-.png"
+   "file": "57-27-offer-agreement-for-veterinary-certificate-step-.png"
   },
   {
    "template": "letter",
@@ -927,35 +733,12 @@
    "fields": {},
    "body": "OOO \"Agro Yer Unumdorlik\" (TIN 307890145) applies for: online application for veterinary certificate. Shipment: 22 000 kg of biohumus (vermicompost), organic fertilizer, Bishkek (Kyrgyzstan) → Tashkent (Uzbekistan), 1 truck 01 KG 555 ABC / trailer 01 KG 99 AB. Contract UZ-57/2026-01 of 01.09.2026.",
    "id": "online-application-for-veterinary-certificate",
-   "file": "57-39-online-application-for-veterinary-certificate.png"
-  },
-  {
-   "id": "receipt-of-payment-42",
-   "template": "receipt",
-   "title": "Receipt of payment — step 42",
-   "docType": "receipt_of_payment",
-   "labels": [
-    "Receipt of payment"
-   ],
-   "steps": [
-    42
-   ],
-   "output": true,
-   "fields": {
-    "receipt_no": "R-57-042",
-    "payer": "OOO \"Agro Yer Unumdorlik\"",
-    "payer_inn": "307890145",
-    "recipient": "State Committee of Veterinary (demo)",
-    "payment_type": "veterinary certificate",
-    "amount": "2 350 000",
-    "date": "22.09.2026"
-   },
-   "file": "57-40-receipt-of-payment-step-42.png"
+   "file": "57-28-online-application-for-veterinary-certificate.png"
   },
   {
    "template": "letter",
    "title": "Certificate of analysis for fertilizers",
-   "docType": null,
+   "docType": "quality_certificate",
    "labels": [
     "Certificate of analysis for fertilizers"
    ],
@@ -964,14 +747,13 @@
    ],
    "output": false,
    "fields": {},
-   "body": "Certificate of analysis for fertilizers issued to OOO \"Agro Yer Unumdorlik\" (TIN 307890145). Demo record for the shipment: 22 000 kg of biohumus (vermicompost), organic fertilizer, Bishkek (Kyrgyzstan) → Tashkent (Uzbekistan), 1 truck 01 KG 555 ABC / trailer 01 KG 99 AB.",
    "id": "certificate-of-analysis-for-fertilizers",
-   "file": "57-41-certificate-of-analysis-for-fertilizers.png"
+   "file": "57-29-certificate-of-analysis-for-fertilizers.png"
   },
   {
    "template": "letter",
    "title": "Quality certificate",
-   "docType": null,
+   "docType": "quality_certificate",
    "labels": [
     "Quality certificate"
    ],
@@ -980,9 +762,8 @@
    ],
    "output": false,
    "fields": {},
-   "body": "Quality certificate issued to OOO \"Agro Yer Unumdorlik\" (TIN 307890145). Demo record for the shipment: 22 000 kg of biohumus (vermicompost), organic fertilizer, Bishkek (Kyrgyzstan) → Tashkent (Uzbekistan), 1 truck 01 KG 555 ABC / trailer 01 KG 99 AB.",
    "id": "quality-certificate",
-   "file": "57-42-quality-certificate.png"
+   "file": "57-30-quality-certificate.png"
   },
   {
    "template": "letter",
@@ -998,7 +779,7 @@
    "fields": {},
    "body": "Normative documents on standardization (fertilizers) for the shipment 22 000 kg of biohumus (vermicompost), organic fertilizer, Bishkek (Kyrgyzstan) → Tashkent (Uzbekistan), 1 truck 01 KG 555 ABC / trailer 01 KG 99 AB, contract UZ-57/2026-01 of 01.09.2026.",
    "id": "normative-documents-on-standardization",
-   "file": "57-43-normative-documents-on-standardization.png"
+   "file": "57-31-normative-documents-on-standardization.png"
   },
   {
    "template": "smgs",
@@ -1027,12 +808,12 @@
     "documents_attached": "Invoice INV-57/2026-031"
    },
    "id": "import-railway-bill",
-   "file": "57-44-import-railway-bill.png"
+   "file": "57-32-import-railway-bill.png"
   },
   {
    "template": "letter",
    "title": "Registration certificate",
-   "docType": null,
+   "docType": "registration_certificate",
    "labels": [
     "Registration certificate"
    ],
@@ -1041,9 +822,8 @@
    ],
    "output": false,
    "fields": {},
-   "body": "Registration certificate issued to OOO \"Agro Yer Unumdorlik\" (TIN 307890145). Demo record for the shipment: 22 000 kg of biohumus (vermicompost), organic fertilizer, Bishkek (Kyrgyzstan) → Tashkent (Uzbekistan), 1 truck 01 KG 555 ABC / trailer 01 KG 99 AB.",
    "id": "registration-certificate",
-   "file": "57-45-registration-certificate.png"
+   "file": "57-33-registration-certificate.png"
   },
   {
    "template": "invoice_for_payment",
@@ -1067,30 +847,7 @@
     "total": "375 000"
    },
    "id": "electronic-invoice-for-payment",
-   "file": "57-46-electronic-invoice-for-payment.png"
-  },
-  {
-   "id": "bank-payment-receipt-47",
-   "template": "receipt",
-   "title": "Bank payment receipt — step 47",
-   "docType": "receipt_of_payment",
-   "labels": [
-    "Bank payment receipt"
-   ],
-   "steps": [
-    47
-   ],
-   "output": true,
-   "fields": {
-    "receipt_no": "R-57-047",
-    "payer": "OOO \"Agro Yer Unumdorlik\"",
-    "payer_inn": "307890145",
-    "recipient": "Certification body of fertilizers (demo)",
-    "payment_type": "certificate of conformity",
-    "amount": "375 000",
-    "date": "25.09.2026"
-   },
-   "file": "57-47-bank-payment-receipt-step-47.png"
+   "file": "57-34-electronic-invoice-for-payment.png"
   },
   {
    "template": "vet_cert",
@@ -1114,7 +871,7 @@
     "vet_permit_no": "VP-57-2026"
    },
    "id": "veterinary-certificate",
-   "file": "57-48-veterinary-certificate.png"
+   "file": "57-35-veterinary-certificate.png"
   },
   {
    "template": "ct1",
@@ -1138,7 +895,7 @@
     "exported_to": "Uzbekistan"
    },
    "id": "certificate-of-origin-of-the-exporter-s-country",
-   "file": "57-49-certificate-of-origin-of-the-exporter-s-country.png"
+   "file": "57-36-certificate-of-origin-of-the-exporter-s-country.png"
   },
   {
    "id": "invoice-for-payment-55",
@@ -1162,30 +919,7 @@
     "vat_rate": "12",
     "total": "18 400 000"
    },
-   "file": "57-50-invoice-for-payment-step-55.png"
-  },
-  {
-   "id": "receipt-of-payment-for-warehouse-services-56",
-   "template": "receipt",
-   "title": "Receipt of payment for warehouse services — step 56",
-   "docType": "receipt_of_payment",
-   "labels": [
-    "Receipt of payment for warehouse services"
-   ],
-   "steps": [
-    56
-   ],
-   "output": true,
-   "fields": {
-    "receipt_no": "R-57-056",
-    "payer": "OOO \"Agro Yer Unumdorlik\"",
-    "payer_inn": "307890145",
-    "recipient": "Demo Customs Warehouse LLC",
-    "payment_type": "customs warehouse services",
-    "amount": "18 400 000",
-    "date": "29.09.2026"
-   },
-   "file": "57-51-receipt-of-payment-for-warehouse-services-step-5.png"
+   "file": "57-37-invoice-for-payment-step-55.png"
   }
  ]
 }

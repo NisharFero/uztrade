@@ -94,10 +94,16 @@ export function tailorProcedure(procedure: Procedure, facts?: Partial<ShipmentFa
     mode: facts?.mode ?? null,
   };
   const plan = buildShipmentPlan(procedure, f, query);
-  const hit = commodityOf(f.goods || query);
+  // What to call the goods: the product intake settled on, which may be one the
+  // lexicon has never heard of (a trader's own word, accepted from a nearest-
+  // category proposal). The published category is the fallback, never the
+  // preference - a case for yoghurt should not talk about "dairy products".
+  const named = (f.goods ?? "").trim().toLowerCase();
+  const usable = named && named.length <= 40 && !/\d/.test(named) ? named : "";
+  const hit = commodityOf(usable || query);
   const known = hit.kind === "known" && hit.category === procedure.goods;
-  const term = known ? hit.term : procedure.goods;
-  const hs = known ? hit.hs : null;
+  const term = usable || (known ? hit.term : procedure.goods);
+  const hs = f.hs || (known ? hit.hs : null);
   const exporting = procedure.direction === "export";
   const route = plan.route;
   const partnerIso = route ? (exporting ? route.destination.place.country : route.origin.place.country) : null;
@@ -121,14 +127,16 @@ export function tailorProcedure(procedure: Procedure, facts?: Partial<ShipmentFa
   const blockRef = (b: TailoredBlock) => `Block ${b.id} · ${b.publishedName}`;
 
   /* naming ---------------------------------------------------------------- */
-  const title = `${cap(procedure.direction)} of ${term} by ${mode}`;
+  const title = procedure.kind === "service" || procedure.direction === "transit"
+    ? procedure.title
+    : `${cap(procedure.direction)} of ${term} by ${mode}`;
   if (term !== procedure.goods) {
     changes.push({
       kind: "naming",
       target: "Workflow",
       change: `“${procedure.title}” → “${title}”`,
       reason: `${cap(term)}${hs ? ` (HS ${hs})` : ""} is covered by the ${procedure.goods} procedure`,
-      source: "Intake — commodity table",
+      source: known ? "Intake — commodity table" : "Intake — goods as stated",
     });
     const category = new RegExp(`\\b${procedure.goods}\\b`, "i");
     let renamed = 0;

@@ -18,7 +18,7 @@ export const dynamic = "force-dynamic";
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const p = CATALOGUE[id];
-  return { title: p ? `${p.title} · UzTrade` : "Procedure · UzTrade" };
+  return { title: p ? `${p.title} · Uzbekistan Trade Platform` : "Procedure · Uzbekistan Trade Platform" };
 }
 
 /** The procedure, and - when a case runs on it - that case's whole workflow:
@@ -79,7 +79,6 @@ export default async function ProcedurePage({ params }: { params: Promise<{ id: 
         <CaseBoard
           key={`${live.id}:${workflow?.progress.completed ?? 0}`}
           caseId={live.id}
-          procedureId={live.procedureId}
           publishedProcedure={procedure}
           initialProgress={progress}
           initialDocumentState={parseDocumentState(live.documentState)}

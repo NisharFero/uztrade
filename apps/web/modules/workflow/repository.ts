@@ -14,6 +14,7 @@ export type WorkflowNodeRecord = WorkflowNodeDefinition & {
   input?: Record<string, unknown>;
   result?: Record<string, unknown>;
   attempts?: number;
+  startedAt?: string | null;
 };
 
 export type WorkItemRecord = {
@@ -81,6 +82,7 @@ export interface WorkflowRepository {
   createRun(run: WorkflowRunRecord, workflow: InstantiatedWorkflow, shipmentFacts: ShipmentFacts): Promise<void>;
   getProjection(runId: string): Promise<WorkflowProjection>;
   updateNode(nodeId: string, patch: Partial<WorkflowNodeRecord>): Promise<void>;
+  claimNode(nodeId: string, from: WorkflowNodeRecord["state"], patch: Partial<WorkflowNodeRecord>): Promise<boolean>;
   updateRun(runId: string, patch: Partial<WorkflowRunRecord>): Promise<void>;
   ensureWorkItem(item: WorkItemRecord): Promise<WorkItemRecord>;
   completeWorkItem(id: string, result: Record<string, unknown>, completedBy: string): Promise<WorkItemRecord>;
@@ -117,6 +119,15 @@ export function createMemoryWorkflowRepository(): WorkflowRepository {
         }
       }
       throw new Error(`Workflow node ${nodeId} not found`);
+    },
+    async claimNode(nodeId, from, patch) {
+      for (const projection of projections.values()) {
+        const node = projection.nodes.find((candidate) => candidate.id === nodeId);
+        if (!node || node.state !== from) continue;
+        Object.assign(node, clone(patch));
+        return true;
+      }
+      return false;
     },
     async updateRun(runId, patch) {
       Object.assign(find(runId).run, clone(patch));

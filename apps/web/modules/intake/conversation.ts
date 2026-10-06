@@ -12,7 +12,7 @@ import { PARTNER_COUNTRIES } from "./data/countries";
 import { CATALOGUE } from "../procedures/data/procedures.generated";
 import { countryName, fmtTonnes, placesForCountry, toTonnes, unitsFor } from "./shipment-plan";
 import { isEmptyDraft, mergeReply, type IntakeDraft, type Slot } from "./draft";
-import { lookupProcedures, type Direction, type Mode } from "./lookup";
+import { lookupProcedures, pickProcedure, regimeLabel, regimesFor, type Direction, type Mode, type Regime } from "./lookup";
 import { isProcedureQuestion, isTradeQuery } from "./relevance";
 import { CATEGORIES, CATEGORY_LABEL, type Category } from "./taxonomy";
 import { checkQuantity, checkRoute, modesFor, type RouteCheck } from "./validate";
@@ -25,9 +25,11 @@ export type IntakeSummary = {
   how: string;
   howMuch: string;
   route: string;
-  direction: Direction;
+  direction: Direction | "transit";
+  regime: string;
   procedureId: string;
   title: string;
+  caseTitle: string;
   steps: number;
   blocks: number;
   /** One sentence the case is opened with. */
@@ -47,6 +49,9 @@ export type IntakeTurn = {
 };
 
 const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
+/** What to call the goods in a sentence: the trader's product, with the
+ *  published category behind it when they differ. */
+const goodsName = (term: string, category: Category) => (term === category ? term : `${term} (${category})`);
 const endLabel = (end: IntakeDraft["origin"]) => (!end ? "?" : end.assumed ? `${countryName(end.country)} (city?)` : end.name);
 const UZ_CITIES = ["Tashkent", "Samarkand", "Andijan", "Bukhara"];
 const DIRECTION_LABEL: Record<Direction, string> = { export: "Export from Uzbekistan", import: "Import into Uzbekistan" };
@@ -86,7 +91,7 @@ function routeChips(route: RouteCheck, direction: Direction): TurnOption[] {
 }
 
 export function converse(draft: IntakeDraft, reply: string, options: { expecting?: Slot | null } = {}): IntakeTurn {
-  if (isEmptyDraft(draft) && isProcedureQuestion(reply)) {
+  if (isProcedureQuestion(reply)) {
     return {
       status: "declined",
       draft,
@@ -126,10 +131,53 @@ export function converse(draft: IntakeDraft, reply: string, options: { expecting
 }
 
 export function evaluate(input: IntakeDraft, prefix: string[] = []): IntakeTurn {
+  const selected = input.procedureId ? CATALOGUE[input.procedureId] : null;
+  if (selected) {
+    const ask = (slot: Slot, message: string): IntakeTurn => ({ status: "asking", draft: input, slot, message, options: [], notes: [], progress: [] });
+    if (input.commodity && selected.goods !== "any cargo" && input.commodity.category !== selected.goods) {
+      return ask("commodity", `Procedure ${selected.id} covers ${selected.goods}. Select a different procedure for ${input.commodity.term}, or keep ${selected.goods}.`);
+    }
+    if (input.mode && selected.mode !== "any" && input.mode !== selected.mode) {
+      return ask("mode", `Procedure ${selected.id} is by ${selected.mode}. Use that mode, or select a different procedure.`);
+    }
+    if (selected.direction !== "transit" && input.statedDirection && input.statedDirection !== selected.direction) {
+      return ask("direction", `Procedure ${selected.id} is for ${selected.direction}. Use that direction, or select another procedure.`);
+    }
+    // Standalone services request their own documents/details in the workflow;
+    // inventing a consignment quantity and cross-border route is unnecessary.
+    if (selected.kind !== "service") {
+      if (!input.quantity) return ask("quantity", "How much are you moving? For example 5 tonnes.");
+      const check = checkQuantity(toTonnes(input.quantity.value, input.quantity.unit, selected.goods), selected.mode === "any" ? "road" : selected.mode, selected.goods);
+      if (check.level === "reject" || (check.level === "warn" && !input.quantity.acknowledged)) return ask("quantity", `${check.message}${check.level === "warn" ? " Say keep to confirm this load." : ""}`);
+      if (selected.direction === "transit") {
+        if (!input.origin || !input.destination || input.origin.country === "UZ" || input.destination.country === "UZ" || input.origin.country === input.destination.country) {
+          return ask("route", "Transit through Uzbekistan needs an origin and destination in two other countries. Where from and where to?");
+        }
+      } else {
+        const route = checkRoute(input.origin, input.destination);
+        if (route.level !== "ok") return ask("route", route.message);
+        if (route.direction !== selected.direction) return ask("route", `Give a route matching this ${selected.direction} procedure.`);
+      }
+    }
+    const route = input.origin && input.destination ? `${input.origin.name} → ${input.destination.name}` : "Not required for this service";
+    const quantity = input.quantity ? `${input.quantity.value} ${input.quantity.unit}` : "Not required for this service";
+    return {
+      status: "confirm", draft: input, options: [], notes: [], progress: [],
+      message: `Selected ${selected.title} (procedure ${selected.id}), ${selected.stepsCount} steps. Create the case?`,
+      summary: {
+        what: input.commodity?.term ?? selected.goods, how: selected.mode === "any" ? "As published" : `By ${selected.mode}`,
+        howMuch: quantity, route, direction: selected.direction, regime: selected.regime,
+        procedureId: selected.id, title: selected.title, caseTitle: selected.title,
+        steps: selected.stepsCount, blocks: selected.blocksCount,
+        query: `Procedure ${selected.id}: ${selected.title}${input.quantity ? `; ${quantity}` : ""}${input.origin && input.destination ? ` from ${input.origin.name} to ${input.destination.name}` : ""}`,
+      },
+    };
+  }
   let draft = { ...input };
   const notes: string[] = [];
   let directionOk = false;
   let modeOk = false;
+  let regimeOk = false;
   let quantityOk = false;
   let routeOk = false;
   let direction: Direction | null = null;
@@ -148,6 +196,12 @@ export function evaluate(input: IntakeDraft, prefix: string[] = []): IntakeTurn 
     },
     { slot: "direction", label: "Export / Import", value: direction ? cap(direction) : draft.statedDirection ? cap(draft.statedDirection) : null, done: directionOk },
     { slot: "mode", label: "How", value: draft.mode ? `By ${draft.mode}` : null, done: modeOk },
+    {
+      slot: "regime",
+      label: "Treatment",
+      value: draft.regime ? (draft.regime === "standard" ? `Whole ${draft.statedDirection ?? "trade"}` : cap(draft.regime)) : null,
+      done: regimeOk,
+    },
     {
       slot: "quantity",
       label: "How much",
@@ -184,7 +238,7 @@ export function evaluate(input: IntakeDraft, prefix: string[] = []): IntakeTurn 
     }
     return ask(
       "commodity",
-      "What goods are you moving? Published procedures cover tea, dried fruits, fresh fruits and vegetables, fruit and vegetable juices, and animal or vegetable fertilizers — or I can arrange rail transport for any cargo.",
+      `What are you moving? Name the product — tomatoes, yoghurt, medicines, carpets — and I will find the procedure for it. ${CATEGORIES.length - 1} goods categories are published, plus rail transport for any cargo.`,
       CATEGORIES.map((c) => ({ label: CATEGORY_LABEL[c], reply: c })),
     );
   }
@@ -198,7 +252,7 @@ export function evaluate(input: IntakeDraft, prefix: string[] = []): IntakeTurn 
   if (route.level === "ok" && !published.includes(route.direction!)) {
     return ask(
       "route",
-      `${cap(category)} can only be ${published.map((d) => (d === "export" ? "exported" : "imported")).join(" or ")} under a published procedure, but ${draft.origin!.name} → ${draft.destination!.name} is an ${route.direction}. Give a route that ${published[0] === "export" ? "leaves" : "enters"} Uzbekistan.`,
+      `${cap(term)} can only be ${published.map((d) => (d === "export" ? "exported" : "imported")).join(" or ")} under a published procedure, but ${draft.origin!.name} → ${draft.destination!.name} is an ${route.direction}. Give a route that ${published[0] === "export" ? "leaves" : "enters"} Uzbekistan.`,
     );
   }
   if (route.level === "ok" && draft.statedDirection && route.direction !== draft.statedDirection) {
@@ -214,7 +268,7 @@ export function evaluate(input: IntakeDraft, prefix: string[] = []): IntakeTurn 
     if (published.length === 1) {
       direction = published[0];
       draft = { ...draft, statedDirection: direction };
-      notes.push(`Only ${direction} is published for ${category} — ${direction}.`);
+      notes.push(`Only ${direction} is published for ${goodsName(term, category)} — ${direction}.`);
     } else {
       const question = category === "any cargo" ? "Rail transport: are you dispatching the cargo, or taking delivery of it?" : `${cap(term)}: is it leaving Uzbekistan or coming in?`;
       return ask("direction", question, published.map((d) => ({ label: directionLabel(category, d), reply: d })));
@@ -222,7 +276,7 @@ export function evaluate(input: IntakeDraft, prefix: string[] = []): IntakeTurn 
   } else if (!published.includes(direction)) {
     return ask(
       "direction",
-      `${cap(category)} is only published as ${published.join(" or ")}.`,
+      `${cap(goodsName(term, category))} is only published as ${published.join(" or ")}.`,
       published.map((d) => ({ label: directionLabel(category, d), reply: d })),
     );
   }
@@ -233,7 +287,7 @@ export function evaluate(input: IntakeDraft, prefix: string[] = []): IntakeTurn 
   if (!draft.mode) {
     if (available.length === 1) {
       draft = { ...draft, mode: available[0].mode };
-      notes.push(`Only ${available[0].mode} is published for ${category} ${direction}s — by ${available[0].mode}.`);
+      notes.push(`Only ${available[0].mode} is published for ${goodsName(term, category)} ${direction}s — by ${available[0].mode}.`);
     } else {
       return ask(
         "mode",
@@ -244,15 +298,31 @@ export function evaluate(input: IntakeDraft, prefix: string[] = []): IntakeTurn 
   } else if (!available.some((o) => o.mode === draft.mode)) {
     const sameMode = all.find((o) => o.mode === draft.mode);
     const why = sameMode
-      ? `By ${draft.mode}, ${category} is only published as ${sameMode.directions.join(" or ")}.`
-      : `${cap(category)} by ${draft.mode} isn't a published procedure.`;
+      ? `By ${draft.mode}, ${goodsName(term, category)} is only published as ${sameMode.directions.join(" or ")}.`
+      : `${cap(goodsName(term, category))} by ${draft.mode} isn't a published procedure.`;
     const choice = available.length === 1 ? `It can go by ${available[0].mode}.` : "Pick a mode.";
     return ask("mode", `${why} ${choice}`, available.map((o) => ({ label: `By ${o.mode}`, reply: `by ${o.mode}` })));
   }
   modeOk = true;
   const mode = draft.mode as Mode;
 
-  /* 4. How much - sensible for the mode */
+  /* 4. Which treatment - only when the corpus publishes more than one */
+  const regimes = regimesFor(category, direction, mode);
+  let regime: Regime | null = draft.regime && regimes.includes(draft.regime) ? draft.regime : null;
+  if (regimes.length <= 1) {
+    regime = regimes[0] ?? null;
+  } else if (!regime) {
+    const basisOf = (r: Regime) => CATALOGUE[lookupProcedures(category, direction, mode, r)[0]]?.basis;
+    return ask(
+      "regime",
+      `${cap(term)} by ${mode}, ${direction}: which of these do you need?`,
+      regimes.map((r) => ({ label: regimeLabel(r, direction!, basisOf(r)), reply: regimeLabel(r, direction!, basisOf(r)) })),
+    );
+  }
+  if (regime && regime !== draft.regime) draft = { ...draft, regime };
+  regimeOk = true;
+
+  /* 5. How much - sensible for the mode */
   const examples = EXAMPLES[mode];
   const exampleChips = examples.map((e) => ({ label: e, reply: e }));
   if (!draft.quantity) return ask("quantity", `How much ${term}? For example ${examples.join(", ")}.`, exampleChips);
@@ -269,7 +339,7 @@ export function evaluate(input: IntakeDraft, prefix: string[] = []): IntakeTurn 
   notes.push(q.message);
   quantityOk = true;
 
-  /* 5. From -> To, in that direction */
+  /* 6. From -> To, in that direction */
   if (route.level !== "ok") return ask("route", route.message, routeChips(route, direction));
   routeOk = true;
 
@@ -296,9 +366,10 @@ export function evaluate(input: IntakeDraft, prefix: string[] = []): IntakeTurn 
   const requirements = direction === "export" ? partner.destinationRequirements.filter((r) => requirementApplies(r, category)) : [];
   if (requirements.length) notes.push(`${partner.name} requires: ${requirements.join("; ")}.`);
 
-  /* 6. Confirm */
-  const ids = lookupProcedures(category, direction, mode);
-  const p = CATALOGUE[ids[0]];
+  /* 7. Confirm */
+  const p = pickProcedure(lookupProcedures(category, direction, mode, regime))!;
+  // The same name modules/workflow/tailor.ts gives the workflow.
+  const caseName = `${cap(direction)} of ${term} by ${mode}`;
   const units = unitsFor(mode, category, tonnes);
   const summary: IntakeSummary = {
     what: withHs(term, hs),
@@ -306,8 +377,12 @@ export function evaluate(input: IntakeDraft, prefix: string[] = []): IntakeTurn 
     howMuch: `${fmtTonnes(tonnes!)} ≈ ${units.count} ${units.kind}${units.count > 1 ? "s" : ""}`,
     route: `${o.name}, ${countryName(o.country)} → ${d.name}, ${countryName(d.country)}`,
     direction,
+    regime: p.regime,
     procedureId: p.id,
+    /** The published procedure's own title - provenance for the case. */
     title: p.title,
+    /** What the case will be called: the trader's goods, not the category. */
+    caseTitle: caseName,
     steps: p.stepsCount,
     blocks: p.blocksCount,
     query: `${cap(direction)} ${fmtTonnes(tonnes!)} of ${term} from ${o.name} to ${d.name} by ${mode}`,
@@ -316,7 +391,13 @@ export function evaluate(input: IntakeDraft, prefix: string[] = []): IntakeTurn 
   return {
     status: "confirm",
     draft,
-    message: [...prefix, `Ready: ${p.title} (procedure ${p.id}), ${p.stepsCount} steps. Create the case and its steps?`].join(" "),
+    // What the case will be called comes first; the published procedure is
+    // provenance, not the headline - this case is for yoghurt, not for "dairy
+    // products".
+    message: [
+      ...prefix,
+      `Ready: ${caseName}${caseName === p.title ? "" : ` — published as ${p.title}`} (procedure ${p.id}), ${p.stepsCount} steps. Create the case and its steps?`,
+    ].join(" "),
     options: [],
     notes,
     progress: progress(),

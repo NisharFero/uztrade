@@ -426,7 +426,9 @@ export function transitView(input: {
   return {
     caseId,
     mode: procedure.mode,
-    goods: procedure.goods,
+    // What the trader is moving, not the category it is published under: this
+    // case is carrying cheese, even though procedure 109 is "dairy products".
+    goods: facts.goods || procedure.goods,
     capacity,
     route,
     legs,

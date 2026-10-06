@@ -13,7 +13,7 @@ export const dynamic = "force-dynamic";
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  return { title: `${id} · UzTrade` };
+  return { title: `${id} · Uzbekistan Trade Platform` };
 }
 
 export default async function CasePage({ params }: { params: Promise<{ id: string }> }) {
@@ -65,7 +65,6 @@ export default async function CasePage({ params }: { params: Promise<{ id: strin
       <CaseBoard
         key={`${found.id}:${workflow?.progress.completed ?? 0}:${found.documentState.length}`}
         caseId={found.id}
-        procedureId={found.procedureId}
         publishedProcedure={procedure}
         initialProgress={progress}
         initialDocumentState={parseDocumentState(found.documentState)}

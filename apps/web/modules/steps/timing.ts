@@ -50,7 +50,7 @@ export type CaseTiming = {
 const MINUTE = 60_000;
 const time = (value?: string) => (value ? Date.parse(value) : Number.NaN);
 const zero = (): Record<WaitedOn, number> => ({ you: 0, entity: 0, goods: 0, agent: 0 });
-const CLOSING = new Set(["agent_node_completed", "work_item_completed", "optional_node_skipped"]);
+const CLOSING = new Set(["agent_node_completed", "work_item_completed", "optional_node_skipped", "step_auto_completed"]);
 
 const laneWait = (lane: string): WaitedOn => laneWaitingOn(lane);
 

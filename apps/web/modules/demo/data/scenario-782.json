@@ -183,7 +183,7 @@
   {
    "template": "letter",
    "title": "Agreement with Technological center",
-   "docType": null,
+   "docType": "service_contract",
    "labels": [
     "Agreement with Technological center"
    ],
@@ -192,7 +192,6 @@
    ],
    "output": false,
    "fields": {},
-   "body": "Agreement with Technological center for the shipment 40 000 kg of ceramic floor tiles, Tashkent (Uzbekistan) → Almaty (Kazakhstan), 1 wagon 60218844, contract UZ-782/2026-01 of 01.09.2026.",
    "id": "agreement-with-technological-center",
    "file": "782-05-agreement-with-technological-center.png"
   },
@@ -221,27 +220,19 @@
    "file": "782-06-invoice-for-payment-for-railway-services.png"
   },
   {
-   "id": "receipt-of-payment-3",
-   "template": "receipt",
-   "title": "Receipt of payment — step 3",
-   "docType": "receipt_of_payment",
+   "id": "agreement-on-railway-transportation-services-7",
+   "template": "letter",
+   "title": "Agreement on railway transportation services — step 7",
+   "docType": "service_contract",
    "labels": [
-    "Receipt of payment"
+    "Agreement on railway transportation services"
    ],
    "steps": [
-    3
+    7
    ],
    "output": true,
-   "fields": {
-    "receipt_no": "R-782-003",
-    "payer": "OOO \"Kulol Keramika\"",
-    "payer_inn": "309012367",
-    "recipient": "JSC Uzbekistan Temir Yo'llari",
-    "payment_type": "Prepay for railway services (juices and tea)",
-    "amount": "245 000",
-    "date": "03.09.2026"
-   },
-   "file": "782-07-receipt-of-payment-step-3.png"
+   "fields": {},
+   "file": "782-07-agreement-on-railway-transportation-services-ste.png"
   },
   {
    "template": "invoice_for_payment",
@@ -268,46 +259,6 @@
    "file": "782-08-invoice-for-payment.png"
   },
   {
-   "id": "receipt-of-payment-8",
-   "template": "receipt",
-   "title": "Receipt of payment — step 8",
-   "docType": "receipt_of_payment",
-   "labels": [
-    "Receipt of payment"
-   ],
-   "steps": [
-    8
-   ],
-   "output": true,
-   "fields": {
-    "receipt_no": "R-782-008",
-    "payer": "OOO \"Kulol Keramika\"",
-    "payer_inn": "309012367",
-    "recipient": "OOO \"Demo Forwarding\"",
-    "payment_type": "code assignment and freight forwarder service",
-    "amount": "1 120 000",
-    "date": "05.09.2026"
-   },
-   "file": "782-09-receipt-of-payment-step-8.png"
-  },
-  {
-   "template": "letter",
-   "title": "Information from following documents is required to complete the application",
-   "docType": null,
-   "labels": [
-    "Information from following documents is required to complete the application"
-   ],
-   "steps": [
-    10,
-    11
-   ],
-   "output": false,
-   "fields": {},
-   "body": "OOO \"Kulol Keramika\" (TIN 309012367) applies for: information from following documents is required to complete the application. Shipment: 40 000 kg of ceramic floor tiles, Tashkent (Uzbekistan) → Almaty (Kazakhstan), 1 wagon 60218844. Contract UZ-782/2026-01 of 01.09.2026.",
-   "id": "information-from-following-documents-is-required",
-   "file": "782-10-information-from-following-documents-is-required.png"
-  },
-  {
    "template": "letter",
    "title": "Telegram on payment for the railway tariff by telegraph",
    "docType": null,
@@ -321,7 +272,7 @@
    "fields": {},
    "body": "Telegram on payment for the railway tariff by telegraph for the shipment 40 000 kg of ceramic floor tiles, Tashkent (Uzbekistan) → Almaty (Kazakhstan), 1 wagon 60218844, contract UZ-782/2026-01 of 01.09.2026.",
    "id": "telegram-on-payment-for-the-railway-tariff-by-te",
-   "file": "782-11-telegram-on-payment-for-the-railway-tariff-by-te.png"
+   "file": "782-09-telegram-on-payment-for-the-railway-tariff-by-te.png"
   },
   {
    "template": "letter",
@@ -337,7 +288,7 @@
    "fields": {},
    "body": "Package of documents for the shipment 40 000 kg of ceramic floor tiles, Tashkent (Uzbekistan) → Almaty (Kazakhstan), 1 wagon 60218844, contract UZ-782/2026-01 of 01.09.2026.",
    "id": "package-of-documents",
-   "file": "782-12-package-of-documents.png"
+   "file": "782-10-package-of-documents.png"
   },
   {
    "id": "duplicate-of-railway-bill-with-datestamp-19",
@@ -367,7 +318,7 @@
     "documents_attached": "Invoice INV-782/2026-031"
    },
    "stamp": "datestamp",
-   "file": "782-13-duplicate-of-railway-bill-with-datestamp-step-19.png"
+   "file": "782-11-duplicate-of-railway-bill-with-datestamp-step-19.png"
   }
  ]
 }

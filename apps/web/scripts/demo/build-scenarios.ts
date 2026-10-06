@@ -243,6 +243,12 @@ function valuesFor(p: Profile): Record<string, string> {
     "Information about the carrier (for physical entities)": "Not applicable — the carrier is a company",
     "Information about driver": `${p.representative.name}, passport ${p.representative.passport}`,
     "Information about shipping documents": `CMR ${p.id}-2026/014, invoice INV-${p.id}/2026-031`,
+    "Vehicle Information": byRoad ? `Truck ${p.units[0] ?? "01 A 123 BC"}, refrigerated semi-trailer` : `Wagon ${p.units[0] ?? "62458731"}`,
+    "Vehicle registration number": p.units[0] ?? "01 A 123 BC",
+    "Description of goods": `${p.goods}, HS ${p.hs}, ${kg(p.netKg)} kg net`,
+    "Bank card number": "8600 1234 5678 9012",
+    "Identification number of foreign trade contract": `UZ-FTC-2026-${p.id}0418`,
+    "Information on the goods to be transported": `${p.goods}, HS ${p.hs}, ${kg(p.netKg)} kg net`,
   };
 }
 

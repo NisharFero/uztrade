@@ -4,6 +4,12 @@ import { openCaseFromQuery } from "../../../modules/cases/orchestration";
 import { buildDagProjection } from "../../../modules/workflow/dag-projection";
 import { agenticAiFromEnv } from "../../../modules/workflow/agentic-ai";
 import { portalsFromEnv, type PortalEnv } from "../../../modules/portals/client";
+import { jsonBody, routeError } from "../../../modules/shared/http";
+
+/* Vercel's default function timeout is shorter than a model call plus the work
+ * around it: answers with a model.
+ * 60 s is the Hobby plan's ceiling and well inside Pro's. */
+export const maxDuration = 60;
 
 function toRouteErrorMessage(error: unknown) {
   const message = error instanceof Error ? error.message : "Unexpected error";
@@ -15,8 +21,8 @@ function toRouteErrorMessage(error: unknown) {
 
 export async function POST(request: Request) {
   try {
-    const payload = (await request.json()) as { query?: string; followUps?: unknown };
-    const query = payload.query?.trim() ?? "";
+    const payload = await jsonBody(request);
+    const query = typeof payload.query === "string" ? payload.query.trim() : "";
     if (!query) {
       return Response.json({ error: "query is required" }, { status: 400 });
     }
@@ -64,6 +70,9 @@ export async function POST(request: Request) {
       { status: 201 },
     );
   } catch (error) {
-    return Response.json({ error: toRouteErrorMessage(error) }, { status: 500 });
+    if (error instanceof Error && /no such table|D1 binding/i.test(error.message)) {
+      return Response.json({ error: toRouteErrorMessage(error) }, { status: 503 });
+    }
+    return routeError(error);
   }
 }

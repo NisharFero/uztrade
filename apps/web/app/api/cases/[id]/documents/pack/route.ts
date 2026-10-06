@@ -3,6 +3,7 @@ const env = getRuntimeEnv();
 import { llmFromEnv, type LlmEnv } from "../../../../../../modules/ai/llm";
 import { syncCaseBlockProgress } from "../../../../../../modules/cases/block-progress";
 import { DOCAI_URL_DEFAULT } from "../../../../../../modules/documents/docai/client";
+import { documentReaderFrom } from "../../../../../../modules/documents/docai/reader";
 import { parseUploadedDocument } from "../../../../../../modules/documents/docai/upload";
 import { ingestDocument, type DocsBucket } from "../../../../../../modules/documents/ingest";
 import { documentBucket } from "../../../../../../modules/documents/storage";
@@ -14,6 +15,11 @@ import { loadCase } from "../../../../../../modules/steps/context";
 import { agenticAiFromEnv } from "../../../../../../modules/workflow/agentic-ai";
 import { portalsFromEnv, type PortalEnv } from "../../../../../../modules/portals/client";
 
+/* Vercel's default function timeout is shorter than a model call plus the work
+ * around it: reads a whole pack of documents.
+ * 60 s is the Hobby plan's ceiling and well inside Pro's. */
+export const maxDuration = 60;
+
 type Ctx = { params: Promise<{ id: string }> };
 
 const MAX_BYTES = 15 * 1024 * 1024;
@@ -24,12 +30,17 @@ const bindings = env as unknown as { DOCS?: DocsBucket; GROQ_API_KEY?: string; G
  *  answers and read like any single upload. What can't be typed is reported,
  *  never guessed. */
 export async function POST(request: Request, { params }: Ctx) {
+  const deadline = Date.now() + 50_000;
   try {
     const { id } = await params;
     const c = await loadCase(id);
     const llm = llmFromEnv(env as unknown as LlmEnv);
     const docaiUrl = bindings.DOCAI_URL || DOCAI_URL_DEFAULT;
+    const reader = documentReaderFrom(bindings, bindings.DOCAI_URL);
 
+    if (!request.headers.get("content-type")?.toLowerCase().startsWith("multipart/form-data")) {
+      throw new HttpError(415, "multipart/form-data is required");
+    }
     const form = await request.formData();
     const files = form.getAll("files").filter((entry): entry is File => typeof entry !== "string");
     if (!files.length) throw new HttpError(400, "files are required");
@@ -41,8 +52,20 @@ export async function POST(request: Request, { params }: Ctx) {
       const fileName = file.name || "document";
       const contentType = file.type || "application/octet-stream";
       const unplaced = (note: string): PackFileResult => ({ fileName, docType: null, from: null, label: null, stepNum: 0, status: "unlabelled", accepted: 0, review: 0, note });
+      if (Date.now() >= deadline - 40_000) {
+        results.push(unplaced("Not processed within this request; upload this file separately."));
+        continue;
+      }
       if (file.size > MAX_BYTES) {
         results.push(unplaced("Larger than 15 MB"));
+        continue;
+      }
+      if (file.size === 0) {
+        results.push(unplaced("The uploaded file is empty"));
+        continue;
+      }
+      if (!/^(image\/(png|jpe?g|webp)|application\/pdf)$/i.test(contentType)) {
+        results.push(unplaced("Upload a PNG, JPEG, WebP or PDF document"));
         continue;
       }
 
@@ -50,8 +73,12 @@ export async function POST(request: Request, { params }: Ctx) {
       let typed = await typeOfFile({ fileName, llm });
       if (!typed.docType) {
         // The page is read once here; the field pass reuses that reading.
-        const probe = await parseUploadedDocument({ bytes, fileName, contentType, spec: DETECT_SPEC, baseUrl: docaiUrl });
+        const probe = await parseUploadedDocument({ bytes, fileName, contentType, spec: DETECT_SPEC, baseUrl: docaiUrl, parseWithAi: reader });
         typed = await typeOfFile({ fileName, text: probe.text, llm });
+      }
+      if (Date.now() >= deadline - 40_000) {
+        results.push(unplaced("Identified but not stored within this request; upload this file separately."));
+        continue;
       }
       if (!typed.docType) {
         results.push(unplaced(packNote({ status: "unlabelled", docType: null, from: null })));
@@ -74,9 +101,11 @@ export async function POST(request: Request, { params }: Ctx) {
         docType: typed.docType,
         bucket: documentBucket(bindings),
         docaiUrl,
+        reader,
         llm,
         ai: agenticAiFromEnv(bindings),
         portals: portalsFromEnv(env as unknown as PortalEnv),
+        deadline,
       });
       projection = ingested.projection;
       const fields = ingested.record.fields;

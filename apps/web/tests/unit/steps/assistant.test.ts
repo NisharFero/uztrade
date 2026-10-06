@@ -188,3 +188,68 @@ test("a payment to anyone but a bank stays with the trader, who picks the channe
   assert.ok(view.blocking.some((b) => /Choose one/.test(b)));
   assert.ok(view.needs.some((n) => n.output && n.docType === "receipt_of_payment"));
 });
+
+/* Document Intelligence closing a trader step on its own (autoCompletable). */
+
+/** A document read by Document Intelligence with every field accepted - no trader review. */
+const readDocument = (docType: DocType, label: string, stepNum: number, overrides: Partial<DocumentRecord> = {}) => {
+  const doc = confirmedDocument(docType, label, stepNum, { confirmed: false, ...overrides });
+  return { ...doc, fields: doc.fields.map((f) => ({ ...f, status: "accepted" as const, source: "docai" })) };
+};
+const stateOf = async (repository: Awaited<ReturnType<typeof openRun>>["repository"], runId: string, stepNum: number) =>
+  (await repository.getProjection(runId)).nodes.find((n) => n.stepNum === stepNum)!.state;
+
+test("a step that only asks for documents completes itself once they are read and verified", async () => {
+  const { repository, runId } = await openRun();
+  assert.equal(await stateOf(repository, runId, 7), "needs_input");
+  await recordDocument(repository, runId, readDocument("trade_contract", "Foreign trade contract", 7));
+
+  assert.equal(await stateOf(repository, runId, 7), "completed");
+  const audit = (await repository.getProjection(runId)).auditEvents.find((e) => e.eventType === "step_auto_completed");
+  assert.equal(audit?.actorId, "document_intelligence");
+});
+
+test("documents reused from an earlier step do not close a step on their own", async () => {
+  const { repository, runId } = await openRun();
+  await recordInput(repository, runId, { kind: "confirm", stepNum: 1, label: "Electronic digital signature", value: "yes" });
+  await recordDocument(repository, runId, readDocument("trade_contract", "Electronic copy of foreign trade contract", 1));
+
+  // Step 1 also needs the trader's signature on the portal: it waits for "Complete step".
+  assert.equal(await stateOf(repository, runId, 1), "needs_input");
+  // Step 7 is satisfied by the same contract, but nothing was handed to it yet.
+  assert.equal(await stateOf(repository, runId, 7), "needs_input");
+});
+
+test("a cross-check mismatch or a field left to review keeps the step open", async () => {
+  const mismatch = await openRun();
+  await recordDocument(mismatch.repository, mismatch.runId, readDocument("trade_contract", "Foreign trade contract", 7, {
+    checks: [{ check: "Exporter matches the case", status: "mismatch", detail: "Different company" }],
+  }));
+  assert.equal(await stateOf(mismatch.repository, mismatch.runId, 7), "needs_input");
+
+  const review = await openRun();
+  const doc = readDocument("trade_contract", "Foreign trade contract", 7);
+  doc.fields = doc.fields.map((f, i) => (i === 0 && f.required ? { ...f, status: "review" as const } : f));
+  await recordDocument(review.repository, review.runId, doc);
+  assert.equal(await stateOf(review.repository, review.runId, 7), "needs_input");
+});
+
+test("a verified output document is proof the step happened", async () => {
+  const { repository, runId, procedure } = await openRun();
+  for (const node of (await repository.getProjection(runId)).nodes) {
+    if (node.stepNum < 31) await repository.updateNode(node.id, { state: "completed" });
+  }
+  await runOrchestrator(repository, runId);
+  let projection = await repository.getProjection(runId);
+  const node = projection.nodes.find((n) => n.stepNum === 31)!;
+  assert.equal(node.state, "needs_input");
+  for (const need of stepViewFor(procedure, projection, buildLedger(projection.artifacts), node).needs.filter((n) => n.kind === "confirm")) {
+    await recordInput(repository, runId, { kind: "confirm", stepNum: 31, label: need.label, value: "yes" });
+  }
+  assert.equal(await stateOf(repository, runId, 31), "needs_input", "a confirmation alone does not close it");
+
+  projection = await repository.getProjection(runId);
+  const output = stepViewFor(procedure, projection, buildLedger(projection.artifacts), node).needs.find((n) => n.output)!;
+  await recordDocument(repository, runId, readDocument("phytosanitary_certificate", output.label, 31));
+  assert.equal(await stateOf(repository, runId, 31), "completed");
+});

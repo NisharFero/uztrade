@@ -332,6 +332,21 @@
    "file": "540-10-certificate-of-state-registration.png"
   },
   {
+   "id": "contract-for-handling-and-storage-of-cargo-7",
+   "template": "letter",
+   "title": "Contract for handling and storage of cargo — step 7",
+   "docType": "service_contract",
+   "labels": [
+    "Contract for handling and storage of cargo"
+   ],
+   "steps": [
+    7
+   ],
+   "output": true,
+   "fields": {},
+   "file": "540-11-contract-for-handling-and-storage-of-cargo-step-.png"
+  },
+  {
    "id": "invoice-for-prepayment-for-cargo-handling-8",
    "template": "invoice_for_payment",
    "title": "Invoice for prepayment for cargo handling — step 8",
@@ -353,30 +368,7 @@
     "vat_rate": "12",
     "total": "1 120 000"
    },
-   "file": "540-11-invoice-for-prepayment-for-cargo-handling-step-8.png"
-  },
-  {
-   "id": "receipt-of-payment-9",
-   "template": "receipt",
-   "title": "Receipt of payment — step 9",
-   "docType": "receipt_of_payment",
-   "labels": [
-    "Receipt of payment"
-   ],
-   "steps": [
-    9
-   ],
-   "output": true,
-   "fields": {
-    "receipt_no": "R-540-009",
-    "payer": "OOO \"Silk Road Tea\"",
-    "payer_inn": "305678923",
-    "recipient": "Service provider (demo)",
-    "payment_type": "Prepay for handling and storage of cargo",
-    "amount": "1 120 000",
-    "date": "06.09.2026"
-   },
-   "file": "540-12-receipt-of-payment-step-9.png"
+   "file": "540-12-invoice-for-prepayment-for-cargo-handling-step-8.png"
   },
   {
    "id": "offer-agreement-for-internal-phytosanitary-certi-10",
@@ -400,29 +392,6 @@
    "file": "540-13-offer-agreement-for-internal-phytosanitary-certi.png"
   },
   {
-   "id": "receipt-of-payment-11",
-   "template": "receipt",
-   "title": "Receipt of payment — step 11",
-   "docType": "receipt_of_payment",
-   "labels": [
-    "Receipt of payment"
-   ],
-   "steps": [
-    11
-   ],
-   "output": true,
-   "fields": {
-    "receipt_no": "R-540-011",
-    "payer": "OOO \"Silk Road Tea\"",
-    "payer_inn": "305678923",
-    "recipient": "Agency of Plant Quarantine and Protection",
-    "payment_type": "internal phytosanitary certificate",
-    "amount": "490 000",
-    "date": "07.09.2026"
-   },
-   "file": "540-14-receipt-of-payment-step-11.png"
-  },
-  {
    "id": "fumigation-offer-agreement-14",
    "template": "offer",
    "title": "Fumigation offer agreement — step 14",
@@ -441,30 +410,7 @@
     "service": "Fumigation offer agreement",
     "units": "1"
    },
-   "file": "540-15-fumigation-offer-agreement-step-14.png"
-  },
-  {
-   "id": "receipt-of-payment-15",
-   "template": "receipt",
-   "title": "Receipt of payment — step 15",
-   "docType": "receipt_of_payment",
-   "labels": [
-    "Receipt of payment"
-   ],
-   "steps": [
-    15
-   ],
-   "output": true,
-   "fields": {
-    "receipt_no": "R-540-015",
-    "payer": "OOO \"Silk Road Tea\"",
-    "payer_inn": "305678923",
-    "recipient": "Agency of Plant Quarantine and Protection",
-    "payment_type": "fumigation",
-    "amount": "780 000",
-    "date": "09.09.2026"
-   },
-   "file": "540-16-receipt-of-payment-step-15.png"
+   "file": "540-14-fumigation-offer-agreement-step-14.png"
   },
   {
    "id": "offer-agreement-for-phytosanitary-certificate-18",
@@ -485,30 +431,7 @@
     "service": "phytosanitary certificate",
     "units": "1"
    },
-   "file": "540-17-offer-agreement-for-phytosanitary-certificate-st.png"
-  },
-  {
-   "id": "receipt-of-payment-19",
-   "template": "receipt",
-   "title": "Receipt of payment — step 19",
-   "docType": "receipt_of_payment",
-   "labels": [
-    "Receipt of payment"
-   ],
-   "steps": [
-    19
-   ],
-   "output": true,
-   "fields": {
-    "receipt_no": "R-540-019",
-    "payer": "OOO \"Silk Road Tea\"",
-    "payer_inn": "305678923",
-    "recipient": "Agency of Plant Quarantine and Protection",
-    "payment_type": "phytosanitary certificate",
-    "amount": "1 500 000",
-    "date": "11.09.2026"
-   },
-   "file": "540-18-receipt-of-payment-step-19.png"
+   "file": "540-15-offer-agreement-for-phytosanitary-certificate-st.png"
   },
   {
    "template": "letter",
@@ -524,7 +447,7 @@
    "fields": {},
    "body": "OOO \"Silk Road Tea\" (TIN 305678923) applies for: online application for phytosanitary certificate. Shipment: 2 000 kg of green tea in packets, Tashkent (Uzbekistan) → Istanbul (Türkiye), 1 air pallet PMC 40211 TK. Contract UZ-540/2026-01 of 01.09.2026.",
    "id": "online-application-for-phytosanitary-certificate",
-   "file": "540-19-online-application-for-phytosanitary-certificate.png"
+   "file": "540-16-online-application-for-phytosanitary-certificate.png"
   },
   {
    "id": "phytosanitary-certificate-22",
@@ -551,7 +474,7 @@
     "treatment": "Not treated",
     "issue_date": "12.09.2026"
    },
-   "file": "540-20-phytosanitary-certificate-step-22.png"
+   "file": "540-17-phytosanitary-certificate-step-22.png"
   },
   {
    "template": "invoice_for_payment",
@@ -575,30 +498,7 @@
     "total": "2 350 000"
    },
    "id": "invoice-for-prepayment",
-   "file": "540-21-invoice-for-prepayment.png"
-  },
-  {
-   "id": "receipt-of-payment-24",
-   "template": "receipt",
-   "title": "Receipt of payment — step 24",
-   "docType": "receipt_of_payment",
-   "labels": [
-    "Receipt of payment"
-   ],
-   "steps": [
-    24
-   ],
-   "output": true,
-   "fields": {
-    "receipt_no": "R-540-024",
-    "payer": "OOO \"Silk Road Tea\"",
-    "payer_inn": "305678923",
-    "recipient": "Uzbekexpertiza JSC (demo)",
-    "payment_type": "certificate of origin",
-    "amount": "2 350 000",
-    "date": "13.09.2026"
-   },
-   "file": "540-22-receipt-of-payment-step-24.png"
+   "file": "540-18-invoice-for-prepayment.png"
   },
   {
    "template": "letter",
@@ -616,7 +516,7 @@
    "fields": {},
    "body": "Any document confirming purchase of agricultural products for the shipment 2 000 kg of green tea in packets, Tashkent (Uzbekistan) → Istanbul (Türkiye), 1 air pallet PMC 40211 TK, contract UZ-540/2026-01 of 01.09.2026.",
    "id": "any-document-confirming-purchase-of-agricultural",
-   "file": "540-23-any-document-confirming-purchase-of-agricultural.png"
+   "file": "540-19-any-document-confirming-purchase-of-agricultural.png"
   },
   {
    "template": "letter",
@@ -634,7 +534,7 @@
    "fields": {},
    "body": "Any document confirming the exporter's right to use a land plot for the shipment 2 000 kg of green tea in packets, Tashkent (Uzbekistan) → Istanbul (Türkiye), 1 air pallet PMC 40211 TK, contract UZ-540/2026-01 of 01.09.2026.",
    "id": "any-document-confirming-the-exporter-s-right-to-",
-   "file": "540-24-any-document-confirming-the-exporter-s-right-to-.png"
+   "file": "540-20-any-document-confirming-the-exporter-s-right-to-.png"
   },
   {
    "template": "letter",
@@ -650,7 +550,7 @@
    "fields": {},
    "body": "OOO \"Silk Road Tea\" (TIN 305678923) applies for: application for obtaining of certificate of origin for exported goods. Shipment: 2 000 kg of green tea in packets, Tashkent (Uzbekistan) → Istanbul (Türkiye), 1 air pallet PMC 40211 TK. Contract UZ-540/2026-01 of 01.09.2026.",
    "id": "application-for-obtaining-of-certificate-of-orig",
-   "file": "540-25-application-for-obtaining-of-certificate-of-orig.png"
+   "file": "540-21-application-for-obtaining-of-certificate-of-orig.png"
   },
   {
    "template": "letter",
@@ -667,7 +567,7 @@
    "fields": {},
    "body": "OOO \"Silk Road Tea\" (TIN 305678923) applies for: online application for certificate of origin. Shipment: 2 000 kg of green tea in packets, Tashkent (Uzbekistan) → Istanbul (Türkiye), 1 air pallet PMC 40211 TK. Contract UZ-540/2026-01 of 01.09.2026.",
    "id": "online-application-for-certificate-of-origin",
-   "file": "540-26-online-application-for-certificate-of-origin.png"
+   "file": "540-22-online-application-for-certificate-of-origin.png"
   },
   {
    "id": "certificate-of-origin-30",
@@ -691,12 +591,12 @@
     "invoice_ref": "INV-540/2026-031 of 04.09.2026",
     "exported_to": "Türkiye"
    },
-   "file": "540-27-certificate-of-origin-step-30.png"
+   "file": "540-23-certificate-of-origin-step-30.png"
   },
   {
    "template": "letter",
    "title": "Vehicle registration certificate",
-   "docType": null,
+   "docType": "vehicle_registration",
    "labels": [
     "Vehicle registration certificate"
    ],
@@ -706,14 +606,13 @@
    ],
    "output": false,
    "fields": {},
-   "body": "Vehicle registration certificate for PMC 40211 TK, operated by Uzbekistan Airways (demo). Shipment: 2 000 kg of green tea in packets, Tashkent (Uzbekistan) → Istanbul (Türkiye), 1 air pallet PMC 40211 TK.",
    "id": "vehicle-registration-certificate",
-   "file": "540-28-vehicle-registration-certificate.png"
+   "file": "540-24-vehicle-registration-certificate.png"
   },
   {
    "template": "letter",
    "title": "Vehicle entrance permit",
-   "docType": null,
+   "docType": "carriage_permit",
    "labels": [
     "Vehicle entrance permit"
    ],
@@ -722,9 +621,8 @@
    ],
    "output": false,
    "fields": {},
-   "body": "Vehicle entrance permit for PMC 40211 TK, operated by Uzbekistan Airways (demo). Shipment: 2 000 kg of green tea in packets, Tashkent (Uzbekistan) → Istanbul (Türkiye), 1 air pallet PMC 40211 TK.",
    "id": "vehicle-entrance-permit",
-   "file": "540-29-vehicle-entrance-permit.png"
+   "file": "540-25-vehicle-entrance-permit.png"
   },
   {
    "id": "notes-or-stamps-in-the-air-waybill-38",
@@ -751,30 +649,7 @@
     "declared_customs": "NCV",
     "executed_on": "11.09.2026"
    },
-   "file": "540-30-notes-or-stamps-in-the-air-waybill-step-38.png"
-  },
-  {
-   "id": "receipt-of-payment-40",
-   "template": "receipt",
-   "title": "Receipt of payment — step 40",
-   "docType": "receipt_of_payment",
-   "labels": [
-    "Receipt of payment"
-   ],
-   "steps": [
-    40
-   ],
-   "output": true,
-   "fields": {
-    "receipt_no": "R-540-040",
-    "payer": "OOO \"Silk Road Tea\"",
-    "payer_inn": "305678923",
-    "recipient": "State Customs Committee (demo)",
-    "payment_type": "customs fee",
-    "amount": "375 000",
-    "date": "21.09.2026"
-   },
-   "file": "540-31-receipt-of-payment-step-40.png"
+   "file": "540-26-notes-or-stamps-in-the-air-waybill-step-38.png"
   },
   {
    "id": "cashdesk-stamp-on-airwaybill-44",
@@ -801,7 +676,7 @@
     "declared_customs": "NCV",
     "executed_on": "11.09.2026"
    },
-   "file": "540-32-cashdesk-stamp-on-airwaybill-step-44.png"
+   "file": "540-27-cashdesk-stamp-on-airwaybill-step-44.png"
   },
   {
    "id": "stamp-release-permited-on-airwaybill-45",
@@ -828,7 +703,7 @@
     "declared_customs": "NCV",
     "executed_on": "11.09.2026"
    },
-   "file": "540-33-stamp-release-permited-on-airwaybill-step-45.png"
+   "file": "540-28-stamp-release-permited-on-airwaybill-step-45.png"
   },
   {
    "template": "letter",
@@ -844,7 +719,7 @@
    "fields": {},
    "body": "Package of documents for the shipment 2 000 kg of green tea in packets, Tashkent (Uzbekistan) → Istanbul (Türkiye), 1 air pallet PMC 40211 TK, contract UZ-540/2026-01 of 01.09.2026.",
    "id": "package-of-documents",
-   "file": "540-34-package-of-documents.png"
+   "file": "540-29-package-of-documents.png"
   },
   {
    "id": "blue-page-of-air-waybill-47",
@@ -871,7 +746,7 @@
     "declared_customs": "NCV",
     "executed_on": "11.09.2026"
    },
-   "file": "540-35-blue-page-of-air-waybill-step-47.png"
+   "file": "540-30-blue-page-of-air-waybill-step-47.png"
   }
  ]
 }

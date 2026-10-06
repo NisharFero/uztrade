@@ -8,10 +8,9 @@ import { listCases } from "../../modules/cases/store";
 import { CATALOGUE } from "../../modules/procedures/data/procedures.generated";
 import { getProcedure } from "../../modules/procedures/registry";
 import type { ShipmentFacts } from "../../modules/workflow/domain";
-import { tailorProcedure } from "../../modules/workflow/tailor";
 
 export const metadata: Metadata = {
-  title: "Ledger · UzTrade",
+  title: "Ledger · Uzbekistan Trade Platform",
   description: "Ledger and entity API records for each case.",
 };
 
@@ -60,7 +59,6 @@ export default async function LedgerPage({ searchParams }: { searchParams: Promi
         <CaseRecords
           key={selected.id}
           caseId={selected.id}
-          procedureId={selected.procedureId}
           publishedProcedure={selectedProcedure}
           shipment={factsOf(selected.shipmentFacts) ?? undefined}
           query={selected.query}

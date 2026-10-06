@@ -1,0 +1,371 @@
+{
+  "about": "What the chat must understand from a trader's message, across the conditions traders actually write in: asking how long, finding out, planning, starting, clearance, certificates, their own cases, and everything else. Each row names the intent, what the answer must be about (goods, direction, mode, procedure), and what it must and must not say. Two rules hold for every row, whatever it expects: no message ever opens a case, and a reply only offers to open one when every detail is known. Procedure ids and categories are checked against the published catalogue before a row is used, so a wrong row reports as bad gold. Rows marked needs: model are run with the language model (typos, other languages, loose phrasing); the rest run on the rules alone and must all pass.",
+  "cases": [
+    {
+      "id": "estimate/tea-train-route",
+      "tags": ["estimate", "goods"],
+      "message": "How long will it take to move tea by train from Tashkent to Almaty?",
+      "expect": { "intent": "estimate", "result": "estimate", "category": "tea", "direction": "export", "mode": "train", "procedureId": "868" },
+      "says": ["3–10 days", "door to door", "Almaty"],
+      "saysNot": ["Shall I open"],
+      "why": "The question the trader asked in so many words: a time, with the route. Answered, not taken in as a shipment."
+    },
+    {
+      "id": "estimate/user-wording",
+      "tags": ["estimate", "goods"],
+      "message": "i want to move tea by train from Tashkent to Almaty? how much it will take",
+      "expect": { "intent": "estimate", "result": "estimate", "category": "tea", "direction": "export", "mode": "train", "procedureId": "868" },
+      "says": ["3–10 days", "door to door"],
+      "saysNot": ["Shall I open", "Nothing is opened yet. To plan yours"],
+      "why": "Starts like a shipment request, ends by asking how long. The question wins: it must get an estimate, not intake."
+    },
+    {
+      "id": "estimate/cheese-import-no-mode",
+      "tags": ["estimate", "goods"],
+      "message": "how long does cheese import take?",
+      "expect": { "intent": "estimate", "result": "estimate", "category": "dairy products", "direction": "import", "optionsAtLeast": 2 },
+      "says": ["Import by road", "Import by train"],
+      "saysNot": ["Export by"],
+      "why": "Dairy is imported by road (109) and by train (288); with no mode both are timed, and no export is offered for an import."
+    },
+    {
+      "id": "estimate/carpets-destination-only",
+      "tags": ["estimate", "goods", "route"],
+      "message": "What's the timeline to export carpets by road to Moscow?",
+      "expect": { "intent": "estimate", "result": "estimate", "category": "carpets", "direction": "export", "mode": "road", "procedureId": "1051" },
+      "says": ["Moscow", "Tashkent as the starting point", "door to door"],
+      "why": "Only the destination is named: the Uzbek end is assumed to be Tashkent and the answer says so."
+    },
+    {
+      "id": "estimate/unpublished-mode",
+      "tags": ["estimate", "goods"],
+      "message": "how long to export tomatoes by air?",
+      "expect": { "intent": "estimate", "result": "estimate", "category": "fresh fruits and vegetables", "optionsAtLeast": 2 },
+      "says": ["no published procedure for tomatoes by air", "Export by train", "Export by road"],
+      "saysNot": ["door to door"],
+      "why": "Fresh produce is exported by train (325) and road (32), never by air. Say that, and time the ways that exist."
+    },
+    {
+      "id": "estimate/honey-only-clearance",
+      "tags": ["estimate", "goods", "clearance"],
+      "message": "how many days to import honey from Almaty by road",
+      "expect": { "intent": "estimate", "result": "estimate", "category": "honey", "direction": "import", "mode": "road", "procedureId": "861" },
+      "says": ["from Almaty to Tashkent", "door to door"],
+      "why": "The only published import of honey by road is a clearance (861), so that is the one timed."
+    },
+    {
+      "id": "estimate/medicines-air",
+      "tags": ["estimate", "goods"],
+      "message": "how quickly can I import medicines by air?",
+      "expect": { "intent": "estimate", "result": "estimate", "category": "pharmaceutical products", "direction": "import", "mode": "air", "procedureId": "714" },
+      "why": "Medicines are published under pharmaceutical products; the standard import by air is 714."
+    },
+    {
+      "id": "estimate/when-arrive",
+      "tags": ["estimate", "goods", "route"],
+      "message": "when will my cargo arrive in Almaty if I send cement by train?",
+      "expect": { "intent": "estimate", "result": "estimate", "category": "cement", "direction": "export", "mode": "train", "procedureId": "824" },
+      "says": ["Almaty"],
+      "why": "\"When will it arrive\" is a time question; \"my cargo\" is not one of their cases."
+    },
+    {
+      "id": "estimate/coffee-all-ways",
+      "tags": ["estimate", "goods"],
+      "message": "how long does it take to import coffee?",
+      "expect": { "intent": "estimate", "result": "estimate", "category": "coffee", "direction": "import", "optionsAtLeast": 3 },
+      "says": ["Import by road", "Import by train", "Import by air"],
+      "why": "Coffee is imported by road (482), train (483) and air (556); each gets its own time."
+    },
+    {
+      "id": "estimate/pasta-clearance",
+      "tags": ["estimate", "clearance", "goods"],
+      "message": "how long does customs clearance of pasta take when importing by road?",
+      "expect": { "intent": "estimate", "result": "estimate", "category": "pasta", "direction": "import", "mode": "road", "regime": "clearance", "procedureId": "1007" },
+      "why": "Clearance named outright: the clearance procedure (1007) is timed, not the whole import (993)."
+    },
+    {
+      "id": "estimate/dried-apricots-russia",
+      "tags": ["estimate", "goods", "route"],
+      "message": "timeline for exporting dried apricots by train to Russia",
+      "expect": { "intent": "estimate", "result": "estimate", "category": "dried fruits", "direction": "export", "mode": "train", "procedureId": "306" },
+      "why": "Dried qualifier settles the apricots; a country is enough to time the route."
+    },
+
+    {
+      "id": "explore/tea-question-mark",
+      "tags": ["explore", "goods"],
+      "message": "i wanna move tea?",
+      "expect": { "intent": "shipment", "goal": "explore", "result": "intake", "overview": true, "category": "tea", "confirm": false, "optionsAtLeast": 5 },
+      "says": ["Here's what moving tea involves", "documents", "usually", "Nothing is opened yet", "leaving Uzbekistan or coming in"],
+      "saysNot": ["Shall I open"],
+      "why": "Someone finding out. They get every published way for tea with its time and what it needs, then one question - and no case."
+    },
+    {
+      "id": "explore/planning-dried-apricots",
+      "tags": ["explore", "goods"],
+      "message": "I'm planning to export dried apricots",
+      "expect": { "intent": "shipment", "goal": "explore", "result": "intake", "overview": true, "category": "dried fruits", "direction": "export", "confirm": false },
+      "says": ["Export by train", "Export by air", "How will it travel"],
+      "saysNot": ["Import by", "Shall I open"],
+      "why": "\"Planning\" is finding out. Only exports are listed because they said export."
+    },
+    {
+      "id": "explore/thinking-yoghurt-import",
+      "tags": ["explore", "goods"],
+      "message": "we are thinking of importing yoghurt",
+      "expect": { "intent": "shipment", "goal": "explore", "result": "intake", "overview": true, "category": "dairy products", "direction": "import", "confirm": false },
+      "says": ["Import by road", "Import by train"],
+      "saysNot": ["Export by"],
+      "why": "\"Thinking of\" is finding out; yoghurt is a dairy product."
+    },
+    {
+      "id": "explore/can-i-carpets",
+      "tags": ["explore", "goods"],
+      "message": "Can I export carpets to Kazakhstan?",
+      "expect": { "intent": "shipment", "goal": "explore", "result": "intake", "overview": true, "category": "carpets", "direction": "export", "confirm": false },
+      "says": ["Export by train", "Export by road"],
+      "why": "\"Can I export\" asks whether it is possible - the overview answers it with the ways that exist."
+    },
+    {
+      "id": "explore/furniture-one-way",
+      "tags": ["explore", "goods"],
+      "message": "I want to move furniture",
+      "expect": { "intent": "shipment", "goal": "explore", "result": "intake", "overview": true, "category": "furniture", "procedureId": "576", "confirm": false },
+      "says": ["Exporting furniture by train follows the published procedure"],
+      "why": "Only one published way (576), so it is said as one sentence rather than a list."
+    },
+    {
+      "id": "explore/apricots-fresh-or-dried",
+      "tags": ["explore", "goods", "ambiguous"],
+      "message": "I want to export apricots",
+      "expect": { "intent": "shipment", "result": "intake", "slot": "commodity", "confirm": false },
+      "says": ["fresh or dried"],
+      "why": "Apricots are published fresh and dried; the goods have to be settled before anything can be said about them."
+    },
+    {
+      "id": "explore/cotton-yarn-turkey",
+      "tags": ["explore", "goods"],
+      "message": "planning to ship cotton yarn to Turkey",
+      "expect": { "intent": "shipment", "goal": "explore", "result": "intake", "overview": true, "category": "cotton yarn", "direction": "export", "confirm": false },
+      "says": ["Export by train", "Export by road"],
+      "why": "A foreign destination makes it an export even without the word."
+    },
+    {
+      "id": "explore/beef-import",
+      "tags": ["explore", "goods"],
+      "message": "i need to import beef",
+      "expect": { "intent": "shipment", "goal": "explore", "result": "intake", "overview": true, "category": "meat and meat products", "direction": "import", "confirm": false },
+      "says": ["Import by road", "Import by train"],
+      "why": "Beef is published under meat and meat products (184 by road, 827 by train)."
+    },
+    {
+      "id": "explore/unsupported-laptops",
+      "tags": ["explore", "unsupported"],
+      "message": "I want to export laptops",
+      "expect": { "intent": "shipment", "result": "intake", "confirm": false },
+      "says": ["What are you moving"],
+      "saysNot": ["Here's what moving laptops involves", "Shall I open"],
+      "why": "No published category covers laptops; nothing may be invented for them."
+    },
+
+    {
+      "id": "start/full-details",
+      "tags": ["start", "goods"],
+      "message": "export 20 tonnes of tea from Tashkent to Almaty by train",
+      "expect": { "intent": "shipment", "goal": "start", "result": "intake", "category": "tea", "direction": "export", "mode": "train", "procedureId": "868", "confirm": true },
+      "says": ["Here's the plan", "20 tonnes of tea", "19 documents", "Shall I open the case"],
+      "why": "Every detail at once: straight to the summary. It still only offers to open; nothing is opened."
+    },
+    {
+      "id": "start/open-a-case",
+      "tags": ["start", "goods"],
+      "message": "open a case to export 10 tonnes of carpets from Tashkent to Moscow by train",
+      "expect": { "intent": "shipment", "goal": "start", "result": "intake", "category": "carpets", "procedureId": "1052", "confirm": true },
+      "says": ["Shall I open the case"],
+      "why": "Asked to open outright, with every detail: the summary, then the trader's yes."
+    },
+    {
+      "id": "start/start-without-details",
+      "tags": ["start", "goods"],
+      "message": "start a shipment of tea",
+      "expect": { "intent": "shipment", "goal": "start", "result": "intake", "overview": false, "category": "tea", "confirm": false },
+      "says": ["Tea", "leaving Uzbekistan or coming in"],
+      "why": "Starting, not finding out: intake asks for the rest straight away, without the overview."
+    },
+    {
+      "id": "start/regime-question",
+      "tags": ["start", "clearance"],
+      "message": "import 12 tonnes of yoghurt from Almaty to Tashkent by road",
+      "expect": { "intent": "shipment", "goal": "start", "result": "intake", "slot": "regime", "confirm": false },
+      "why": "Dairy by road is published as a full import and as a clearance; intake must ask which before it can summarise."
+    },
+    {
+      "id": "start/clearance-only",
+      "tags": ["start", "clearance"],
+      "message": "import 5 tonnes of honey from Almaty to Tashkent by road, customs clearance only",
+      "expect": { "intent": "shipment", "goal": "start", "result": "intake", "category": "honey", "procedureId": "861", "confirm": true },
+      "why": "Clearance named and every detail given: the clearance procedure is summarised."
+    },
+
+    {
+      "id": "mid/answer-after-explore",
+      "tags": ["mid-conversation"],
+      "after": ["i wanna move tea?"],
+      "message": "export 20 tonnes from Tashkent to Almaty by train",
+      "expect": { "intent": "shipment", "goal": "start", "result": "intake", "category": "tea", "procedureId": "868", "confirm": true },
+      "says": ["Shall I open the case"],
+      "why": "The answer to the overview's question completes the shipment; only now is opening offered."
+    },
+    {
+      "id": "mid/question-is-not-an-answer",
+      "tags": ["mid-conversation", "certification"],
+      "after": ["i wanna move tea?"],
+      "message": "what documents do I need for the phytosanitary certificate?",
+      "expect": { "intent": "knowledge", "result": "knowledge", "confirm": false },
+      "says": ["phytosanitary"],
+      "why": "A question asked in the middle of intake is still a question, not a slot value."
+    },
+    {
+      "id": "mid/estimate-from-draft",
+      "tags": ["mid-conversation", "estimate"],
+      "after": ["i wanna move tea?"],
+      "message": "how long would it take by train to Almaty?",
+      "expect": { "intent": "estimate", "result": "estimate", "category": "tea", "direction": "export", "mode": "train", "procedureId": "868" },
+      "says": ["door to door"],
+      "why": "The goods come from the conversation so far; the question is still how long."
+    },
+
+    {
+      "id": "knowledge/phytosanitary",
+      "tags": ["certification"],
+      "message": "how do I get a phytosanitary certificate for tea?",
+      "expect": { "intent": "knowledge", "result": "knowledge", "confirm": false },
+      "says": ["phytosanitary"],
+      "saysNot": ["Here's what moving tea involves"],
+      "why": "Obtaining a certificate is a procedure question, even though it names goods."
+    },
+    {
+      "id": "knowledge/certificate-of-origin",
+      "tags": ["certification"],
+      "message": "Who issues the certificate of origin?",
+      "expect": { "intent": "knowledge", "result": "knowledge", "confirm": false },
+      "why": "Who issues what is answered from the procedures."
+    },
+    {
+      "id": "knowledge/documents-carpets",
+      "tags": ["certification"],
+      "message": "what documents do I need to export carpets?",
+      "expect": { "intent": "knowledge", "result": "knowledge", "confirm": false },
+      "says": ["carpets"],
+      "why": "Documents in general, not a shipment to start."
+    },
+    {
+      "id": "knowledge/permit-meat",
+      "tags": ["certification"],
+      "message": "Which permit is needed to import meat?",
+      "expect": { "intent": "knowledge", "result": "knowledge", "confirm": false },
+      "why": "A permit question about goods is still a question."
+    },
+    {
+      "id": "knowledge/what-by-air",
+      "tags": ["knowledge"],
+      "message": "Which goods can I export by air?",
+      "expect": { "intent": "knowledge", "result": "knowledge", "confirm": false },
+      "why": "About what the catalogue covers, not about moving anything."
+    },
+
+    {
+      "id": "cases/active",
+      "tags": ["cases"],
+      "message": "Which shipments are currently active?",
+      "expect": { "intent": "cases", "result": "cases", "confirm": false },
+      "why": "Their own shipments."
+    },
+    {
+      "id": "cases/how-long-mine",
+      "tags": ["cases", "estimate"],
+      "message": "how long until my tea shipment is done?",
+      "expect": { "intent": "cases", "result": "cases", "confirm": false },
+      "saysNot": ["door to door"],
+      "why": "\"My shipment\" is a case they have, so this is about progress - not a fresh estimate."
+    },
+    {
+      "id": "cases/by-reference",
+      "tags": ["cases"],
+      "message": "What is UZ-2609-0008 waiting on?",
+      "expect": { "intent": "cases", "result": "cases", "confirm": false },
+      "why": "A case reference is always about that case."
+    },
+
+    {
+      "id": "other/hello",
+      "tags": ["other"],
+      "message": "hello",
+      "expect": { "intent": "other", "result": "other", "confirm": false },
+      "why": "Small talk never reaches intake."
+    },
+
+    { "id": "goods/cement-wagons", "tags": ["goods", "explore"], "message": "we plan to export 3 wagons of cement", "expect": { "intent": "shipment", "goal": "explore", "category": "cement", "direction": "export", "confirm": false }, "why": "Wagons are a quantity and a mode; the route is still missing, so it is an overview." },
+    { "id": "goods/washing-powder", "tags": ["goods", "explore"], "message": "I want to import washing powder", "expect": { "intent": "shipment", "category": "washing detergents", "confirm": false }, "why": "Washing powder is a detergent." },
+    { "id": "goods/sunflower-oil", "tags": ["goods", "explore"], "message": "planning to import sunflower oil for cooking", "expect": { "intent": "shipment", "category": "seed oil", "confirm": false }, "why": "Sunflower oil is published under seed oil (HS 1512) - the taxonomy gold fixes it there - even when it is for cooking." },
+    { "id": "goods/silk-fabric", "tags": ["goods", "explore"], "message": "i want to export silk fabric", "expect": { "intent": "shipment", "category": "fabrics", "confirm": false }, "why": "Fabric, not garments." },
+    { "id": "goods/perfume-air", "tags": ["goods", "explore", "clearance"], "message": "we want to import perfume by air", "expect": { "intent": "shipment", "category": "perfumery, cosmetic or toilet preparations", "procedureId": "572", "confirm": false }, "why": "Perfume by air is only published as a clearance (572), so that is the way offered." },
+    { "id": "goods/eggs", "tags": ["goods", "explore"], "message": "i want to import eggs", "expect": { "intent": "shipment", "category": "eggs", "confirm": false }, "why": "Eggs are their own category." },
+    { "id": "goods/shoes", "tags": ["goods", "explore"], "message": "i want to export shoes", "expect": { "intent": "shipment", "category": "shoes", "procedureId": "1070", "confirm": false }, "why": "One published way (1070)." },
+    { "id": "goods/honey-air", "tags": ["goods", "explore"], "message": "I want to export honey by air", "expect": { "intent": "shipment", "category": "honey", "procedureId": "819", "confirm": false }, "why": "Honey by air is 819." },
+    { "id": "goods/pasta", "tags": ["goods", "explore"], "message": "i want to import pasta", "expect": { "intent": "shipment", "category": "pasta", "direction": "import", "confirm": false }, "why": "Pasta, imported." },
+    { "id": "goods/wheat", "tags": ["goods", "explore"], "message": "i want to import wheat", "expect": { "intent": "shipment", "category": "cereals", "confirm": false }, "why": "Wheat is a cereal." },
+    { "id": "goods/medical-equipment", "tags": ["goods", "explore"], "message": "i want to import medical equipment", "expect": { "intent": "shipment", "category": "medical equipment", "confirm": false }, "why": "Named outright." },
+    { "id": "goods/chocolate", "tags": ["goods", "explore"], "message": "i want to import chocolate", "expect": { "intent": "shipment", "category": "confectionery", "confirm": false }, "why": "Chocolate is confectionery." },
+    { "id": "goods/orange-juice", "tags": ["goods", "explore"], "message": "I want to export orange juice", "expect": { "intent": "shipment", "category": "fruit and vegetable juices", "confirm": false }, "why": "A juice is not its fruit." },
+    { "id": "goods/flour-train", "tags": ["goods", "explore"], "message": "I want to import flour by train", "expect": { "intent": "shipment", "category": "flour", "procedureId": "680", "confirm": false }, "why": "Flour by train is 680." },
+    { "id": "goods/jewelry-air", "tags": ["goods", "explore"], "message": "we're planning to export gold jewelry by air", "expect": { "intent": "shipment", "category": "jewelry", "procedureId": "591", "confirm": false }, "why": "Jewelry by air is 591." },
+    { "id": "goods/salt-train", "tags": ["goods", "explore"], "message": "I want to export salt by train", "expect": { "intent": "shipment", "category": "salt", "procedureId": "804", "confirm": false }, "why": "Salt by train is 804." },
+    { "id": "goods/cardboard", "tags": ["goods", "explore"], "message": "i want to import cardboard boxes", "expect": { "intent": "shipment", "category": "paper and cardboard products", "confirm": false }, "why": "Cardboard boxes are paper and cardboard products." },
+    { "id": "goods/t-shirts", "tags": ["goods", "explore"], "message": "i want to export cotton t-shirts", "expect": { "intent": "shipment", "category": "textile and garment", "confirm": false }, "why": "A t-shirt is a garment, not yarn or fabric." },
+    { "id": "goods/any-cargo-rail", "tags": ["goods", "explore"], "message": "I want to send 2 wagons of cargo by rail", "expect": { "intent": "shipment", "category": "any cargo", "confirm": false }, "why": "Rail transport of any cargo is its own published service." },
+    { "id": "goods/timber", "tags": ["goods", "explore"], "message": "looking to import timber", "expect": { "intent": "shipment", "category": "wood", "confirm": false }, "why": "Timber is wood." },
+
+    {
+      "id": "model/typo-estimate",
+      "tags": ["estimate", "typo", "goods"],
+      "needs": "model",
+      "message": "i want to move taea by tarain from tashkent to almaty. how much it will take",
+      "expect": { "result": "estimate", "category": "tea", "direction": "export", "mode": "train", "procedureId": "868" },
+      "says": ["door to door"],
+      "why": "The user's own message, typos included: the model reads the goods and the mode, and the question is still how long."
+    },
+    {
+      "id": "model/typo-explore",
+      "tags": ["explore", "typo", "goods"],
+      "needs": "model",
+      "message": "i wanna exprot tee",
+      "expect": { "intent": "shipment", "result": "intake", "category": "tea", "confirm": false },
+      "why": "Misspelt verb and goods; still finding out about tea."
+    },
+    {
+      "id": "model/russian",
+      "tags": ["explore", "language", "goods"],
+      "needs": "model",
+      "message": "хочу экспортировать чай поездом",
+      "expect": { "result": "intake", "category": "tea", "mode": "train", "confirm": false },
+      "why": "\"I want to export tea by train\" in Russian."
+    },
+    {
+      "id": "model/weather",
+      "tags": ["other"],
+      "needs": "model",
+      "message": "what's the weather in Tashkent tomorrow?",
+      "expect": { "intent": "other", "result": "other", "confirm": false },
+      "why": "Mentions a city, asks nothing about trade."
+    },
+    {
+      "id": "model/loose-planning",
+      "tags": ["explore", "goods"],
+      "needs": "model",
+      "message": "my company makes dried apricots and we'd like to start selling them in Russia, where do we begin?",
+      "expect": { "result": "intake", "category": "dried fruits", "direction": "export", "confirm": false },
+      "why": "Nobody says \"export\"; selling abroad is exporting, and \"where do we begin\" is finding out."
+    }
+  ]
+}

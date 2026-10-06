@@ -1,0 +1,14 @@
+{
+  "name": "uztrade-portals",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Sandbox APIs for the entities the trade agent files with: Single Window, Uzbekistan Railways, Customs cabinet, Assalom Agro, Uzbekexpertiza, and the payment gateway.",
+  "engines": {
+    "node": ">=22.13.0"
+  },
+  "scripts": {
+    "start": "node --experimental-strip-types --disable-warning=ExperimentalWarning src/server.ts",
+    "test": "node --experimental-strip-types --disable-warning=ExperimentalWarning --test tests/app.test.ts"
+  }
+}

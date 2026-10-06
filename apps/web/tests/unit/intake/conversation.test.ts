@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import { converse, type IntakeTurn } from "../../../modules/intake/conversation";
 import { EMPTY_DRAFT } from "../../../modules/intake/draft";
+import { CATALOGUE } from "../../../modules/procedures/sync";
 
 /** Plays a conversation: each reply is read against the slot just asked. */
 function talk(...replies: string[]): IntakeTurn {
@@ -21,24 +22,24 @@ test("'I want to move tea' asks export or import first, then the modes published
   assert.deepEqual(exporting.options.map((o) => o.reply), ["by train", "by air"]);
 
   const importing = converse(first.draft, "import", { expecting: "direction" });
-  assert.equal(importing.draft.mode, "train", "tea imports are only published by train");
-  assert.equal(importing.slot, "quantity");
+  assert.equal(importing.slot, "mode");
+  assert.deepEqual(importing.options.map((o) => o.reply), ["by train", "by road", "by air"], "tea imports are published by all three");
 });
 
 test("goods published in one direction only are stated, not asked", () => {
-  const raisins = talk("raisins");
-  assert.equal(raisins.draft.statedDirection, "export");
-  assert.ok(raisins.notes.some((n) => /Only export/.test(n)));
-  assert.equal(raisins.slot, "quantity");
+  const tomatoes = talk("tomatoes");
+  assert.equal(tomatoes.draft.statedDirection, "export", "fresh produce is published as export only");
+  assert.ok(tomatoes.notes.some((n) => /Only export/.test(n)));
+  assert.equal(tomatoes.slot, "mode", "both rail and road are published, so the mode is asked");
 });
 
 test("a single published mode is stated, not asked; an unpublished one is refused", () => {
-  const dried = talk("export raisins");
-  assert.equal(dried.draft.mode, "train");
-  assert.equal(dried.slot, "quantity");
-  assert.ok(dried.notes.some((n) => /Only train/i.test(n)));
+  const juice = talk("import juice");
+  assert.equal(juice.draft.mode, "train", "juice imports are published by train only");
+  assert.equal(juice.slot, "quantity");
+  assert.ok(juice.notes.some((n) => /Only train/i.test(n)));
 
-  const air = talk("export raisins by air");
+  const air = talk("import juice by air");
   assert.equal(air.slot, "mode");
   assert.match(air.message, /isn't a published procedure/);
   assert.deepEqual(air.options.map((o) => o.reply), ["by train"]);
@@ -90,17 +91,16 @@ test("a chosen direction the route contradicts is asked again", () => {
 });
 
 test("a route that makes the chosen mode unpublished asks the mode again", () => {
-  const t = talk("tea by air", "2 tonnes", "from China to Tashkent");
+  // Dried fruits go out by air, but come in only by rail or road - and the
+  // route (Almaty to Tashkent) is what settles the direction.
+  const t = talk("raisins by air", "20 tonnes", "from Almaty to Tashkent");
   assert.equal(t.slot, "mode");
-  assert.match(t.message, /air/i);
-  assert.deepEqual(t.options.map((o) => o.reply), ["by train"]);
+  assert.match(t.message, /By air, raisins \(dried fruits\) is only published as export/);
+  assert.deepEqual(t.options.map((o) => o.reply), ["by train", "by road"]);
 
   const fixed = converse(t.draft, "by train", { expecting: "mode" });
-  assert.equal(fixed.slot, "route");
-  assert.match(fixed.message, /which city in China/i);
-  const city = converse(fixed.draft, "Urumqi", { expecting: "route" });
-  assert.equal(city.status, "confirm");
-  assert.equal(city.summary?.procedureId, "477");
+  assert.equal(fixed.status, "confirm");
+  assert.equal(fixed.summary?.procedureId, "321", "the published import of dried fruits by train");
 });
 
 test("one reply can fill several details, and a later reply corrects one", () => {
@@ -108,7 +108,7 @@ test("one reply can fill several details, and a later reply corrects one", () =>
   assert.equal(t.status, "confirm");
   assert.equal(t.summary?.procedureId, "868");
   assert.equal(t.summary?.steps, 48);
-  assert.equal(t.progress.length, 5);
+  assert.equal(t.progress.length, 6);
   assert.ok(t.progress.every((row) => row.done));
 
   const air = converse(t.draft, "actually by air", { expecting: null });
@@ -116,7 +116,7 @@ test("one reply can fill several details, and a later reply corrects one", () =>
 });
 
 test("the confirm card carries country notes from the supplied fixture", () => {
-  const t = talk("export 20 tonnes of tomatoes from Andijan to Kazakhstan");
+  const t = talk("export 20 tonnes of tomatoes from Andijan to Kazakhstan", "by train");
   assert.equal(t.slot, "route");
   assert.match(t.message, /which city in Kazakhstan/i);
 
@@ -179,11 +179,47 @@ test("while only the city is missing: progress shows the country, and odd answer
   assert.equal(converse(imported.draft, "Urumqi", { expecting: "route" }).summary?.procedureId, "477");
 });
 
-test("small talk is declined; unknown goods are named and the question stays open", () => {
+test("small talk is declined; goods no category names keep the question open", () => {
   assert.equal(converse(EMPTY_DRAFT, "what is the weather like today").status, "declined");
-  const cotton = converse(EMPTY_DRAFT, "export cotton by train");
-  assert.equal(cotton.slot, "commodity");
-  assert.match(cotton.message, /cotton/);
+
+  // Cotton yarn is published, so the words reach a procedure.
+  const yarn = converse(EMPTY_DRAFT, "export cotton yarn by train");
+  assert.equal(yarn.draft.commodity?.category, "cotton yarn");
+
+  // Saffron is not. The rules alone keep asking - the nearest-category
+  // reasoning that answers it lives in intakeTurn, with a model.
+  const saffron = converse(EMPTY_DRAFT, "export saffron by air");
+  assert.equal(saffron.slot, "commodity");
+  assert.equal(saffron.draft.commodity, null);
+});
+
+test("goods with more than one published treatment are asked which one", () => {
+  // Fertilizers arrive by train as a whole import (707) or as customs
+  // clearance of goods already at the border (710).
+  const asked = talk("import manure by train");
+  assert.equal(asked.slot, "regime");
+  assert.match(asked.message, /Organic fertilizer by train, import: which of these/);
+  assert.deepEqual(
+    asked.options.map((o) => o.label),
+    ["The whole import — permits, contract, transport and clearance", "Customs clearance only — the goods are already at the border"],
+  );
+
+  const whole = converse(asked.draft, asked.options[0].reply, { expecting: "regime" });
+  assert.equal(whole.draft.regime, "standard");
+  const clearance = converse(asked.draft, asked.options[1].reply, { expecting: "regime" });
+  assert.equal(clearance.draft.regime, "clearance");
+
+  const opened = converse(
+    converse(clearance.draft, "44 tonnes", { expecting: clearance.slot ?? null }).draft,
+    "from Almaty to Tashkent",
+    { expecting: "route" },
+  );
+  assert.equal(opened.status, "confirm");
+  assert.equal(opened.summary?.procedureId, "710");
+  assert.equal(opened.summary?.regime, "clearance");
+
+  // Goods with only one published treatment are never asked.
+  assert.notEqual(talk("export carpets by road").slot, "regime");
 });
 
 test("general procedure questions do not start shipment intake", () => {
@@ -211,18 +247,27 @@ test("juices, fertilizers and rail logistics each reach their own procedure", ()
     for (const message of messages.slice(1)) turn = converse(turn.draft, message, { expecting: turn.slot ?? null });
     return turn;
   };
-  assert.equal(walk("I want to export apple juice", "20 tonnes", "from Tashkent to Almaty").summary?.procedureId, "161");
-  assert.equal(walk("import manure", "by train", "44 tonnes", "from Almaty to Tashkent").summary?.procedureId, "707");
-  const road = walk("import organic fertilizer by truck", "3 trucks", "from Bishkek to Tashkent");
+  assert.equal(walk("I want to export apple juice", "by road", "20 tonnes", "from Tashkent to Almaty").summary?.procedureId, "33");
+  assert.equal(
+    walk("import manure", "by train", "the whole import", "44 tonnes", "from Almaty to Tashkent").summary?.procedureId,
+    "707",
+  );
+  const road = walk("import organic fertilizer by truck", "the whole import", "3 trucks", "from Bishkek to Tashkent");
   assert.equal(road.summary?.procedureId, "57");
   assert.match(road.summary?.howMuch ?? "", /3 trucks/);
-  assert.equal(walk("arrange cargo transportation by train", "40 tonnes", "from Tashkent to Almaty").summary?.procedureId, "782");
+  const rail = walk("arrange cargo transportation by train", "40 tonnes", "from Tashkent to Almaty");
+  assert.equal(CATALOGUE[rail.summary!.procedureId].kind, "logistics", "rail logistics for any cargo");
+  assert.equal(CATALOGUE[rail.summary!.procedureId].mode, "train");
 
   const asked = converse(EMPTY_DRAFT, "I need to arrange rail transport");
   assert.equal(asked.slot, "direction");
   assert.deepEqual(asked.options.map((o) => o.reply), ["export", "import"]);
-  assert.equal(walk("I need to arrange rail transport", "take delivery", "60 tonnes", "from Moscow to Tashkent").summary?.procedureId, "924");
+  const delivery = walk("I need to arrange rail transport", "take delivery", "60 tonnes", "from Moscow to Tashkent");
+  assert.equal(CATALOGUE[delivery.summary!.procedureId].kind, "logistics");
+  assert.equal(CATALOGUE[delivery.summary!.procedureId].direction, "import", "taking delivery of any cargo by rail");
 
+  // Mineral fertilizers are their own published category, distinct from the
+  // animal or vegetable ones.
   const mineral = converse(EMPTY_DRAFT, "export urea fertilizer");
-  assert.match(mineral.message, /No published procedure covers mineral fertilizers/);
+  assert.equal(mineral.draft.commodity?.category, "mineral fertilizers");
 });

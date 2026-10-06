@@ -108,6 +108,22 @@ test("environment client uses Groq chat completions when an API key is configure
   assert.equal(result.text, "Groq model summary");
 });
 
+test("a stalled Groq request times out and the task keeps its deterministic result", async () => {
+  const client = createAgenticAiClient({
+    groqApiKey: "test-key",
+    timeoutMs: 20,
+    fetcher: async (_request, init) => new Promise<Response>((_resolve, reject) => {
+      const hold = setTimeout(() => reject(new Error("request was not aborted")), 1_000);
+      init?.signal?.addEventListener("abort", () => { clearTimeout(hold); reject(init.signal?.reason); }, { once: true });
+    }),
+  });
+  const result = await runAgenticAiTask({
+    task: "procedure_execution", system: "Return JSON", prompt: "Execute", fallback: { status: "simulated_success" },
+  }, client);
+  assert.deepEqual(result.aiProviders, ["deterministic"]);
+  assert.equal(result.data.status, "simulated_success");
+});
+
 test("specialists include Groq and Hugging Face provider metadata on agent runs", async () => {
   const procedure = PROCEDURES["868"];
   const workflow = instantiateWorkflow(procedure, "run-ai");

@@ -146,13 +146,19 @@ export function complianceTasks(
 ): AgentTask[] {
   const a = assessCompliance(procedure, facts, query);
 
-  const logistics = procedure.kind === "logistics";
+  // Only customs procedures declare goods. Logistics procedures move whatever
+  // cargo is handed to them, and service procedures obtain a single document -
+  // in both the goods are classified by the customs procedure they belong to.
+  const declares = procedure.kind === "customs";
   const analysis: AgentTask[] = [
-    logistics
+    !declares
       ? {
           key: "hs",
-          label: "No classification — rail logistics",
-          detail: "This procedure moves the cargo; the goods are classified in their own customs procedure.",
+          label: "No classification — " + (procedure.kind === "logistics" ? "transport service" : "no goods declared"),
+          detail:
+            procedure.kind === "logistics"
+              ? "This procedure moves the cargo; the goods are classified in their own customs procedure."
+              : "This procedure obtains a document; the goods are classified in the customs procedure that uses it.",
           status: "done",
           note: "Not needed",
         }
@@ -173,7 +179,8 @@ export function complianceTasks(
     })),
   ];
 
-  const filings = procedure.blocks.flatMap((block) =>
+  // Nothing is checked against a filing that declares no goods of its own.
+  const filings = !declares ? [] : procedure.blocks.flatMap((block) =>
     block.steps
       .filter((s) => !s.optional && CUSTOMS_FILING.test(s.title))
       .map<AgentTask>((s) => {

@@ -57,10 +57,85 @@ export const Icon: Record<string, ReactNode> = {
     </svg>
   ),
 
+  /* Navigation - one glyph per place, each the thing you would expect there. */
+  home: (
+    <svg {...s}>
+      <path d="M3.5 10.5 12 3.5l8.5 7" />
+      <path d="M5.5 9v10.5a1 1 0 0 0 1 1H10v-6h4v6h3.5a1 1 0 0 0 1-1V9" />
+    </svg>
+  ),
+  book: (
+    <svg {...s}>
+      <path d="M12 6.5C10.3 5 7.8 4.5 4 4.5v14c3.8 0 6.3.5 8 2 1.7-1.5 4.2-2 8-2v-14c-3.8 0-6.3.5-8 2Z" />
+      <path d="M12 6.5v14" />
+    </svg>
+  ),
+  truck: (
+    <svg {...s}>
+      <path d="M2.5 6.5h11v10h-11z" />
+      <path d="M13.5 9.5h4.2l3.3 3.6v3.4h-7.5" />
+      <circle cx="6.5" cy="17.5" r="1.9" />
+      <circle cx="17" cy="17.5" r="1.9" />
+    </svg>
+  ),
+  receipt: (
+    <svg {...s}>
+      <path d="M5.5 3h13v18l-2.6-1.6-2.3 1.6-2.3-1.6L9 21l-2-1.4-1.5 1.1Z" />
+      <path d="M9 8h6M9 11.5h6M9 15h3.5" />
+    </svg>
+  ),
+  help: (
+    <svg {...s}>
+      <circle cx="12" cy="12" r="8.8" />
+      <path d="M9.6 9.3a2.5 2.5 0 0 1 4.8.9c0 1.7-2.4 2.2-2.4 3.8" />
+      <path d="M12 17h.01" strokeWidth={2.4} />
+    </svg>
+  ),
+  landmark: (
+    <svg {...s}>
+      <path d="M3 9.5 12 4l9 5.5" />
+      <path d="M5 10v7.5M9.7 10v7.5M14.3 10v7.5M19 10v7.5" />
+      <path d="M3 20.5h18" />
+    </svg>
+  ),
+  bot: (
+    <svg {...s}>
+      <rect x="4" y="8" width="16" height="11.5" rx="3.2" />
+      <path d="M12 4.5V8M12 3.6h.01" />
+      <path d="M9.2 13.2v1.2M14.8 13.2v1.2M1.8 13.5H4M20 13.5h2.2" />
+    </svg>
+  ),
+  compose: (
+    <svg {...s}>
+      <path d="M11 4.5H6.5a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V13" />
+      <path d="M17.6 3.9a1.9 1.9 0 0 1 2.7 2.7L12.6 14.3l-3.3.6.6-3.3Z" />
+    </svg>
+  ),
+  menu: (
+    <svg {...s} strokeWidth={1.8}>
+      <path d="M4 7h16M4 12h16M4 17h10" />
+    </svg>
+  ),
+  close: (
+    <svg {...s} strokeWidth={1.8}>
+      <path d="M6 6l12 12M18 6 6 18" />
+    </svg>
+  ),
+  paperclip: (
+    <svg {...s}>
+      <path d="m20 11.2-7.7 7.7a4.8 4.8 0 0 1-6.8-6.8l8-8a3.2 3.2 0 0 1 4.5 4.5l-8 8a1.6 1.6 0 0 1-2.3-2.3l7.3-7.3" />
+    </svg>
+  ),
+
   /* Composer */
   send: (
     <svg {...s} strokeWidth={2}>
       <path d="M12 19V5M6 11l6-6 6 6" />
+    </svg>
+  ),
+  plus: (
+    <svg {...s} strokeWidth={2}>
+      <path d="M12 5v14M5 12h14" />
     </svg>
   ),
   sparkle: (

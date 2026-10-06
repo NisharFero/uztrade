@@ -21,28 +21,44 @@ async function render(path = "/") {
 const readJson = (rel) =>
   JSON.parse(readFileSync(fileURLToPath(new URL(rel, import.meta.url)), "utf8"));
 
-/* Ground truth for the five supported procedures. If the source data or the
-   generator drifts, these numbers are what should fail first. */
+/* Ground truth for the ten hand-checked procedures - the ones whose graphs are
+   curated rather than derived. If the source data or the generator drifts,
+   these numbers are what should fail first. */
 const EXPECTED = {
   306: { title: "Export of dried fruits by train", blocks: 10, steps: 48 },
   325: { title: "Export of fresh fruits and vegetables by train", blocks: 10, steps: 48 },
   477: { title: "Import of tea by train", blocks: 15, steps: 53 },
   540: { title: "Export of tea by air", blocks: 9, steps: 47 },
   868: { title: "Export of tea by train", blocks: 10, steps: 48 },
+  161: { title: "Clearance of fruit and vegetable juices by road", blocks: 2, steps: 13 },
+  57: { title: "Import of animal or vegetable fertilizers by road", blocks: 12, steps: 58 },
+  707: { title: "Import of animal or vegetable fertilizers by train", blocks: 17, steps: 60 },
+  782: { title: "Arrange cargo transportation by train via Single Window online portal", blocks: 5, steps: 20 },
+  924: { title: "Arrange cargo delivery by train physically", blocks: 6, steps: 18 },
 };
 
-test("server-renders the dashboard composer", async () => {
+/* The whole published corpus: one workflow file per procedure. */
+const WORKFLOW_DIR = fileURLToPath(new URL("../../public/data/procedures/", import.meta.url));
+const workflows = () =>
+  readdirSync(WORKFLOW_DIR)
+    .filter((f) => f.endsWith(".json"))
+    .map((f) => JSON.parse(readFileSync(WORKFLOW_DIR + f, "utf8")));
+const CORPUS = workflows();
+
+test("server-renders the conversation the dashboard opens with", async () => {
   const response = await render();
   assert.equal(response.status, 200);
   assert.match(response.headers.get("content-type") ?? "", /^text\/html\b/i);
 
   const html = await response.text();
-  assert.match(html, /<title>UzTrade Trade Agent<\/title>/i);
-  assert.match(html, /Ask UzTrade/);
-  assert.match(html, /Describe the goods you want to move/);
-  assert.match(html, /Send request/);
-  // The composer offers the five supported procedures as prompts.
-  for (const { title } of Object.values(EXPECTED)) assert.match(html, new RegExp(title));
+  assert.match(html, /<title>Uzbekistan Trade Platform<\/title>/i);
+  // Chat first: one question and the composer, no form - missing details are
+  // asked for one at a time in the conversation.
+  assert.match(html, /class="convo convo-start"/);
+  assert.match(html, /What are you moving\?/);
+  assert.match(html, /id="trade-query"/, "the composer");
+  assert.match(html, /Export 20 tonnes of tea from Tashkent to Almaty by train/, "a way in");
+  assert.doesNotMatch(html, /intake-fields|Open the case/, "no form, and nothing to open before a match");
 });
 
 test("sidebar links to the real destinations", async () => {
@@ -59,7 +75,7 @@ test("sidebar links to the real destinations", async () => {
   assert.doesNotMatch(html, /href="#"/);
 });
 
-test("procedures page lists all five with their real counts", async () => {
+test("procedures page lists every published procedure", async () => {
   const response = await render("/procedures");
   assert.equal(response.status, 200);
   const html = await response.text();
@@ -68,6 +84,9 @@ test("procedures page lists all five with their real counts", async () => {
     assert.match(html, new RegExp(title));
     assert.match(html, new RegExp(`href="/procedures/${id}"`));
   }
+  // Not a sample of them: the list is the corpus, and search narrows it client-side.
+  const listed = new Set([...html.matchAll(/href="\/procedures\/(\d+)"/g)].map((m) => m[1]));
+  assert.equal(listed.size, CORPUS.length, `${listed.size} listed of ${CORPUS.length} published`);
   // Demo content from the earlier hard-coded workflow must be gone.
   assert.doesNotMatch(html, /Shipment Concierge|Procedure 868 plan/);
 });
@@ -75,6 +94,8 @@ test("procedures page lists all five with their real counts", async () => {
 test("generated dataset matches the source procedures", () => {
   const source = readJson("../../scripts/data/dag-data.json");
 
+  // dag-data.json holds exactly the curated graphs, which the generator keeps
+  // in preference to anything derived from the .docx.
   assert.deepEqual(Object.keys(EXPECTED).sort(), Object.keys(source).sort());
 
   for (const [id, expected] of Object.entries(EXPECTED)) {
@@ -109,40 +130,51 @@ test("generated dataset matches the source procedures", () => {
     };
     for (const b of p.blocks) visit(b.id);
 
-    // Real parallelism: more than one root, and at least one join.
-    assert.ok(p.blocks.filter((b) => b.dependsOn.length === 0).length >= 2, `${id} roots`);
-    assert.ok(p.blocks.filter((b) => b.dependsOn.length > 1).length >= 1, `${id} joins`);
+    // Somewhere to start, always.
+    const roots = p.blocks.filter((b) => b.dependsOn.length === 0).length;
+    assert.ok(roots >= 1, `${id} has no root block`);
+
+    // Real parallelism where the procedure has it. The five original graphs
+    // fan out and rejoin; 57, 161, 707, 782 and 924 are genuinely sequential
+    // chains and asserting otherwise would be asserting a fiction.
+    if (["306", "325", "477", "540", "868"].includes(id)) {
+      assert.ok(roots >= 2, `${id} roots`);
+      assert.ok(p.blocks.filter((b) => b.dependsOn.length > 1).length >= 1, `${id} joins`);
+    }
   }
 });
 
 test("every entity classifies to a known actor", () => {
-  const source = readJson("../../scripts/data/dag-data.json");
 
   // Mirrors modules/procedures/actors.ts. Kept in step deliberately: an entity that
   // falls through would silently land in the wrong swimlane.
   const RULES = [
     [/\bbank\b|banking system/i, "bank"],
     [/customs warehouse/i, "transport"],
+    [/insurance/i, "commercial"],
     [/customs post|customs control|group of customs/i, "government"],
     [
-      /quarantine|karantin|expertiza|single window|singlewindow|state services|my\.gov|sanitary|epidemiolog|ministry|committee|agency of plant|border checkpoint|assalom agro|standard/i,
+      /quarantine|karantin|expertiza|single window|singlewindow|state services|my\.gov|sanitary|epidemiolog|ministry|committee|agency of plant|border checkpoint|assalom agro|standard|comittee/i,
+      "government",
+    ],
+    [
+      /border crossing point|e-tranzit|electronic document management|uztest|research and quality control|certification body|nature protection|export promotion|darmon/i,
       "government",
     ],
     [
       /railway|temir yo|forwarding|freight|station|airport|airline|terminal|junction|cargo sales agent|postal cargo|place of loading|branch line|transport/i,
       "transport",
     ],
-    [/personal cabinet of participant|customs broker|warehouse|location of goods/i, "trader"],
+    [/personal cabinet of participant|customs broker|warehouse|location of goods|place of .*installation/i, "trader"],
   ];
   const counterparty = (entity) => RULES.find(([re]) => re.test(entity))?.[1] ?? null;
 
   const entities = new Set();
-  for (const p of Object.values(source))
-    for (const b of p.blocks) for (const s of b.steps) entities.add(s.entity);
+  for (const p of CORPUS) for (const b of p.blocks) for (const s of b.steps) if (s.entity) entities.add(s.entity);
 
   const unmatched = [...entities].filter((e) => counterparty(e) === null);
   assert.deepEqual(unmatched, [], `unclassified entities: ${unmatched.join(", ")}`);
-  assert.ok(entities.size >= 25, "expected at least 25 distinct entities");
+  assert.ok(entities.size >= 40, `expected at least 40 distinct entities, saw ${entities.size}`);
 });
 
 test("uses the upgraded theme and font system", async () => {
@@ -150,7 +182,7 @@ test("uses the upgraded theme and font system", async () => {
 
   assert.doesNotMatch(html, /Manrope|Source Serif|IBM Plex Mono/);
   assert.match(html, /premium-shell/);
-  assert.match(html, /command-surface/);
+  assert.match(html, /class="convo convo-start"/, "the conversation owns the page");
 });
 
 /* Fonts are self-hosted rather than injected by next/font, so the @font-face
@@ -180,8 +212,6 @@ test("serves self-hosted webfonts over http, not file://", async () => {
    what the swimlane columns render. Mirrors modules/procedures/delegation.ts; a drift
    between the two shows up here rather than as a silently wrong diagram. */
 test("every step delegates to exactly one of user / agent / physical", () => {
-  const source = readJson("../../scripts/data/dag-data.json");
-
   const PHYSICAL_ACT =
     /\bundergo\b|\bload(ing)?\b|\bunload|\bdispatch\b|\bseal(ing)?\b|\bsampl(e|ing)s?\b|\bfumigat|\bweigh|^place cargo|^arrange cargo|\binspection\b|\bhand over\b/i;
 
@@ -194,7 +224,7 @@ test("every step delegates to exactly one of user / agent / physical", () => {
 
   const tally = { user: 0, agent: 0, physical: 0 };
   let total = 0;
-  for (const p of Object.values(source))
+  for (const p of CORPUS)
     for (const b of p.blocks)
       for (const s of b.steps) {
         const lane = delegate(s);
@@ -203,18 +233,18 @@ test("every step delegates to exactly one of user / agent / physical", () => {
         total++;
       }
 
-  assert.equal(total, 244, "expected 244 steps across the five procedures");
+  assert.equal(total, 5539, "expected 5,539 steps across the published corpus");
   assert.equal(tally.user + tally.agent + tally.physical, total, "lanes must partition every step");
 
   // Nothing filed online can be a physical cargo operation - the gate that
   // stops "Obtain offer agreement for fumigation" landing in Physical.
-  for (const p of Object.values(source))
+  for (const p of CORPUS)
     for (const b of p.blocks)
       for (const s of b.steps)
         if (/^online:/i.test(s.channel)) assert.notEqual(delegate(s), "physical", s.title);
 
   // Every payment is the trader's to authorize, never the agent's to make.
-  for (const p of Object.values(source))
+  for (const p of CORPUS)
     for (const b of p.blocks)
       for (const s of b.steps)
         if (/^online:\s*pay/i.test(s.channel)) assert.equal(delegate(s), "user", s.title);
@@ -225,15 +255,23 @@ test("every step delegates to exactly one of user / agent / physical", () => {
 
 /* Compliance & Risk must never invent a duty figure it cannot support - the
    source procedures contain no HS codes and no tariff rates. */
-test("compliance reference covers every goods category in scope", () => {
-  const source = readJson("../../scripts/data/dag-data.json");
-  const goods = new Set(
-    Object.values(source).map((p) => {
-      const m = p.title.match(/^(?:Export|Import|Clearance)\s+of\s+(.+?)\s+by\s+(?:train|air|road)$/i);
-      return m[1].toLowerCase();
-    }),
-  );
-  assert.deepEqual([...goods].sort(), ["dried fruits", "fresh fruits and vegetables", "tea"]);
+test("every procedure carries the taxonomy intake matches on", () => {
+  const directions = new Set(["import", "export", "transit"]);
+  const modes = new Set(["train", "air", "road", "any"]);
+  const kinds = new Set(["customs", "logistics", "service"]);
+
+  for (const p of CORPUS) {
+    assert.ok(directions.has(p.direction), `${p.id} direction ${p.direction}`);
+    assert.ok(modes.has(p.mode), `${p.id} mode ${p.mode}`);
+    assert.ok(kinds.has(p.kind), `${p.id} kind ${p.kind}`);
+    assert.ok(p.goods && p.goods.length > 0, `${p.id} names its goods`);
+    assert.ok(p.blocks.length > 0 && p.stepsCount > 0, `${p.id} has a workflow`);
+  }
+
+  // The goods the certificate rules and the demo pack are written against.
+  const goods = new Set(CORPUS.map((p) => p.goods));
+  for (const g of ["tea", "dried fruits", "fresh fruits and vegetables", "fruit and vegetable juices"])
+    assert.ok(goods.has(g), `${g} is published`);
 });
 
 test("backend workflow API surface is present without changing the UI", () => {

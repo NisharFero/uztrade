@@ -1,0 +1,16 @@
+{
+  "name": "uztrade",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Uzbekistan Trade Platform: web app, entity API sandboxes and local database, run together.",
+  "engines": {
+    "node": ">=22.13.0"
+  },
+  "scripts": {
+    "setup": "node scripts/local.mjs setup",
+    "start": "node scripts/local.mjs start",
+    "stop": "node scripts/local.mjs stop",
+    "status": "node scripts/local.mjs status",
+    "test": "npm --prefix apps/web run test:unit && npm --prefix apps/portals test"
+  }
+}

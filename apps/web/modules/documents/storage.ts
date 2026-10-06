@@ -1,4 +1,4 @@
-import { get, put } from "@vercel/blob";
+import { del, get, put } from "@vercel/blob";
 import type { DocsBucket } from "./ingest";
 
 export type DocumentBucket = DocsBucket & {
@@ -17,6 +17,9 @@ const vercelBucket: DocumentBucket = {
     const result = await get(key, { access: "private" });
     if (!result || result.statusCode !== 200) return null;
     return { body: result.stream, httpMetadata: { contentType: result.blob.contentType } };
+  },
+  async delete(key) {
+    await del(key);
   },
 };
 

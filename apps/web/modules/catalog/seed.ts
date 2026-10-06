@@ -12,7 +12,7 @@ export type SeedUser = {
 export type SeedEntity = {
   id: string;
   canonicalName: string;
-  type: "government" | "bank" | "transport" | "inspection" | "certification" | "facility";
+  type: EntityType;
   capabilities: string[];
   contact: { email: string; phone: string };
   simulationMode: true;
@@ -32,19 +32,36 @@ function slug(value: string): string {
   return value.normalize("NFKD").replace(/[^a-zA-Z0-9]+/g, "-").replace(/^-|-$/g, "").toLowerCase();
 }
 
-function entityType(name: string): SeedEntity["type"] {
-  if (/bank/i.test(name)) return "bank";
-  if (/quarantine|sanitary|inspection|border checkpoint/i.test(name)) return "inspection";
-  if (/expertiza|certificat/i.test(name)) return "certification";
-  if (/railway|cargo|freight|station|airport|transport/i.test(name)) return "transport";
-  if (/warehouse|place of loading|location of goods/i.test(name)) return "facility";
-  return "government";
+export type EntityType = "government" | "customs" | "inspection" | "certification" | "portal" | "bank" | "transport" | "facility" | "service";
+
+/* What an entity is, from its name. Order matters: an online system is a
+ * portal even when it belongs to an agency ("... Personal cabinet"), a customs
+ * post is customs even at an airport warehouse, and a private provider is a
+ * service even when its name says cargo or freight. The answer for every
+ * entity the corpus names is hand-checked in evals/gold/entities.json. */
+const ENTITY_RULES: [RegExp, EntityType][] = [
+  [/online banking|\bbank\b/i, "bank"],
+  [/personal cabinet|single window|single portal|service portal|web-?site|information system|document management|^assalom agro$|^darmon$/i, "portal"],
+  [/customs post|border crossing/i, "customs"],
+  [/broker|insurance|forwarding|sales agent/i, "service"],
+  [/quarantine|sanitary|inspection|border checkpoint/i, "inspection"],
+  [/expertiza|certificat|expertise and standardization|quality control/i, "certification"],
+  [/warehouse|place of loading|location of goods|place of .* installation/i, "facility"],
+  [/railway|temir yo'?llari|cargo|station|airport|transport/i, "transport"],
+];
+
+/** The corpus spells some names with typographic quotes and some without
+ *  ("“Uzbekexpertiza” JSC" and "\"Uzbekexpertiza\" JSC"); both are one entity. */
+export const entityName = (name: string) => name.trim().replace(/[“”„]/g, '"').replace(/[‘’]/g, "'").replace(/\s+/g, " ");
+
+export function entityType(name: string): EntityType {
+  return ENTITY_RULES.find(([re]) => re.test(name.trim()))?.[1] ?? "government";
 }
 
 export function mockEntities(): SeedEntity[] {
   // The catalogue already lists every entity each procedure names, so seeding
   // the directory needs no workflow files.
-  const names = [...new Set(Object.values(CATALOGUE).flatMap((procedure) => procedure.entities.map((entity) => entity.trim())))]
+  const names = [...new Set(Object.values(CATALOGUE).flatMap((procedure) => procedure.entities.map(entityName)))]
     .filter(Boolean)
     .sort((a, b) => a.localeCompare(b));
 

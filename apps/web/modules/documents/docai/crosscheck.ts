@@ -24,6 +24,9 @@ export type CheckContext = {
   partnerCountry: string | null;
   direction: "export" | "import" | null;
   goodsCategory: string | null;
+  /** The goods as the case names them ("yoghurt"), which is what a document
+   *  usually says - the category ("dairy products") rarely appears on one. */
+  goodsTerm?: string | null;
   documents: LedgerDocument[];
   /** The step the document being checked was uploaded for. */
   stepNum?: number | null;
@@ -44,11 +47,34 @@ function tonnesIn(fields: ExtractedField[]): { key: string; label: string; tonne
   return null;
 }
 
+/* Russian and Uzbek words for the goods the demo corpus was built around: a
+   bilingual invoice says "Чай черный", not "tea". Categories without an entry
+   fall back to matching the case's own words (goodsWordsFor below), which is
+   why a corpus of 38 categories no longer needs 38 entries here. */
 const GOODS_WORDS: Record<string, RegExp> = {
   tea: /\btea\b|чай|choy/i,
   "dried fruits": /dried|сушен|сухофрукт|изюм|кишмиш|курага|raisin|apricot/i,
   "fresh fruits and vegetables": /fresh|свеж|tomato|томат|помидор|grape|виноград|apple|яблок|melon|дын|черешн|cherr/i,
+  "dairy products": /dairy|молоч|молоко|сыр|йогурт|kefir|cheese|milk|yogh?urt|butter/i,
+  "meat and meat products": /meat|мяс|говядин|баранин|птиц|beef|lamb|mutton|poultry|sausage|колбас/i,
+  "pharmaceutical products": /pharmac|medic|лекарств|препарат|dori|tablet|vaccine/i,
+  "medical equipment": /medical|медицинск|оборудован|equipment|apparatus/i,
 };
+
+/** Does a document's goods line mention what the case is moving? Every word of
+ *  four letters or more from the case's goods and category counts, so a case
+ *  for "silk scarves" matches "Scarves, 100% silk" without a table entry. */
+function mentionsGoods(text: string, ctx: CheckContext): boolean {
+  const curated = ctx.goodsCategory ? GOODS_WORDS[ctx.goodsCategory] : null;
+  if (curated?.test(text)) return true;
+  const haystack = text.toLowerCase();
+  const words = `${ctx.goodsTerm ?? ""} ${ctx.goodsCategory ?? ""}`
+    .toLowerCase()
+    .split(/[^a-z\u0400-\u04ff]+/)
+    .filter((w) => w.length >= 4 && !["and", "products", "other", "their", "vegetable", "vegetables"].includes(w));
+  // Singular and plural both count: "carpets" on the case, "carpet" on the invoice.
+  return words.some((w) => haystack.includes(w) || haystack.includes(w.replace(/s$/, "")));
+}
 
 /* The bill a receipt pays is the latest offer agreement or invoice for payment
  * issued after the previous payment and no later than this one. Comparing with
@@ -111,12 +137,12 @@ export function crossCheck(docType: DocType, fields: ExtractedField[], ctx: Chec
   }
 
   const goods = valueOf(fields, "goods") ?? valueOf(fields, "produce") ?? valueOf(fields, "cargo");
-  const goodsRe = ctx.goodsCategory ? GOODS_WORDS[ctx.goodsCategory] : null;
-  if (goods?.value && goodsRe) {
+  if (goods?.value && (ctx.goodsTerm || ctx.goodsCategory)) {
+    const named = ctx.goodsTerm || ctx.goodsCategory;
     checks.push({
       check: "Goods vs intake",
-      status: goodsRe.test(goods.value) ? "ok" : "unknown",
-      detail: `“${goods.value}” for ${ctx.goodsCategory}`,
+      status: mentionsGoods(goods.value, ctx) ? "ok" : "unknown",
+      detail: `“${goods.value}” for ${named}`,
     });
   }
 

@@ -52,17 +52,71 @@ export type StepNeeds = {
   variants: StepVariant[];
 };
 
-const VARIANT = /^for (physical payment|online payment|submitting application)/i;
+const VARIANT = /^for (physical payment|online payment|submitting application)|^to obtain (electronic|hard) copy$|^for (legal entities|individuals)$/i;
 /* Road procedures (161, 57) add their own headings: "Information required to
  * complete transit declaration", "Documents related to the vehicle", "For
- * issuance of Cargo delivery control book", "Not obligatory documents". */
+ * issuance of Cargo delivery control book", "Not obligatory documents".
+ * Others, with the source's own spelling: "Documents requried to complete
+ * declaration", "Infromation required to complete online application",
+ * "Optional documents, the submission of which is advisory in nature:". */
 const GROUP =
-  /^(data required|documents? requi|required documents|documents that are not obligatory|not obligatory documents|to access the platform|certificates and permits|information required to complete|documents (related to|of the|attached to)|for (issuance|clearance|concluding)|if cargo operat)/i;
-const OPTIONAL_GROUP = /not obligatory/i;
+  /^(data required|documents? requi|documents requried|required documents|documents that are not obligatory|not obligatory documents|to access the platform|certificates and permits|information required to complete|infromation required to complete|information from following documents|documents, the submission|optional documents|additional information to be submitted|documents (related to|of the|attached to)|for (issuance|clearance|concluding)|if cargo operat)/i;
+const OPTIONAL_GROUP = /not obligatory|advisory in nature|^optional documents/i;
 
 const PRESENCE = /^(physical presence|availability by phone|internet access)$/i;
 const IDENTITY = /electronic digital signature|one id account|online banking account/i;
-const PUBLISHED = /bank details of territorial customs|^guiding letter \(template\)$|^instruction on completing|^guarantees and fees$/i;
+const PUBLISHED = /bank details of territorial customs|^guiding letter \(template\)$|^instruction on completing|^guarantees and fees$|^non-tariff measures$|^treasury (bank )?account of the ministry of finance$/i;
+
+/** A single detail the trader types (or the case already knows), not a file. */
+export const VALUE_INPUT =
+  /^(payment sum|quantity of transport units|amount of consignment|cost on the contract|agency region|type of organi[sz]ation|name of the organi[sz]ation|full name of an organi[sz]ation'?s manager|contact phone number|email|tax identification number|personal identification number|bank details|warehouse license number|information about|information on the goods|general information|supplier information|payment information|vehicle registration number|vehicle information|bank card number|identification number of|description of goods|contractor bank details|labeling information|pharmaceutical product information)/i;
+
+/** A paper the platform drafts from the case and the trader signs or submits:
+ *  an application, a letter, a telegram. Nothing on it is read back. */
+const APPLICATION = /^(online |electronic )?application\b|^application (form|on letterhead)|^letter (to|on)\b|^guiding letter$|^cover letter$|^telegram\b|^attachments to the application$/i;
+
+/** Documents kept as provided without reading fields from them: the entity
+ *  examines them itself (a dossier, samples, a technical description), or they
+ *  carry nothing the case checks. Each is listed by name, so a new document in
+ *  a procedure shows up as unclassified until someone decides what it is. */
+const KEPT_AS_PROVIDED = [
+  /^package of (documents|rail carriage documents|corrected registration documents)$/i,
+  /^islamic republic of iran approval letter$/i,
+  /^description of the technological workflow/i,
+  /^any document confirming/i,
+  /^normative documents on standardization/i,
+  /^packaging layout/i,
+  /^ecological certificate$/i,
+  /^material pass$/i,
+  /^code notification from the forwarder/i,
+  /^internal order on designation of director$/i,
+  /^information about the document on the basis of which/i,
+  /^certificate of individual entrepreneur registration$/i,
+  /^contract of international cargo transportation$/i,
+  /^bank transfer order$/i,
+  /^certificate of acceptance$|^handover certificate$|^act of expertise$|^product sampling label$/i,
+  /^registration documents|^registrantion documents|^administrative documents$|^list of documents submitted/i,
+  /^(chemical, pharmaceutical and biological information|preclinical study reports|clinical study reports)/i,
+  /samples/i,
+];
+
+export type InputShape = "document" | "value" | "application" | "kept" | "unclassified";
+
+/**
+ * What a shipment input is, for Document Intelligence:
+ *   document      a file with a spec: its fields are read and verified
+ *   value         one detail typed once and reused
+ *   application   drafted by the platform from the case, then signed or submitted
+ *   kept          a file kept as provided; the entity examines it, nothing is read
+ *   unclassified  nobody has decided yet - the coverage test fails on these
+ */
+export function inputShape(label: string): InputShape {
+  if (docTypeOf(label)) return "document";
+  if (VALUE_INPUT.test(label)) return "value";
+  if (APPLICATION.test(label)) return "application";
+  if (KEPT_AS_PROVIDED.some((re) => re.test(label))) return "kept";
+  return "unclassified";
+}
 const PROFILE =
   /tax identification number|personal identification number|^name of the organi[sz]ation$|full name of an organi[sz]ation|^contact phone number$|^email$|^agency region$|^type of organi[sz]ation|^passport$|power of attorney|^bank details$|certificate of state registration|^stamp$|^information about applicant$/i;
 

@@ -1,0 +1,27 @@
+# Local PostgreSQL in Docker, for machines without PostgreSQL installed.
+# `npm run setup` / `npm start` use it automatically when no PostgreSQL
+# binaries are found. Same address and credentials as the repo-local cluster,
+# so DATABASE_URL is identical either way:
+#   postgres://uztrade@127.0.0.1:5433/uztrade
+services:
+  db:
+    image: postgres:17
+    container_name: uztrade-db
+    environment:
+      POSTGRES_USER: uztrade
+      POSTGRES_DB: uztrade
+      # Loopback only (see ports), so no password is needed.
+      POSTGRES_HOST_AUTH_METHOD: trust
+    ports:
+      - "127.0.0.1:5433:5432"
+    volumes:
+      - uztrade-pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "uztrade", "-d", "uztrade"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+    restart: unless-stopped
+
+volumes:
+  uztrade-pgdata:

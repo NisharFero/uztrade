@@ -38,7 +38,21 @@ export type DocType =
   | "customs_declaration"
   | "cargo_transport_application"
   | "food_test_report"
-  | "passport";
+  | "passport"
+  | "vehicle_registration"
+  | "drivers_licence"
+  | "atp_certificate"
+  | "carriage_permit"
+  | "tir_carnet"
+  | "cargo_control_book"
+  | "transit_declaration"
+  | "funds_certificate"
+  | "company_charter"
+  | "sanitary_conclusion"
+  | "quality_certificate"
+  | "veterinary_permit"
+  | "registration_certificate"
+  | "service_contract";
 
 export type FieldSource = "specimen" | "procedure" | "reference";
 export type FieldKind = "text" | "date" | "inn" | "hs" | "amount" | "weight" | "number" | "currency" | "incoterm" | "country";
@@ -79,6 +93,7 @@ const make =
   });
 const s = make("specimen");
 const p = make("procedure");
+const r = make("reference");
 
 export const DOC_SPECS: Record<DocType, DocSpec> = {
   commercial_invoice: {
@@ -526,6 +541,216 @@ export const DOC_SPECS: Record<DocType, DocSpec> = {
     supporting: [],
     checks: ["Name matches the power of attorney", "Not expired on the date of the visit"],
   },
+
+  /* ------------------------------------------------------------------------
+   * Documents the 243 procedures ask for that have no published specimen.
+   * Their fields are standard practice ("reference"): the identifiers an
+   * officer reads off the document and the dates that make it valid. Required
+   * means a step cannot move until the field is read or confirmed.
+   * Ordered by how many procedures ask for them (scripts/audit/document-coverage.ts). */
+
+  vehicle_registration: {
+    type: "vehicle_registration",
+    name: "Vehicle registration certificate",
+    purpose: "Identifies the truck and its owner at the border and in the transit declaration.",
+    specimen: "No specimen published — national vehicle registration certificate",
+    fields: [
+      r("reg_number", "Registration number (plate)", "text", true, ["What is the registration number?"], ["registration (no|number)", "регистрационный (знак|номер)", "davlat raqam"]),
+      r("vin", "VIN / chassis number", "text", true, ["What is the VIN or chassis number?"], ["\\bvin\\b", "шасси", "идентификационный номер"]),
+      r("owner", "Owner", "text", true, ["Who is the owner?"], ["owner", "собственник", "владелец"]),
+      r("make_model", "Make and model", "text", false, ["What is the make and model?"], ["make", "марка"]),
+      r("issue_date", "Date of issue", "date", false, ["What is the date of issue?"], ["date of issue", "дата выдачи"]),
+    ],
+    supporting: [],
+    checks: ["Registration number matches the transit declaration and the carriage permit"],
+  },
+  drivers_licence: {
+    type: "drivers_licence",
+    name: "Driver's licence",
+    purpose: "Shows the driver may drive the vehicle carrying the goods.",
+    specimen: "No specimen published — national or international driving permit",
+    fields: [
+      r("holder", "Holder", "text", true, ["Who is the licence holder?"], ["surname", "фамилия"]),
+      r("licence_no", "Licence number", "text", true, ["What is the licence number?"], ["licen[cs]e no", "номер удостоверения", "\\b5\\."]),
+      r("categories", "Categories", "text", true, ["Which categories does it cover?"], ["categor", "категори", "\\b9\\."]),
+      r("valid_until", "Valid until", "date", true, ["Until when is it valid?"], ["valid until", "действительно до", "\\b4b\\."]),
+    ],
+    supporting: [],
+    checks: ["Category covers a heavy goods vehicle (C or CE)", "Valid on the date of the crossing"],
+  },
+  atp_certificate: {
+    type: "atp_certificate",
+    name: "ATP certificate",
+    purpose: "Certifies a refrigerated or insulated vehicle for perishable foodstuffs (ATP agreement).",
+    specimen: "No specimen published — ATP certificate of compliance",
+    fields: [
+      r("certificate_no", "Certificate number", "text", true, ["What is the certificate number?"], ["certificate no", "свидетельство\\s*№"]),
+      r("vehicle", "Vehicle registration number", "text", true, ["Which vehicle is it for?"], ["registration", "регистрационный"]),
+      r("equipment_class", "Class of equipment", "text", false, ["What is the equipment class?"], ["class", "класс"]),
+      r("valid_until", "Valid until", "date", true, ["Until when is it valid?"], ["valid until", "действительно до"]),
+    ],
+    supporting: [],
+    checks: ["Vehicle matches the vehicle registration certificate", "Valid on the date of carriage"],
+  },
+  carriage_permit: {
+    type: "carriage_permit",
+    name: "International carriage permit",
+    purpose: "Bilateral or ECMT authorisation for a truck to carry goods into or through a country.",
+    specimen: "No specimen published — bilateral / ECMT road transport permit",
+    fields: [
+      r("permit_no", "Permit number", "text", true, ["What is the permit number?"], ["permit no", "разрешение\\s*№"]),
+      r("country", "Country it is valid for", "country", true, ["For which country is it issued?"], ["country", "страна"]),
+      r("vehicle", "Vehicle registration number", "text", false, ["Which vehicle is it for?"], ["registration", "регистрационный"]),
+      r("valid_until", "Valid until", "date", true, ["Until when is it valid?"], ["valid until", "действительно до"]),
+    ],
+    supporting: [],
+    checks: ["Country matches the route", "Valid on the date of the crossing"],
+  },
+  tir_carnet: {
+    type: "tir_carnet",
+    name: "TIR carnet",
+    purpose: "Customs transit document under the TIR Convention: goods cross borders under seal without duties.",
+    specimen: "No specimen published — IRU TIR carnet",
+    fields: [
+      r("carnet_no", "Carnet number", "text", true, ["What is the carnet number?"], ["carnet", "книжка мдп\\s*№"]),
+      r("holder", "Holder", "text", true, ["Who is the holder?"], ["holder", "держатель"]),
+      r("valid_until", "Valid until", "date", true, ["Until when is it valid?"], ["valid until", "действительна до"]),
+      r("departure_office", "Customs office of departure", "text", false, ["What is the customs office of departure?"], ["office of departure", "таможня отправления"]),
+      r("vehicle", "Vehicle registration number", "text", false, ["Which vehicle carries the goods?"], ["registration", "регистрационный"]),
+    ],
+    supporting: [],
+    checks: ["Holder matches the carrier", "Vehicle matches the vehicle registration certificate"],
+  },
+  cargo_control_book: {
+    type: "cargo_control_book",
+    name: "Cargo delivery control book",
+    purpose: "Customs control of delivery: goods travel from the border to the destination customs office.",
+    specimen: "No specimen published — cargo delivery control document",
+    fields: [
+      r("book_no", "Control book number", "text", true, ["What is the control book number?"], ["№", "номер"]),
+      r("issue_date", "Date of issue", "date", true, ["What is the date of issue?"], ["дата", "date"]),
+      r("destination_office", "Customs office of destination", "text", true, ["What is the customs office of destination?"], ["таможня назначения", "office of destination"]),
+      r("transport", "Vehicle or wagon number", "text", false, ["Which vehicle or wagon carries the goods?"], ["транспортное средство", "вагон"]),
+    ],
+    supporting: [],
+    checks: ["Destination office matches the route"],
+  },
+  transit_declaration: {
+    type: "transit_declaration",
+    name: "Transit declaration",
+    purpose: "Places the goods under customs transit to the office of destination.",
+    specimen: "No specimen published — transit declaration",
+    fields: [
+      r("declaration_no", "Declaration number", "text", true, ["What is the declaration number?"], ["№", "registration number"]),
+      r("date", "Date", "date", true, ["What is the date?"], ["дата", "date"]),
+      r("departure_office", "Customs office of departure", "text", true, ["What is the customs office of departure?"], ["таможня отправления", "office of departure"]),
+      r("destination_office", "Customs office of destination", "text", true, ["What is the customs office of destination?"], ["таможня назначения", "office of destination"]),
+      r("hs_code", "Commodity code", "hs", false, ["What is the commodity code?"], ["код товара"]),
+      r("gross_weight", "Gross weight", "weight", false, ["What is the gross weight?"], ["вес брутто"]),
+    ],
+    supporting: [],
+    checks: ["Commodity code matches the case", "Offices match the route"],
+  },
+  funds_certificate: {
+    type: "funds_certificate",
+    name: "Certificate on availability of funds",
+    purpose: "The bank's statement that the client's account holds enough for the payment.",
+    specimen: "No specimen published — bank certificate",
+    fields: [
+      r("bank", "Bank", "text", true, ["Which bank issued it?"], ["bank", "банк"]),
+      r("account_holder", "Account holder", "text", true, ["Who is the account holder?"], ["client", "клиент", "владелец счета"]),
+      r("amount", "Amount available", "amount", true, ["What amount is available?"], ["amount", "сумма", "остаток"]),
+      r("date", "Date", "date", true, ["What is the date?"], ["дата", "date"]),
+    ],
+    supporting: [],
+    checks: ["Account holder matches the case's company", "Issued recently"],
+  },
+  company_charter: {
+    type: "company_charter",
+    name: "Company charter",
+    purpose: "The founding document that names the company and who may act for it.",
+    specimen: "No specimen published — charter (устав)",
+    fields: [
+      r("company", "Company name", "text", true, ["What is the company name?"], ["устав", "charter"]),
+      r("approved", "Date approved", "date", false, ["When was it approved?"], ["утвержден", "approved"]),
+      r("director", "Executive body / director", "text", false, ["Who is the executive body?"], ["директор", "director"]),
+    ],
+    supporting: [],
+    checks: ["Company matches the case's company"],
+  },
+  sanitary_conclusion: {
+    type: "sanitary_conclusion",
+    name: "Sanitary-epidemiological conclusion",
+    purpose: "The sanitary service's finding that the product is safe for the market.",
+    specimen: "No specimen published — sanitary-epidemiological conclusion",
+    fields: [
+      r("conclusion_no", "Conclusion number", "text", true, ["What is the conclusion number?"], ["заключение\\s*№", "№"]),
+      r("issue_date", "Date of issue", "date", true, ["What is the date of issue?"], ["дата", "date"]),
+      r("product", "Product", "text", true, ["Which product does it cover?"], ["продукция", "product"]),
+      r("holder", "Issued to", "text", false, ["To whom is it issued?"], ["выдано", "issued to"]),
+      r("valid_until", "Valid until", "date", false, ["Until when is it valid?"], ["действительно до", "valid until"]),
+    ],
+    supporting: [],
+    checks: ["Product matches the goods of the case"],
+  },
+  quality_certificate: {
+    type: "quality_certificate",
+    name: "Quality certificate / certificate of analysis",
+    purpose: "The producer's or laboratory's statement of the batch's quality and composition.",
+    specimen: "No specimen published — quality certificate or certificate of analysis",
+    fields: [
+      r("certificate_no", "Certificate number", "text", true, ["What is the certificate number?"], ["certificate no", "сертификат\\s*№", "№"]),
+      r("issue_date", "Date of issue", "date", true, ["What is the date of issue?"], ["date", "дата"]),
+      r("product", "Product", "text", true, ["Which product does it cover?"], ["product", "продукция", "наименование"]),
+      r("batch", "Batch / lot", "text", false, ["What is the batch number?"], ["batch", "lot", "партия"]),
+      r("issuer", "Issued by", "text", false, ["Who issued it?"], ["issued by", "выдан"]),
+    ],
+    supporting: [],
+    checks: ["Product matches the goods of the case"],
+  },
+  veterinary_permit: {
+    type: "veterinary_permit",
+    name: "Veterinary permit",
+    purpose: "The veterinary committee's permission to import or export animal products.",
+    specimen: "No specimen published — veterinary permit",
+    fields: [
+      r("permit_no", "Permit number", "text", true, ["What is the permit number?"], ["разрешение\\s*№", "permit no"]),
+      r("issue_date", "Date of issue", "date", true, ["What is the date of issue?"], ["дата", "date"]),
+      r("goods", "Goods", "text", true, ["Which goods does it cover?"], ["продукция", "товар", "goods"]),
+      r("valid_until", "Valid until", "date", false, ["Until when is it valid?"], ["действительно до", "valid until"]),
+    ],
+    supporting: [],
+    checks: ["Goods match the case", "Valid on the date of the crossing"],
+  },
+  registration_certificate: {
+    type: "registration_certificate",
+    name: "Registration certificate",
+    purpose: "State registration of a regulated product (medicine, medical device, fertiliser).",
+    specimen: "No specimen published — state registration certificate",
+    fields: [
+      r("certificate_no", "Registration number", "text", true, ["What is the registration number?"], ["регистрационн", "registration no", "№"]),
+      r("product", "Product", "text", true, ["Which product is registered?"], ["наименование", "product"]),
+      r("holder", "Registration holder", "text", false, ["Who holds the registration?"], ["держатель", "holder"]),
+      r("valid_until", "Valid until", "date", false, ["Until when is it valid?"], ["действительно до", "valid until"]),
+    ],
+    supporting: [],
+    checks: ["Product matches the goods of the case"],
+  },
+  service_contract: {
+    type: "service_contract",
+    name: "Service contract",
+    purpose: "A contract with a service provider on the route: customs warehouse, cargo handling, rail services, a technological centre.",
+    specimen: "No specimen published — service contract",
+    fields: [
+      r("contract_no", "Contract number", "text", true, ["What is the contract number?"], ["договор\\s*№", "contract no"]),
+      r("date", "Date", "date", true, ["What is the date?"], ["дата", "date", "от\\s"]),
+      r("provider", "Service provider", "text", true, ["Who provides the service?"], ["исполнитель", "provider"]),
+      r("client", "Client", "text", true, ["Who is the client?"], ["заказчик", "client"]),
+      r("valid_until", "Valid until", "date", false, ["Until when is it valid?"], ["срок действия", "valid until"]),
+    ],
+    supporting: [],
+    checks: ["Client matches the case's company"],
+  },
 };
 
 /* Order matters: an "Offer agreement for phytosanitary certificate" is an
@@ -538,9 +763,9 @@ const PATTERNS: [RegExp, DocType][] = [
   [/shipper'?s letter of instruction/i, "shippers_letter"],
   [/food test report/i, "food_test_report"],
   [/invoice for (payment|prepayment)/i, "invoice_for_payment"],
-  [/commercial invoice/i, "commercial_invoice"],
+  [/commercial invoice|^invoice$/i, "commercial_invoice"],
   [/packing list/i, "packing_list"],
-  [/foreign trade contract|foreign economic activity contract|^supply contract$/i, "trade_contract"],
+  [/foreign trade contract|foreign economic activity contract|^supply contract$|^sales and purchase agreement$/i, "trade_contract"],
   [/railway bill|\bsmgs\b/i, "railway_bill"],
   [/carriage of goods by road|\bcmr\b/i, "cmr_note"],
   [/veterinary certificate/i, "veterinary_certificate"],
@@ -550,8 +775,22 @@ const PATTERNS: [RegExp, DocType][] = [
   [/certificate of origin/i, "certificate_of_origin"],
   [/receipt/i, "receipt_of_payment"],
   [/power of attorney/i, "power_of_attorney"],
-  [/customs declaration|\bim70\b/i, "customs_declaration"],
-  [/^passport$/i, "passport"],
+  [/customs declaration|\bim70\b|^export declaration of the exporter/i, "customs_declaration"],
+  [/^(international )?passport$|^id-card$/i, "passport"],
+  [/vehicle registration certificate/i, "vehicle_registration"],
+  [/driver'?s licen[cs]e|driving licen[cs]e/i, "drivers_licence"],
+  [/\batp certificate\b/i, "atp_certificate"],
+  [/authori[sz]ation for international carriage|vehicle entrance permit/i, "carriage_permit"],
+  [/\btir carnet\b/i, "tir_carnet"],
+  [/cargo delivery control book/i, "cargo_control_book"],
+  [/^transit declaration$/i, "transit_declaration"],
+  [/availability of funds/i, "funds_certificate"],
+  [/^company charter$/i, "company_charter"],
+  [/sanitary-?epidemiolog\w* conclusion/i, "sanitary_conclusion"],
+  [/quality certificate|certificate of analysis/i, "quality_certificate"],
+  [/veterinary permit/i, "veterinary_permit"],
+  [/^registration certificate/i, "registration_certificate"],
+  [/contract for (customs warehouse|handling and storage)|agreement on railway transportation services|agreement with technological cent/i, "service_contract"],
 ];
 
 export function docTypeOf(label: string): DocType | null {

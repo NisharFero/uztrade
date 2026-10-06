@@ -7,18 +7,28 @@
 
 import { extractShipmentFacts } from "../workflow/domain";
 import { mentionedRoute, placesIn, type Place } from "./shipment-plan";
-import type { Direction, Mode } from "./lookup";
+import { regimeIn, type Direction, type Mode, type Regime } from "./lookup";
 import { CATEGORIES, commodityOf, logisticsDirection, type Category } from "./taxonomy";
+import { CATALOGUE } from "../procedures/data/procedures.generated";
+import { procedureReferenceIn } from "./reference";
 
-export type Slot = "commodity" | "direction" | "mode" | "quantity" | "route";
+export type Slot = "commodity" | "direction" | "mode" | "regime" | "quantity" | "route";
 
 export type DraftEnd = { name: string; country: string; assumed: boolean };
 
 export type IntakeDraft = {
+  /** An explicit, catalogue-validated selection, retained across turns. */
+  procedureId?: string | null;
   commodity: { term: string; category: Category; hs: string } | null;
   /** Goods named but ambiguous ("apricots") - kept so the question can name them. */
   pendingTerm: string | null;
+  /** Goods outside the published categories, with the nearest one reasoned out
+   *  and waiting for the trader's yes. Never applied on its own. */
+  proposal: { term: string; category: Category; hs: string; reason: string } | null;
   mode: Mode | null;
+  /** Which published treatment of the goods: the whole export/import, customs
+   *  clearance only, temporary, or re-export. Asked only when several exist. */
+  regime: Regime | null;
   quantity: { value: number; unit: string; acknowledged: boolean } | null;
   origin: DraftEnd | null;
   destination: DraftEnd | null;
@@ -29,12 +39,15 @@ export type IntakeDraft = {
 export const EMPTY_DRAFT: IntakeDraft = {
   commodity: null,
   pendingTerm: null,
+  proposal: null,
   mode: null,
+  regime: null,
   quantity: null,
   origin: null,
   destination: null,
   statedDirection: null,
 };
+
 
 const MODE_WORDS: [RegExp, Mode][] = [
   [/\b(air|plane|flight|fly|airfreight)\b/i, "air"],
@@ -81,9 +94,19 @@ export function mergeReply(draft: IntakeDraft, text: string, expecting: Slot | n
   let unsupportedGoods: string | null = null;
   let unknownPlace: string | null = null;
   const facts = extractShipmentFacts(text);
+  const reference = procedureReferenceIn(text);
+  if (reference) {
+    const p = CATALOGUE[reference.id];
+    next.procedureId = p.id;
+    next.commodity = { term: p.goods, category: p.goods, hs: "" };
+    next.mode = p.mode === "any" ? null : p.mode;
+    next.statedDirection = p.direction === "transit" ? null : p.direction;
+    next.regime = ["standard", "clearance", "temporary", "re-export"].includes(p.regime) ? p.regime as Regime : null;
+    understood = true;
+  }
 
   // What - a pending "apricots" is resolved by a reply of just "dried".
-  const hit = commodityOf(draft.pendingTerm ? `${text} ${draft.pendingTerm}` : text);
+  const hit = reference ? { kind: "none" as const } : commodityOf(draft.pendingTerm ? `${text} ${draft.pendingTerm}` : text);
   if (hit.kind === "known") {
     next.commodity = { term: hit.term, category: hit.category, hs: hit.hs };
     next.pendingTerm = null;
@@ -94,6 +117,13 @@ export function mergeReply(draft: IntakeDraft, text: string, expecting: Slot | n
     understood = true;
   } else if (hit.kind === "unsupported") {
     unsupportedGoods = hit.term;
+    understood = true;
+  }
+
+  // Which treatment: said outright ("customs clearance only", "temporary import").
+  const regime = regimeIn(text);
+  if (regime) {
+    next.regime = regime;
     understood = true;
   }
 
@@ -182,10 +212,20 @@ export function parseDraft(raw: unknown): IntakeDraft {
   const q = obj(r.quantity);
   const value = typeof q.value === "number" ? q.value : Number.NaN;
 
+  const pr = obj(r.proposal);
+  const proposed = CATEGORIES.find((k) => k === pr.category) ?? null;
+  const regimes: Regime[] = ["standard", "clearance", "temporary", "re-export"];
+
   return {
+    ...(typeof r.procedureId === "string" && CATALOGUE[r.procedureId] ? { procedureId: r.procedureId } : {}),
     commodity: category ? { term: str(c.term) ?? category, category, hs: str(c.hs) ?? "" } : null,
     pendingTerm: str(r.pendingTerm),
+    proposal:
+      proposed && str(pr.term)
+        ? { term: str(pr.term)!, category: proposed, hs: str(pr.hs) ?? "", reason: str(pr.reason) ?? "" }
+        : null,
     mode: r.mode === "train" || r.mode === "air" || r.mode === "road" ? r.mode : null,
+    regime: regimes.find((x) => x === r.regime) ?? null,
     quantity: Number.isFinite(value) ? { value, unit: str(q.unit) ?? "t", acknowledged: Boolean(q.acknowledged) } : null,
     origin: end(r.origin),
     destination: end(r.destination),
@@ -195,7 +235,7 @@ export function parseDraft(raw: unknown): IntakeDraft {
 
 /** A draft with nothing in it - used for the relevance gate. */
 export const isEmptyDraft = (d: IntakeDraft) =>
-  !d.commodity && !d.pendingTerm && !d.mode && !d.quantity && !d.origin && !d.destination && !d.statedDirection;
+  !d.procedureId && !d.commodity && !d.pendingTerm && !d.proposal && !d.mode && !d.quantity && !d.origin && !d.destination && !d.statedDirection;
 
 /* Re-exported for callers that only need the commodity table's categories. */
 export { commodityOf };

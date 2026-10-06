@@ -52,7 +52,7 @@ test("answers the current step and stage from the live case", async () => {
   const stage = answerProcedureQuestion({ question: "what stage am I currently in?", procedure, projection, view });
   assert.equal(stage.title, "Current stage");
   assert.match(stage.message, /Registration/i);
-  assert.ok(stage.bullets.some((b) => /Steps 1-1/));
+  assert.ok(stage.bullets.some((b) => /Steps 1-1/.test(b)));
 });
 
 test("answers which documents are needed now and before starting", async () => {
@@ -62,7 +62,7 @@ test("answers which documents are needed now and before starting", async () => {
   assert.equal(answer.kind, "answer");
   assert.equal(answer.title, "Documents needed");
   assert.ok(answer.bullets.some((b) => /Electronic copy of foreign trade contract/i.test(b)));
-  assert.ok(answer.bullets.some((b) => /Before you start/i));
+  assert.ok(answer.bullets.some((b) => /Before you start/i.test(b)));
 });
 
 test("answers required fields for a named document", async () => {
@@ -71,9 +71,9 @@ test("answers required fields for a named document", async () => {
   const answer = answerProcedureQuestion({ question: "what details required in the commercial invoice?", procedure, projection, view });
   assert.equal(answer.kind, "answer");
   assert.equal(answer.title, "Commercial invoice details");
-  assert.ok(answer.bullets.some((b) => /Invoice number/i));
-  assert.ok(answer.bullets.some((b) => /Total value/i));
-  assert.ok(answer.bullets.some((b) => /Currency of invoice/i));
+  assert.ok(answer.bullets.some((b) => /Invoice number/i.test(b)));
+  assert.ok(answer.bullets.some((b) => /Total value/i.test(b)));
+  assert.ok(answer.bullets.some((b) => /Currency of invoice/i.test(b)));
 });
 
 test("reports timing without inventing entity approval SLA", async () => {
@@ -83,7 +83,7 @@ test("reports timing without inventing entity approval SLA", async () => {
   assert.equal(answer.kind, "answer");
   assert.equal(answer.title, "Time and approvals");
   assert.match(answer.message, /ETA/i);
-  assert.ok(answer.bullets.some((b) => /published procedure does not give an entity approval SLA/i));
+  assert.ok(answer.bullets.some((b) => /published procedure does not give an entity approval SLA/i.test(b)));
 });
 
 test("maps fresh produce goods to procedure 325", async () => {
@@ -127,7 +127,7 @@ test("routes ambiguous export-document questions to a follow-up when a case is a
   const answer = await answerRoutedProcedureQuestion({ question: "what documents are needed for export?", procedure, projection, view, llm: undefined });
   assert.equal(answer.kind, "clarify");
   assert.match(answer.message, /current shipment/i);
-  assert.ok(answer.bullets.some((b) => /General export documents/i));
+  assert.ok(answer.bullets.some((b) => /General export documents/i.test(b)));
 });
 
 test("routes clearly current shipment questions to the case answer", async () => {
@@ -137,7 +137,7 @@ test("routes clearly current shipment questions to the case answer", async () =>
 
   assert.equal(answer.kind, "answer");
   assert.equal(answer.title, "Documents needed");
-  assert.ok(answer.bullets.some((b) => /Electronic copy of foreign trade contract/i));
+  assert.ok(answer.bullets.some((b) => /Electronic copy of foreign trade contract/i.test(b)));
 });
 
 test("routes general export questions to FAQ instead of current case details", async () => {
@@ -153,6 +153,6 @@ test("routes general export questions to FAQ instead of current case details", a
 
   assert.equal(answer.kind, "answer");
   assert.equal(answer.title, "General procedure answer");
-  assert.ok(answer.bullets.some((b) => /sources/i));
+  assert.ok(answer.bullets.some((b) => /sources/i.test(b)));
   assert.notEqual(answer.title, "Documents needed", "general route must not use the current-case document answer");
 });

@@ -16,6 +16,7 @@ import type { PortalClient } from "../portals/client";
 import type { ShipmentFacts } from "../workflow/domain";
 import type { WorkflowProjection, WorkflowRepository } from "../workflow/repository";
 import { DOCAI_URL_DEFAULT } from "./docai/client";
+import type { DocumentReader } from "./docai/reader";
 import { crossCheck } from "./docai/crosscheck";
 import { adjudicateNames } from "./docai/names";
 import { rereadUncertainFields } from "./docai/reread";
@@ -24,6 +25,7 @@ import { specFor, type DocType } from "./specs";
 
 export type DocsBucket = {
   put(key: string, value: ArrayBuffer, options?: { httpMetadata?: { contentType?: string } }): Promise<unknown>;
+  delete?(key: string): Promise<unknown>;
 };
 
 export type IngestInput = {
@@ -42,9 +44,14 @@ export type IngestInput = {
   docType: DocType | null;
   bucket?: DocsBucket | null;
   docaiUrl?: string;
+  /** Reads the file. Groq's vision model when a key is set, the DocAI service
+   *  otherwise - see modules/documents/docai/reader.ts. */
+  reader?: DocumentReader;
   llm?: LlmClient;
   ai?: AgenticAiClient;
   portals?: PortalClient;
+  /** Leave time for the HTTP route to write the ledger and return. */
+  deadline?: number;
 };
 
 export type Ingested = { record: DocumentRecord; projection: WorkflowProjection; text: string };
@@ -55,7 +62,6 @@ export async function ingestDocument(input: IngestInput): Promise<Ingested> {
   let r2Key: string | null = null;
   if (input.bucket) {
     r2Key = `cases/${input.caseId}/${docId}/${input.fileName.replace(/[^\w.-]+/g, "_")}`;
-    await input.bucket.put(r2Key, input.bytes, { httpMetadata: { contentType: input.contentType } });
   }
 
   const projection = await input.repository.getProjection(input.runId);
@@ -74,6 +80,7 @@ export async function ingestDocument(input: IngestInput): Promise<Ingested> {
       spec: specFor(input.docType),
       procedureId: input.procedure.id,
       baseUrl: input.docaiUrl || DOCAI_URL_DEFAULT,
+      parseWithAi: input.reader,
     });
     reader = analyzed.fallback;
     models = analyzed.models;
@@ -83,10 +90,17 @@ export async function ingestDocument(input: IngestInput): Promise<Ingested> {
   }
 
   // Document data: both of these use a model only if one runs on this machine.
-  const fields = parsed ? (await rereadUncertainFields(parsed.fields, text, input.llm)).fields : [];
-  const checks = parsed && input.docType
-    ? await adjudicateNames(crossCheck(input.docType, fields, checkContext(input.procedure, input.facts, input.query, ledger, input.stepNum)), input.llm)
+  const enoughTime = () => Date.now() < (input.deadline ?? Infinity) - 35_000;
+  const fields = parsed
+    ? enoughTime() ? (await rereadUncertainFields(parsed.fields, text, input.llm)).fields : parsed.fields
     : [];
+  const baseChecks = parsed && input.docType
+    ? crossCheck(input.docType, fields, checkContext(input.procedure, input.facts, input.query, ledger, input.stepNum))
+    : [];
+  const checks = enoughTime() ? await adjudicateNames(baseChecks, input.llm) : baseChecks;
+
+  // Parse first so a timed out reader cannot strand an unreferenced blob.
+  if (input.bucket && r2Key) await input.bucket.put(r2Key, input.bytes, { httpMetadata: { contentType: input.contentType } });
 
   const record: DocumentRecord = {
     docId,
@@ -111,6 +125,19 @@ export async function ingestDocument(input: IngestInput): Promise<Ingested> {
     parsedAt: new Date().toISOString(),
   };
 
-  const after = await recordDocument(input.repository, input.runId, record, { ai: input.ai, portals: input.portals });
+  let after: WorkflowProjection;
+  try {
+    after = await recordDocument(input.repository, input.runId, record, { ai: input.ai, portals: input.portals, deadline: input.deadline });
+  } catch (error) {
+    // If the ledger write failed, remove this request's upload. If the ledger
+    // was written and a later orchestrator step failed, keep the referenced file.
+    if (r2Key && input.bucket?.delete) {
+      const recorded = await input.repository.getProjection(input.runId)
+        .then((current) => current.artifacts.some((item) => item.id === `document:${input.runId}:${record.docId}:${record.version}`))
+        .catch(() => true);
+      if (!recorded) await input.bucket.delete(r2Key).catch(() => undefined);
+    }
+    throw error;
+  }
   return { record, projection: after, text };
 }

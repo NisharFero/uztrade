@@ -6,6 +6,7 @@ import type { AssistantView } from "../../modules/steps/assistant";
 import type { UpfrontItem } from "../../modules/steps/upfront";
 import type { Need } from "../../modules/steps/next";
 import { labelKey } from "../../modules/steps/ledger";
+import { demoFor } from "../../modules/demo/demo";
 
 /** Inputs given at the start of the case are recorded against step 0, so every
  *  later step that needs them finds them already there. */
@@ -102,6 +103,7 @@ export default function CaseUpfront({ caseId, procedureId }: { caseId: string; p
 
   const items = view?.upfront.items ?? [];
   const have = items.filter((i) => i.status === "have").length;
+  const hasDemoPack = Boolean(demoFor(procedureId));
 
   return (
     <details className="upfront" onToggle={(event) => event.currentTarget.open && void load()}>
@@ -120,6 +122,12 @@ export default function CaseUpfront({ caseId, procedureId }: { caseId: string; p
 
       {view ? (
         <>
+          {!hasDemoPack ? (
+            <p className="query-note" data-tone="info">
+              No demo document pack is registered for this procedure yet, so upload buttons are available but demo document buttons are hidden.
+            </p>
+          ) : null}
+
           <NeedsForm
             needs={items.map(asNeed)}
             stepNum={UPFRONT_STEP}

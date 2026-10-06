@@ -5,6 +5,7 @@ import { answerAboutCases, digestCase, selectCases, summarize } from "../../../m
 import { caseFollowUps, knowledgeFollowUps, runChat, type ChatDeps, type ChatEvent } from "../../../modules/assistant/chat";
 import { parseDraft } from "../../../modules/intake/draft";
 import type { WorkflowProjection } from "../../../modules/workflow/repository";
+import { inSentence, startsSentence } from "../../../modules/shared/text";
 
 const row = (id: string, status: string, done: number) => ({
   id,
@@ -39,9 +40,9 @@ const reply = (content: (system: string) => object) =>
 
 const deps = (llm?: ChatDeps["llm"]): ChatDeps => ({ llm, listCases: async () => ROWS, projection: async () => projection });
 
-async function run(message: string, d: ChatDeps) {
+async function run(message: string, d: ChatDeps, caseId?: string) {
   const events: ChatEvent[] = [];
-  await runChat({ message, draft: parseDraft(null), expecting: null }, d, (e) => events.push(e));
+  await runChat({ message, draft: parseDraft(null), expecting: null, caseId }, d, (e) => events.push(e));
   return events;
 }
 
@@ -60,7 +61,12 @@ test("a digest carries progress and the open steps, lowest first", async () => {
     d.openSteps.map((s) => s.stepNum),
     [12, 14],
   );
-  assert.match(summarize([d], "active"), /step 14 “Pay the fee” waits on you/);
+  // The summary names the shipment, not just its id, and says what to do
+  // rather than quoting a step number on its own.
+  const line = summarize([d], "active");
+  assert.match(line, /Export of tea by train/);
+  assert.match(line, /UZ-2609-0002/);
+  assert.match(line, /Next on you: pay the fee \(step 14\)/);
 });
 
 test("selection follows named cases first, then the filter", () => {
@@ -157,4 +163,82 @@ test("every answer comes with next messages that fit it", async () => {
   assert.ok(sources.length > 1 && sources.length <= 3);
   assert.match(sources[0].text, /Apply for phytosanitary certificate/);
   assert.ok(sources.some((f) => f.text === "I want to export tea by train"));
+});
+
+test("case tool answers document and risk questions from workflow data", async () => {
+  const docs = resultOf(await run("What documents do I need for UZ-2609-0002?", deps()));
+  assert.equal(docs.kind, "cases");
+  if (docs.kind === "cases") {
+    assert.equal(docs.answer.by, "summary");
+    assert.match(docs.answer.answer, /Export of tea by train/);
+    assert.doesNotMatch(docs.answer.answer, /I don't know/i);
+    assert.match(docs.answer.answer, /Pay the fee|For this step|document/i);
+  }
+
+  const risk = resultOf(await run("What did the risk agent verify for UZ-2609-0002?", deps()));
+  assert.equal(risk.kind, "cases");
+  if (risk.kind === "cases") {
+    assert.equal(risk.answer.by, "summary");
+    assert.match(risk.answer.answer, /risk agent/i);
+    assert.match(risk.answer.answer, /uploaded document|checks? passed|mismatch|evidence/i);
+  }
+});
+
+test("case tools answer ETA, status and agent-tool questions before the model", async () => {
+  for (const [question, pattern] of [
+    ["When will UZ-2609-0002 finish?", /Estimated time left|usual full-flow estimate/i],
+    ["What is the status of UZ-2609-0002?", /steps are complete|stages are done/i],
+    ["Show agent tools for UZ-2609-0002", /Document analysis|Transit agent/i],
+  ] as const) {
+    const result = resultOf(await run(question, deps()));
+    assert.equal(result.kind, "cases");
+    if (result.kind !== "cases") continue;
+    assert.equal(result.answer.by, "summary");
+    assert.match(result.answer.answer, pattern);
+  }
+});
+
+test("a session with an active case scopes vague case questions to that shipment", async () => {
+  const result = resultOf(await run("what is waiting on me?", deps(), "UZ-2609-0001"));
+  assert.equal(result.kind, "cases");
+  if (result.kind !== "cases") {
+    return;
+  }
+  assert.deepEqual(
+    result.answer.cases.map((c) => c.id),
+    ["UZ-2609-0001"],
+  );
+});
+
+test("a place the digests don't mention is an invented place", async () => {
+  const digests = [await digestCase(ROWS[0], projection)];
+
+  // The tea in ROWS[0] goes to Almaty. Asked about several shipments at once a
+  // model will carry one destination across the rest, which reads as fact.
+  const moved = await answerAboutCases(
+    "which are active?",
+    digests,
+    "active",
+    reply(() => ({ answer: "The tea to Moscow (UZ-2609-0002) needs the fee paid." })),
+  );
+  assert.equal(moved.by, "summary", "an invented destination falls back to what the app knows");
+  assert.match(moved.answer, /Almaty/);
+
+  // The real destination is fine.
+  const right = await answerAboutCases(
+    "which are active?",
+    digests,
+    "active",
+    reply(() => ({ answer: "The tea to Almaty (UZ-2609-0002) needs the fee paid." })),
+  );
+  assert.equal(right.by, "model");
+});
+
+test("a title set into a sentence keeps its acronyms", () => {
+  assert.equal(inSentence("Register foreign trade contract in UEISFTO"), "register foreign trade contract in UEISFTO");
+  // The form's code keeps its capitals; the ordinary word in front of it does
+  // not need them mid-sentence.
+  assert.equal(inSentence("Obtain certificate of origin Form CT-1"), "obtain certificate of origin form CT-1");
+  assert.equal(inSentence("Pay the fee"), "pay the fee");
+  assert.equal(startsSentence("pay the fee"), "Pay the fee");
 });

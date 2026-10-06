@@ -67,6 +67,35 @@ test("auto-runs agents, pauses external work, and resumes exactly once", async (
   assert.ok(projection.nodes.every((node) => node.state === "completed"));
 });
 
+test("recovers a stale specialist claim on the next run", async () => {
+  const repository = createMemoryWorkflowRepository();
+  const runId = "run-stale-agent";
+  await repository.createRun(
+    { id: runId, caseId: "case-stale", procedureVersionId: "procedure:tomato-train:v1", status: "running", cycle: 0 },
+    instantiateWorkflow(procedure, runId),
+    extractShipmentFacts("move tomatoes from Tashkent to Dubai by train"),
+  );
+  const first = (await repository.getProjection(runId)).nodes[0];
+  await repository.updateNode(first.id, { state: "running", attempts: 1, startedAt: new Date(Date.now() - 60_000).toISOString() });
+  const after = await runOrchestrator(repository, runId);
+  assert.equal(after.nodes[0].state, "completed");
+  assert.equal(after.nodes[0].attempts, 2);
+  assert.ok(after.auditEvents.some((event) => event.eventType === "agent_retry_ready"));
+});
+
+test("only one concurrent request can claim a ready specialist", async () => {
+  const repository = createMemoryWorkflowRepository();
+  const runId = "run-concurrent-agent";
+  await repository.createRun(
+    { id: runId, caseId: "case-concurrent", procedureVersionId: "procedure:tomato-train:v1", status: "running", cycle: 0 },
+    instantiateWorkflow(procedure, runId),
+    extractShipmentFacts("move tomatoes from Tashkent to Dubai by train"),
+  );
+  await Promise.all([runOrchestrator(repository, runId), runOrchestrator(repository, runId)]);
+  const after = await repository.getProjection(runId);
+  assert.equal(after.agentRuns.filter((run) => run.nodeId === after.nodes[0].id).length, 1);
+});
+
 test("document intelligence states what a step needs and requests amendments for missing inputs", async () => {
   const real = PROCEDURES["325"];
   const node = instantiateWorkflow(real, "run-325").nodes.find((n) => n.stepNum === 41)!;

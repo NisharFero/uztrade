@@ -1,76 +1,117 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useEffect, useRef } from "react";
+import { usePathname, useSearchParams } from "next/navigation";
+import { Suspense, useEffect, useState } from "react";
 import { Icon } from "../icons";
+import RecentCases from "./recent-cases";
 
 const items = [
-  { href: "/", label: "Dashboard", icon: Icon.dashboard, exact: true },
-  { href: "/procedures", label: "Procedures", icon: Icon.procedures },
-  { href: "/cases", label: "Cases & Shipments", icon: Icon.shipments },
-  { href: "/ledger", label: "Ledger", icon: Icon.list, children: ["Entity API records"] },
-  { href: "/faq", label: "FAQ", icon: Icon.sparkle },
-  { href: "/entities", label: "Entities", icon: Icon.physical },
-  { href: "/agents", label: "AI Agent Center", icon: Icon.agents, children: ["All Agents"] },
-  // Not in scope for the current procedures; shown so the shape of the
-  // product is visible, but not linked anywhere that would 404.
-  { href: null, label: "Documents", icon: Icon.documents },
-  { href: null, label: "Compliance & Risk", icon: Icon.compliance },
+  { href: "/", label: "Dashboard", icon: Icon.home, exact: true },
+  { href: "/procedures", label: "Procedures", icon: Icon.book },
+  { href: "/cases", label: "Cases & Shipments", icon: Icon.truck },
+  { href: "/ledger", label: "Ledger", icon: Icon.receipt, children: ["Entity API records"] },
+  { href: "/faq", label: "FAQ", icon: Icon.help },
+  { href: "/entities", label: "Entities", icon: Icon.landmark },
+  { href: "/agents", label: "AI Agent Center", icon: Icon.bot, children: ["All Agents"] },
 ];
+
+/** Closes the drawer whenever the page or the open chat changes. Reading the
+ *  query makes this client-only, so it sits in its own Suspense boundary. */
+function CloseOnNavigate({ onChange }: { onChange: () => void }) {
+  const pathname = usePathname();
+  const params = useSearchParams();
+  const chat = params.get("case");
+  useEffect(() => onChange(), [pathname, chat, onChange]);
+  return null;
+}
 
 export default function Nav() {
   const pathname = usePathname();
-  const navRef = useRef<HTMLElement>(null);
+  /* On a laptop the rail is always there. On a phone or a narrow window it is
+     a drawer, opened from the top bar, the way ChatGPT and Claude do it. */
+  const [open, setOpen] = useState(false);
+  const [close] = useState(() => () => setOpen(false));
+  /* On the dashboard the rail folds to icons once a conversation starts, so
+     the thread has the room; the trader can open it again, and it stays
+     however they left it until the next conversation. */
+  const [folded, setCollapsed] = useState(false);
+  // Every other page is read with the full navigation.
+  const collapsed = folded && pathname === "/";
 
-  /* On phones the nav is a horizontal scroller; bring the active pill into
-     view. A no-op on desktop, where nothing overflows. */
   useEffect(() => {
-    const nav = navRef.current;
-    const active = nav?.querySelector<HTMLElement>(".nav-item.active");
-    if (!nav || !active || nav.scrollWidth <= nav.clientWidth) return;
-    const n = nav.getBoundingClientRect();
-    const a = active.getBoundingClientRect();
-    nav.scrollLeft += a.left - n.left - (n.width - a.width) / 2;
-  }, [pathname]);
+    const onRail = (event: Event) => setCollapsed((event as CustomEvent<string>).detail === "collapse");
+    window.addEventListener("uztrade:rail", onRail);
+    return () => window.removeEventListener("uztrade:rail", onRail);
+  }, []);
+
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (event: KeyboardEvent) => event.key === "Escape" && setOpen(false);
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [open]);
 
   return (
-    <aside className="sidebar" aria-label="Main navigation">
-      <div className="brand">
-        <span aria-hidden="true">UZ</span>
-        <div>
-          <strong>UzTrade</strong>
-          <small>Trade Agent</small>
+    <>
+      <header className="mobile-bar">
+        <button type="button" className="mobile-bar-button" aria-label="Open menu" aria-expanded={open} onClick={() => setOpen(true)}>
+          {Icon.menu}
+        </button>
+        <span className="mobile-bar-title">Uzbekistan Trade Platform</span>
+        <Link className="mobile-bar-button" href="/?case=new" aria-label="New shipment" title="New shipment">
+          {Icon.compose}
+        </Link>
+      </header>
+
+      {open ? <button type="button" className="sidebar-scrim" aria-label="Close menu" onClick={close} /> : null}
+
+      <aside className={["sidebar", open ? "is-open" : "", collapsed ? "is-collapsed" : ""].filter(Boolean).join(" ")} aria-label="Main navigation">
+        <div className="brand">
+          <span aria-hidden="true">UZ</span>
+          <div>
+            <strong>Uzbekistan</strong>
+            <small>Trade Platform</small>
+          </div>
+          <button type="button" className="sidebar-close" aria-label="Close menu" onClick={close}>
+            {Icon.close}
+          </button>
         </div>
-      </div>
 
-      <nav ref={navRef}>
-        {items.map((item) => {
-          const active = item.href
-            ? item.exact
-              ? pathname === item.href
-              : pathname.startsWith(item.href)
-            : false;
+        <button
+          type="button"
+          className="sidebar-fold"
+          aria-label={collapsed ? "Show navigation" : "Hide navigation"}
+          title={collapsed ? "Show navigation" : "Hide navigation"}
+          aria-expanded={!collapsed}
+          onClick={() => setCollapsed(!collapsed)}
+        >
+          {Icon.menu}
+          <span>{collapsed ? "" : "Hide"}</span>
+        </button>
 
-          if (!item.href) {
+        <nav>
+          {items.map((item) => {
+            const active = item.exact ? pathname === item.href : pathname.startsWith(item.href);
+
             return (
-              <span className="nav-item is-soon" key={item.label} aria-disabled="true">
+              <Link className={active ? "nav-item active" : "nav-item"} href={item.href} key={item.label} title={collapsed ? item.label : undefined}>
                 <span className="nav-icon">{item.icon}</span>
                 <span>{item.label}</span>
-                <small className="sub-nav">Soon</small>
-              </span>
+                {item.children ? <small className="sub-nav">{item.children.join(", ")}</small> : null}
+              </Link>
             );
-          }
+          })}
+        </nav>
 
-          return (
-            <Link className={active ? "nav-item active" : "nav-item"} href={item.href} key={item.label}>
-              <span className="nav-icon">{item.icon}</span>
-              <span>{item.label}</span>
-              {item.children ? <small className="sub-nav">{item.children.join(", ")}</small> : null}
-            </Link>
-          );
-        })}
-      </nav>
-    </aside>
+        {/* The case list reads ?case= to mark the open case, which makes it
+            client-only; without a boundary it would stop every static page from
+            prerendering (the 404 first). */}
+        <Suspense fallback={null}>
+          <RecentCases />
+          <CloseOnNavigate onChange={close} />
+        </Suspense>
+      </aside>
+    </>
   );
 }

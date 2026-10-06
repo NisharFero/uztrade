@@ -1,8 +1,12 @@
 /* The chat's first move: work out what the message is asking before anything
  * answers it.
  *
- *   shipment   a shipment to open, or an answer to the intake question that
- *              is waiting ("20 tonnes", "to Almaty")
+ *   shipment   goods the trader wants to move or is planning to, or an answer
+ *              to the intake question that is waiting ("20 tonnes", "to
+ *              Almaty"). intention.ts then tells finding out from starting.
+ *   estimate   how long moving particular goods takes ("how long will tea by
+ *              train from Tashkent to Almaty take?") - answered from the
+ *              published timeframe and the route, with nothing opened
  *   cases      the trader's own cases and shipments - which are active, what
  *              one is waiting on, how far along it is
  *   knowledge  the published procedures and how UzTrade works - what a
@@ -22,12 +26,15 @@ import { z } from "zod";
 import { llmJson, type LlmClient } from "../ai/llm";
 import { isEmptyDraft, mergeReply, type IntakeDraft, type Slot } from "../intake/draft";
 import { isProcedureQuestion, isTradeQuery } from "../intake/relevance";
+import { answersProposal } from "../intake/turn";
 import { commodityOf } from "../intake/taxonomy";
+import { procedureReferenceIn, procedureTitleCandidates } from "../intake/reference";
+import { ESTIMATE_QUESTION } from "./intention";
 import { PROCEDURE_IDS, CATALOGUE as PROCEDURE_CATALOGUE } from "../procedures/data/procedures.generated";
 
 const CATALOGUE = PROCEDURE_IDS.map((id) => PROCEDURE_CATALOGUE[id].title.toLowerCase()).join("; ");
 
-export type Intent = "shipment" | "cases" | "knowledge" | "other";
+export type Intent = "shipment" | "estimate" | "cases" | "knowledge" | "other";
 export type CaseFilter = "active" | "complete" | "any";
 
 export type CaseRef = { id: string; title: string; status: string };
@@ -55,6 +62,7 @@ const SLOT_QUESTION: Record<Slot, string> = {
   commodity: "what goods are moving",
   direction: "export from or import into Uzbekistan",
   mode: "how the goods travel (train, air)",
+  regime: "the whole export/import, or customs clearance only",
   quantity: "how much",
   route: "from where to where",
 };
@@ -68,8 +76,19 @@ const CASE_STATE =
   /\b(cases?|shipments?|consignments?)\b[^.?!]{0,30}\b(status|progress|active|open|opened|running|ongoing|in progress|current(ly)?|stuck|blocked|pending|waiting|finished|complete[d]?|so far|now)\b/i;
 const STATE_CASE = /\b(active|open|ongoing|running|current|existing|pending|blocked|stuck|finished|completed|recent|latest)\s+(cases?|shipments?|consignments?)\b/i;
 const HOW_MANY = /\bhow many\b[^.?!]{0,20}\b(cases?|shipments?)\b/i;
-const SHIPMENT_REQUEST =
-  /\b(i|we)\s+(want|need|plan|would like|am going|are going|am trying|are trying)\s+to\s+(export|import|ship|send|move|transport|bring)\b|^\s*(export|import|ship|send|move|transport)\b/i;
+const MOVE = "(export(ing)?|import(ing)?|ship(ping)?|send(ing)?|mov(e|ing)|transport(ing)?|bring(ing)?|deliver(ing)?)";
+const SHIPMENT_REQUEST = new RegExp(
+  [
+    // "I want to export", "we'd like to ship", "I wanna move", "I'm going to send", "I need to import"
+    `\\b(i|we)(\\s*'d|\\s*'m|\\s*'re|\\s+would|\\s+am|\\s+are)?\\s+(want|wanna|need|plan|planning|like|going|gonna|trying|hoping|looking)(\\s+to)?\\s+${MOVE}\\b`,
+    // "planning to export", "thinking of importing", "considering shipping"
+    `\\b(planning|thinking|considering|looking)(\\s+(to|of|about|at))?\\s+${MOVE}\\b`,
+    // "we'd like to start selling them in Russia" - selling abroad is exporting
+    `\\b(start|begin|started|beginning)\\s+(selling|exporting|importing|shipping|supplying)\\b`,
+    `^\\s*${MOVE}\\b`,
+  ].join("|"),
+  "i",
+);
 
 const completeWord = /\b(finished|complete[d]?|done|closed)\b/i;
 const activeWord = /\b(active|open|ongoing|running|current(ly)?|in progress|pending|blocked|stuck|waiting)\b/i;
@@ -101,26 +120,56 @@ const routed = (intent: Intent, reasoning: string, message: string, context: Rou
 
 /** Messages whose intent the words settle on their own - no model needed. */
 export function obviousRoute(message: string, context: RouteContext): Routed | null {
+  if (procedureReferenceIn(message) || procedureTitleCandidates(message).length) return routed("shipment", "You selected a published procedure.", message, context);
   if (caseRefsIn(message, context.cases).length) {
     return routed("cases", "The message names one of your cases.", message, context);
+  }
+  // "yes" / "no" to the goods intake proposed - the model once read a bare
+  // "yes" there as "show my cases" and dropped the shipment being described.
+  if (answersProposal(context.draft, message)) {
+    return routed("shipment", `An answer to the waiting question: did you mean ${context.draft.proposal!.term}?`, message, context);
   }
   // A plain answer to the question intake is waiting on ("20 tonnes", "by train").
   if (context.expecting && !QUESTION.test(message) && mergeReply(context.draft, message, context.expecting).understood) {
     return routed("shipment", `An answer to the waiting question: ${SLOT_QUESTION[context.expecting]}.`, message, context);
   }
+  // While intake waits, a reply that is neither a question nor about the
+  // trader's cases stays with intake, which re-asks if it can't read it -
+  // it is never handed to a model that might start a different conversation.
+  if (context.expecting && !QUESTION.test(message) && !looksLikeCases(message)) {
+    return routed("shipment", `A reply to the waiting question: ${SLOT_QUESTION[context.expecting]}.`, message, context);
+  }
+  // "How long will tea by train from Tashkent to Almaty take?" asks for a time
+  // about goods - answered with an estimate, never by opening anything. About
+  // the trader's own case ("how long until my case is done") it is not.
+  if (ESTIMATE_QUESTION.test(message) && !MINE.test(message) && !looksLikeCases(message) && namesGoods(message, context.draft)) {
+    return routed("estimate", "You're asking how long moving these goods takes, so I'll estimate it from the published procedure and the route.", message, context);
+  }
   // "I want to export tomatoes" is a new shipment, even when a tomato case already exists -
   // the model once read it as "show my tomato case" and answered with that case's quantity and route.
-  if (SHIPMENT_REQUEST.test(message) && !QUESTION.test(message) && !MINE.test(message)) {
-    return routed("shipment", "You want to move goods — a new shipment, so I'll ask for the details.", message, context);
+  // A trailing "?" does not make "I wanna move tea?" a question about procedures.
+  if ((SHIPMENT_REQUEST.test(message) || FEASIBILITY.test(message)) && !ASKS.test(message) && !MINE.test(message)) {
+    return routed("shipment", "You want to move goods, so I'll say what that involves and what I need from you.", message, context);
   }
   return null;
 }
+
+/** Asking about the platform: "what can you do?", "how does this work?". */
+const ABOUT_THE_APP = /\b(uztrade|trade platform|platform|you|your|this (app|site|tool|service)|it work|agents?|supported|covered|cover)\b/i;
+
+/** Opens with a question word: "what documents...", "how do I...". */
+const ASKS = /^\s*(what|which|how|when|where|who|whom|why)\b/i;
+/** "Can I export tea to Russia?", "is it possible to import cheese?" - finding out. */
+const FEASIBILITY = new RegExp(`^\\s*(can|could|may)\\s+(i|we)\\s+${MOVE}\\b|\\bis it possible to\\s+${MOVE}\\b`, "i");
+
+/** Goods the message or the shipment being described names. */
+const namesGoods = (message: string, draft: IntakeDraft) => Boolean(draft.commodity) || commodityOf(message).kind !== "none";
 
 /** The rules' best reading, for when no model is available. */
 export function routeByRules(message: string, context: RouteContext): Routed {
   const obvious = obviousRoute(message, context);
   if (obvious) return obvious;
-  if (SHIPMENT_REQUEST.test(message) && !QUESTION.test(message)) return routed("shipment", "It describes goods you want to move.", message, context);
+  if (SHIPMENT_REQUEST.test(message) && !ASKS.test(message)) return routed("shipment", "It describes goods you want to move.", message, context);
   if (looksLikeCases(message)) return routed("cases", "It asks about your own cases or shipments.", message, context);
   if (isProcedureQuestion(message) || (QUESTION.test(message) && isTradeQuery(message))) {
     return routed("knowledge", "It's a question about the procedures, not a shipment to open.", message, context);
@@ -129,13 +178,17 @@ export function routeByRules(message: string, context: RouteContext): Routed {
   if (commodityOf(message).kind !== "none" || isTradeQuery(message) || (drafting && !QUESTION.test(message))) {
     return routed("shipment", "It reads as shipment details.", message, context);
   }
-  if (QUESTION.test(message)) return routed("knowledge", "A question - the published procedures and the FAQ may answer it.", message, context);
+  // A question about the app itself is for the FAQ; one about the weather is not,
+  // even when it names a city.
+  if (QUESTION.test(message) && ABOUT_THE_APP.test(message)) {
+    return routed("knowledge", "A question about how this works - the FAQ may answer it.", message, context);
+  }
   return routed("other", "It isn't about a shipment, your cases, or the procedures.", message, context);
 }
 
 const Decision = z.object({
   reasoning: z.string().min(1).max(600),
-  intent: z.enum(["shipment", "cases", "knowledge", "other"]),
+  intent: z.enum(["shipment", "estimate", "cases", "knowledge", "other"]),
   caseIds: z.array(z.string()).max(20).nullish(),
   filter: z.enum(["active", "complete", "any"]).nullish(),
 });
@@ -144,7 +197,8 @@ const SYSTEM = [
   `You are the router of UzTrade, a workspace where a trader opens cases for moving goods into or out of Uzbekistan under ${PROCEDURE_IDS.length} published procedures (${CATALOGUE}).`,
   "Decide what the trader's message asks for. Think about what they actually want before choosing; the same words can mean different things.",
   "Intents:",
-  '- "shipment": they describe goods they want to move or ask to arrange rail transport or delivery of cargo, or answer the intake question that is waiting (a quantity, a place, a mode, fresh or dried, export or import, dispatch or delivery).',
+  '- "shipment": they describe goods they want to move, are planning or thinking of moving, ask whether they can move them, ask to arrange rail transport or delivery of cargo, or answer the intake question that is waiting (a quantity, a place, a mode, fresh or dried, export or import, dispatch or delivery). This never opens a case by itself.',
+  '- "estimate": they ask how long moving particular goods takes (a duration, a timeline, when it would arrive) - with or without a route. Not about their own existing case.',
   '- "cases": they ask about THEIR OWN cases or shipments already in the workspace - which are active or finished, how many, the status or progress of one, what one is waiting on, its next step, what it still needs.',
   '- "knowledge": they ask how the published procedures work in general (documents, steps, who issues what, durations, countries, which goods are covered) or how UzTrade works.',
   '- "other": anything else (greetings, weather, unrelated topics).',
@@ -152,7 +206,10 @@ const SYSTEM = [
   '"I want to export tomatoes" -> shipment, even if a tomato case already exists (they are starting a new one). "How is my tomato shipment doing?" -> cases.',
   '"Which shipments are supported?" -> knowledge. "Which shipments are currently active?" -> cases, filter active.',
   '"What documents do I need to export tea?" -> knowledge. "What documents does my tea shipment still need?" -> cases.',
-  '"How long does tea export by train take?" -> knowledge. "How long until my case is done?" -> cases.',
+  '"How long does tea export by train take?" -> estimate. "How long will it take to move tea by train from Tashkent to Almaty?" -> estimate. "How long until my case is done?" -> cases.',
+  '"I wanna move tea?" -> shipment (a trailing question mark does not make it a procedure question). "I am planning to import cheese" -> shipment. "Can I export apricots to Russia?" -> shipment.',
+  '"What is the weather in Tashkent?" -> other (naming a city does not make it about trade).',
+  '"How do I get a phytosanitary certificate for tea?" -> knowledge. "Which steps need customs clearance for cheese?" -> knowledge.',
   '"Export 20 tonnes of tea to Almaty" -> shipment. "20 tonnes" while intake asks how much -> shipment.',
   '"What do I need for the phytosanitary certificate?" while intake asks how much -> knowledge (a question, not an answer).',
   "caseIds: ids from the given case list the message refers to (by id, goods, route or title); [] when it means cases in general.",
@@ -172,7 +229,11 @@ export async function routeMessage(message: string, context: RouteContext, llm: 
     prompt: JSON.stringify({
       message,
       intakeInProgress: !isEmptyDraft(context.draft),
-      waitingQuestion: context.expecting ? SLOT_QUESTION[context.expecting] : null,
+      waitingQuestion: context.draft.proposal
+        ? `did you mean ${context.draft.proposal.term}, published under ${context.draft.proposal.category}? (yes or no)`
+        : context.expecting
+          ? SLOT_QUESTION[context.expecting]
+          : null,
       cases: context.cases.slice(0, 20).map((c) => ({ id: c.id, title: c.title, status: c.status })),
     }),
     schema: Decision,

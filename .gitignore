@@ -7,6 +7,10 @@
 # dependencies and environments
 node_modules/
 .venv/
+# local development database (npm run db:setup)
+.pgdata/
+# throwaway introspection snapshot (npm run db:pull)
+.drizzle-pull/
 __pycache__/
 
 # model and tool caches
@@ -21,6 +25,10 @@ apps/web/.next/
 apps/web/tsconfig.tsbuildinfo
 apps/web/next-env.d.ts
 apps/portals/.data/
+
+# procedure source documents (730 MB): only needed to rebuild the data in
+# apps/web/public/data (npm run data:build); keep them locally
+Docs/Procedures/
 
 # local tooling (presentation builder)
 .tools/

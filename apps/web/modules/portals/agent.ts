@@ -8,8 +8,8 @@
  *   changes requested       -> the step pauses; the fix is filed as an amendment
  *   approved                -> what the entity issued is recorded; the step completes
  *
- * An unreachable API returns "unavailable" and the orchestrator falls back to
- * simulating the step, as before the APIs existed. */
+ * An unreachable API returns "unavailable" and the orchestrator retains the
+ * step for retry; unavailable does not mean approved. */
 
 import type { LlmClient } from "../ai/llm";
 import type { Procedure, ProcedureStep } from "../procedures/data/procedures.generated";
@@ -152,9 +152,10 @@ export async function filePortalStep(
 }
 
 /** Reads back every application still under review. */
-export async function syncPortalApplications(repository: WorkflowRepository, projection: WorkflowProjection, procedure: Procedure, client: PortalClient) {
+export async function syncPortalApplications(repository: WorkflowRepository, projection: WorkflowProjection, procedure: Procedure, client: PortalClient, deadline = Infinity) {
   const latest = latestRecords(projection);
   for (const node of projection.nodes) {
+    if (Date.now() >= deadline - client.timeoutMs * 3) break;
     const record = latest.get(node.stepNum);
     if (node.lane !== "agent" || node.state !== "running" || record?.status !== "under_review") continue;
     await filePortalStep(repository, projection, procedure, node, client);

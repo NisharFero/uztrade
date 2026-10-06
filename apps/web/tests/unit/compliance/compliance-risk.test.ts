@@ -17,13 +17,21 @@ test("rules are indexed by commodity × direction: tea export and tea import nee
 });
 
 test("every certificate a rule names is produced by a step of each procedure it covers", () => {
+  // A rule covers one goods category in one direction. The corpus publishes far
+  // more categories than there are rules, so the rules decide what is checked -
+  // and each must hold for every procedure it covers.
+  let checked = 0;
   for (const id of PROCEDURE_IDS) {
     const p = PROCEDURES[id];
     const rule = CERTIFICATE_RULES[`${p.goods}×${p.direction}`];
-    assert.ok(rule, `${id} has a rule`);
+    // A clearance starts at the border with its permits already obtained, and
+    // temporary admission and re-export follow their own rules.
+    if (!rule || p.regime !== "standard") continue;
     const outputs = p.blocks.flatMap((b) => b.steps.map((s) => s.output.toLowerCase()));
     for (const c of rule.certificates) assert.ok(outputs.includes(c.toLowerCase()), `${id}: ${c}`);
+    checked += 1;
   }
+  assert.ok(checked >= 10, `${checked} procedures covered by a certificate rule`);
 });
 
 test("a missing destination is stated as unresolved; naming it resolves it", () => {

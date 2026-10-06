@@ -7,6 +7,14 @@
  *             only a model on this machine (LLM_LOCAL_URL, loopback only),
  *             unless LLM_DOCUMENT_DATA=external is set on purpose
  *
+ * One deliberate exception sits outside this module: reading an uploaded
+ * document at all. `modules/documents/docai/groq-vision.ts` sends the page
+ * image to Groq whenever GROQ_API_KEY is set, because that is now how documents
+ * are read - the alternative is the DocAI service, which `DOC_READER=docai`
+ * selects. The rule here still governs every *text* prompt derived from a
+ * document afterwards (the re-read of uncertain fields, company-name
+ * adjudication), which stay local unless LLM_DOCUMENT_DATA=external.
+ *
  * Every answer is validated against a schema. Null means "no model" - no
  * provider allowed, unreachable, or an answer that didn't fit - and each
  * feature then runs on its rules alone. */

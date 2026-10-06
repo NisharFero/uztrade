@@ -64,6 +64,11 @@ export type TransportMode = "train" | "air" | "road" | "any";
  *  document or registering one contract. */
 export type ProcedureKind = "customs" | "logistics" | "service";
 
+/** How the goods cross: a full import or export, a clearance that starts at the
+ *  border with its permits already in hand, temporary admission, a re-export,
+ *  transit through the country, or a service procedure. */
+export type ProcedureRegime = "standard" | "clearance" | "temporary" | "re-export" | "transit" | "service";
+
 /** What the catalogue knows about every procedure without loading its workflow. */
 export type ProcedureSummary = {
   id: string;
@@ -72,6 +77,10 @@ export type ProcedureSummary = {
   goods: string;
   mode: TransportMode;
   kind: ProcedureKind;
+  regime: ProcedureRegime;
+  /** Only when the goods are cleared on a special basis: "temporary import",
+   *  "temporary export", "re-export", "re-import". */
+  basis?: string;
   /** [min, max] hours end to end, as published. */
   timeframe: [number, number];
   blocksCount: number;
@@ -87,6 +96,8 @@ export type Procedure = {
   goods: string;
   mode: TransportMode;
   kind: ProcedureKind;
+  regime: ProcedureRegime;
+  basis?: string;
   timeframe: [number, number];
   stepsCount: number;
   blocks: ProcedureBlock[];
@@ -108,6 +119,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "fresh fruits and vegetables",
   "mode": "road",
   "kind": "customs",
+  "regime": "standard",
   "timeframe": [
    29,
    89
@@ -139,6 +151,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "fruit and vegetable juices",
   "mode": "road",
   "kind": "customs",
+  "regime": "standard",
   "timeframe": [
    15,
    52
@@ -166,6 +179,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "flour",
   "mode": "road",
   "kind": "customs",
+  "regime": "standard",
   "timeframe": [
    39,
    169
@@ -196,6 +210,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "pharmaceutical products",
   "mode": "road",
   "kind": "customs",
+  "regime": "standard",
   "timeframe": [
    82,
    275
@@ -225,6 +240,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "mineral fertilizers",
   "mode": "road",
   "kind": "customs",
+  "regime": "standard",
   "timeframe": [
    27,
    183
@@ -252,6 +268,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "medical equipment",
   "mode": "road",
   "kind": "customs",
+  "regime": "standard",
   "timeframe": [
    82,
    275
@@ -281,6 +298,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "animal or vegetable fertilizers",
   "mode": "road",
   "kind": "customs",
+  "regime": "standard",
   "timeframe": [
    45,
    517
@@ -311,6 +329,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "confectionery",
   "mode": "road",
   "kind": "customs",
+  "regime": "standard",
   "timeframe": [
    21,
    83
@@ -339,6 +358,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "dairy products",
   "mode": "road",
   "kind": "customs",
+  "regime": "standard",
   "timeframe": [
    63,
    371
@@ -368,6 +388,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "confectionery",
   "mode": "road",
   "kind": "customs",
+  "regime": "standard",
   "timeframe": [
    15,
    52
@@ -395,6 +416,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "any cargo",
   "mode": "any",
   "kind": "service",
+  "regime": "service",
   "timeframe": [
    0,
    0
@@ -413,6 +435,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "any cargo",
   "mode": "any",
   "kind": "service",
+  "regime": "service",
   "timeframe": [
    0,
    0
@@ -431,6 +454,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "any cargo",
   "mode": "any",
   "kind": "service",
+  "regime": "service",
   "timeframe": [
    8,
    19
@@ -449,6 +473,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "any cargo",
   "mode": "road",
   "kind": "logistics",
+  "regime": "standard",
   "timeframe": [
    11,
    30
@@ -468,6 +493,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "confectionery",
   "mode": "road",
   "kind": "customs",
+  "regime": "clearance",
   "timeframe": [
    2,
    12
@@ -489,6 +515,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "confectionery",
   "mode": "road",
   "kind": "customs",
+  "regime": "clearance",
   "timeframe": [
    6,
    32
@@ -513,6 +540,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "any cargo",
   "mode": "any",
   "kind": "service",
+  "regime": "service",
   "timeframe": [
    0,
    0
@@ -531,6 +559,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "any cargo",
   "mode": "any",
   "kind": "service",
+  "regime": "service",
   "timeframe": [
    2,
    3
@@ -550,6 +579,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "any cargo",
   "mode": "any",
   "kind": "service",
+  "regime": "service",
   "timeframe": [
    13,
    48
@@ -572,6 +602,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "dairy products",
   "mode": "road",
   "kind": "customs",
+  "regime": "standard",
   "timeframe": [
    26,
    84
@@ -599,6 +630,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "seed oil",
   "mode": "road",
   "kind": "customs",
+  "regime": "standard",
   "timeframe": [
    14,
    52
@@ -626,6 +658,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "any cargo",
   "mode": "any",
   "kind": "service",
+  "regime": "service",
   "timeframe": [
    5,
    13
@@ -648,6 +681,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "fruit and vegetable juices",
   "mode": "road",
   "kind": "customs",
+  "regime": "standard",
   "timeframe": [
    2,
    12
@@ -669,6 +703,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "meat and meat products",
   "mode": "road",
   "kind": "customs",
+  "regime": "standard",
   "timeframe": [
    25,
    82
@@ -696,6 +731,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "meat and meat products",
   "mode": "road",
   "kind": "customs",
+  "regime": "clearance",
   "timeframe": [
    2,
    12
@@ -717,6 +753,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "dairy products",
   "mode": "road",
   "kind": "customs",
+  "regime": "clearance",
   "timeframe": [
    4,
    15
@@ -738,6 +775,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "seed oil",
   "mode": "road",
   "kind": "customs",
+  "regime": "clearance",
   "timeframe": [
    1,
    12
@@ -759,6 +797,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "any cargo",
   "mode": "any",
   "kind": "service",
+  "regime": "service",
   "timeframe": [
    1,
    5
@@ -779,6 +818,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "meat and meat products",
   "mode": "road",
   "kind": "customs",
+  "regime": "standard",
   "timeframe": [
    63,
    371
@@ -808,6 +848,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "any cargo",
   "mode": "any",
   "kind": "service",
+  "regime": "service",
   "timeframe": [
    48,
    113
@@ -827,6 +868,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "any cargo",
   "mode": "any",
   "kind": "service",
+  "regime": "service",
   "timeframe": [
    5,
    13
@@ -848,6 +890,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "any cargo",
   "mode": "any",
   "kind": "service",
+  "regime": "service",
   "timeframe": [
    8,
    24
@@ -866,6 +909,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "any cargo",
   "mode": "any",
   "kind": "service",
+  "regime": "service",
   "timeframe": [
    8,
    243
@@ -885,6 +929,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "any cargo",
   "mode": "any",
   "kind": "service",
+  "regime": "service",
   "timeframe": [
    2,
    10
@@ -907,6 +952,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "any cargo",
   "mode": "any",
   "kind": "service",
+  "regime": "service",
   "timeframe": [
    2,
    10
@@ -929,6 +975,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "dairy products",
   "mode": "road",
   "kind": "customs",
+  "regime": "clearance",
   "timeframe": [
    7,
    33
@@ -953,6 +1000,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "any cargo",
   "mode": "any",
   "kind": "service",
+  "regime": "service",
   "timeframe": [
    1,
    5
@@ -973,6 +1021,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "any cargo",
   "mode": "any",
   "kind": "service",
+  "regime": "service",
   "timeframe": [
    45,
    88
@@ -995,6 +1044,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "vegetable oils for consumers' use and consumption",
   "mode": "road",
   "kind": "customs",
+  "regime": "standard",
   "timeframe": [
    45,
    83
@@ -1023,6 +1073,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "vegetable oils for technical or industrial use",
   "mode": "road",
   "kind": "customs",
+  "regime": "standard",
   "timeframe": [
    4,
    20
@@ -1047,6 +1098,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "vegetable oils for consumers' use and consumption",
   "mode": "road",
   "kind": "customs",
+  "regime": "clearance",
   "timeframe": [
    6,
    32
@@ -1071,6 +1123,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "vegetable oils for technical or industrial use",
   "mode": "road",
   "kind": "customs",
+  "regime": "clearance",
   "timeframe": [
    4,
    20
@@ -1094,6 +1147,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "any cargo",
   "mode": "any",
   "kind": "service",
+  "regime": "service",
   "timeframe": [
    2,
    10
@@ -1116,6 +1170,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "any cargo",
   "mode": "any",
   "kind": "service",
+  "regime": "service",
   "timeframe": [
    4,
    42
@@ -1136,6 +1191,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "animal or vegetable fertilizers",
   "mode": "road",
   "kind": "customs",
+  "regime": "clearance",
   "timeframe": [
    6,
    33
@@ -1160,6 +1216,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "any cargo",
   "mode": "any",
   "kind": "service",
+  "regime": "service",
   "timeframe": [
    5,
    43
@@ -1182,6 +1239,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "any cargo",
   "mode": "any",
   "kind": "service",
+  "regime": "service",
   "timeframe": [
    19,
    148
@@ -1203,6 +1261,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "flour",
   "mode": "road",
   "kind": "customs",
+  "regime": "clearance",
   "timeframe": [
    6,
    33
@@ -1227,6 +1286,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "any cargo",
   "mode": "any",
   "kind": "service",
+  "regime": "service",
   "timeframe": [
    450,
    1524
@@ -1247,6 +1307,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "any cargo",
   "mode": "any",
   "kind": "service",
+  "regime": "service",
   "timeframe": [
    74,
    239
@@ -1269,6 +1330,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "any cargo",
   "mode": "any",
   "kind": "service",
+  "regime": "service",
   "timeframe": [
    162,
    1514
@@ -1289,6 +1351,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "any cargo",
   "mode": "any",
   "kind": "service",
+  "regime": "service",
   "timeframe": [
    74,
    239
@@ -1311,6 +1374,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "dairy products",
   "mode": "train",
   "kind": "customs",
+  "regime": "standard",
   "timeframe": [
    76,
    235
@@ -1342,6 +1406,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "dairy products",
   "mode": "train",
   "kind": "customs",
+  "regime": "clearance",
   "timeframe": [
    2,
    12
@@ -1363,6 +1428,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "any cargo",
   "mode": "train",
   "kind": "logistics",
+  "regime": "standard",
   "timeframe": [
    63,
    189
@@ -1387,6 +1453,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "dairy products",
   "mode": "train",
   "kind": "customs",
+  "regime": "standard",
   "timeframe": [
    66,
    386
@@ -1417,6 +1484,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "any cargo",
   "mode": "any",
   "kind": "service",
+  "regime": "service",
   "timeframe": [
    2,
    10
@@ -1437,6 +1505,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "any cargo",
   "mode": "any",
   "kind": "service",
+  "regime": "service",
   "timeframe": [
    1,
    5
@@ -1457,6 +1526,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "dairy products",
   "mode": "train",
   "kind": "customs",
+  "regime": "clearance",
   "timeframe": [
    4,
    28
@@ -1479,6 +1549,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "any cargo",
   "mode": "train",
   "kind": "logistics",
+  "regime": "standard",
   "timeframe": [
    63,
    189
@@ -1503,6 +1574,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "fruit and vegetable juices",
   "mode": "train",
   "kind": "customs",
+  "regime": "standard",
   "timeframe": [
    67,
    206
@@ -1534,6 +1606,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "dried fruits",
   "mode": "train",
   "kind": "customs",
+  "regime": "standard",
   "timeframe": [
    81,
    241
@@ -1569,6 +1642,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "any cargo",
   "mode": "train",
   "kind": "logistics",
+  "regime": "standard",
   "timeframe": [
    63,
    189
@@ -1593,6 +1667,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "dried fruits",
   "mode": "road",
   "kind": "customs",
+  "regime": "clearance",
   "timeframe": [
    2,
    13
@@ -1614,6 +1689,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "dried fruits",
   "mode": "train",
   "kind": "customs",
+  "regime": "clearance",
   "timeframe": [
    2,
    12
@@ -1635,6 +1711,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "fresh fruits and vegetables",
   "mode": "train",
   "kind": "customs",
+  "regime": "standard",
   "timeframe": [
    81,
    241
@@ -1670,6 +1747,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "cotton yarn",
   "mode": "train",
   "kind": "customs",
+  "regime": "standard",
   "timeframe": [
    44,
    130
@@ -1701,6 +1779,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "cotton yarn",
   "mode": "road",
   "kind": "customs",
+  "regime": "standard",
   "timeframe": [
    21,
    116
@@ -1730,6 +1809,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "textile and garment",
   "mode": "train",
   "kind": "customs",
+  "regime": "standard",
   "timeframe": [
    43,
    125
@@ -1761,6 +1841,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "any cargo",
   "mode": "road",
   "kind": "logistics",
+  "regime": "standard",
   "timeframe": [
    16,
    89
@@ -1783,6 +1864,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "any cargo",
   "mode": "train",
   "kind": "logistics",
+  "regime": "standard",
   "timeframe": [
    39,
    109
@@ -1807,6 +1889,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "cotton yarn",
   "mode": "road",
   "kind": "customs",
+  "regime": "clearance",
   "timeframe": [
    4,
    17
@@ -1828,6 +1911,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "cotton yarn",
   "mode": "train",
   "kind": "customs",
+  "regime": "clearance",
   "timeframe": [
    3,
    16
@@ -1849,6 +1933,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "fabrics",
   "mode": "road",
   "kind": "customs",
+  "regime": "standard",
   "timeframe": [
    17,
    57
@@ -1876,6 +1961,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "fabrics",
   "mode": "train",
   "kind": "customs",
+  "regime": "standard",
   "timeframe": [
    44,
    130
@@ -1907,6 +1993,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "any cargo",
   "mode": "any",
   "kind": "service",
+  "regime": "service",
   "timeframe": [
    2,
    11
@@ -1929,6 +2016,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "any cargo",
   "mode": "any",
   "kind": "service",
+  "regime": "service",
   "timeframe": [
    2,
    11
@@ -1951,6 +2039,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "any cargo",
   "mode": "any",
   "kind": "service",
+  "regime": "service",
   "timeframe": [
    2,
    11
@@ -1973,6 +2062,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "any cargo",
   "mode": "train",
   "kind": "logistics",
+  "regime": "standard",
   "timeframe": [
    63,
    189
@@ -1997,6 +2087,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "confectionery",
   "mode": "train",
   "kind": "customs",
+  "regime": "standard",
   "timeframe": [
    67,
    206
@@ -2028,6 +2119,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "any cargo",
   "mode": "train",
   "kind": "logistics",
+  "regime": "standard",
   "timeframe": [
    63,
    189
@@ -2052,6 +2144,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "seed oil",
   "mode": "train",
   "kind": "customs",
+  "regime": "standard",
   "timeframe": [
    66,
    206
@@ -2083,6 +2176,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "mineral fertilizers",
   "mode": "train",
   "kind": "customs",
+  "regime": "standard",
   "timeframe": [
    67,
    206
@@ -2114,6 +2208,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "any cargo",
   "mode": "train",
   "kind": "logistics",
+  "regime": "standard",
   "timeframe": [
    63,
    189
@@ -2138,6 +2233,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "meat and meat products",
   "mode": "train",
   "kind": "customs",
+  "regime": "standard",
   "timeframe": [
    76,
    235
@@ -2169,6 +2265,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "animal or vegetable fertilizers",
   "mode": "road",
   "kind": "customs",
+  "regime": "standard",
   "timeframe": [
    30,
    98
@@ -2198,6 +2295,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "animal or vegetable fertilizers",
   "mode": "train",
   "kind": "customs",
+  "regime": "standard",
   "timeframe": [
    82,
    249
@@ -2231,6 +2329,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "animal or vegetable fertilizers",
   "mode": "road",
   "kind": "customs",
+  "regime": "clearance",
   "timeframe": [
    2,
    15
@@ -2252,6 +2351,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "any cargo",
   "mode": "any",
   "kind": "service",
+  "regime": "service",
   "timeframe": [
    2,
    6
@@ -2272,6 +2372,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "tea",
   "mode": "road",
   "kind": "customs",
+  "regime": "standard",
   "timeframe": [
    31,
    169
@@ -2302,6 +2403,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "tea",
   "mode": "train",
   "kind": "customs",
+  "regime": "standard",
   "timeframe": [
    34,
    183
@@ -2333,6 +2435,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "coffee",
   "mode": "road",
   "kind": "customs",
+  "regime": "standard",
   "timeframe": [
    31,
    169
@@ -2363,6 +2466,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "coffee",
   "mode": "train",
   "kind": "customs",
+  "regime": "standard",
   "timeframe": [
    35,
    184
@@ -2393,6 +2497,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "any cargo",
   "mode": "any",
   "kind": "service",
+  "regime": "service",
   "timeframe": [
    4,
    42
@@ -2413,6 +2518,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "any cargo",
   "mode": "any",
   "kind": "service",
+  "regime": "service",
   "timeframe": [
    5,
    43
@@ -2435,6 +2541,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "coffee",
   "mode": "train",
   "kind": "customs",
+  "regime": "clearance",
   "timeframe": [
    5,
    28
@@ -2456,6 +2563,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "confectionery",
   "mode": "train",
   "kind": "customs",
+  "regime": "standard",
   "timeframe": [
    25,
    98
@@ -2485,6 +2593,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "any cargo",
   "mode": "any",
   "kind": "service",
+  "regime": "service",
   "timeframe": [
    4,
    42
@@ -2505,6 +2614,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "any cargo",
   "mode": "any",
   "kind": "service",
+  "regime": "service",
   "timeframe": [
    5,
    43
@@ -2527,6 +2637,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "vegetable oils for consumers' use and consumption",
   "mode": "train",
   "kind": "customs",
+  "regime": "standard",
   "timeframe": [
    49,
    98
@@ -2556,6 +2667,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "vegetable oils for technical or industrial use",
   "mode": "train",
   "kind": "customs",
+  "regime": "standard",
   "timeframe": [
    10,
    41
@@ -2582,6 +2694,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "vegetable oils",
   "mode": "train",
   "kind": "customs",
+  "regime": "standard",
   "timeframe": [
    67,
    206
@@ -2613,6 +2726,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "any cargo",
   "mode": "train",
   "kind": "logistics",
+  "regime": "standard",
   "timeframe": [
    63,
    189
@@ -2637,6 +2751,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "any cargo",
   "mode": "train",
   "kind": "logistics",
+  "regime": "standard",
   "timeframe": [
    63,
    189
@@ -2661,6 +2776,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "seed oil",
   "mode": "train",
   "kind": "customs",
+  "regime": "clearance",
   "timeframe": [
    1,
    12
@@ -2682,6 +2798,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "perfumery, cosmetic or toilet preparations",
   "mode": "air",
   "kind": "customs",
+  "regime": "standard",
   "timeframe": [
    16,
    72
@@ -2709,6 +2826,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "tea",
   "mode": "air",
   "kind": "customs",
+  "regime": "standard",
   "timeframe": [
    30,
    108
@@ -2740,6 +2858,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "vegetable oils for consumers' use and consumption",
   "mode": "train",
   "kind": "customs",
+  "regime": "clearance",
   "timeframe": [
    7,
    33
@@ -2763,6 +2882,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "vegetable oils for technical or industrial use",
   "mode": "train",
   "kind": "customs",
+  "regime": "clearance",
   "timeframe": [
    3,
    18
@@ -2785,6 +2905,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "meat and meat products",
   "mode": "road",
   "kind": "customs",
+  "regime": "clearance",
   "timeframe": [
    7,
    33
@@ -2809,6 +2930,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "any cargo",
   "mode": "any",
   "kind": "service",
+  "regime": "service",
   "timeframe": [
    9,
    21
@@ -2831,6 +2953,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "tea",
   "mode": "air",
   "kind": "customs",
+  "regime": "standard",
   "timeframe": [
    36,
    196
@@ -2861,6 +2984,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "coffee",
   "mode": "air",
   "kind": "customs",
+  "regime": "standard",
   "timeframe": [
    36,
    196
@@ -2891,6 +3015,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "pharmaceutical products",
   "mode": "train",
   "kind": "customs",
+  "regime": "standard",
   "timeframe": [
    85,
    290
@@ -2921,6 +3046,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "wood",
   "mode": "road",
   "kind": "customs",
+  "regime": "standard",
   "timeframe": [
    17,
    122
@@ -2949,6 +3075,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "wood",
   "mode": "train",
   "kind": "customs",
+  "regime": "standard",
   "timeframe": [
    21,
    136
@@ -2978,6 +3105,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "tea",
   "mode": "air",
   "kind": "customs",
+  "regime": "clearance",
   "timeframe": [
    5,
    36
@@ -3000,6 +3128,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "any cargo",
   "mode": "air",
   "kind": "logistics",
+  "regime": "standard",
   "timeframe": [
    12,
    51
@@ -3021,6 +3150,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "perfumery, cosmetic or toilet preparations",
   "mode": "air",
   "kind": "customs",
+  "regime": "clearance",
   "timeframe": [
    4,
    28
@@ -3042,6 +3172,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "furniture",
   "mode": "train",
   "kind": "customs",
+  "regime": "standard",
   "timeframe": [
    43,
    125
@@ -3073,6 +3204,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "tea",
   "mode": "air",
   "kind": "customs",
+  "regime": "clearance",
   "timeframe": [
    5,
    28
@@ -3095,6 +3227,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "any cargo",
   "mode": "any",
   "kind": "service",
+  "regime": "service",
   "timeframe": [
    5,
    13
@@ -3116,6 +3249,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "any cargo",
   "mode": "train",
   "kind": "logistics",
+  "regime": "standard",
   "timeframe": [
    39,
    109
@@ -3140,6 +3274,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "jewelry",
   "mode": "air",
   "kind": "customs",
+  "regime": "standard",
   "timeframe": [
    16,
    72
@@ -3167,6 +3302,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "pharmaceutical products",
   "mode": "train",
   "kind": "customs",
+  "regime": "clearance",
   "timeframe": [
    7,
    33
@@ -3190,6 +3326,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "medical equipment",
   "mode": "train",
   "kind": "customs",
+  "regime": "standard",
   "timeframe": [
    85,
    290
@@ -3220,6 +3357,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "medical equipment",
   "mode": "train",
   "kind": "customs",
+  "regime": "clearance",
   "timeframe": [
    4,
    25
@@ -3241,6 +3379,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "any cargo",
   "mode": "any",
   "kind": "service",
+  "regime": "service",
   "timeframe": [
    9,
    21
@@ -3263,6 +3402,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "any cargo",
   "mode": "train",
   "kind": "logistics",
+  "regime": "standard",
   "timeframe": [
    63,
    189
@@ -3287,6 +3427,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "jewelry",
   "mode": "air",
   "kind": "customs",
+  "regime": "standard",
   "timeframe": [
    12,
    50
@@ -3311,6 +3452,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "jewelry",
   "mode": "air",
   "kind": "customs",
+  "regime": "clearance",
   "timeframe": [
    4,
    28
@@ -3332,6 +3474,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "carbonated beverages",
   "mode": "train",
   "kind": "customs",
+  "regime": "standard",
   "timeframe": [
    33,
    138
@@ -3361,6 +3504,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "cereals",
   "mode": "train",
   "kind": "customs",
+  "regime": "standard",
   "timeframe": [
    29,
    155
@@ -3392,6 +3536,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "fruit and vegetable juices",
   "mode": "train",
   "kind": "customs",
+  "regime": "standard",
   "timeframe": [
    57,
    138
@@ -3421,6 +3566,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "flour",
   "mode": "train",
   "kind": "customs",
+  "regime": "standard",
   "timeframe": [
    41,
    178
@@ -3450,6 +3596,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "any cargo",
   "mode": "any",
   "kind": "service",
+  "regime": "service",
   "timeframe": [
    4,
    59
@@ -3470,6 +3617,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "mineral fertilizers",
   "mode": "train",
   "kind": "customs",
+  "regime": "standard",
   "timeframe": [
    30,
    198
@@ -3498,6 +3646,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "animal or vegetable fertilizers",
   "mode": "train",
   "kind": "customs",
+  "regime": "standard",
   "timeframe": [
    49,
    531
@@ -3529,6 +3678,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "animal or vegetable fertilizers",
   "mode": "train",
   "kind": "customs",
+  "regime": "clearance",
   "timeframe": [
    4,
    28
@@ -3551,6 +3701,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "pharmaceutical products",
   "mode": "air",
   "kind": "customs",
+  "regime": "standard",
   "timeframe": [
    87,
    301
@@ -3579,6 +3730,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "any cargo",
   "mode": "air",
   "kind": "logistics",
+  "regime": "standard",
   "timeframe": [
    10,
    38
@@ -3599,6 +3751,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "pharmaceutical products",
   "mode": "air",
   "kind": "customs",
+  "regime": "clearance",
   "timeframe": [
    3,
    24
@@ -3619,6 +3772,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "any cargo",
   "mode": "any",
   "kind": "service",
+  "regime": "service",
   "timeframe": [
    16,
    245
@@ -3641,6 +3795,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "flour",
   "mode": "train",
   "kind": "customs",
+  "regime": "clearance",
   "timeframe": [
    6,
    31
@@ -3662,6 +3817,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "glass and glass products",
   "mode": "road",
   "kind": "customs",
+  "regime": "standard",
   "timeframe": [
    24,
    281
@@ -3690,6 +3846,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "glass and glass products",
   "mode": "train",
   "kind": "customs",
+  "regime": "standard",
   "timeframe": [
    27,
    296
@@ -3719,6 +3876,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "any cargo",
   "mode": "train",
   "kind": "logistics",
+  "regime": "standard",
   "timeframe": [
    7,
    28
@@ -3741,6 +3899,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "any cargo",
   "mode": "train",
   "kind": "logistics",
+  "regime": "standard",
   "timeframe": [
    39,
    109
@@ -3765,6 +3924,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "any cargo",
   "mode": "train",
   "kind": "logistics",
+  "regime": "standard",
   "timeframe": [
    33,
    87
@@ -3788,6 +3948,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "any cargo",
   "mode": "train",
   "kind": "logistics",
+  "regime": "standard",
   "timeframe": [
    13,
    34
@@ -3810,6 +3971,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "any cargo",
   "mode": "train",
   "kind": "logistics",
+  "regime": "standard",
   "timeframe": [
    13,
    34
@@ -3832,6 +3994,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "any cargo",
   "mode": "train",
   "kind": "logistics",
+  "regime": "standard",
   "timeframe": [
    7,
    27
@@ -3854,6 +4017,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "any cargo",
   "mode": "train",
   "kind": "logistics",
+  "regime": "standard",
   "timeframe": [
    13,
    34
@@ -3876,6 +4040,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "any cargo",
   "mode": "train",
   "kind": "logistics",
+  "regime": "standard",
   "timeframe": [
    7,
    27
@@ -3898,6 +4063,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "any cargo",
   "mode": "train",
   "kind": "logistics",
+  "regime": "standard",
   "timeframe": [
    7,
    28
@@ -3920,6 +4086,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "any cargo",
   "mode": "train",
   "kind": "logistics",
+  "regime": "standard",
   "timeframe": [
    13,
    34
@@ -3942,6 +4109,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "any cargo",
   "mode": "train",
   "kind": "logistics",
+  "regime": "standard",
   "timeframe": [
    13,
    34
@@ -3964,6 +4132,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "any cargo",
   "mode": "train",
   "kind": "logistics",
+  "regime": "standard",
   "timeframe": [
    7,
    28
@@ -3986,6 +4155,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "any cargo",
   "mode": "train",
   "kind": "logistics",
+  "regime": "standard",
   "timeframe": [
    7,
    28
@@ -4008,6 +4178,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "any cargo",
   "mode": "train",
   "kind": "logistics",
+  "regime": "standard",
   "timeframe": [
    13,
    34
@@ -4030,6 +4201,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "any cargo",
   "mode": "train",
   "kind": "logistics",
+  "regime": "standard",
   "timeframe": [
    7,
    28
@@ -4052,6 +4224,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "any cargo",
   "mode": "train",
   "kind": "logistics",
+  "regime": "standard",
   "timeframe": [
    13,
    34
@@ -4074,6 +4247,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "any cargo",
   "mode": "train",
   "kind": "logistics",
+  "regime": "standard",
   "timeframe": [
    7,
    28
@@ -4096,6 +4270,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "any cargo",
   "mode": "train",
   "kind": "logistics",
+  "regime": "standard",
   "timeframe": [
    13,
    34
@@ -4118,6 +4293,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "any cargo",
   "mode": "train",
   "kind": "logistics",
+  "regime": "standard",
   "timeframe": [
    7,
    28
@@ -4140,6 +4316,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "any cargo",
   "mode": "train",
   "kind": "logistics",
+  "regime": "standard",
   "timeframe": [
    13,
    34
@@ -4162,6 +4339,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "any cargo",
   "mode": "train",
   "kind": "logistics",
+  "regime": "standard",
   "timeframe": [
    7,
    28
@@ -4184,6 +4362,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "any cargo",
   "mode": "train",
   "kind": "logistics",
+  "regime": "standard",
   "timeframe": [
    13,
    34
@@ -4206,6 +4385,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "any cargo",
   "mode": "train",
   "kind": "logistics",
+  "regime": "standard",
   "timeframe": [
    7,
    28
@@ -4228,6 +4408,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "any cargo",
   "mode": "train",
   "kind": "logistics",
+  "regime": "standard",
   "timeframe": [
    13,
    34
@@ -4250,6 +4431,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "any cargo",
   "mode": "train",
   "kind": "logistics",
+  "regime": "standard",
   "timeframe": [
    7,
    28
@@ -4272,6 +4454,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "any cargo",
   "mode": "train",
   "kind": "logistics",
+  "regime": "standard",
   "timeframe": [
    13,
    34
@@ -4294,6 +4477,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "any cargo",
   "mode": "train",
   "kind": "logistics",
+  "regime": "standard",
   "timeframe": [
    7,
    28
@@ -4316,6 +4500,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "any cargo",
   "mode": "train",
   "kind": "logistics",
+  "regime": "standard",
   "timeframe": [
    13,
    34
@@ -4338,6 +4523,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "any cargo",
   "mode": "train",
   "kind": "logistics",
+  "regime": "standard",
   "timeframe": [
    7,
    28
@@ -4360,6 +4546,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "any cargo",
   "mode": "train",
   "kind": "logistics",
+  "regime": "standard",
   "timeframe": [
    13,
    34
@@ -4382,6 +4569,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "any cargo",
   "mode": "train",
   "kind": "logistics",
+  "regime": "standard",
   "timeframe": [
    7,
    28
@@ -4404,6 +4592,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "any cargo",
   "mode": "train",
   "kind": "logistics",
+  "regime": "standard",
   "timeframe": [
    13,
    34
@@ -4426,6 +4615,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "any cargo",
   "mode": "train",
   "kind": "logistics",
+  "regime": "standard",
   "timeframe": [
    7,
    28
@@ -4448,6 +4638,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "any cargo",
   "mode": "train",
   "kind": "logistics",
+  "regime": "standard",
   "timeframe": [
    13,
    34
@@ -4470,6 +4661,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "any cargo",
   "mode": "train",
   "kind": "logistics",
+  "regime": "standard",
   "timeframe": [
    33,
    87
@@ -4493,6 +4685,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "any cargo",
   "mode": "train",
   "kind": "logistics",
+  "regime": "standard",
   "timeframe": [
    33,
    87
@@ -4516,6 +4709,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "any cargo",
   "mode": "train",
   "kind": "logistics",
+  "regime": "standard",
   "timeframe": [
    33,
    87
@@ -4539,6 +4733,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "any cargo",
   "mode": "train",
   "kind": "logistics",
+  "regime": "standard",
   "timeframe": [
    33,
    87
@@ -4562,6 +4757,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "any cargo",
   "mode": "train",
   "kind": "logistics",
+  "regime": "standard",
   "timeframe": [
    33,
    87
@@ -4585,6 +4781,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "any cargo",
   "mode": "train",
   "kind": "logistics",
+  "regime": "standard",
   "timeframe": [
    33,
    87
@@ -4608,6 +4805,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "any cargo",
   "mode": "train",
   "kind": "logistics",
+  "regime": "standard",
   "timeframe": [
    33,
    87
@@ -4631,6 +4829,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "any cargo",
   "mode": "train",
   "kind": "logistics",
+  "regime": "standard",
   "timeframe": [
    33,
    87
@@ -4654,6 +4853,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "any cargo",
   "mode": "train",
   "kind": "logistics",
+  "regime": "standard",
   "timeframe": [
    33,
    87
@@ -4677,6 +4877,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "any cargo",
   "mode": "train",
   "kind": "logistics",
+  "regime": "standard",
   "timeframe": [
    33,
    87
@@ -4700,6 +4901,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "honey",
   "mode": "road",
   "kind": "customs",
+  "regime": "standard",
   "timeframe": [
    25,
    83
@@ -4727,6 +4929,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "salt",
   "mode": "train",
   "kind": "customs",
+  "regime": "standard",
   "timeframe": [
    43,
    125
@@ -4758,6 +4961,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "dried fruits",
   "mode": "air",
   "kind": "customs",
+  "regime": "standard",
   "timeframe": [
    30,
    108
@@ -4789,6 +4993,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "any cargo",
   "mode": "air",
   "kind": "logistics",
+  "regime": "standard",
   "timeframe": [
    12,
    52
@@ -4811,6 +5016,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "honey",
   "mode": "air",
   "kind": "customs",
+  "regime": "standard",
   "timeframe": [
    25,
    102
@@ -4838,6 +5044,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "cement",
   "mode": "train",
   "kind": "customs",
+  "regime": "standard",
   "timeframe": [
    43,
    125
@@ -4869,6 +5076,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "meat and meat products",
   "mode": "train",
   "kind": "customs",
+  "regime": "standard",
   "timeframe": [
    64,
    382
@@ -4899,6 +5107,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "any cargo",
   "mode": "any",
   "kind": "service",
+  "regime": "service",
   "timeframe": [
    96,
    319
@@ -4921,6 +5130,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "salt",
   "mode": "train",
   "kind": "customs",
+  "regime": "clearance",
   "timeframe": [
    2,
    12
@@ -4942,6 +5152,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "paper and cardboard products",
   "mode": "road",
   "kind": "customs",
+  "regime": "standard",
   "timeframe": [
    24,
    282
@@ -4970,6 +5181,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "paper and cardboard products",
   "mode": "train",
   "kind": "customs",
+  "regime": "standard",
   "timeframe": [
    27,
    301
@@ -4999,6 +5211,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "honey",
   "mode": "road",
   "kind": "customs",
+  "regime": "clearance",
   "timeframe": [
    2,
    13
@@ -5020,6 +5233,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "any cargo",
   "mode": "any",
   "kind": "service",
+  "regime": "service",
   "timeframe": [
    1,
    5
@@ -5040,6 +5254,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "any cargo",
   "mode": "any",
   "kind": "service",
+  "regime": "service",
   "timeframe": [
    32,
    40
@@ -5061,6 +5276,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "tea",
   "mode": "train",
   "kind": "customs",
+  "regime": "standard",
   "timeframe": [
    81,
    244
@@ -5096,6 +5312,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "pasta",
   "mode": "train",
   "kind": "customs",
+  "regime": "standard",
   "timeframe": [
    67,
    209
@@ -5127,6 +5344,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "any cargo",
   "mode": "train",
   "kind": "logistics",
+  "regime": "standard",
   "timeframe": [
    33,
    90
@@ -5150,6 +5368,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "cement",
   "mode": "train",
   "kind": "customs",
+  "regime": "standard",
   "timeframe": [
    27,
    296
@@ -5179,6 +5398,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "paper and cardboard products",
   "mode": "road",
   "kind": "customs",
+  "regime": "standard",
   "timeframe": [
    29,
    87
@@ -5210,6 +5430,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "paper and cardboard products",
   "mode": "train",
   "kind": "customs",
+  "regime": "standard",
   "timeframe": [
    81,
    243
@@ -5245,6 +5466,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "any cargo",
   "mode": "train",
   "kind": "logistics",
+  "regime": "standard",
   "timeframe": [
    7,
    27
@@ -5267,6 +5489,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "any cargo",
   "mode": "train",
   "kind": "logistics",
+  "regime": "standard",
   "timeframe": [
    13,
    34
@@ -5289,6 +5512,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "any cargo",
   "mode": "train",
   "kind": "logistics",
+  "regime": "standard",
   "timeframe": [
    39,
    112
@@ -5313,6 +5537,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "any cargo",
   "mode": "train",
   "kind": "logistics",
+  "regime": "standard",
   "timeframe": [
    33,
    87
@@ -5336,6 +5561,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "eggs",
   "mode": "road",
   "kind": "customs",
+  "regime": "standard",
   "timeframe": [
    24,
    77
@@ -5363,6 +5589,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "eggs",
   "mode": "train",
   "kind": "customs",
+  "regime": "standard",
   "timeframe": [
    76,
    238
@@ -5394,6 +5621,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "washing detergents",
   "mode": "train",
   "kind": "customs",
+  "regime": "standard",
   "timeframe": [
    67,
    209
@@ -5425,6 +5653,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "any cargo",
   "mode": "train",
   "kind": "logistics",
+  "regime": "standard",
   "timeframe": [
    33,
    87
@@ -5448,6 +5677,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "eggs",
   "mode": "road",
   "kind": "customs",
+  "regime": "clearance",
   "timeframe": [
    1,
    8
@@ -5468,6 +5698,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "pasta",
   "mode": "road",
   "kind": "customs",
+  "regime": "standard",
   "timeframe": [
    55,
    331
@@ -5497,6 +5728,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "pasta",
   "mode": "train",
   "kind": "customs",
+  "regime": "standard",
   "timeframe": [
    58,
    346
@@ -5527,6 +5759,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "any cargo",
   "mode": "any",
   "kind": "service",
+  "regime": "service",
   "timeframe": [
    37,
    48
@@ -5549,6 +5782,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "any cargo",
   "mode": "road",
   "kind": "logistics",
+  "regime": "transit",
   "timeframe": [
    1,
    3
@@ -5568,6 +5802,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "any cargo",
   "mode": "train",
   "kind": "logistics",
+  "regime": "transit",
   "timeframe": [
    3,
    7
@@ -5587,6 +5822,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "pasta",
   "mode": "road",
   "kind": "customs",
+  "regime": "clearance",
   "timeframe": [
    7,
    33
@@ -5611,6 +5847,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "washing detergents",
   "mode": "train",
   "kind": "customs",
+  "regime": "standard",
   "timeframe": [
    27,
    296
@@ -5640,6 +5877,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "jewelry",
   "mode": "air",
   "kind": "customs",
+  "regime": "clearance",
   "timeframe": [
    2,
    15
@@ -5661,6 +5899,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "any cargo",
   "mode": "air",
   "kind": "logistics",
+  "regime": "standard",
   "timeframe": [
    10,
    36
@@ -5681,6 +5920,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "carpets",
   "mode": "road",
   "kind": "customs",
+  "regime": "standard",
   "timeframe": [
    47,
    92
@@ -5710,6 +5950,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "carpets",
   "mode": "train",
   "kind": "customs",
+  "regime": "standard",
   "timeframe": [
    75,
    165
@@ -5743,6 +5984,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "shoes",
   "mode": "train",
   "kind": "customs",
+  "regime": "standard",
   "timeframe": [
    67,
    209
@@ -5774,6 +6016,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "medical equipment",
   "mode": "road",
   "kind": "customs",
+  "regime": "temporary",
   "timeframe": [
    6,
    24
@@ -5798,6 +6041,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "medical equipment",
   "mode": "road",
   "kind": "customs",
+  "regime": "re-export",
   "timeframe": [
    94,
    203
@@ -5821,6 +6065,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "reusable packaging",
   "mode": "road",
   "kind": "customs",
+  "regime": "temporary",
   "timeframe": [
    14,
    43
@@ -5845,6 +6090,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "reusable packaging",
   "mode": "road",
   "kind": "customs",
+  "regime": "re-export",
   "timeframe": [
    6,
    25
@@ -5869,6 +6115,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "any cargo",
   "mode": "any",
   "kind": "service",
+  "regime": "service",
   "timeframe": [
    0,
    0
@@ -5884,9 +6131,11 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "id": "1108",
   "title": "Clearance of temporary import of medical equipment by road",
   "direction": "import",
-  "goods": "temporary import of medical equipment",
+  "goods": "medical equipment",
   "mode": "road",
   "kind": "customs",
+  "regime": "clearance",
+  "basis": "temporary import",
   "timeframe": [
    6,
    23
@@ -5910,6 +6159,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "medical equipment",
   "mode": "road",
   "kind": "customs",
+  "regime": "clearance",
   "timeframe": [
    83,
    173
@@ -5931,6 +6181,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "reusable packaging",
   "mode": "road",
   "kind": "customs",
+  "regime": "clearance",
   "timeframe": [
    6,
    24
@@ -5951,9 +6202,11 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "id": "1122",
   "title": "Clearance of temporary export of reusable packaging by road",
   "direction": "import",
-  "goods": "temporary export of reusable packaging",
+  "goods": "reusable packaging",
   "mode": "road",
   "kind": "customs",
+  "regime": "clearance",
+  "basis": "temporary export",
   "timeframe": [
    2,
    12
@@ -5975,6 +6228,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "salt",
   "mode": "train",
   "kind": "customs",
+  "regime": "standard",
   "timeframe": [
    14,
    54
@@ -6002,6 +6256,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "any cargo",
   "mode": "any",
   "kind": "service",
+  "regime": "service",
   "timeframe": [
    4,
    9
@@ -6020,6 +6275,7 @@ export const CATALOGUE: Record<string, ProcedureSummary> = {
   "goods": "any cargo",
   "mode": "any",
   "kind": "service",
+  "regime": "service",
   "timeframe": [
    56,
    297

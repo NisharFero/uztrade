@@ -1,12 +1,11 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { Icon } from "../../components/icons";
 import { CATALOGUE, PROCEDURE_IDS, type ProcedureKind } from "../../modules/procedures/data/procedures.generated";
 import { fmtRange } from "../../modules/procedures/dag";
 import ProcedureFilter from "../../components/procedures/procedure-filter";
 
 export const metadata: Metadata = {
-  title: "Procedures · UzTrade",
+  title: "Procedures · Uzbekistan Trade Platform",
   description: "The published Uzbek trade procedures this workspace can execute.",
 };
 

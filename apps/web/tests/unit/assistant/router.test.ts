@@ -72,6 +72,47 @@ test("mid-intake: a plain answer goes to intake, a question is reasoned about", 
   );
 });
 
+test("mid-intake: 'yes' to proposed goods stays with intake, whatever a model would say", async () => {
+  // "ok i want to move banana" -> "Did you mean banana, published under fresh
+  // fruits and vegetables?" -> "yes" was once routed to the trader's cases.
+  const draft = parseDraft({
+    proposal: { term: "banana", category: "fresh fruits and vegetables", hs: "", reason: "Banana is a fresh fruit." },
+  });
+  const context: RouteContext = { draft, expecting: "commodity", cases: CASES };
+  const calls: string[] = [];
+  const wrong = model({ reasoning: "Asks about their shipments.", intent: "cases" }, calls);
+
+  for (const reply of ["yes", "Yes please", "ok", "no", "nope, something else"]) {
+    const routed = await routeMessage(reply, context, wrong);
+    assert.equal(routed.intent, "shipment", reply);
+    assert.equal(routed.by, "rules", reply);
+  }
+  // Any other plain reply while intake waits stays with intake too.
+  assert.equal((await routeMessage("hmm not sure", context, wrong)).intent, "shipment");
+  assert.equal(calls.length, 0, "no model is asked");
+
+  // A real question, or one about their cases, still leaves intake.
+  assert.equal((await routeMessage("Which of my shipments are active?", context, wrong)).intent, "cases");
+});
+
+test("router phrase variants keep intake answers in intake while allowing side questions", async () => {
+  const proposal = parseDraft({ proposal: { term: "banana", category: "fresh fruits and vegetables", hs: "", reason: "Fresh fruit" } });
+  const context: RouteContext = { draft: proposal, expecting: "commodity", cases: CASES };
+  const calls: string[] = [];
+  const wrong = model({ reasoning: "Unrelated", intent: "other" }, calls);
+  for (const stem of ["yes", "no", "ok", "sure", "not sure"]) {
+    for (const variant of [stem, stem.toUpperCase(), `${stem}!`, ` ${stem} `]) {
+      const result = await routeMessage(variant, context, wrong);
+      assert.equal(result.intent, "shipment", variant);
+      assert.equal(result.by, "rules", variant);
+    }
+  }
+  assert.equal(calls.length, 0);
+  for (const question of ["Which of my shipments are active?", "What documents does tea export need?"]) {
+    assert.notEqual((await routeMessage(question, context, wrong)).intent, "shipment", question);
+  }
+});
+
 test("the model's reading decides; invented case ids are dropped", async () => {
   const routed = await routeMessage(
     "how is my tea going",

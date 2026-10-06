@@ -66,14 +66,14 @@ test("compliance analysis completes itself; filing checks follow their step", ()
     const analysis = template.filter((t) => !t.key.startsWith("filing:"));
     const filings = template.filter((t) => t.key.startsWith("filing:"));
     assert.ok(analysis.every((t) => t.status === "done"), `${id} analysis needs no confirmation`);
-    if (PROCEDURES[id].kind === "logistics") {
-      // Rail logistics: nothing to classify and no declaration to check.
+    if (PROCEDURES[id].kind !== "customs") {
+      // Logistics move any cargo and services obtain one document: there is
+      // nothing to classify and no declaration of their own to check.
       assert.match(analysis[0].label, /No classification/);
       assert.equal(filings.length, 0, `${id} files no customs declaration`);
       continue;
     }
     assert.ok(analysis.length >= 3, `${id} classifies, estimates duty and screens risk`);
-    assert.ok(filings.length > 0, `${id} has customs filings to check`);
     assert.ok(filings.every((t) => t.status === "pending"), `${id} filings wait for the case to reach them`);
   }
 

@@ -13,7 +13,7 @@ import { completeWorkflowWorkItem } from "../workflow/service";
 import { buildLedger, DOCUMENT_ARTIFACT, INPUT_ARTIFACT, inputKey, nextVersion, type DocumentRecord, type InputKind } from "./ledger";
 import { stepViewFor } from "./next";
 
-export type StepServiceOptions = { ai?: AgenticAiClient; portals?: PortalClient };
+export type StepServiceOptions = { ai?: AgenticAiClient; portals?: PortalClient; deadline?: number };
 
 export class StepNotReady extends Error {
   constructor(public stepNum: number, public missing: string[]) {

@@ -1,7 +1,11 @@
 @import "tailwindcss";
 @import "./fonts.css";
 @import "./pages.css";
+@import "./chat.css";
+@import "./board.css";
 @import "./panels.css";
+@import "./convo.css";
+@import "./cards.css";
 
 /* ---------------------------------------------------------------------------
    UzTrade — modern product dashboard on a white ground.
@@ -14,41 +18,48 @@
   /* Supplied by app/fonts.css rather than next/font - see the note there. */
   --font-geist: "Geist", system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-geist-mono: "Geist Mono", ui-monospace, "Cascadia Mono", monospace;
+  /* The type pairing Claude uses: a plain sans for everything the interface
+     says, a reading serif for what the assistant writes. */
+  --font-ui: "Inter", "Geist", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-read: "Source Serif 4", "Iowan Old Style", Charter, Cambria, Georgia, serif;
 
-  --canvas: #ffffff;
+  /* The dashboard's palette, for every page: warm paper, the blue-black of a
+     customs stamp for ink, and the Rishtan blue of Uzbek ceramics as the one
+     accent. Surfaces are white on the paper; rules are warm, not grey. */
+  --canvas: #faf9f5;
   --surface: #ffffff;
-  --surface-2: #f8fafc;
-  --surface-3: #f2f5f9;
+  --surface-2: #f8f7f2;
+  --surface-3: #f1eee6;
 
   /* Deep blue rail. Nav items invert to white pills on hover and when active,
      so the rail reads as navigation and the white pill reads as "you are
      here" - the same contrast trick enterprise consoles use. */
-  --rail: #12224d;
-  --rail-2: #0d1936;
+  --rail: #16304a;
+  --rail-2: #0f2235;
   --rail-hover: #ffffff;
   --rail-active: #ffffff;
-  --rail-ink: #1b3576;
+  --rail-ink: #14283c;
   --rail-text: rgba(255, 255, 255, 0.78);
   --rail-text-strong: #ffffff;
   --rail-line: rgba(255, 255, 255, 0.13);
 
   /* Actor identity - each swimlane owns a hue. Five distinct families so the
      column a block sits in is readable without checking the header. */
-  --lane-trader: #7c3aed;
-  --lane-trader-wash: #f4efff;
-  --lane-trader-line: #d9c8fb;
-  --lane-agent: #2563eb;
-  --lane-agent-wash: #eef4ff;
-  --lane-agent-line: #c2d7fd;
+  --lane-trader: #6f4aa3;
+  --lane-trader-wash: #f4f0f8;
+  --lane-trader-line: #d9cde8;
+  --lane-agent: #0b6f86;
+  --lane-agent-wash: #e9f3f5;
+  --lane-agent-line: #b9dbe2;
   --lane-bank: #a16207;
   --lane-bank-wash: #fdf6e3;
   --lane-bank-line: #e5d09a;
   --lane-government: #be185d;
   --lane-government-wash: #fdeef4;
   --lane-government-line: #f2c2d5;
-  --lane-transport: #0d9488;
-  --lane-transport-wash: #e6f6f4;
-  --lane-transport-line: #a9ddd6;
+  --lane-transport: #4f7a3f;
+  --lane-transport-wash: #eef3e8;
+  --lane-transport-line: #c7d8b9;
 
   /* Execution-lane aliases over the same palette: the User lane is the
      trader, the Physical lane is goods handling. Named separately so the
@@ -57,45 +68,46 @@
   --lane-physical: var(--lane-transport);
 
   /* Status trace. */
-  --wait: #64748b;
-  --wait-wash: #f1f5f9;
+  --wait: #6b7784;
+  --wait-wash: #f1efe8;
 
-  --ink: #0f1729;
-  --ink-2: #46526a;
-  --muted: #6b7688;
-  --faint: #98a1b1;
+  --ink: #14283c;
+  --ink-2: #4d5e70;
+  --muted: #66727f;
+  --faint: #8a95a1;
 
-  --line: #e7eaf0;
-  --line-2: #d7dce5;
+  --line: #e6e2d8;
+  --line-2: #d9d4c7;
 
-  --accent: #2563eb;
-  --accent-hi: #4f8cff;
-  --accent-press: #1d4ed8;
-  --accent-wash: #eef4ff;
-  --accent-line: #c5d8fd;
+  --accent: #0b6f86;
+  --accent-hi: #1a8aa3;
+  --accent-press: #07576f;
+  --accent-wash: #e9f3f5;
+  --accent-line: #b9dbe2;
 
   --ok: #047857;
   --ok-wash: #e6f6ef;
   --ok-line: #a7ddc6;
   --warn: #b45309;
   --warn-wash: #fdf3e3;
-  --info: #2563eb;
-  --info-wash: #eef4ff;
-  --neutral: #475569;
-  --neutral-wash: #eef1f6;
+  --info: #0b6f86;
+  --info-wash: #e9f3f5;
+  --neutral: #4d5e70;
+  --neutral-wash: #f1efe8;
 
   --r-xl: 16px;
   --r-lg: 12px;
   --r-md: 10px;
   --r-sm: 8px;
 
-  --shadow-sm: 0 1px 2px rgba(15, 23, 41, 0.06);
+  /* Quiet: a surface is set off by its rule, not by a drop shadow. */
+  --shadow-sm: 0 1px 2px rgba(20, 40, 60, 0.04);
   --shadow:
-    0 1px 3px rgba(15, 23, 41, 0.07),
-    0 8px 24px -14px rgba(15, 23, 41, 0.28);
+    0 1px 2px rgba(20, 40, 60, 0.04),
+    0 10px 28px -24px rgba(20, 40, 60, 0.4);
   --shadow-lift:
-    0 2px 4px rgba(15, 23, 41, 0.06),
-    0 14px 34px -12px rgba(15, 23, 41, 0.3);
+    0 1px 2px rgba(20, 40, 60, 0.05),
+    0 14px 34px -22px rgba(20, 40, 60, 0.45);
 }
 
 /* Dark palette is opt-in only: set <html data-theme="dark">. It deliberately
@@ -173,7 +185,7 @@
 @theme inline {
   --color-background: var(--canvas);
   --color-foreground: var(--ink);
-  --font-sans: var(--font-geist);
+  --font-sans: var(--font-ui);
   --font-mono: var(--font-geist-mono);
 }
 
@@ -189,7 +201,8 @@ body {
   margin: 0;
   background: var(--canvas);
   color: var(--ink);
-  font-family: var(--font-geist);
+  font-family: var(--font-ui);
+  font-feature-settings: "cv11", "ss01";
   font-size: 14px;
   line-height: 1.5;
   letter-spacing: -0.006em;
@@ -251,15 +264,13 @@ button {
   min-height: 36px;
   border: 1px solid transparent;
   border-radius: var(--r-md);
-  background: linear-gradient(180deg, var(--accent-hi), var(--accent));
+  background: var(--accent);
   color: #ffffff;
-  box-shadow:
-    var(--shadow-sm),
-    inset 0 1px 0 rgba(255, 255, 255, 0.16);
+  box-shadow: none;
   padding: 0 15px;
   cursor: pointer;
   font-size: 13.5px;
-  font-weight: 550;
+  font-weight: 500;
   letter-spacing: -0.008em;
   transition:
     background 130ms ease,
@@ -270,10 +281,8 @@ button {
 }
 
 button:hover {
-  background: linear-gradient(180deg, var(--accent-hi), var(--accent-press));
-  box-shadow:
-    var(--shadow),
-    inset 0 1px 0 rgba(255, 255, 255, 0.16);
+  background: var(--accent-press);
+  box-shadow: none;
 }
 
 button:active {
@@ -363,6 +372,137 @@ a:focus-visible {
   padding: 4px 6px 0;
 }
 
+/* ------------------------------ Chat history --------------------------- */
+
+/* Sessions live in the visitor's own browser, so this list is theirs alone.
+   It takes the space the navigation leaves and scrolls inside it. */
+.recents {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-height: 0;
+  flex: 1;
+  border-top: 1px solid var(--rail-line);
+  padding-top: 14px;
+}
+
+.recents-new {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  border: 1px solid var(--rail-line);
+  border-radius: var(--r-md);
+  background: transparent;
+  color: var(--rail-text-strong);
+  padding: 8px 10px;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.recents-new:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.28);
+}
+
+.recents-head {
+  margin: 8px 6px 2px;
+  color: var(--rail-text);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  opacity: 0.7;
+}
+
+.recents-empty {
+  margin: 6px;
+  color: var(--rail-text);
+  font-size: 12px;
+  opacity: 0.65;
+}
+
+.recents-list {
+  list-style: none;
+  margin: 0;
+  padding: 0 0 8px;
+  overflow-y: auto;
+  min-height: 0;
+  display: grid;
+  gap: 1px;
+}
+
+.recents-list li {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.recents-item {
+  flex: 1;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  min-width: 0;
+  border: 0;
+  border-radius: var(--r-md);
+  background: transparent;
+  color: var(--rail-text);
+  padding: 7px 10px;
+  font: inherit;
+  font-size: 12.5px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.recents-item:hover,
+.recents-item.is-current {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--rail-text-strong);
+}
+
+.recents-title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.recents-when {
+  flex: none;
+  font-size: 11px;
+  opacity: 0.6;
+}
+
+/* Only offered on the row the pointer is over: a delete that is always
+   visible invites the wrong click. */
+.recents-remove {
+  position: absolute;
+  right: 4px;
+  border: 0;
+  border-radius: var(--r-sm);
+  background: transparent;
+  color: var(--rail-text);
+  padding: 2px 6px;
+  font-size: 15px;
+  line-height: 1;
+  cursor: pointer;
+  opacity: 0;
+}
+
+.recents-list li:hover .recents-remove,
+.recents-remove:focus-visible {
+  opacity: 0.75;
+}
+
+.recents-remove:hover {
+  opacity: 1;
+  background: rgba(255, 255, 255, 0.12);
+}
+
 .brand > span {
   display: grid;
   place-items: center;
@@ -381,6 +521,12 @@ a:focus-visible {
 .brand div {
   display: grid;
   gap: 1px;
+  flex: 1;
+  min-width: 0;
+}
+
+.sidebar-close {
+  display: none;
 }
 
 .brand strong {
@@ -484,6 +630,27 @@ nav {
   opacity: 1;
 }
 
+/* ----------------------- Phone and narrow window ----------------------- */
+
+.mobile-bar-button,
+.mobile-bar-button:hover,
+.sidebar-close,
+.sidebar-close:hover,
+.sidebar-scrim,
+.sidebar-scrim:hover,
+.recents-new,
+.recents-item,
+.recents-remove {
+  min-height: 0;
+  box-shadow: none;
+}
+
+/* Out of the way on a laptop; below 900px it replaces the rail. */
+.mobile-bar,
+.sidebar-scrim {
+  display: none;
+}
+
 /* ------------------------------ Workspace ------------------------------ */
 
 .dashboard {
@@ -533,19 +700,21 @@ strong {
 h1 {
   margin: 0;
   color: var(--ink);
-  font-size: clamp(28px, 3.2vw, 40px);
-  font-weight: 600;
-  line-height: 1.08;
-  letter-spacing: -0.032em;
+  font-family: var(--font-read);
+  font-size: clamp(26px, 3vw, 34px);
+  font-weight: 400;
+  line-height: 1.15;
+  letter-spacing: -0.012em;
 }
 
 h2 {
   margin: 0;
   color: var(--ink);
-  font-size: 18px;
-  font-weight: 600;
+  font-family: var(--font-read);
+  font-size: 20px;
+  font-weight: 500;
   line-height: 1.25;
-  letter-spacing: -0.022em;
+  letter-spacing: -0.008em;
 }
 
 h3 {
@@ -585,8 +754,8 @@ p {
   margin-inline: auto;
   border-color: var(--accent-line);
   box-shadow:
-    0 1px 3px rgba(15, 23, 41, 0.06),
-    0 18px 42px -26px rgba(37, 99, 235, 0.55);
+    0 1px 2px rgba(20, 40, 60, 0.05),
+    0 18px 42px -28px rgba(20, 40, 60, 0.45);
   padding: 22px;
 }
 
@@ -1018,6 +1187,13 @@ textarea:focus {
 [data-counterparty="transport"] {
   --cp: var(--lane-transport);
   --cp-wash: var(--lane-transport-wash);
+}
+
+/* Private providers - insurers and the like - are neither the state nor a
+   carrier, so they borrow the bank hue: money changes hands either way. */
+[data-counterparty="commercial"] {
+  --cp: var(--lane-bank);
+  --cp-wash: var(--lane-bank-wash);
 }
 
 .wf-lane-head {
@@ -1830,26 +2006,127 @@ mark[data-tone="info"] {
 }
 
 @media (max-width: 980px) {
-  .shell,
   .output-layout {
     grid-template-columns: 1fr;
   }
+}
 
-  .sidebar {
-    position: static;
-    height: auto;
-    border-right: 0;
-    border-bottom: 1px solid var(--rail-line);
+/* Below 900px the rail becomes a drawer, the way ChatGPT and Claude do it on
+   a phone: a slim bar across the top with the menu, the product and a new
+   chat; the rail slides in over the page and a scrim closes it. The page
+   itself gets the whole width. */
+@media (max-width: 900px) {
+  .shell {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto 1fr;
   }
 
-  nav {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+  .mobile-bar {
+    position: sticky;
+    top: 0;
+    z-index: 30;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    height: 52px;
+    padding: 0 8px;
+    border-bottom: 1px solid rgba(20, 40, 60, 0.08);
+    background: rgba(250, 249, 245, 0.92);
+    backdrop-filter: blur(10px);
+  }
+
+  .mobile-bar-title {
+    overflow: hidden;
+    color: var(--ink);
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .mobile-bar-button {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 38px;
+    height: 38px;
+    border: 0;
+    border-radius: 10px;
+    background: transparent;
+    color: var(--ink);
+    cursor: pointer;
+  }
+
+  .mobile-bar-button:hover {
+    background: rgba(20, 40, 60, 0.06);
+  }
+
+  .mobile-bar-button svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .sidebar {
+    position: fixed;
+    inset: 0 auto 0 0;
+    z-index: 50;
+    width: min(290px, 84vw);
+    height: 100dvh;
+    overflow-y: auto;
+    transform: translateX(-102%);
+    visibility: hidden;
+    transition: transform 0.22s ease, visibility 0s linear 0.22s;
+  }
+
+  .sidebar.is-open {
+    transform: none;
+    visibility: visible;
+    box-shadow: 0 0 40px rgba(6, 20, 55, 0.35);
+    transition: transform 0.22s ease, visibility 0s;
+  }
+
+  .sidebar-scrim {
+    position: fixed;
+    inset: 0;
+    z-index: 40;
+    display: block;
+    border: 0;
+    border-radius: 0;
+    background: rgba(10, 20, 35, 0.4);
+    cursor: pointer;
+  }
+
+  .sidebar-scrim:hover {
+    background: rgba(10, 20, 35, 0.4);
+  }
+
+  .sidebar-close {
+    display: grid;
+    place-items: center;
+    width: 32px;
+    height: 32px;
+    border: 0;
+    border-radius: 8px;
+    background: transparent;
+    color: var(--rail-text);
+    cursor: pointer;
+  }
+
+  .sidebar-close:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--rail-text-strong);
+  }
+
+  .sidebar-close svg {
+    width: 18px;
+    height: 18px;
   }
 }
 
 @media (max-width: 620px) {
   .dashboard,
-  .sidebar,
   .chat-panel,
   .agent-output,
   .mini-panel,
@@ -1857,42 +2134,8 @@ mark[data-tone="info"] {
     padding: 16px;
   }
 
-  nav {
-    display: grid;
-    grid-template-columns: 1fr;
-  }
-
-  /* Phone: the rail collapses to one scrollable row of pills. Stacked, six
-     items plus their sub-labels took ~410px - half the first screen - above
-     the content on every page. nav.tsx keeps the active pill in view.
-     min-width: 0 stops the sidebar's 1fr track growing to the pill row's
-     min-content width, which would scroll the whole page sideways. */
-  .sidebar {
-    gap: 12px;
-    min-width: 0;
-  }
-
-  .sidebar nav {
-    display: flex;
-    gap: 4px;
-    overflow-x: auto;
-    margin: 0 -16px;
-    padding: 2px 16px 4px;
-    scrollbar-width: none;
-  }
-
-  .sidebar nav .nav-item {
-    flex: none;
-    grid-template-columns: 20px auto;
-    gap: 7px;
-  }
-
-  .sidebar nav .sub-nav {
-    display: none;
-  }
-
   h1 {
-    font-size: 28px;
+    font-size: 26px;
   }
 }
 

@@ -3,6 +3,7 @@ import test from "node:test";
 import { createLlmClient } from "../../../modules/ai/llm";
 import { converse } from "../../../modules/intake/conversation";
 import { EMPTY_DRAFT } from "../../../modules/intake/draft";
+import { CATALOGUE } from "../../../modules/procedures/sync";
 import { needsModel, restate, understandWithModel } from "../../../modules/intake/llm-extract";
 
 const model = (answer: object) =>
@@ -36,9 +37,12 @@ test("trucks are a unit the rules measure; a unit they don't is dropped", () => 
   const text = restate({ shipment: true, goods: "tomatoes", direction: "export", mode: "road", quantity: 2, unit: "fura", origin: "Andijan", destination: "Almaty" }, null);
   assert.equal(text, "export 2 trucks of tomatoes from Andijan to Almaty by road");
   assert.equal(restate({ shipment: true, goods: "tea", quantity: 12, unit: "pallets" }, null), "tea", "a count of pallets isn't read as tonnes");
+  // Fresh produce by road is published (procedure 32), so with goods, mode,
+  // quantity and route all read from one sentence the card is ready to confirm.
   const turn = converse(EMPTY_DRAFT, text);
-  assert.equal(turn.status, "asking");
-  assert.equal(turn.slot, "mode", "tomatoes aren't published by road");
+  assert.equal(turn.status, "confirm");
+  assert.equal(CATALOGUE[turn.summary!.procedureId].mode, "road");
+  assert.match(turn.summary?.howMuch ?? "", /truck/);
   assert.equal(restate({ shipment: true, goods: "tea", quantity: 20, unit: "тонн" }, null), "20 tonnes of tea");
 });
 

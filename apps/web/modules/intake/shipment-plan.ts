@@ -19,6 +19,7 @@
 import { requiresPhysical } from "../procedures/delegation";
 import type { Direction, Procedure, ProcedureBlock, TransportMode as ProcedureMode } from "../procedures/data/procedures.generated";
 import type { ShipmentFacts } from "../workflow/domain";
+import { containerTonnesFor, isPerishable, truckTonnesFor, wagonTonnesFor } from "./goods-handling";
 
 export type Hours = [number, number];
 
@@ -190,6 +191,10 @@ export function placesForCountry(country: string): Place[] {
   });
 }
 
+/** Every one-word place name and alias the gazetteer knows ("almaty",
+ *  "tashkent", "russia"), for correcting a misspelt one before it is read. */
+export const PLACE_WORDS: ReadonlySet<string> = new Set(ALIASES.map((a) => a.alias).filter((a) => /^[a-z]{4,}$/.test(a)));
+
 export function countryName(code: string): string {
   return COUNTRY_NAMES[code]?.name ?? code;
 }
@@ -217,7 +222,8 @@ export function mentionedRoute(
       return m ? mentions.find((p) => p.index >= m.index + m[0].length - 1)?.place ?? null : null;
     };
     origin ??= after(/\bfrom\s/);
-    destination ??= after(/\b(?:to|into)\s/);
+    // "to Almaty", not the "to" of "how many days to import honey from Almaty".
+    destination ??= after(/\b(?:to|into)\s(?!(?:import|export|move|ship|send|bring|take|get|be|do|have|clear|deliver|transport|arrive|reach)\b)/);
     const others = mentions.map((m) => m.place).filter((p) => p !== origin && p !== destination);
     if (!origin && !destination && others.length >= 2) {
       origin = others[0];
@@ -396,8 +402,10 @@ const round = (h: Hours): Hours => [Math.round(h[0]), Math.round(h[1])];
 
 /* ------------------------------------------------------------- quantity --- */
 
-/* Tonnes one unit carries. Tea and dried fruit fill a covered wagon's volume
-   long before its 68 t weight limit; fresh produce travels refrigerated. */
+/* Tonnes one unit carries, for the goods measured directly. Everything else
+   is sized by its handling band (modules/intake/goods-handling.ts): tea and
+   dried fruit fill a covered wagon's volume long before its 68 t weight limit,
+   cement reaches the limit. */
 const WAGON_T: Record<string, number> = {
   tea: 30,
   "dried fruits": 45,
@@ -416,9 +424,9 @@ export function toTonnes(quantity: number | null, unit: string | null, goods: st
   if (quantity == null || !Number.isFinite(quantity) || quantity <= 0) return null;
   const u = (unit ?? "t").toLowerCase();
   if (/^(kg|kgs|kilo|kilogram)/.test(u)) return quantity / 1000;
-  if (/^wagon|^railcar/.test(u)) return quantity * (WAGON_T[goods] ?? 30);
-  if (/^container/.test(u)) return quantity * (CONTAINER_T[goods] ?? 18);
-  if (/^(truck|lorr|fura|trailer)/.test(u)) return quantity * (TRUCK_T[goods] ?? 20);
+  if (/^wagon|^railcar/.test(u)) return quantity * (WAGON_T[goods] ?? wagonTonnesFor(goods));
+  if (/^container/.test(u)) return quantity * (CONTAINER_T[goods] ?? containerTonnesFor(goods));
+  if (/^(truck|lorr|fura|trailer)/.test(u)) return quantity * (TRUCK_T[goods] ?? truckTonnesFor(goods));
   if (/^(lb|pound)/.test(u)) return (quantity * 0.4536) / 1000;
   return quantity; // t, tonnes, tons, mt - read as metric tonnes
 }
@@ -427,15 +435,28 @@ export type Units = { kind: string; count: number; perUnitT: number; assumed: bo
 
 export function unitsFor(modeIn: TransportMode, goods: string, tonnes: number | null): Units {
   const mode = planningMode(modeIn);
+  // A cold chain is a cold chain whatever carries it: a reefer trailer on the
+  // road and a temperature-controlled ULD in the air, not only a reefer wagon.
+  const chilled = isPerishable(goods);
   if (mode === "road") {
-    const perUnitT = TRUCK_T[goods] ?? 20;
-    return { kind: "truck", count: tonnes ? Math.max(1, Math.ceil(tonnes / perUnitT)) : 1, perUnitT, assumed: tonnes == null };
+    const perUnitT = TRUCK_T[goods] ?? truckTonnesFor(goods);
+    return {
+      kind: chilled ? "refrigerated truck" : "truck",
+      count: tonnes ? Math.max(1, Math.ceil(tonnes / perUnitT)) : 1,
+      perUnitT,
+      assumed: tonnes == null,
+    };
   }
   if (mode === "air") {
-    return { kind: "air pallet", count: tonnes ? Math.max(1, Math.ceil(tonnes / AIR_PALLET_T)) : 1, perUnitT: AIR_PALLET_T, assumed: tonnes == null };
+    return {
+      kind: chilled ? "refrigerated air pallet" : "air pallet",
+      count: tonnes ? Math.max(1, Math.ceil(tonnes / AIR_PALLET_T)) : 1,
+      perUnitT: AIR_PALLET_T,
+      assumed: tonnes == null,
+    };
   }
-  const perUnitT = WAGON_T[goods] ?? 30;
-  const kind = goods === "fresh fruits and vegetables" ? "refrigerated wagon" : "covered wagon";
+  const perUnitT = WAGON_T[goods] ?? wagonTonnesFor(goods);
+  const kind = chilled ? "refrigerated wagon" : "covered wagon";
   return { kind, count: tonnes ? Math.max(1, Math.ceil(tonnes / perUnitT)) : 1, perUnitT, assumed: tonnes == null };
 }
 
@@ -587,10 +608,16 @@ export function buildShipmentPlan(procedure: Procedure, facts: ShipmentFacts, qu
     if (route.sea) notes.push({ tone: "caution", text: `${route.sea} — ${mode === "road" ? "the truck travels on the ferry; book it" : "not rail; book it separately"}.` });
     if (route.road) notes.push({ tone: "caution", text: route.road + "." });
     if (!route.modelled) notes.push({ tone: "info", text: "Transit corridor for this country isn't modelled — estimate uses distance only." });
-    if (goods === "fresh fruits and vegetables") {
+    if (isPerishable(goods)) {
       const days = route.transit[1] / 24;
-      if (days > 7) notes.push({ tone: "high", text: `Transit up to ${Math.round(days)} days is beyond the shelf life of most fresh produce — pre-cool, use reefers, or choose a nearer market.` });
-      else if (days > 3) notes.push({ tone: "caution", text: `Up to ${Math.round(days)} days in transit — keep the cold chain unbroken and pre-cool before loading.` });
+      if (days > 7) {
+        notes.push({
+          tone: "high",
+          text: `Transit up to ${Math.round(days)} days is beyond the shelf life of most ${goods} — pre-cool, use reefers, or choose a nearer market.`,
+        });
+      } else if (days > 3) {
+        notes.push({ tone: "caution", text: `Up to ${Math.round(days)} days in transit — keep the cold chain unbroken and pre-cool before loading.` });
+      }
     }
   }
 

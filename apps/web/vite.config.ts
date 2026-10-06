@@ -1,4 +1,5 @@
 import { existsSync, readFileSync } from "node:fs";
+import { fileURLToPath } from "node:url";
 import vinext from "vinext";
 
 /* Local dev secrets live in apps/.env (outside this package, and gitignored).
@@ -78,6 +79,24 @@ export default defineConfig(async () => {
 
   return {
     server: serverConfig,
+    resolve: {
+      alias: {
+        // postgres.js ships a Cloudflare-specific build behind the `workerd`
+        // export condition, which speaks `cloudflare:sockets` and therefore
+        // only runs inside workerd - `vinext start` serves the same bundle
+        // from Node and its queries fail. workerd's own `nodejs_compat`
+        // provides node:net, so the standard build runs in both.
+        postgres: fileURLToPath(new URL("./node_modules/postgres/src/index.js", import.meta.url)),
+      },
+    },
+    // workerd's `nodejs_compat` console polyfill defines `console.createTask`
+    // as a stub that throws `ERR_METHOD_NOT_IMPLEMENTED`, and React's
+    // development build calls it for every element it creates the moment it
+    // sees the property - so every dev render fails with "The
+    // Console.createTask method is not implemented". Compiling the property
+    // away puts React on its own fallback (`() => null`). Production builds of
+    // React never create tasks, so nothing is lost.
+    define: { "console.createTask": "undefined" },
     plugins: [
       vinext(),
       sites(),

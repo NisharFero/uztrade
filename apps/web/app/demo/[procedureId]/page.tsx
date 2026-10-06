@@ -7,7 +7,7 @@ export const dynamic = "force-dynamic";
 
 export async function generateMetadata({ params }: { params: Promise<{ procedureId: string }> }) {
   const { procedureId } = await params;
-  return { title: `Demo pack ${procedureId} · UzTrade` };
+  return { title: `Demo pack ${procedureId} · Uzbekistan Trade Platform` };
 }
 
 /** Every demo document and value for a procedure, to download and upload by hand

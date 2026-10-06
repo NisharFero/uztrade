@@ -1,0 +1,126 @@
+{
+  "about": "What the intake agent must do with a trader's words. Every `procedureId` is checked against the published catalogue before the case runs, so a wrong expectation fails as bad gold rather than as a product bug.",
+  "cases": [
+    {
+      "id": "tea-export-train",
+      "message": "export 60 tonnes of tea from Tashkent to Moscow by train",
+      "expect": { "status": "confirm", "procedureId": "868", "term": "tea", "category": "tea", "direction": "export", "mode": "train", "caseTitle": "Export of tea by train" },
+      "why": "The original hand-checked procedure; if this moves, the corpus or the lookup moved."
+    },
+    {
+      "id": "tomatoes-export-train",
+      "message": "export 20 tonnes of tomatoes from Tashkent to Almaty by train",
+      "expect": { "status": "confirm", "procedureId": "325", "term": "tomatoes", "category": "fresh fruits and vegetables", "direction": "export", "mode": "train", "caseTitle": "Export of tomatoes by train" },
+      "why": "A product named inside a category: the case is for tomatoes, published as fresh fruits and vegetables."
+    },
+    {
+      "id": "raisins-dried",
+      "message": "export 20 tonnes of raisins from Tashkent to Almaty by train",
+      "expect": { "status": "confirm", "procedureId": "306", "term": "raisins", "category": "dried fruits", "direction": "export", "mode": "train" },
+      "why": "Raisins are only ever dried, so no question is needed."
+    },
+    {
+      "id": "apricots-ambiguous",
+      "message": "export apricots by train",
+      "expect": { "status": "asking", "slot": "commodity", "messageMatches": "fresh or dried" },
+      "why": "Apricots are published both ways; intake must ask rather than pick."
+    },
+    {
+      "id": "yoghurt-import-road",
+      "message": "import 12 tonnes of yoghurt from Almaty to Tashkent by road",
+      "replies": ["The whole import"],
+      "expect": { "status": "confirm", "procedureId": "109", "term": "yoghurt", "category": "dairy products", "direction": "import", "mode": "road", "regime": "standard", "caseTitle": "Import of yoghurt by road" },
+      "why": "A category unreachable before the corpus grew; also the regime question, since dairy by road is published as a full import and as a clearance."
+    },
+    {
+      "id": "yoghurt-clearance",
+      "message": "import 12 tonnes of yoghurt from Almaty to Tashkent by road",
+      "replies": ["Customs clearance only — the goods are already at the border"],
+      "expect": { "status": "confirm", "regime": "clearance", "direction": "import", "mode": "road", "category": "dairy products" },
+      "why": "The other answer to the same question must reach a clearance procedure, not the full import."
+    },
+    {
+      "id": "carpets-export-train",
+      "message": "export 5 tonnes of carpets from Tashkent to Moscow by train",
+      "expect": { "status": "confirm", "procedureId": "1052", "term": "carpets", "category": "carpets", "direction": "export", "mode": "train", "caseTitle": "Export of carpets by train" },
+      "why": "One published treatment only, so no regime question."
+    },
+    {
+      "id": "medicines-import-air",
+      "message": "import 2 tonnes of medicines from Istanbul to Tashkent by air",
+      "replies": ["The whole import"],
+      "expect": { "status": "confirm", "category": "pharmaceutical products", "term": "medicines", "direction": "import", "mode": "air", "regime": "standard" },
+      "why": "Medicines reach pharmaceutical products; air imports are published as a full import and as a clearance."
+    },
+    {
+      "id": "cement-export-train",
+      "message": "export 60 tonnes of cement from Tashkent to Almaty by train",
+      "expect": { "status": "confirm", "category": "cement", "term": "cement", "direction": "export", "mode": "train" },
+      "why": "A dense bulk category: the load must size against the wagon's weight limit, not the 30 t default."
+    },
+    {
+      "id": "walnuts-to-turkey",
+      "message": "export 5 tonnes of walnuts to Turkey by air",
+      "expect": { "status": "asking", "slot": "commodity" },
+      "expectNot": { "category": "meat and meat products" },
+      "why": "\"Turkey\" is the country. Reading it as poultry was a real bug; walnuts themselves are not published."
+    },
+    {
+      "id": "juice-import-train",
+      "message": "import 20 tonnes of apple juice from Almaty to Tashkent by train",
+      "expect": { "status": "confirm", "category": "fruit and vegetable juices", "term": "apple juice", "direction": "import", "mode": "train" },
+      "why": "Juice before fruit: apple juice is 2009, not apples."
+    },
+    {
+      "id": "rail-logistics",
+      "message": "arrange cargo transportation by train, 40 tonnes from Tashkent to Almaty",
+      "expect": { "status": "confirm", "category": "any cargo", "kind": "logistics", "mode": "train" },
+      "why": "Asking for carriage is not naming goods; it reaches the rail-logistics procedure."
+    },
+    {
+      "id": "mineral-fertilizer",
+      "message": "export 60 tonnes of urea fertilizer from Tashkent to Almaty by train",
+      "expect": { "status": "confirm", "category": "mineral fertilizers", "direction": "export", "mode": "train" },
+      "why": "Mineral fertilizers are their own category, distinct from the animal or vegetable ones."
+    },
+    {
+      "id": "tea-import-direction-conflict",
+      "message": "import 30 tonnes of tea from Tashkent to Moscow by train",
+      "expect": { "status": "asking", "slot": "direction", "messageMatches": "You chose import" },
+      "why": "The route decides: Tashkent to Moscow is an export, whatever the trader typed."
+    },
+    {
+      "id": "small-talk",
+      "message": "what is the weather like today",
+      "expect": { "status": "declined" },
+      "why": "Not a shipment."
+    },
+    {
+      "id": "procedure-question",
+      "message": "What documents are needed for export?",
+      "expect": { "status": "declined" },
+      "why": "A procedure question belongs to the FAQ, not to case intake."
+    },
+    {
+      "id": "saffron-nothing-fits",
+      "needs": "model",
+      "message": "export 2 tonnes of saffron by air to Dubai",
+      "expect": { "status": "asking", "slot": "commodity", "messageMatches": "No published procedure covers saffron" },
+      "why": "Saffron is a spice; nothing published covers it, and the refusal must name the goods."
+    },
+    {
+      "id": "silk-scarves-proposal",
+      "needs": "model",
+      "message": "export silk scarves by air",
+      "expect": { "status": "asking", "slot": "commodity", "proposalCategory": "textile and garment", "proposalTerm": "silk scarves" },
+      "why": "Not in the lexicon, but plainly a textile: the nearest published category is proposed with its reasoning, and waits for a yes."
+    },
+    {
+      "id": "russian-message",
+      "needs": "model",
+      "message": "вывозим 20 тонн чая из Ташкента в Алматы поездом",
+      "expect": { "status": "confirm", "category": "tea", "direction": "export", "mode": "train" },
+      "why": "A message the rules cannot read is restated by the model, and the rules decide from the restatement."
+    }
+  ]
+}

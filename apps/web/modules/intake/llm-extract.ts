@@ -33,6 +33,7 @@ const QUESTION: Record<Slot, string> = {
   commodity: "what goods are moving",
   direction: "export from or import into Uzbekistan",
   mode: "how the goods travel",
+  regime: "the whole export/import, or customs clearance only",
   quantity: "how much",
   route: "from where to where",
 };

@@ -19,10 +19,15 @@ const procedures = PROCEDURE_IDS.map((id) => {
   return `${p.title} (procedure ${id}, ${p.stepsCount} steps, published ${p.timeframe[0]}–${p.timeframe[1]} h)`;
 });
 
+/* What is covered, said in a few lines. Listing all 243 titles was an answer
+   nobody could read - the procedures page is where the list belongs. */
+const goodsCategories = [...new Set(PROCEDURE_IDS.map((id) => CATALOGUE[id].goods))].filter((g) => g !== "any cargo").sort();
+const byKind = (kind: string) => PROCEDURE_IDS.filter((id) => CATALOGUE[id].kind === kind).length;
+
 export const FAQ: FaqEntry[] = [
   {
     id: "what",
-    question: "What does UzTrade do?",
+    question: "What does the Uzbekistan Trade Platform do?",
     answer: [
       "You describe a shipment in the chat. It checks what you're moving, export or import, how, how much and the route against the published procedures, then opens one case and walks you through it one step at a time.",
       "Agent steps run by themselves; your steps show exactly what's needed and wait for you.",
@@ -32,8 +37,23 @@ export const FAQ: FaqEntry[] = [
   {
     id: "supported",
     question: "Which shipments are supported?",
-    answer: [`${procedures.length} published procedures:`, ...procedures],
-    keywords: ["supported", "procedure", "procedures", "goods", "tea", "fruit", "fruits", "vegetables", "dried", "juice", "juices", "fertilizer", "fertilizers", "cargo", "which", "shipments", "cover", "move"],
+    answer: [
+      `${procedures.length} published procedures: ${byKind("customs")} customs, ${byKind("logistics")} logistics and ${byKind("service")} services.`,
+      `Goods: ${goodsCategories.join(", ")} — plus rail transport for any cargo.`,
+      "Each is published for one direction (export or import) and one transport mode, and many goods are published both as the whole trade and as customs clearance on its own. Name the product you are moving and the matching procedure is found for it.",
+    ],
+    keywords: [
+      "supported",
+      "procedure",
+      "procedures",
+      "goods",
+      "cargo",
+      "which",
+      "shipments",
+      "cover",
+      "move",
+      ...goodsCategories.flatMap((g) => g.split(/[^a-z]+/i)).filter((w) => w.length > 3),
+    ],
     link: { href: "/procedures", label: "See the procedures" },
   },
   {
@@ -108,7 +128,7 @@ export const FAQ: FaqEntry[] = [
   },
   {
     id: "payments",
-    question: "Does UzTrade pay fees for me?",
+    question: "Does the platform pay fees for me?",
     answer: ["No. A payment step gives you a reference and waits for your receipt, which is then checked against the bill it pays."],
     keywords: ["pay", "payment", "payments", "fee", "fees", "bank", "receipt", "money"],
   },

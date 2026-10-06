@@ -60,6 +60,9 @@ export async function createCase(input: {
   matchedBy: string;
   /** The shipment workflow's title, e.g. "Export of tomatoes by train". */
   title?: string;
+  /** The goods as intake settled them, e.g. "cheese" rather than the
+   *  procedure's category "dairy products". */
+  goods?: string;
 }): Promise<CaseWithBlocks> {
   const procedure = await getProcedure(input.procedureId);
   if (!procedure) throw new Error(`Unknown procedure ${input.procedureId}`);
@@ -72,7 +75,8 @@ export async function createCase(input: {
     id,
     procedureId: procedure.id,
     title: input.title ?? procedure.title,
-    goods: procedure.goods,
+    // The goods as intake settled them; the category is on the procedure.
+    goods: input.goods?.trim() || procedure.goods,
     query: input.query,
     matchedBy: input.matchedBy,
     status: "active",

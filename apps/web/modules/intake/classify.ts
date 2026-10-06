@@ -1,7 +1,9 @@
 import { PROCEDURE_IDS, CATALOGUE as PROCEDURE_CATALOGUE } from "../procedures/data/procedures.generated";
 import { getProcedure } from "../procedures/registry";
+import { procedureReferenceIn } from "./reference";
+export { procedureReferenceIn } from "./reference";
 import { extractShipmentFacts, type ShipmentFacts } from "../workflow/domain";
-import { lookupProcedures, type Direction, type Mode } from "./lookup";
+import { lookupProcedures, pickProcedure, regimeIn, type Direction, type Mode, type Regime } from "./lookup";
 import { buildStepPlan, type StepPlan } from "./plan";
 import { isProcedureQuestion, isTradeQuery } from "./relevance";
 import { CATEGORIES, CATEGORY_LABEL, commodityOf, type Category, type CommodityHit } from "./taxonomy";
@@ -72,6 +74,42 @@ const CATALOGUE = PROCEDURE_IDS.map((id) => {
   const p = PROCEDURE_CATALOGUE[id];
   return `${id}: ${p.title} (${p.direction}, ${p.goods}, by ${p.mode})`;
 }).join("\n");
+
+/** A trader may name a published procedure directly. This is the only
+ * lossless way to select service procedures and same-title variants: shipment
+ * taxonomy is intentionally about goods, while ids identify every workflow in
+ * the corpus. The reference is resolved before a model or commodity lookup so
+ * it cannot be "helpfully" changed into a different procedure. */
+function directMatch(query: string): Match | null {
+  const referenced = procedureReferenceIn(query);
+  if (!referenced) return null;
+  const p = PROCEDURE_CATALOGUE[referenced.id];
+  const facts = extractShipmentFacts(query);
+  const slots = slotsOf(query, facts);
+  const conflict = (slots.category && p.goods !== "any cargo" && slots.category !== p.goods)
+    || (slots.mode && p.mode !== "any" && slots.mode !== p.mode)
+    || (slots.direction && p.direction !== "transit" && slots.direction !== p.direction);
+  if (conflict) return {
+    ...classifyByRules(query), status: "declined", procedureId: null, confidence: 0,
+    reason: `The shipment details conflict with procedure ${p.id}: ${p.title}. Correct the details or select another procedure.`,
+  };
+  return {
+    status: "resolved",
+    procedureId: referenced.id,
+    confidence: 1,
+    reason: referenced.reason,
+    matchedBy: "rules",
+    shipmentFacts: { ...facts, goods: facts.goods || p.goods, mode: facts.mode ?? (p.mode === "any" ? null : p.mode) },
+    slots: {
+      ...slotsOf(query, facts),
+      commodity: facts.goods || p.goods,
+      category: p.goods,
+      direction: p.direction === "transit" ? null : p.direction,
+      mode: p.mode === "any" ? null : p.mode,
+    },
+    rationale: [referenced.reason],
+  };
+}
 
 /* ---------------------------------------------------------------- slots --- */
 
@@ -348,7 +386,7 @@ export function settleMatch(match: Match, query: string, options: IntakeOptions 
   const directions = unique(fits.map((id) => PROCEDURE_CATALOGUE[id].direction));
   if (directions.length > 1) {
     return ask(base, "direction", {
-      question: `Is the ${category} leaving Uzbekistan or coming in?`,
+      question: `${category.charAt(0).toUpperCase()}${category.slice(1)}: leaving Uzbekistan, or coming in?`,
       options: [
         { label: "Export from Uzbekistan", query: `${stem(query)} — export from Uzbekistan` },
         { label: "Import into Uzbekistan", query: `${stem(query)} — import into Uzbekistan` },
@@ -356,7 +394,7 @@ export function settleMatch(match: Match, query: string, options: IntakeOptions 
     }, fits, followUps);
   }
 
-  let pick = fits[0];
+  let pick = pickProcedure(fits)!.id;
   let reason = "";
   let confidence = slots.direction && slots.mode ? 0.95 : 0.85;
 
@@ -376,6 +414,26 @@ export function settleMatch(match: Match, query: string, options: IntakeOptions 
     reason = `${PROCEDURE_CATALOGUE[pick].title}: no transport mode was stated, and ${advice.reason}.`;
     rationale.push(`No mode stated; the load decided: ${advice.reason}.`);
     confidence = 0.75;
+  }
+
+  /* Which treatment. The corpus publishes the same goods, direction and mode
+     as a whole export or import and as customs clearance on its own, and a
+     clearance case presupposes the permits the full one produces. This path
+     cannot ask, so it takes the trader's word when they gave one and the whole
+     procedure otherwise - never whichever id happens to sort first. */
+  const regimes = unique(fits.map((id) => PROCEDURE_CATALOGUE[id].regime as Regime));
+  if (regimes.length > 1) {
+    const asked = regimeIn(query);
+    const chosen: Regime = asked && regimes.includes(asked) ? asked : regimes.includes("standard") ? "standard" : regimes[0];
+    const narrowed = fits.filter((id) => PROCEDURE_CATALOGUE[id].regime === chosen);
+    if (narrowed.length) {
+      pick = pickProcedure(narrowed)!.id;
+      rationale.push(
+        asked
+          ? `Treatment: ${chosen}, as asked for.`
+          : `Treatment: ${chosen} — ${regimes.join(" and ")} are both published, and the whole procedure is the safe reading.`,
+      );
+    }
   }
 
   const p = PROCEDURE_CATALOGUE[pick];
@@ -409,6 +467,12 @@ export async function classify(query: string, apiKey?: string, options: IntakeOp
 }
 
 async function settleWithLlm(query: string, apiKey: string | undefined, options: IntakeOptions): Promise<Match> {
+  const direct = directMatch(query);
+  if (direct) return direct;
+  if (/\bprocedure\s*(?:id\s*)?[#:]?\s*\d+/i.test(query)) return {
+    ...classifyByRules(query), status: "declined", procedureId: null, confidence: 0,
+    reason: "Select one published procedure to start, or ask about it without opening a case.",
+  };
   if (apiKey) {
     try {
       const match = await classifyByLlm(query, apiKey);

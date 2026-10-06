@@ -1,6 +1,5 @@
 import { getRuntimeEnv } from "@/modules/runtime/env";
 const env = getRuntimeEnv();
-import { CATALOGUE } from "../../../modules/procedures/data/procedures.generated";
 import type { ShipmentFacts } from "../../../modules/workflow/domain";
 import { openCaseFromIntake } from "../../../modules/cases/orchestration";
 import { buildDagProjection } from "../../../modules/workflow/dag-projection";
@@ -11,8 +10,14 @@ import { buildStepPlan } from "../../../modules/intake/plan";
 import { llmFromEnv, type LlmEnv } from "../../../modules/ai/llm";
 import { agenticAiFromEnv } from "../../../modules/workflow/agentic-ai";
 import { portalsFromEnv, type PortalEnv } from "../../../modules/portals/client";
+import { jsonBody, routeError } from "../../../modules/shared/http";
 
-const SLOTS: Slot[] = ["commodity", "direction", "mode", "quantity", "route"];
+/* Vercel's default function timeout is shorter than a model call plus the work
+ * around it: reads a message with a model, and opens the case on confirm.
+ * 60 s is the Hobby plan's ceiling and well inside Pro's. */
+export const maxDuration = 60;
+
+const SLOTS: Slot[] = ["commodity", "direction", "mode", "regime", "quantity", "route"];
 
 /** One intake turn. `{message, draft, expecting}` answers the current question;
  *  `{draft, confirm: true}` re-validates the draft and, only if every detail
@@ -20,7 +25,7 @@ const SLOTS: Slot[] = ["commodity", "direction", "mode", "quantity", "route"];
  *  read (another language, typos) is read by a model and restated for the rules. */
 export async function POST(request: Request) {
   try {
-    const body = (await request.json()) as { message?: unknown; draft?: unknown; expecting?: unknown; confirm?: unknown };
+    const body = await jsonBody(request) as { message?: unknown; draft?: unknown; expecting?: unknown; confirm?: unknown };
     const draft = parseDraft(body.draft);
 
     if (body.confirm === true) {
@@ -29,11 +34,12 @@ export async function POST(request: Request) {
 
       const summary = turn.summary;
       const facts: ShipmentFacts = {
-        goods: turn.draft.commodity!.term,
-        quantity: turn.draft.quantity!.value,
-        unit: turn.draft.quantity!.unit,
-        origin: turn.draft.origin!.name,
-        destination: turn.draft.destination!.name,
+        goods: turn.draft.commodity?.term ?? summary.what,
+        hs: turn.draft.commodity?.hs || null,
+        quantity: turn.draft.quantity?.value ?? null,
+        unit: turn.draft.quantity?.unit ?? null,
+        origin: turn.draft.origin?.name ?? null,
+        destination: turn.draft.destination?.name ?? null,
         mode: turn.draft.mode,
       };
       const bindings = env as unknown as { GROQ_API_KEY?: string; GROQ_MODEL?: string; DOCAI_URL?: string };
@@ -59,6 +65,6 @@ export async function POST(request: Request) {
 
     return Response.json(await intakeTurn(draft, message, expecting, llmFromEnv(env as unknown as LlmEnv)));
   } catch (error) {
-    return Response.json({ error: error instanceof Error ? error.message : "Unexpected error" }, { status: 500 });
+    return routeError(error);
   }
 }

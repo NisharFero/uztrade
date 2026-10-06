@@ -1,14 +1,17 @@
 /* Where a procedure's workflow comes from.
  *
- * The catalogue of all 243 procedures is bundled (title, goods, mode, kind,
+ * The catalogue of all published procedures is bundled (title, goods, mode, kind,
  * counts) because listing, search and intake matching need every row. The
  * workflows are not: blocks, steps and step inputs come to 3.4 MB across the
  * corpus, so each one is a file under public/data/procedures/<id>.json, read
  * on demand and kept in memory afterwards.
  *
- * Two ways to read it, tried in order: the Worker's static assets binding, and
- * the filesystem (tests, scripts and `node --test`). Both return the same
- * object, so callers just await getProcedure(id).
+ * Three ways to read it, tried in order: the Worker's static assets binding
+ * (when one is bound), the application's own origin (the Worker has no
+ * filesystem - `public/` is reachable only over HTTP, and the request in hand
+ * says which host to ask), and the filesystem (tests, scripts and
+ * `node --test`). All three return the same object, so callers just await
+ * getProcedure(id).
  */
 
 import { CATALOGUE, PROCEDURE_IDS, type Procedure, type ProcedureSummary } from "./data/procedures.generated";
@@ -41,6 +44,47 @@ async function fromAssets(id: string): Promise<Procedure | undefined> {
   }
 }
 
+/* The origin that serves public/, remembered from a request. A streamed
+ * response keeps working after its request scope has closed - where
+ * next/headers no longer answers - and a procedure first needed mid-stream
+ * would otherwise have nowhere to be fetched from. */
+let knownOrigin: string | null = null;
+
+/** Called by routes that stream, with the request's own URL. */
+export function rememberOrigin(url: string): void {
+  try {
+    knownOrigin = new URL(url).origin;
+  } catch {
+    // not a URL; keep what we had
+  }
+}
+
+async function fromKnownOrigin(id: string): Promise<Procedure | undefined> {
+  if (!knownOrigin) return undefined;
+  try {
+    const response = await fetch(`${knownOrigin}/data/procedures/${id}.json`);
+    return response.ok ? ((await response.json()) as Procedure) : undefined;
+  } catch {
+    return undefined;
+  }
+}
+
+async function fromOrigin(id: string): Promise<Procedure | undefined> {
+  try {
+    // Only inside a request: the incoming headers name the host that serves
+    // public/, and a Worker can only fetch an absolute URL.
+    const { headers } = (await import("next/headers")) as typeof import("next/headers");
+    const h = await headers();
+    const host = h.get("host");
+    if (!host) return undefined;
+    const proto = h.get("x-forwarded-proto") ?? (/^(localhost|127\.|\[::1\])/.test(host) ? "http" : "https");
+    const response = await fetch(`${proto}://${host}/data/procedures/${id}.json`);
+    return response.ok ? ((await response.json()) as Procedure) : undefined;
+  } catch {
+    return undefined; // no request in hand, or nothing serving public/
+  }
+}
+
 async function fromDisk(id: string): Promise<Procedure | undefined> {
   try {
     // The specifier is built at runtime so the Worker bundler doesn't try to
@@ -63,7 +107,7 @@ export async function getProcedure(id: string): Promise<Procedure | undefined> {
   if (running) return running;
 
   const load = (async () => {
-    const procedure = (await fromAssets(id)) ?? (await fromDisk(id));
+    const procedure = (await fromAssets(id)) ?? (await fromOrigin(id)) ?? (await fromKnownOrigin(id)) ?? (await fromDisk(id));
     if (procedure) cache.set(id, procedure);
     inFlight.delete(id);
     return procedure;

@@ -41,6 +41,7 @@ export function checkContext(
     partnerCountry: partner && !partner.assumed ? partner.place.country : null,
     direction: planningDirection(procedure.direction),
     goodsCategory: procedure.goods,
+    goodsTerm: facts.goods ?? null,
     stepNum: stepNum ?? null,
     documents: ledger.documents
       .filter((d) => d.docId !== excludeDocId && d.docType)

@@ -5,7 +5,7 @@ import FaqList from "../../components/faq/faq-list";
 
 export const dynamic = "force-dynamic";
 
-export const metadata = { title: "FAQ · UzTrade" };
+export const metadata = { title: "FAQ · Uzbekistan Trade Platform" };
 
 /** The FAQ, linked from the chat's answers. The closest answers
  *  to what was asked come first and open. */
@@ -32,7 +32,7 @@ export default async function FaqPage({ searchParams }: { searchParams: Promise<
             {matches.length ? "these answers look closest." : "here are the common questions."}
           </p>
         ) : (
-          <p className="page-lede">How UzTrade works, what it covers, and what it doesn&rsquo;t do.</p>
+          <p className="page-lede">How the Uzbekistan Trade Platform works, what it covers, and what it doesn&rsquo;t do.</p>
         )}
       </header>
 

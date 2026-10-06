@@ -1,0 +1,229 @@
+{
+  "about": "The words a trader uses for the goods, and the category the corpus publishes them under. One row per published category at least, plus the readings that are easy to get wrong. HS headings are WCO Harmonized System 2022 and identify the heading only.",
+  "cases": [
+    {
+      "words": "green tea",
+      "category": "tea",
+      "term": "tea",
+      "hs": "0902"
+    },
+    {
+      "words": "raisins",
+      "category": "dried fruits",
+      "term": "raisins",
+      "hs": "0806.20"
+    },
+    {
+      "words": "fresh tomatoes",
+      "category": "fresh fruits and vegetables",
+      "term": "tomatoes",
+      "hs": "0702"
+    },
+    {
+      "words": "apple juice",
+      "category": "fruit and vegetable juices",
+      "term": "apple juice",
+      "hs": "2009.7"
+    },
+    {
+      "words": "organic fertilizer",
+      "category": "animal or vegetable fertilizers"
+    },
+    {
+      "words": "urea fertilizer",
+      "category": "mineral fertilizers"
+    },
+    {
+      "words": "yoghurt",
+      "category": "dairy products",
+      "term": "yoghurt",
+      "hs": "0403"
+    },
+    {
+      "words": "cheese",
+      "category": "dairy products",
+      "term": "cheese",
+      "hs": "0406"
+    },
+    {
+      "words": "butter",
+      "category": "dairy products",
+      "term": "butter"
+    },
+    {
+      "words": "beef",
+      "category": "meat and meat products",
+      "term": "beef",
+      "hs": "0201"
+    },
+    {
+      "words": "sausages",
+      "category": "meat and meat products",
+      "term": "sausages"
+    },
+    {
+      "words": "eggs",
+      "category": "eggs",
+      "hs": "0407"
+    },
+    {
+      "words": "honey",
+      "category": "honey",
+      "hs": "0409"
+    },
+    {
+      "words": "chocolate",
+      "category": "confectionery",
+      "term": "chocolate"
+    },
+    {
+      "words": "biscuits",
+      "category": "confectionery",
+      "term": "biscuits"
+    },
+    {
+      "words": "pasta",
+      "category": "pasta",
+      "hs": "1902"
+    },
+    {
+      "words": "lagman noodles",
+      "category": "pasta"
+    },
+    {
+      "words": "flour",
+      "category": "flour",
+      "hs": "1101"
+    },
+    {
+      "words": "wheat",
+      "category": "cereals"
+    },
+    {
+      "words": "salt",
+      "category": "salt",
+      "hs": "2501"
+    },
+    {
+      "words": "coffee",
+      "category": "coffee",
+      "hs": "0901"
+    },
+    {
+      "words": "soft drinks",
+      "category": "carbonated beverages"
+    },
+    {
+      "words": "sunflower oil",
+      "category": "seed oil"
+    },
+    {
+      "words": "edible vegetable oil",
+      "category": "vegetable oils for consumers' use and consumption"
+    },
+    {
+      "words": "technical vegetable oil",
+      "category": "vegetable oils for technical or industrial use"
+    },
+    {
+      "words": "vegetable oils",
+      "category": "vegetable oils",
+      "why": "Unqualified: the one published export (514). The edible and technical categories only claim it when the words say which."
+    },
+    {
+      "words": "medicines",
+      "category": "pharmaceutical products"
+    },
+    {
+      "words": "ultrasound machine",
+      "category": "medical equipment"
+    },
+    {
+      "words": "perfume",
+      "category": "perfumery, cosmetic or toilet preparations"
+    },
+    {
+      "words": "washing powder",
+      "category": "washing detergents"
+    },
+    {
+      "words": "cotton yarn",
+      "category": "cotton yarn"
+    },
+    {
+      "words": "fabrics",
+      "category": "fabrics"
+    },
+    {
+      "words": "garments",
+      "category": "textile and garment"
+    },
+    {
+      "words": "carpets",
+      "category": "carpets"
+    },
+    {
+      "words": "shoes",
+      "category": "shoes"
+    },
+    {
+      "words": "jewellery",
+      "category": "jewelry"
+    },
+    {
+      "words": "furniture",
+      "category": "furniture"
+    },
+    {
+      "words": "timber",
+      "category": "wood"
+    },
+    {
+      "words": "cardboard boxes",
+      "category": "paper and cardboard products"
+    },
+    {
+      "words": "glassware",
+      "category": "glass and glass products"
+    },
+    {
+      "words": "cement",
+      "category": "cement",
+      "hs": "2523"
+    },
+    {
+      "words": "reusable packaging",
+      "category": "reusable packaging"
+    },
+    {
+      "words": "arrange cargo transportation by train",
+      "category": "any cargo"
+    },
+    {
+      "words": "export walnuts to Turkey by air",
+      "category": null,
+      "why": "Turkey is the country, not the bird - and walnuts are not published."
+    },
+    {
+      "words": "ship apples to Turkiye",
+      "category": "fresh fruits and vegetables",
+      "term": "apples",
+      "why": "The country must not swallow the goods either."
+    },
+    {
+      "words": "dried tomatoes",
+      "category": null,
+      "why": "A dried vegetable (0712) is published by nobody; the fresh procedure must not claim it."
+    },
+    {
+      "words": "saffron",
+      "category": null,
+      "why": "A spice; no published category covers it."
+    },
+    {
+      "words": "copper wire",
+      "category": null,
+      "why": "Not published; the nearest-category reasoning handles it, not the lexicon."
+    }
+  ]
+}

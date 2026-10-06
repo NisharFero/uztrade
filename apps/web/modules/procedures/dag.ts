@@ -102,7 +102,10 @@ export function procedureStats(procedure: Procedure) {
   let online = 0;
   let inPerson = 0;
   for (const b of blocks)
-    for (const s of b.steps) (/^online:/i.test(s.channel) ? online++ : inPerson++);
+    for (const s of b.steps) {
+      if (/^online:/i.test(s.channel)) online += 1;
+      else inPerson += 1;
+    }
 
   const agentSteps = blocks.reduce(
     (n, b) => n + b.steps.filter((s) => delegationOfStep(s).lane === "agent").length,

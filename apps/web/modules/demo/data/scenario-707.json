@@ -317,50 +317,19 @@
    "file": "707-08-offer-agreement-step-1.png"
   },
   {
-   "id": "receipt-of-payment-2",
-   "template": "receipt",
-   "title": "Receipt of payment — step 2",
-   "docType": "receipt_of_payment",
+   "id": "agreement-with-technological-center-10",
+   "template": "letter",
+   "title": "Agreement with Technological center (single window) — step 10",
+   "docType": "service_contract",
    "labels": [
-    "Receipt of payment"
+    "Agreement with Technological center (single window)"
    ],
    "steps": [
-    2
+    10
    ],
    "output": true,
-   "fields": {
-    "receipt_no": "R-707-002",
-    "payer": "OOO \"Bogdorchilik Resurs\"",
-    "payer_inn": "308901256",
-    "recipient": "Agency of Plant Quarantine and Protection",
-    "payment_type": "quarantine permit",
-    "amount": "245 000",
-    "date": "02.09.2026"
-   },
-   "file": "707-09-receipt-of-payment-step-2.png"
-  },
-  {
-   "id": "receipt-of-payment-12",
-   "template": "receipt",
-   "title": "Receipt of payment — step 12",
-   "docType": "receipt_of_payment",
-   "labels": [
-    "Receipt of payment"
-   ],
-   "steps": [
-    12
-   ],
-   "output": true,
-   "fields": {
-    "receipt_no": "R-707-012",
-    "payer": "OOO \"Bogdorchilik Resurs\"",
-    "payer_inn": "308901256",
-    "recipient": "JSC Uzbekistan Temir Yo'llari",
-    "payment_type": "Prepay for railway services (for fertilizers)",
-    "amount": "1 120 000",
-    "date": "07.09.2026"
-   },
-   "file": "707-10-receipt-of-payment-step-12.png"
+   "fields": {},
+   "file": "707-09-agreement-with-technological-center-step-10.png"
   },
   {
    "template": "letter",
@@ -376,7 +345,7 @@
    "fields": {},
    "body": "Certificate of state registration issued to OOO \"Bogdorchilik Resurs\" (TIN 308901256). Demo record for the shipment: 60 000 kg of granulated poultry manure, organic fertilizer, Moscow (Russia) → Tashkent (Uzbekistan), 1 wagon 54410087.",
    "id": "certificate-of-state-registration",
-   "file": "707-11-certificate-of-state-registration.png"
+   "file": "707-10-certificate-of-state-registration.png"
   },
   {
    "id": "invoice-for-payment-15",
@@ -398,32 +367,9 @@
     "supplier_inn": "200933140",
     "customer": "OOO \"Bogdorchilik Resurs\"",
     "vat_rate": "12",
-    "total": "490 000"
+    "total": "1 120 000"
    },
-   "file": "707-12-invoice-for-payment-step-15.png"
-  },
-  {
-   "id": "receipt-of-payment-16",
-   "template": "receipt",
-   "title": "Receipt of payment — step 16",
-   "docType": "receipt_of_payment",
-   "labels": [
-    "Receipt of payment"
-   ],
-   "steps": [
-    16
-   ],
-   "output": true,
-   "fields": {
-    "receipt_no": "R-707-016",
-    "payer": "OOO \"Bogdorchilik Resurs\"",
-    "payer_inn": "308901256",
-    "recipient": "Demo Customs Warehouse LLC",
-    "payment_type": "Prepay for customs warehouse services",
-    "amount": "490 000",
-    "date": "09.09.2026"
-   },
-   "file": "707-13-receipt-of-payment-step-16.png"
+   "file": "707-11-invoice-for-payment-step-15.png"
   },
   {
    "template": "letter",
@@ -440,12 +386,12 @@
    "fields": {},
    "body": "OOO \"Bogdorchilik Resurs\" (TIN 308901256) applies for: letter to railway station. Shipment: 60 000 kg of granulated poultry manure, organic fertilizer, Moscow (Russia) → Tashkent (Uzbekistan), 1 wagon 54410087. Contract UZ-707/2026-01 of 01.09.2026.",
    "id": "letter-to-railway-station",
-   "file": "707-14-letter-to-railway-station.png"
+   "file": "707-12-letter-to-railway-station.png"
   },
   {
    "template": "letter",
    "title": "Certificate on availability of funds at client's account",
-   "docType": null,
+   "docType": "funds_certificate",
    "labels": [
     "Certificate on availability of funds at client's account"
    ],
@@ -454,9 +400,8 @@
    ],
    "output": false,
    "fields": {},
-   "body": "Certificate on availability of funds at client's account issued to OOO \"Bogdorchilik Resurs\" (TIN 308901256). Demo record for the shipment: 60 000 kg of granulated poultry manure, organic fertilizer, Moscow (Russia) → Tashkent (Uzbekistan), 1 wagon 54410087.",
    "id": "certificate-on-availability-of-funds-at-client-s",
-   "file": "707-15-certificate-on-availability-of-funds-at-client-s.png"
+   "file": "707-13-certificate-on-availability-of-funds-at-client-s.png"
   },
   {
    "id": "import-railway-bill-20",
@@ -485,7 +430,7 @@
     "seals": "RU 5520731",
     "documents_attached": "Invoice INV-707/2026-031"
    },
-   "file": "707-16-import-railway-bill-step-20.png"
+   "file": "707-14-import-railway-bill-step-20.png"
   },
   {
    "template": "letter",
@@ -503,7 +448,7 @@
    "fields": {},
    "body": "OOO \"Bogdorchilik Resurs\" (TIN 308901256) applies for: application for preliminary visual inspection. Shipment: 60 000 kg of granulated poultry manure, organic fertilizer, Moscow (Russia) → Tashkent (Uzbekistan), 1 wagon 54410087. Contract UZ-707/2026-01 of 01.09.2026.",
    "id": "application-for-preliminary-visual-inspection",
-   "file": "707-17-application-for-preliminary-visual-inspection.png"
+   "file": "707-15-application-for-preliminary-visual-inspection.png"
   },
   {
    "template": "letter",
@@ -519,12 +464,12 @@
    "fields": {},
    "body": "OOO \"Bogdorchilik Resurs\" (TIN 308901256) applies for: electronic application for preliminary visual inspection. Shipment: 60 000 kg of granulated poultry manure, organic fertilizer, Moscow (Russia) → Tashkent (Uzbekistan), 1 wagon 54410087. Contract UZ-707/2026-01 of 01.09.2026.",
    "id": "electronic-application-for-preliminary-visual-in",
-   "file": "707-18-electronic-application-for-preliminary-visual-in.png"
+   "file": "707-16-electronic-application-for-preliminary-visual-in.png"
   },
   {
    "template": "letter",
    "title": "Contract for customs warehouse services",
-   "docType": null,
+   "docType": "service_contract",
    "labels": [
     "Contract for customs warehouse services"
    ],
@@ -533,26 +478,8 @@
    ],
    "output": false,
    "fields": {},
-   "body": "Contract for customs warehouse services for the shipment 60 000 kg of granulated poultry manure, organic fertilizer, Moscow (Russia) → Tashkent (Uzbekistan), 1 wagon 54410087, contract UZ-707/2026-01 of 01.09.2026.",
    "id": "contract-for-customs-warehouse-services",
-   "file": "707-19-contract-for-customs-warehouse-services.png"
-  },
-  {
-   "template": "letter",
-   "title": "Documents requried to complete declaration",
-   "docType": null,
-   "labels": [
-    "Documents requried to complete declaration"
-   ],
-   "steps": [
-    24,
-    52
-   ],
-   "output": false,
-   "fields": {},
-   "body": "Documents requried to complete declaration for the shipment 60 000 kg of granulated poultry manure, organic fertilizer, Moscow (Russia) → Tashkent (Uzbekistan), 1 wagon 54410087, contract UZ-707/2026-01 of 01.09.2026.",
-   "id": "documents-requried-to-complete-declaration",
-   "file": "707-20-documents-requried-to-complete-declaration.png"
+   "file": "707-17-contract-for-customs-warehouse-services.png"
   },
   {
    "template": "declaration",
@@ -580,12 +507,12 @@
     "customs_value": "21 000.00 USD"
    },
    "id": "cargo-customs-declaration",
-   "file": "707-21-cargo-customs-declaration.png"
+   "file": "707-18-cargo-customs-declaration.png"
   },
   {
    "template": "letter",
    "title": "Cargo delivery control book (railway)",
-   "docType": null,
+   "docType": "cargo_control_book",
    "labels": [
     "Cargo delivery control book (railway)"
    ],
@@ -594,9 +521,8 @@
    ],
    "output": false,
    "fields": {},
-   "body": "Cargo delivery control book (railway) for 54410087, operated by JSC Russian Railways. Shipment: 60 000 kg of granulated poultry manure, organic fertilizer, Moscow (Russia) → Tashkent (Uzbekistan), 1 wagon 54410087.",
    "id": "cargo-delivery-control-book",
-   "file": "707-22-cargo-delivery-control-book.png"
+   "file": "707-19-cargo-delivery-control-book.png"
   },
   {
    "id": "offer-agreement-31",
@@ -613,34 +539,11 @@
    "fields": {
     "agreement_no": "26147070031",
     "agreement_date": "17.09.2026",
-    "amount": "780 000",
+    "amount": "490 000",
     "service": "Inspection services",
     "units": "1"
    },
-   "file": "707-23-offer-agreement-step-31.png"
-  },
-  {
-   "id": "receipt-of-payment-32",
-   "template": "receipt",
-   "title": "Receipt of payment — step 32",
-   "docType": "receipt_of_payment",
-   "labels": [
-    "Receipt of payment"
-   ],
-   "steps": [
-    32
-   ],
-   "output": true,
-   "fields": {
-    "receipt_no": "R-707-032",
-    "payer": "OOO \"Bogdorchilik Resurs\"",
-    "payer_inn": "308901256",
-    "recipient": "Agency of Plant Quarantine and Protection",
-    "payment_type": "transport unit opening act",
-    "amount": "780 000",
-    "date": "17.09.2026"
-   },
-   "file": "707-24-receipt-of-payment-step-32.png"
+   "file": "707-20-offer-agreement-step-31.png"
   },
   {
    "template": "phyto",
@@ -668,7 +571,7 @@
     "issue_date": "18.09.2026"
    },
    "id": "phytosanitary-certificate-of-the-exporter-s-coun",
-   "file": "707-25-phytosanitary-certificate-of-the-exporter-s-coun.png"
+   "file": "707-21-phytosanitary-certificate-of-the-exporter-s-coun.png"
   },
   {
    "id": "fumigation-offer-agreement-35",
@@ -685,34 +588,11 @@
    "fields": {
     "agreement_no": "26147070035",
     "agreement_date": "19.09.2026",
-    "amount": "1 500 000",
+    "amount": "780 000",
     "service": "Fumigation offer agreement",
     "units": "1"
    },
-   "file": "707-26-fumigation-offer-agreement-step-35.png"
-  },
-  {
-   "id": "receipt-of-payment-36",
-   "template": "receipt",
-   "title": "Receipt of payment — step 36",
-   "docType": "receipt_of_payment",
-   "labels": [
-    "Receipt of payment"
-   ],
-   "steps": [
-    36
-   ],
-   "output": true,
-   "fields": {
-    "receipt_no": "R-707-036",
-    "payer": "OOO \"Bogdorchilik Resurs\"",
-    "payer_inn": "308901256",
-    "recipient": "Agency of Plant Quarantine and Protection",
-    "payment_type": "fumigation",
-    "amount": "1 500 000",
-    "date": "19.09.2026"
-   },
-   "file": "707-27-receipt-of-payment-step-36.png"
+   "file": "707-22-fumigation-offer-agreement-step-35.png"
   },
   {
    "template": "letter",
@@ -728,7 +608,7 @@
    "fields": {},
    "body": "OOO \"Bogdorchilik Resurs\" (TIN 308901256) applies for: application for wagon handover. Shipment: 60 000 kg of granulated poultry manure, organic fertilizer, Moscow (Russia) → Tashkent (Uzbekistan), 1 wagon 54410087. Contract UZ-707/2026-01 of 01.09.2026.",
    "id": "application-for-wagon-handover",
-   "file": "707-28-application-for-wagon-handover.png"
+   "file": "707-23-application-for-wagon-handover.png"
   },
   {
    "template": "smgs",
@@ -757,7 +637,7 @@
     "documents_attached": "Invoice INV-707/2026-031"
    },
    "id": "export-railway-bill",
-   "file": "707-29-export-railway-bill.png"
+   "file": "707-24-export-railway-bill.png"
   },
   {
    "template": "letter",
@@ -773,7 +653,7 @@
    "fields": {},
    "body": "OOO \"Bogdorchilik Resurs\" (TIN 308901256) applies for: application for returning empty wagons. Shipment: 60 000 kg of granulated poultry manure, organic fertilizer, Moscow (Russia) → Tashkent (Uzbekistan), 1 wagon 54410087. Contract UZ-707/2026-01 of 01.09.2026.",
    "id": "application-for-returning-empty-wagons",
-   "file": "707-30-application-for-returning-empty-wagons.png"
+   "file": "707-25-application-for-returning-empty-wagons.png"
   },
   {
    "id": "duplicate-of-railway-bill-with-datestamp-40",
@@ -803,7 +683,7 @@
     "documents_attached": "Invoice INV-707/2026-031"
    },
    "stamp": "datestamp",
-   "file": "707-31-duplicate-of-railway-bill-with-datestamp-step-40.png"
+   "file": "707-26-duplicate-of-railway-bill-with-datestamp-step-40.png"
   },
   {
    "id": "offer-agreement-for-veterinary-certificate-42",
@@ -820,11 +700,11 @@
    "fields": {
     "agreement_no": "26147070042",
     "agreement_date": "22.09.2026",
-    "amount": "2 350 000",
+    "amount": "1 500 000",
     "service": "veterinary certificate",
     "units": "1"
    },
-   "file": "707-32-offer-agreement-for-veterinary-certificate-step-.png"
+   "file": "707-27-offer-agreement-for-veterinary-certificate-step-.png"
   },
   {
    "template": "vet_cert",
@@ -848,7 +728,7 @@
     "vet_permit_no": "VP-707-2026"
    },
    "id": "veterinary-certificate-from-the-exporter-s-count",
-   "file": "707-33-veterinary-certificate-from-the-exporter-s-count.png"
+   "file": "707-28-veterinary-certificate-from-the-exporter-s-count.png"
   },
   {
    "template": "letter",
@@ -864,35 +744,12 @@
    "fields": {},
    "body": "OOO \"Bogdorchilik Resurs\" (TIN 308901256) applies for: online application for veterinary certificate. Shipment: 60 000 kg of granulated poultry manure, organic fertilizer, Moscow (Russia) → Tashkent (Uzbekistan), 1 wagon 54410087. Contract UZ-707/2026-01 of 01.09.2026.",
    "id": "online-application-for-veterinary-certificate",
-   "file": "707-34-online-application-for-veterinary-certificate.png"
-  },
-  {
-   "id": "receipt-of-payment-44",
-   "template": "receipt",
-   "title": "Receipt of payment — step 44",
-   "docType": "receipt_of_payment",
-   "labels": [
-    "Receipt of payment"
-   ],
-   "steps": [
-    44
-   ],
-   "output": true,
-   "fields": {
-    "receipt_no": "R-707-044",
-    "payer": "OOO \"Bogdorchilik Resurs\"",
-    "payer_inn": "308901256",
-    "recipient": "State Committee of Veterinary (demo)",
-    "payment_type": "veterinary certificate",
-    "amount": "2 350 000",
-    "date": "23.09.2026"
-   },
-   "file": "707-35-receipt-of-payment-step-44.png"
+   "file": "707-29-online-application-for-veterinary-certificate.png"
   },
   {
    "template": "letter",
    "title": "Certificate of analysis for fertilizers",
-   "docType": null,
+   "docType": "quality_certificate",
    "labels": [
     "Certificate of analysis for fertilizers"
    ],
@@ -901,14 +758,13 @@
    ],
    "output": false,
    "fields": {},
-   "body": "Certificate of analysis for fertilizers issued to OOO \"Bogdorchilik Resurs\" (TIN 308901256). Demo record for the shipment: 60 000 kg of granulated poultry manure, organic fertilizer, Moscow (Russia) → Tashkent (Uzbekistan), 1 wagon 54410087.",
    "id": "certificate-of-analysis-for-fertilizers",
-   "file": "707-36-certificate-of-analysis-for-fertilizers.png"
+   "file": "707-30-certificate-of-analysis-for-fertilizers.png"
   },
   {
    "template": "letter",
    "title": "Quality certificate",
-   "docType": null,
+   "docType": "quality_certificate",
    "labels": [
     "Quality certificate"
    ],
@@ -917,9 +773,8 @@
    ],
    "output": false,
    "fields": {},
-   "body": "Quality certificate issued to OOO \"Bogdorchilik Resurs\" (TIN 308901256). Demo record for the shipment: 60 000 kg of granulated poultry manure, organic fertilizer, Moscow (Russia) → Tashkent (Uzbekistan), 1 wagon 54410087.",
    "id": "quality-certificate",
-   "file": "707-37-quality-certificate.png"
+   "file": "707-31-quality-certificate.png"
   },
   {
    "template": "letter",
@@ -935,12 +790,12 @@
    "fields": {},
    "body": "Normative documents on standardization (fertilizers) for the shipment 60 000 kg of granulated poultry manure, organic fertilizer, Moscow (Russia) → Tashkent (Uzbekistan), 1 wagon 54410087, contract UZ-707/2026-01 of 01.09.2026.",
    "id": "normative-documents-on-standardization",
-   "file": "707-38-normative-documents-on-standardization.png"
+   "file": "707-32-normative-documents-on-standardization.png"
   },
   {
    "template": "letter",
    "title": "Registration certificate",
-   "docType": null,
+   "docType": "registration_certificate",
    "labels": [
     "Registration certificate"
    ],
@@ -949,9 +804,8 @@
    ],
    "output": false,
    "fields": {},
-   "body": "Registration certificate issued to OOO \"Bogdorchilik Resurs\" (TIN 308901256). Demo record for the shipment: 60 000 kg of granulated poultry manure, organic fertilizer, Moscow (Russia) → Tashkent (Uzbekistan), 1 wagon 54410087.",
    "id": "registration-certificate",
-   "file": "707-39-registration-certificate.png"
+   "file": "707-33-registration-certificate.png"
   },
   {
    "template": "invoice_for_payment",
@@ -972,33 +826,10 @@
     "supplier_inn": "200933140",
     "customer": "OOO \"Bogdorchilik Resurs\"",
     "vat_rate": "12",
-    "total": "375 000"
+    "total": "2 350 000"
    },
    "id": "electronic-invoice-for-payment",
-   "file": "707-40-electronic-invoice-for-payment.png"
-  },
-  {
-   "id": "bank-payment-receipt-49",
-   "template": "receipt",
-   "title": "Bank payment receipt — step 49",
-   "docType": "receipt_of_payment",
-   "labels": [
-    "Bank payment receipt"
-   ],
-   "steps": [
-    49
-   ],
-   "output": true,
-   "fields": {
-    "receipt_no": "R-707-049",
-    "payer": "OOO \"Bogdorchilik Resurs\"",
-    "payer_inn": "308901256",
-    "recipient": "Certification body of fertilizers (demo)",
-    "payment_type": "certificate of conformity",
-    "amount": "375 000",
-    "date": "26.09.2026"
-   },
-   "file": "707-41-bank-payment-receipt-step-49.png"
+   "file": "707-34-electronic-invoice-for-payment.png"
   },
   {
    "template": "vet_cert",
@@ -1022,7 +853,7 @@
     "vet_permit_no": "VP-707-2026"
    },
    "id": "veterinary-certificate-form-2",
-   "file": "707-42-veterinary-certificate-form-2.png"
+   "file": "707-35-veterinary-certificate-form-2.png"
   },
   {
    "template": "ct1",
@@ -1046,12 +877,12 @@
     "exported_to": "Uzbekistan"
    },
    "id": "certificate-of-origin-of-the-exporter-s-country",
-   "file": "707-43-certificate-of-origin-of-the-exporter-s-country.png"
+   "file": "707-36-certificate-of-origin-of-the-exporter-s-country.png"
   },
   {
-   "template": "letter",
+   "template": "declaration",
    "title": "Export declaration of the exporter's country",
-   "docType": null,
+   "docType": "customs_declaration",
    "labels": [
     "Export declaration of the exporter's country"
    ],
@@ -1059,10 +890,22 @@
     52
    ],
    "output": false,
-   "fields": {},
-   "body": "Export declaration of the exporter's country for the shipment 60 000 kg of granulated poultry manure, organic fertilizer, Moscow (Russia) → Tashkent (Uzbekistan), 1 wagon 54410087, contract UZ-707/2026-01 of 01.09.2026.",
+   "fields": {
+    "decl_type": "IM40",
+    "exporter": "OOO \"Podmoskovnye Udobreniya\"",
+    "consignee": "OOO \"Bogdorchilik Resurs\"",
+    "origin_country": "Russia",
+    "destination_country": "Uzbekistan",
+    "delivery_terms": "CPT Tashkent",
+    "invoice_amount": "21 000.00 USD",
+    "hs_code": "3101 00 000 0",
+    "gross_weight": "61 200",
+    "net_weight": "60 000",
+    "procedure_code": "40",
+    "customs_value": "21 000.00 USD"
+   },
    "id": "export-declaration-of-the-exporter-s-country",
-   "file": "707-44-export-declaration-of-the-exporter-s-country.png"
+   "file": "707-37-export-declaration-of-the-exporter-s-country.png"
   },
   {
    "id": "invoice-for-payment-57",
@@ -1084,32 +927,9 @@
     "supplier_inn": "200933140",
     "customer": "OOO \"Bogdorchilik Resurs\"",
     "vat_rate": "12",
-    "total": "18 400 000"
+    "total": "375 000"
    },
-   "file": "707-45-invoice-for-payment-step-57.png"
-  },
-  {
-   "id": "receipt-of-payment-for-warehouse-services-58",
-   "template": "receipt",
-   "title": "Receipt of payment for warehouse services — step 58",
-   "docType": "receipt_of_payment",
-   "labels": [
-    "Receipt of payment for warehouse services"
-   ],
-   "steps": [
-    58
-   ],
-   "output": true,
-   "fields": {
-    "receipt_no": "R-707-058",
-    "payer": "OOO \"Bogdorchilik Resurs\"",
-    "payer_inn": "308901256",
-    "recipient": "Demo Customs Warehouse LLC",
-    "payment_type": "customs warehouse services",
-    "amount": "18 400 000",
-    "date": "29.09.2026"
-   },
-   "file": "707-46-receipt-of-payment-for-warehouse-services-step-5.png"
+   "file": "707-38-invoice-for-payment-step-57.png"
   }
  ]
 }

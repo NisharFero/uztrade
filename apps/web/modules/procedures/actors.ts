@@ -1,6 +1,6 @@
 /* Who is involved in a step.
  *
- * `performedBy` is blank on 226 of the 244 steps, so the actor has to be
+ * `performedBy` is blank on almost every step, so the actor has to be
  * derived from the entity you deal with plus the channel you deal through.
  * Two different questions are answered here and they must not be conflated:
  *
@@ -13,7 +13,7 @@
 
 import type { ProcedureBlock, ProcedureStep } from "./data/procedures.generated";
 
-export type Actor = "trader" | "agent" | "bank" | "government" | "transport";
+export type Actor = "trader" | "agent" | "bank" | "government" | "transport" | "commercial";
 
 export const ACTORS: { id: Actor; label: string; blurb: string }[] = [
   { id: "trader", label: "Trader", blurb: "You and your premises" },
@@ -21,20 +21,32 @@ export const ACTORS: { id: Actor; label: string; blurb: string }[] = [
   { id: "bank", label: "Bank", blurb: "Payments" },
   { id: "government", label: "Government", blurb: "Ministries & customs" },
   { id: "transport", label: "Transport", blurb: "Carriers & terminals" },
+  { id: "commercial", label: "Commercial", blurb: "Insurers and private providers" },
 ];
 
 /* Rule order is load-bearing. `Customs post "Avia yuklar" at the airport's
    warehouse` must match customs before warehouse, and `Customs warehouse` is a
    bonded cargo facility (unloading, placement, departure) rather than a
    government office - so it is matched explicitly before both. */
-const COUNTERPARTY_RULES: [RegExp, Exclude<Actor, "agent">][] = [
+export const COUNTERPARTY_RULES: [RegExp, Exclude<Actor, "agent">][] = [
   [/\bbank\b|banking system/i, "bank"],
+  // A private counterparty before the state rules, so "Insurance company"
+  // is not swept up as an official body.
+  [/insurance/i, "commercial"],
   // Bonded/again physical cargo facilities that happen to contain "customs".
   [/customs warehouse/i, "transport"],
   // Government offices, including customs posts.
   [/customs post|customs control|group of customs/i, "government"],
   [
-    /quarantine|karantin|expertiza|single window|singlewindow|state services|my\.gov|sanitary|epidemiolog|ministry|committee|agency of plant|border checkpoint|assalom agro|standard/i,
+    /quarantine|karantin|expertiza|single window|singlewindow|state services|my\.gov|sanitary|epidemiolog|ministry|committee|agency of plant|border checkpoint|assalom agro|standard|comittee/i,
+    "government",
+  ],
+  // State systems and bodies the wider corpus names: border posts (the single
+  // most common entity of all), the customs transit system, the tax portal's
+  // document exchange, testing and certification centres, the pharmaceutical
+  // register and the export promotion agency.
+  [
+    /border crossing point|e-tranzit|electronic document management|uztest|research and quality control|certification body|nature protection|export promotion|darmon/i,
     "government",
   ],
   [
@@ -42,7 +54,7 @@ const COUNTERPARTY_RULES: [RegExp, Exclude<Actor, "agent">][] = [
     "transport",
   ],
   // The trader's own filings and premises.
-  [/personal cabinet of participant|customs broker|warehouse|location of goods/i, "trader"],
+  [/personal cabinet of participant|customs broker|warehouse|location of goods|place of .*installation/i, "trader"],
 ];
 
 /** Who the step is transacted with. Falls back to government (the residual

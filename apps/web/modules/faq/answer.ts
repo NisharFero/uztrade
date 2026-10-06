@@ -12,7 +12,6 @@ import { z } from "zod";
 import { llmJson, type LlmClient } from "../ai/llm";
 import { DOC_SPECS } from "../documents/specs";
 import { PARTNER_COUNTRIES } from "../intake/data/countries";
-import { delegationOfStep } from "../procedures/delegation";
 import { CATALOGUE, PROCEDURE_IDS } from "../procedures/data/procedures.generated";
 import { FAQ } from "./faq";
 
@@ -29,8 +28,6 @@ export type FaqAnswer = {
   /** Why a model's answer isn't shown, when it was withheld. */
   withheld: string | null;
 };
-
-const LANE: Record<string, string> = { user: "the trader", agent: "the platform's agent", physical: "at the goods (in person)" };
 
 let corpus: Passage[] | null = null;
 

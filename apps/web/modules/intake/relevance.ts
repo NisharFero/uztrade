@@ -5,7 +5,7 @@ const TRADE =
   /\b(export|import|ship|shipping|shipment|send|move|transport|deliver|bring|sell|buy|purchase|customs|cargo|freight|consignment|goods|train|rail|wagons?|air|plane|truck|lorry|tonnes?|tons?|kg|procedure|clearance|trade)\b/i;
 
 const PROCEDURE_QUESTION =
-  /\b(documents?|docs?|papers?|requirements?|required|needed|need|provide|details?|fields?|steps?|stages?|stage|procedure|process|approval|approved|approve|entities?|time|duration|how long|status)\b/i;
+  /\b(documents?|docs?|papers?|requirements?|required|needed|need|provide|details?|fields?|steps?|stages?|stage|procedure|process|approval|approved|approve|entities?|time|duration|how long|status|certificates?|certification|certified|permits?|licen[cs]es?|inspections?|issues?|issued|obtain|apply|application|registration|declarations?)\b/i;
 const QUESTION_SHAPE =
   /\?|\b(what|which|how|when|where|who|why|can|could|should|do|does|is|are)\b/i;
 const SHIPMENT_REQUEST =

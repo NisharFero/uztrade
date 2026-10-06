@@ -52,6 +52,15 @@ export const demoFor = (procedureId: string): DemoScenario | null => SCENARIOS[p
 
 export const demoFileUrl = (procedureId: string, doc: DemoDocument) => `/demo/${procedureId}/${doc.file}`;
 
+function genericDocument(docType: string | null): { scenario: DemoScenario; document: DemoDocument } | null {
+  if (!docType) return null;
+  for (const scenario of Object.values(SCENARIOS)) {
+    const document = scenario.documents.find((d) => !d.output && d.docType === docType);
+    if (document) return { scenario, document };
+  }
+  return null;
+}
+
 /** The demo document an uploaded file is, by its file name - within one procedure's pack when known. */
 export function demoDocumentByFile(fileName: string, docType: string | null, procedureId?: string | null): { scenario: DemoScenario; document: DemoDocument } | null {
   const base = fileName.replace(/\\/g, "/").split("/").pop()?.toLowerCase() ?? "";
@@ -68,7 +77,10 @@ export type DemoMatch = { kind: "document"; document: DemoDocument; url: string 
 /** The demo that satisfies one need at one step, if the procedure has a demo pack. */
 export function demoForNeed(procedureId: string, need: Need, stepNum: number): DemoMatch | null {
   const scenario = demoFor(procedureId);
-  if (!scenario) return null;
+  if (!scenario) {
+    const generic = need.kind === "document" ? genericDocument(need.docType) : null;
+    return generic ? { kind: "document", document: generic.document, url: demoFileUrl(generic.scenario.procedureId, generic.document) } : null;
+  }
 
   if (need.kind === "value") {
     const value = scenario.values[need.label];
@@ -84,5 +96,7 @@ export function demoForNeed(procedureId: string, need: Need, stepNum: number): D
     pool.find((d) => d.steps.includes(stepNum)) ??
     pool[0] ??
     (!need.output && need.docType ? scenario.documents.find((d) => !d.output && d.docType === need.docType) : undefined);
-  return pick ? { kind: "document", document: pick, url: demoFileUrl(procedureId, pick) } : null;
+  if (pick) return { kind: "document", document: pick, url: demoFileUrl(procedureId, pick) };
+  const generic = !need.output ? genericDocument(need.docType) : null;
+  return generic ? { kind: "document", document: generic.document, url: demoFileUrl(generic.scenario.procedureId, generic.document) } : null;
 }

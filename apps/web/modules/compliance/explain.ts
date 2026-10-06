@@ -11,6 +11,7 @@
 import { docTypeOf, specFor, type DocType } from "../documents/specs";
 import type { Procedure, ProcedureStep } from "../procedures/data/procedures.generated";
 import type { Ledger } from "../steps/ledger";
+import { isPerishable } from "../intake/goods-handling";
 
 export type ExplainSource = {
   document: string;
@@ -140,7 +141,7 @@ export function explainRow(key: string, procedure: Procedure, ledger: Ledger | n
     }
     if (/phytosanitary/i.test(requirement)) {
       return {
-        why: procedure.goods === "fresh fruits and vegetables" ? why : `${why} It applies to fresh produce only — these goods are ${procedure.goods}.`,
+        why: isPerishable(procedure.goods) ? why : `${why} It applies to fresh produce only — these goods are ${procedure.goods}.`,
         sources: clean([intake(["Destination country", "Goods"]), source(procedure, ledger, "phytosanitary_certificate", ["produce", "destination_country", "quantity"], "Phytosanitary certificate")]),
         verify: ["The certificate's destination country must be this case's destination", "Produce and quantity must match the invoice"],
       };
@@ -210,7 +211,9 @@ export function explainRow(key: string, procedure: Procedure, ledger: Ledger | n
         ? "Fresh produce spoils in transit; the time the route takes decides whether a cold chain is enough or a nearer market is needed."
         : `${procedure.goods} keeps for months, so transit time isn't a risk for this procedure.`,
       sources: [intake(["Goods", "Route → transit days"])],
-      verify: procedure.goods === "fresh fruits and vegetables" ? ["Transit days vs typical shelf life", "Refrigerated wagons ordered on the transport application"] : ["Nothing to verify"],
+      verify: isPerishable(procedure.goods)
+        ? ["Transit days vs typical shelf life", "Refrigerated wagons ordered on the transport application"]
+        : ["Nothing to verify"],
     };
   }
   if (key === "iran") {

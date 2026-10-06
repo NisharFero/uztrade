@@ -10,8 +10,16 @@ export class DocaiUnavailable extends Error {}
 export async function parseWithDocai(
   input: { bytes: ArrayBuffer; fileName: string; contentType: string; spec: DocSpec },
   baseUrl = DOCAI_URL_DEFAULT,
+  timeoutMs = 35_000,
 ): Promise<DocaiResponse> {
-  if (!baseUrl) throw new DocaiUnavailable("DOCAI_URL is required on Vercel");
+  if (!baseUrl) {
+    // No document service deployed. Images are read by the vision model
+    // (docai/groq-vision.ts); a PDF has to be rasterized first, which is what
+    // that service does - so say what will work instead of naming a variable.
+    throw new DocaiUnavailable(
+      `${input.fileName} couldn't be read: PDFs need the document service, which isn't deployed. Upload a photo or a PNG/JPG of the page and it will be read.`,
+    );
+  }
   const form = new FormData();
   form.append("file", new Blob([input.bytes], { type: input.contentType || "application/octet-stream" }), input.fileName);
   form.append(
@@ -26,7 +34,7 @@ export async function parseWithDocai(
 
   let response: Response;
   try {
-    response = await fetch(`${baseUrl.replace(/\/$/, "")}/parse`, { method: "POST", body: form, signal: AbortSignal.timeout(240_000) });
+    response = await fetch(`${baseUrl.replace(/\/$/, "")}/parse`, { method: "POST", body: form, signal: AbortSignal.timeout(timeoutMs) });
   } catch (error) {
     throw new DocaiUnavailable(
       `The document AI service isn't reachable at ${baseUrl} — start it with apps/docai/run.sh (${error instanceof Error ? error.message : "network error"}).`,

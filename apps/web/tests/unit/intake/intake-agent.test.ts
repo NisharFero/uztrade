@@ -38,14 +38,20 @@ test("after two follow-ups it offers candidate procedures by title instead of as
   }
 });
 
-test("declines small talk and unsupported goods by name", () => {
+test("declines small talk, and goods no published category names", () => {
   const weather = settle("what is the weather like today");
   assert.equal(weather.status, "declined");
   assert.equal(weather.clarify, undefined);
 
-  const cotton = settle("export cotton by train");
-  assert.equal(cotton.status, "declined");
-  assert.match(cotton.reason, /cotton/);
+  // Cotton yarn is published; the rules reach it without a model.
+  assert.notEqual(settle("export cotton yarn by train").status, "declined");
+
+  // Saffron is not published under any category. The rules cannot name the
+  // goods, so they keep asking for them - the nearest-category reasoning that
+  // answers this lives in intakeTurn, with a model.
+  const saffron = settle("export saffron by air");
+  assert.equal(saffron.status, "clarify");
+  assert.equal(saffron.missing, "commodity");
 });
 
 test("the classifier's procedure pick loses to the commodity table", async () => {
@@ -68,8 +74,9 @@ test("the classifier's procedure pick loses to the commodity table", async () =>
   }
 });
 
-test("a resolved query carries the step plan to follow", () => {
-  const m = settle("export 20 tonnes of tomatoes from Tashkent to Almaty by train");
+test("a resolved query carries the step plan to follow", async () => {
+  // The plan needs the procedure's blocks, which classify() loads on demand.
+  const m = await classify("export 20 tonnes of tomatoes from Tashkent to Almaty by train");
   assert.equal(m.status, "resolved");
   assert.equal(m.slots.destinationCountry, "Kazakhstan");
   assert.equal(m.slots.hs, "0702");

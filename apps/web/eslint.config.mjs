@@ -12,6 +12,9 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // `npm run db:pull` output: a throwaway snapshot of a live database, kept
+    // out of the way of the migration history in drizzle-postgres/.
+    ".drizzle-pull/**",
   ]),
 ]);
 

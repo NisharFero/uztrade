@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Icon } from "../../components/icons";
 import { delegationOfStep } from "../../modules/procedures/delegation";
-import { CATALOGUE, PROCEDURE_IDS, type Procedure, type ProcedureBlock } from "../../modules/procedures/data/procedures.generated";
+import { PROCEDURE_IDS, type Procedure, type ProcedureBlock } from "../../modules/procedures/data/procedures.generated";
 import { getProcedures } from "../../modules/procedures/registry";
 import type { ShipmentFacts } from "../../modules/workflow/domain";
 import { listCases } from "../../modules/cases/store";
@@ -40,7 +40,7 @@ const RISK_NEEDS = [
 ];
 
 export const metadata: Metadata = {
-  title: "AI Agent Center · UzTrade",
+  title: "AI Agent Center · Uzbekistan Trade Platform",
   description: "Agents, what they are handling now, and what they have completed.",
 };
 

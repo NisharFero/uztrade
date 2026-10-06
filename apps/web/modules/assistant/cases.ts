@@ -16,6 +16,8 @@ import { getProcedure } from "../procedures/registry";
 import type { WorkflowProjection } from "../workflow/repository";
 import { tailorProcedure } from "../workflow/tailor";
 import type { CaseFilter, Routed } from "./router";
+import { placesIn } from "../intake/shipment-plan";
+import { inSentence } from "../shared/text";
 
 export type OpenStep = { stepNum: number; title: string; lane: Lane; blockName: string };
 
@@ -120,19 +122,51 @@ export function summarize(cases: CaseDigest[], filter: CaseFilter, unknown: stri
     const none = filter === "active" ? "No active cases" : filter === "complete" ? "No finished cases" : "No cases";
     return `${missing}${none} yet — describe a shipment to open one.`;
   }
-  const kind = filter === "active" ? "active case" : filter === "complete" ? "finished case" : "case";
+
+  /* One shipment: say where it stands and what it is waiting for. */
+  if (cases.length === 1) return `${missing}${lineFor(cases[0])}`;
+
+  /* Several: the count, then only the ones that need something from you.
+     Listing every case as an id was the old answer, and it read as noise. */
+  const kind = filter === "active" ? "active shipment" : filter === "complete" ? "finished shipment" : "shipment";
   const onYou = cases.filter((c) => c.openSteps.some((s) => s.lane === "user"));
-  const head = cases.length === 1 ? "" : `${plural(cases.length, kind)}${onYou.length ? `, ${onYou.length} waiting on you` : ""}. `;
-  return `${missing}${head}${cases.map((c) => describeCase(c, cases.length > 3)).join(" ")}`;
+  const head = `You have ${plural(cases.length, kind)}${onYou.length ? `, ${onYou.length} waiting on you` : ", none waiting on you"}.`;
+  const lines = onYou.slice(0, 3).map((c) => `• ${lineFor(c)}`);
+  const more = onYou.length > 3 ? `\n…and ${onYou.length - 3} more waiting on you.` : "";
+  return `${missing}${head}${lines.length ? `\n\n${lines.join("\n")}${more}` : ""}`;
+}
+
+/** One shipment in a sentence: what it is, how far along, what it needs next.
+ *  The route is worth carrying (two tea cases differ by where they go); the
+ *  wagon count and HS heading are not, in a list. */
+function lineFor(c: CaseDigest): string {
+  const route = c.line.match(/([A-Z][\w' -]+ → [A-Z][\w' -]+)/)?.[1]?.trim();
+  const what = `${c.title}${route ? `, ${route}` : ""} (${c.id})`;
+  const progress = `${c.stagesDone} of ${c.stagesTotal} stages done`;
+  const onYou = c.openSteps.find((s) => s.lane === "user");
+  if (onYou) return `${what}: ${progress}. Next on you: ${inSentence(onYou.title)} (step ${onYou.stepNum}).`;
+  const running = c.openSteps[0];
+  if (running) return `${what}: ${progress}. Waiting on ${WAITS_ON[running.lane]} — ${inSentence(running.title)} (step ${running.stepNum}).`;
+  return `${what}: ${progress}.`;
+}
+
+/** Places the answer names that no digest does. The gazetteer decides what
+ *  counts as a place, so an ordinary capitalised word is not mistaken for one. */
+export function inventedPlaces(answer: string, digests: string): string[] {
+  const known = new Set(placesIn(digests).map((p) => p.place.name.toLowerCase()));
+  return [...new Set(placesIn(answer).map((p) => p.place.name))].filter((name) => !known.has(name.toLowerCase()));
 }
 
 const Answered = z.object({ answer: z.string().min(1).max(2000) });
 
 const SYSTEM = [
-  "You answer a trader's question about their own trade cases in UzTrade, using ONLY the case digests given.",
-  "Name cases by their id (e.g. UZ-2609-0001). Say plainly what is waiting on the trader.",
-  "Each case is already shown to the trader as a card below your answer, so with more than three cases answer the question in aggregate (counts, what they have in common, which need attention first) instead of listing every case.",
-  "Don't invent dates, durations, documents or steps that aren't in the digests. At most 4 sentences.",
+  "You are answering the trader themselves, in a chat, about their own shipments in UzTrade. Use ONLY the case digests given.",
+  "Write to them: \"you\", not \"the trader\".",
+  "Name a shipment by what it is - \"the tea to Moscow\", \"your carpets by train\" - and put the case id in brackets after it. A bare id means nothing to the person reading.",
+  "Say what to do next in words: which document to get, who issues it, which shipment it is for. A step number on its own is not an answer; give the step's name if you give its number at all.",
+  "Nothing is shown below your answer, so the answer has to stand on its own.",
+  "With more than three shipments, lead with the count, then take the two or three that need something from them now, one short line each. Do not list ids that need nothing.",
+  "Don't invent dates, durations, documents or steps that aren't in the digests. At most 5 sentences.",
   'Say "all" or "every" only when it holds for every digest; name the exceptions otherwise.',
   "If the digests don't answer the question, say what they do show.",
   'JSON: {"answer": "..."}',
@@ -155,7 +189,13 @@ export async function answerAboutCases(question: string, cases: CaseDigest[], fi
   if (!reply) return plain;
 
   const answer = reply.data.answer.trim();
-  const source = { id: "cases", title: `${cases.length} cases`, text: `${digests.join(" ")} ${unknown.join(" ")}`, href: null };
+  const text = `${digests.join(" ")} ${unknown.join(" ")}`;
+  const source = { id: "cases", title: `${cases.length} cases`, text, href: null };
+  // Numbers and addresses the digests don't contain.
   if (unsupportedClaims(answer, [source]).length) return { ...plain, model: reply.model };
+  // And places. Asked about several shipments at once, a model will carry one
+  // shipment's destination across the rest - "the tea to Moscow" when the tea
+  // goes to Almaty - which reads as fact and is not one.
+  if (inventedPlaces(answer, text).length) return { ...plain, model: reply.model };
   return { ...plain, answer, by: "model", model: reply.model };
 }

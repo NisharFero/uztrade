@@ -24,12 +24,7 @@ export async function completeWorkflowWorkItem(
 }
 
 export async function startWorkflowForCase(caseId: string, procedure: Procedure, query: string, understoodFacts?: ShipmentFacts, options: WorkflowServiceOptions = {}) {
-  const [{ createD1WorkflowRepository }, { getDb }, { eq }, { cases }] = await Promise.all([
-    import("./d1-repository"),
-    import("../../db"),
-    import("drizzle-orm"),
-    import("../../db/schema"),
-  ]);
+  const { createD1WorkflowRepository } = await import("./d1-repository");
   const repository = createD1WorkflowRepository();
   const runId = `workflow:${caseId}`;
   try {
@@ -44,7 +39,6 @@ export async function startWorkflowForCase(caseId: string, procedure: Procedure,
     instantiateWorkflow(tailorProcedure(procedure, facts, query), runId),
     facts,
   );
-  await getDb().update(cases).set({ workflowRunId: runId }).where(eq(cases.id, caseId));
   const projection = await runOrchestrator(repository, runId, options);
   const { syncCaseBlockProgress } = await import("../cases/block-progress");
   await syncCaseBlockProgress(projection);

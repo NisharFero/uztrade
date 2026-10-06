@@ -3,6 +3,8 @@ import type { Procedure } from "../procedures/data/procedures.generated";
 
 export type ShipmentFacts = {
   goods: string;
+  /** HS heading as intake settled it, when it knows one. */
+  hs?: string | null;
   quantity: number | null;
   unit: string | null;
   origin: string | null;

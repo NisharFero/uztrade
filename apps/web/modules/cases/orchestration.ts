@@ -15,7 +15,7 @@ export async function openCaseFromQuery(query: string, apiKey?: string, options:
   if (!match.procedureId) return { matched: false as const, match, supported: PROCEDURE_IDS.map((id) => ({ id, title: CATALOGUE[id].title })) };
   const matched = await requireProcedure(match.procedureId);
   const title = tailorProcedure(matched, match.shipmentFacts, query).title;
-  const created = await createCase({ procedureId: match.procedureId, query, matchedBy: match.matchedBy, title });
+  const created = await createCase({ procedureId: match.procedureId, query, matchedBy: match.matchedBy, title, goods: match.shipmentFacts.goods });
   const workflow = await startWorkflowForCase(created.id, matched, query, match.shipmentFacts, { ai: options.ai, portals: options.portals });
   return { matched: true as const, match, case: created, workflow, procedure: matched };
 }
@@ -25,7 +25,13 @@ export async function openCaseFromQuery(query: string, apiKey?: string, options:
 export async function openCaseFromIntake(input: { procedureId: string; query: string; facts: ShipmentFacts }, options: { ai?: AgenticAiClient; portals?: PortalClient } = {}) {
   const procedure = await getProcedure(input.procedureId);
   if (!procedure) throw new Error(`Unknown procedure ${input.procedureId}`);
-  const created = await createCase({ procedureId: input.procedureId, query: input.query, matchedBy: "rules", title: tailorProcedure(procedure, input.facts, input.query).title });
+  const created = await createCase({
+    procedureId: input.procedureId,
+    query: input.query,
+    matchedBy: "rules",
+    title: tailorProcedure(procedure, input.facts, input.query).title,
+    goods: input.facts.goods,
+  });
   const workflow = await startWorkflowForCase(created.id, procedure, input.query, input.facts, options);
   return { case: created, workflow, procedure };
 }

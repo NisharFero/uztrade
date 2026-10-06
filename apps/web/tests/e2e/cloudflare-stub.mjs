@@ -7,4 +7,6 @@
  * server instead, where the real binding exists.
  */
 export const env = {};
-export default { env };
+
+const bindings = { env };
+export default bindings;
