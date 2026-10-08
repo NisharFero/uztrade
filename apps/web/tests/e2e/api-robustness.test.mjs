@@ -51,7 +51,7 @@ function validBody(route, method, ids) {
   if (/\/submit$/.test(route)) return { status: "accepted" };
   if (/\/procedures\/868$/.test(route) && method === "PATCH") return { status: "published" };
   if (/\/users\//.test(route) && method === "PATCH") return { displayName: "API Test User" };
-  if (/\/entities\//.test(route) && method === "PATCH") return { canonicalName: "API Test Entity" };
+  if (/\/entities\//.test(route) && method === "PATCH") return { canonicalName: `API Test Entity ${Date.now()}` };
   if (/\/cases\//.test(route) && method === "PATCH") return { blockId: ids.blockId };
   return {};
 }

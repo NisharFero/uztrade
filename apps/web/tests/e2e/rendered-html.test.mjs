@@ -51,7 +51,7 @@ test("server-renders the conversation the dashboard opens with", async () => {
   assert.match(response.headers.get("content-type") ?? "", /^text\/html\b/i);
 
   const html = await response.text();
-  assert.match(html, /<title>Uzbekistan Trade Platform<\/title>/i);
+  assert.match(html, /<title>UzOne Trade Platform<\/title>/i);
   // Chat first: one question and the composer, no form - missing details are
   // asked for one at a time in the conversation.
   assert.match(html, /class="convo convo-start"/);
@@ -69,8 +69,13 @@ test("sidebar links to the real destinations", async () => {
   assert.match(html, /href="\/agents"/);
   assert.match(html, /Cases &amp; Shipments/);
   assert.match(html, /href="\/faq"/);
+  assert.match(html, /href="\/entities"/);
+  assert.match(html, /href="\/configuration"/);
   assert.match(html, /AI Agent Center/);
-  assert.match(html, /All Agents/);
+  assert.match(html, /Configuration/);
+  // Sub-labels were dropped: each row names one destination and nothing else.
+  assert.doesNotMatch(html, /All Agents/);
+  assert.doesNotMatch(html, /Master data/);
   // Out-of-scope sections must not be dead links.
   assert.doesNotMatch(html, /href="#"/);
 });
