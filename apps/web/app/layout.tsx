@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import Nav from "../components/layout/nav";
+import { Suspense } from "react";
+import AppShell from "../components/layout/app-shell";
 import "./styles/globals.css";
 
 /* Fonts are self-hosted from public/fonts and declared in app/fonts.css.
@@ -24,11 +25,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="antialiased">
-        {/* The shell lives here so every route shares the rail. */}
-        <main className="shell premium-shell">
-          <Nav />
-          <section className="dashboard">{children}</section>
-        </main>
+        <Suspense fallback={null}><AppShell>{children}</AppShell></Suspense>
       </body>
     </html>
   );

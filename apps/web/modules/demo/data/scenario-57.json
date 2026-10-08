@@ -256,7 +256,7 @@
     "goods": "Biohumus (vermicompost), organic fertilizer",
     "places": "880",
     "weight": "22 440 kg",
-    "carrier": "OcOO \"Demo Kyrgyz Transit\" (TIR carrier)",
+    "carrier": "OcOO \"Demo Kyrgyz Transit\"",
     "vehicle": "01 KG 555 ABC / trailer 01 KG 99 AB",
     "issue_date": "05.09.2026"
    },
@@ -378,7 +378,7 @@
    "file": "57-10-invoice-for-payment-step-10.png"
   },
   {
-   "template": "letter",
+   "template": "reference",
    "title": "Authorization for international carriage of goods",
    "docType": "carriage_permit",
    "labels": [
@@ -389,12 +389,23 @@
     21
    ],
    "output": false,
-   "fields": {},
+   "fields": {
+    "permit_no": "CP-57-2026",
+    "country": "Uzbekistan",
+    "vehicle": "01 KG 555 ABC / trailer 01 KG 99 AB",
+    "valid_until": "31.12.2027"
+   },
    "id": "authorization-for-international-carriage-of-good",
-   "file": "57-11-authorization-for-international-carriage-of-good.png"
+   "file": "57-11-authorization-for-international-carriage-of-good.png",
+   "fieldLabels": {
+    "permit_no": "Permit number",
+    "country": "Country it is valid for",
+    "vehicle": "Vehicle registration number",
+    "valid_until": "Valid until"
+   }
   },
   {
-   "template": "letter",
+   "template": "reference",
    "title": "Vehicle registration certificate",
    "docType": "vehicle_registration",
    "labels": [
@@ -405,9 +416,22 @@
     21
    ],
    "output": false,
-   "fields": {},
+   "fields": {
+    "reg_number": "01 KG 555 ABC / trailer 01 KG 99 AB",
+    "vin": "XW8ZZZ61ZKG000057",
+    "owner": "OcOO \"Demo Kyrgyz Transit\"",
+    "make": "MAN",
+    "valid_until": "31.12.2027"
+   },
    "id": "vehicle-registration-certificate",
-   "file": "57-12-vehicle-registration-certificate.png"
+   "file": "57-12-vehicle-registration-certificate.png",
+   "fieldLabels": {
+    "reg_number": "Registration number (plate)",
+    "vin": "VIN / chassis number",
+    "owner": "Owner",
+    "make_model": "Make and model",
+    "issue_date": "Date of issue"
+   }
   },
   {
    "template": "invoice_for_payment",
@@ -517,7 +541,7 @@
    "file": "57-16-export-declaration-of-the-exporter-s-country.png"
   },
   {
-   "template": "letter",
+   "template": "reference",
    "title": "ATP certificate",
    "docType": "atp_certificate",
    "labels": [
@@ -527,12 +551,23 @@
     21
    ],
    "output": false,
-   "fields": {},
+   "fields": {
+    "certificate_no": "ATP-57-2026",
+    "vehicle": "01 KG 555 ABC / trailer 01 KG 99 AB",
+    "valid_until": "31.12.2027",
+    "class": "FRC"
+   },
    "id": "atp-certificate",
-   "file": "57-17-atp-certificate.png"
+   "file": "57-17-atp-certificate.png",
+   "fieldLabels": {
+    "certificate_no": "Certificate number",
+    "vehicle": "Vehicle registration number",
+    "equipment_class": "Class of equipment",
+    "valid_until": "Valid until"
+   }
   },
   {
-   "template": "letter",
+   "template": "reference",
    "title": "TIR Carnet - \"Transport International Routier\"",
    "docType": "tir_carnet",
    "labels": [
@@ -545,9 +580,22 @@
     28
    ],
    "output": false,
-   "fields": {},
+   "fields": {
+    "carnet_no": "TX57202601",
+    "holder": "OcOO \"Demo Kyrgyz Transit\"",
+    "valid_until": "31.12.2027",
+    "departure_office": "Bishkek customs",
+    "vehicle": "01 KG 555 ABC / trailer 01 KG 99 AB"
+   },
    "id": "tir-carnet-transport-international-routier",
-   "file": "57-18-tir-carnet-transport-international-routier.png"
+   "file": "57-18-tir-carnet-transport-international-routier.png",
+   "fieldLabels": {
+    "carnet_no": "Carnet number",
+    "holder": "Holder",
+    "valid_until": "Valid until",
+    "departure_office": "Customs office of departure",
+    "vehicle": "Vehicle registration number"
+   }
   },
   {
    "template": "letter",
@@ -584,7 +632,7 @@
    "file": "57-20-electronic-application-for-preliminary-visual-in.png"
   },
   {
-   "template": "letter",
+   "template": "reference",
    "title": "Contract for customs warehouse services",
    "docType": "service_contract",
    "labels": [
@@ -594,12 +642,25 @@
     28
    ],
    "output": false,
-   "fields": {},
+   "fields": {
+    "contract_no": "SRV-57-28",
+    "date": "15.09.2026",
+    "provider": "Demo Customs Warehouse LLC",
+    "client": "OOO \"Agro Yer Unumdorlik\"",
+    "valid_until": "31.12.2027"
+   },
    "id": "contract-for-customs-warehouse-services",
-   "file": "57-21-contract-for-customs-warehouse-services.png"
+   "file": "57-21-contract-for-customs-warehouse-services.png",
+   "fieldLabels": {
+    "contract_no": "Contract number",
+    "date": "Date",
+    "provider": "Service provider",
+    "client": "Client",
+    "valid_until": "Valid until"
+   }
   },
   {
-   "template": "letter",
+   "template": "reference",
    "title": "Cargo delivery control book",
    "docType": "cargo_control_book",
    "labels": [
@@ -609,12 +670,23 @@
     28
    ],
    "output": false,
-   "fields": {},
+   "fields": {
+    "book_no": "CCB-57-28",
+    "issue_date": "15.09.2026",
+    "destination_office": "Tashkent customs",
+    "transport": "01 KG 555 ABC / trailer 01 KG 99 AB"
+   },
    "id": "cargo-delivery-control-book",
-   "file": "57-22-cargo-delivery-control-book.png"
+   "file": "57-22-cargo-delivery-control-book.png",
+   "fieldLabels": {
+    "book_no": "Control book number",
+    "issue_date": "Date of issue",
+    "destination_office": "Customs office of destination",
+    "transport": "Vehicle or wagon number"
+   }
   },
   {
-   "template": "letter",
+   "template": "reference",
    "title": "Transit declaration",
    "docType": "transit_declaration",
    "labels": [
@@ -624,9 +696,24 @@
     28
    ],
    "output": false,
-   "fields": {},
+   "fields": {
+    "declaration_no": "TR-57-28",
+    "date": "15.09.2026",
+    "departure_office": "Bishkek customs",
+    "destination_office": "Tashkent customs",
+    "hs_code": "3101 00 000 0",
+    "gross_weight": "22 440 kg"
+   },
    "id": "transit-declaration",
-   "file": "57-23-transit-declaration.png"
+   "file": "57-23-transit-declaration.png",
+   "fieldLabels": {
+    "declaration_no": "Declaration number",
+    "date": "Date",
+    "departure_office": "Customs office of departure",
+    "destination_office": "Customs office of destination",
+    "hs_code": "Commodity code",
+    "gross_weight": "Gross weight"
+   }
   },
   {
    "template": "declaration",
@@ -736,7 +823,7 @@
    "file": "57-28-online-application-for-veterinary-certificate.png"
   },
   {
-   "template": "letter",
+   "template": "reference",
    "title": "Certificate of analysis for fertilizers",
    "docType": "quality_certificate",
    "labels": [
@@ -746,12 +833,25 @@
     45
    ],
    "output": false,
-   "fields": {},
+   "fields": {
+    "certificate_no": "QC-57-45",
+    "issue_date": "24.09.2026",
+    "product": "Biohumus (vermicompost), organic fertilizer",
+    "batch": "LOT-57-2026",
+    "issuer": "OcOO \"Kyrgyz Bio Organic\""
+   },
    "id": "certificate-of-analysis-for-fertilizers",
-   "file": "57-29-certificate-of-analysis-for-fertilizers.png"
+   "file": "57-29-certificate-of-analysis-for-fertilizers.png",
+   "fieldLabels": {
+    "certificate_no": "Certificate number",
+    "issue_date": "Date of issue",
+    "product": "Product",
+    "batch": "Batch / lot",
+    "issuer": "Issued by"
+   }
   },
   {
-   "template": "letter",
+   "template": "reference",
    "title": "Quality certificate",
    "docType": "quality_certificate",
    "labels": [
@@ -761,9 +861,22 @@
     45
    ],
    "output": false,
-   "fields": {},
+   "fields": {
+    "certificate_no": "QC-57-45",
+    "issue_date": "24.09.2026",
+    "product": "Biohumus (vermicompost), organic fertilizer",
+    "batch": "LOT-57-2026",
+    "issuer": "OcOO \"Kyrgyz Bio Organic\""
+   },
    "id": "quality-certificate",
-   "file": "57-30-quality-certificate.png"
+   "file": "57-30-quality-certificate.png",
+   "fieldLabels": {
+    "certificate_no": "Certificate number",
+    "issue_date": "Date of issue",
+    "product": "Product",
+    "batch": "Batch / lot",
+    "issuer": "Issued by"
+   }
   },
   {
    "template": "letter",
@@ -811,7 +924,7 @@
    "file": "57-32-import-railway-bill.png"
   },
   {
-   "template": "letter",
+   "template": "reference",
    "title": "Registration certificate",
    "docType": "registration_certificate",
    "labels": [
@@ -821,9 +934,20 @@
     45
    ],
    "output": false,
-   "fields": {},
+   "fields": {
+    "certificate_no": "REG-57-2026",
+    "product": "Biohumus (vermicompost), organic fertilizer",
+    "holder": "OOO \"Agro Yer Unumdorlik\"",
+    "valid_until": "31.12.2027"
+   },
    "id": "registration-certificate",
-   "file": "57-33-registration-certificate.png"
+   "file": "57-33-registration-certificate.png",
+   "fieldLabels": {
+    "certificate_no": "Registration number",
+    "product": "Product",
+    "holder": "Registration holder",
+    "valid_until": "Valid until"
+   }
   },
   {
    "template": "invoice_for_payment",

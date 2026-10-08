@@ -262,6 +262,11 @@ export async function runChat(input: ChatInput, given: ChatDeps, rawEmit: (e: Ch
     if (routed.intent === "estimate") {
       await answerEstimate(message, draft, deps, emit);
     } else if (routed.intent === "shipment") {
+      if (input.caseId) {
+        emit({ type: "result", result: { kind: "other", message: `This session is linked to case ${input.caseId}. Start a new shipment session to describe another shipment.`, suggestions: [] }, followUps: [] });
+        emit({ type: "done" });
+        return;
+      }
       // Intention first: a question about timing is answered, not taken in.
       const goal = goalOf(message, draft, expecting);
       if (goal === "estimate") {

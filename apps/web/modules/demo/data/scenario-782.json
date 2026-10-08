@@ -181,7 +181,7 @@
    "file": "782-04-power-of-attorney.png"
   },
   {
-   "template": "letter",
+   "template": "reference",
    "title": "Agreement with Technological center",
    "docType": "service_contract",
    "labels": [
@@ -191,9 +191,22 @@
     3
    ],
    "output": false,
-   "fields": {},
+   "fields": {
+    "contract_no": "SRV-782-3",
+    "date": "03.09.2026",
+    "provider": "JSC Uzbekistan Temir Yo'llari",
+    "client": "OOO \"Kulol Keramika\"",
+    "valid_until": "31.12.2027"
+   },
    "id": "agreement-with-technological-center",
-   "file": "782-05-agreement-with-technological-center.png"
+   "file": "782-05-agreement-with-technological-center.png",
+   "fieldLabels": {
+    "contract_no": "Contract number",
+    "date": "Date",
+    "provider": "Service provider",
+    "client": "Client",
+    "valid_until": "Valid until"
+   }
   },
   {
    "template": "invoice_for_payment",
@@ -221,7 +234,7 @@
   },
   {
    "id": "agreement-on-railway-transportation-services-7",
-   "template": "letter",
+   "template": "reference",
    "title": "Agreement on railway transportation services — step 7",
    "docType": "service_contract",
    "labels": [
@@ -231,8 +244,21 @@
     7
    ],
    "output": true,
-   "fields": {},
-   "file": "782-07-agreement-on-railway-transportation-services-ste.png"
+   "fields": {
+    "contract_no": "SRV-782-7",
+    "date": "05.09.2026",
+    "provider": "OOO \"Demo Forwarding\"",
+    "client": "OOO \"Kulol Keramika\"",
+    "valid_until": "31.12.2027"
+   },
+   "file": "782-07-agreement-on-railway-transportation-services-ste.png",
+   "fieldLabels": {
+    "contract_no": "Contract number",
+    "date": "Date",
+    "provider": "Service provider",
+    "client": "Client",
+    "valid_until": "Valid until"
+   }
   },
   {
    "template": "invoice_for_payment",

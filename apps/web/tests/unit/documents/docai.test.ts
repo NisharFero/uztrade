@@ -221,3 +221,13 @@ test("known demo uploads are analyzed when the document AI service is unavailabl
   assert.equal(parsed.document.fields.find((f) => f.key === "quantity")?.normalized, 60);
   assert.equal(parsed.document.fields.find((f) => f.key === "currency")?.normalized, "USD");
 });
+
+test("quantity comparison accepts the exact 2% boundary but rejects larger differences", () => {
+  const spec = specFor("certificate_of_origin");
+  const check = (raw: string) => {
+    const doc = composeDocument(spec, { docType: spec.type, text: "Certificate of origin", pages: [{ width: 1240, height: 1754, segments: 1 }], fields: { weight: { candidates: [{ value: raw, score: .96, source: "demo-pack" }] } } });
+    return crossCheck(spec.type, doc.fields, { intakeTonnes: 60, partnerCountry: "RU", direction: "export", goodsCategory: "tea", documents: [] }).find((row) => row.check === "Quantity vs intake")?.status;
+  };
+  assert.equal(check("61 200 kg"), "ok");
+  assert.equal(check("61 201 kg"), "mismatch");
+});

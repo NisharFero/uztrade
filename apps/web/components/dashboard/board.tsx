@@ -69,7 +69,7 @@ export default function Board({ cases, lastCaseId }: { cases: CaseOption[]; last
 
   const select = (id: string | null) => {
     setProblem(null);
-    router.push(id ? `/?case=${encodeURIComponent(id)}` : "/?case=new");
+    router.push(id ? `/dashboard?case=${encodeURIComponent(id)}` : "/dashboard?case=new");
   };
 
   /** One action on the case; the orchestrator's refreshed view comes back. */
@@ -119,7 +119,7 @@ export default function Board({ cases, lastCaseId }: { cases: CaseOption[]; last
   // The URL carries the new case, and the sidebar re-reads cases on navigation.
   const started = (id: string) => {
     rememberCase(id);
-    router.push(`/?case=${encodeURIComponent(id)}`);
+    router.push(`/dashboard?case=${encodeURIComponent(id)}`);
   };
 
   // A case started a moment ago is not in the server's list yet; the view knows it.

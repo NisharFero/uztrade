@@ -259,7 +259,7 @@ export function CasesCard({ cases }: { cases: CaseDigest[] }) {
         const pct = c.stagesTotal ? Math.round((c.stagesDone / c.stagesTotal) * 100) : 0;
         return (
           <li key={c.id}>
-            <Link className="rcase-row" href={`/?case=${encodeURIComponent(c.id)}`}>
+            <Link className="rcase-row" href={`/dashboard?case=${encodeURIComponent(c.id)}`}>
               <span className="rcase-main">
                 <span className="rcase-title">{c.title}</span>
                 <span className="rcase-meta">

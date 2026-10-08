@@ -27,18 +27,18 @@ export default function RecentChats() {
     };
   }, []);
 
-  const open = (id: string) => router.push(`/?chat=${encodeURIComponent(id)}`);
+  const open = (id: string) => router.push(`/dashboard?chat=${encodeURIComponent(id)}`);
 
   const remove = (event: React.MouseEvent, id: string) => {
     event.stopPropagation();
     deleteSession(id);
     setSessions(listSessions());
-    if (current === id) router.push("/");
+    if (current === id) router.push("/dashboard");
   };
 
   return (
     <div className="recents">
-      <button type="button" className="recents-new" onClick={() => router.push("/?chat=new")}>
+      <button type="button" className="recents-new" onClick={() => router.push("/dashboard?chat=new")}>
         <span className="nav-icon">{Icon.compose}</span>
         <span>New chat</span>
       </button>

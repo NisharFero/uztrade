@@ -178,8 +178,24 @@ export function placesIn(text: string): { place: Place; index: number }[] {
   return found.sort((a, b) => a.index - b.index).map(({ place, index }) => ({ place, index }));
 }
 
+/** Exact city/country aliases for validating supplied route endpoints. */
+export function findExactPlace(text: string): Place | null {
+  return ALIASES.find(({ alias }) => alias === normalize(text.trim()))?.place ?? null;
+}
+
 export function findPlace(text: string | null | undefined): Place | null {
   return text ? placesIn(text)[0]?.place ?? null : null;
+}
+
+/** Every place the gazetteer knows, for labelling a map rather than only the
+ *  stops on one route. */
+export function allPlaces(): Place[] {
+  const seen = new Set<string>();
+  return CITIES.map(([name, country, lat, lon]) => ({ name, country, lat, lon })).filter((p) => {
+    if (seen.has(p.name)) return false;
+    seen.add(p.name);
+    return true;
+  });
 }
 
 export function placesForCountry(country: string): Place[] {
@@ -197,6 +213,13 @@ export const PLACE_WORDS: ReadonlySet<string> = new Set(ALIASES.map((a) => a.ali
 
 export function countryName(code: string): string {
   return COUNTRY_NAMES[code]?.name ?? code;
+}
+
+/** The freight hub a corridor passes through when it names only a country.
+ *  `via: ["KZ"]` is a leg through Kazakhstan; this is the point to draw it at. */
+export function hubOf(code: string): Place | null {
+  const hub = COUNTRY_NAMES[code]?.hub;
+  return hub ? findPlace(hub) : null;
 }
 
 /* ---------------------------------------------------------------- route --- */

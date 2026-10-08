@@ -2,7 +2,7 @@
   "name": "uztrade",
   "version": "0.1.0",
   "private": true,
-  "description": "Uzbekistan Trade Platform: web app, entity API sandboxes and local database, run together.",
+  "description": "UzOne Trade Platform: web app, entity API sandboxes and local database, run together.",
   "engines": {
     "node": ">=22.13.0"
   },

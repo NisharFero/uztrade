@@ -25,7 +25,8 @@ const SLOTS: Slot[] = ["commodity", "direction", "mode", "regime", "quantity", "
  *  read (another language, typos) is read by a model and restated for the rules. */
 export async function POST(request: Request) {
   try {
-    const body = await jsonBody(request) as { message?: unknown; draft?: unknown; expecting?: unknown; confirm?: unknown };
+    const body = await jsonBody(request) as { message?: unknown; draft?: unknown; expecting?: unknown; confirm?: unknown; caseId?: unknown };
+    if (body.caseId) return Response.json({ error: "This session already has a case. Start a new shipment session to open another." }, { status: 409 });
     const draft = parseDraft(body.draft);
 
     if (body.confirm === true) {

@@ -116,3 +116,20 @@ test("generated packs: receipts pay what was offered, weights agree with intake,
     }
   }
 });
+
+test("every typed demo document passes the upload fallback's required-field gates", async () => {
+  const { readFileSync } = await import("node:fs");
+  const { parseUploadedDocument } = await import("../../../modules/documents/docai/upload");
+  const { specFor } = await import("../../../modules/documents/specs");
+  const failures: string[] = [];
+  for (const id of DEMO_PROCEDURES) {
+    for (const doc of demoFor(id)!.documents) {
+      if (!doc.docType) continue;
+      const buffer = readFileSync(`public/demo/${id}/${doc.file}`);
+      const parsed = await parseUploadedDocument({ bytes: buffer.buffer.slice(buffer.byteOffset, buffer.byteOffset + buffer.byteLength) as ArrayBuffer, fileName: doc.file, contentType: "image/png", procedureId: id, spec: specFor(doc.docType as import("../../../modules/documents/specs").DocType), parseWithAi: async () => { throw new Error("Offline demo fixture test; no OCR service"); } });
+      assert.equal(parsed.fallback, "demo", doc.file);
+      for (const field of parsed.document.fields) if (field.required && field.status !== "accepted") failures.push(`${id}/${doc.file}: ${field.key} ${field.status}`);
+    }
+  }
+  assert.deepEqual(failures, []);
+});

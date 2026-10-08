@@ -47,7 +47,7 @@ export default async function CasePage({ params }: { params: Promise<{ id: strin
         </p>
         <h1>{found.id}</h1>
         <p className="page-lede">
-          <Link className="crumb" href="/">
+          <Link className="crumb" href="/dashboard">
             Steps on the dashboard
           </Link>{" "}
           ·{" "}

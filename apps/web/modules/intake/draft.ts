@@ -6,7 +6,7 @@
  * whole thing on every turn. */
 
 import { extractShipmentFacts } from "../workflow/domain";
-import { mentionedRoute, placesIn, type Place } from "./shipment-plan";
+import { findExactPlace, mentionedRoute, placesIn, type Place } from "./shipment-plan";
 import { regimeIn, type Direction, type Mode, type Regime } from "./lookup";
 import { CATEGORIES, commodityOf, logisticsDirection, type Category } from "./taxonomy";
 import { CATALOGUE } from "../procedures/data/procedures.generated";
@@ -89,6 +89,23 @@ export type Merge = {
  *  corrects one. `expecting` lets a bare answer ("60", "Tashkent") land in
  *  the slot that was just asked about. */
 export function mergeReply(draft: IntakeDraft, text: string, expecting: Slot | null = null): Merge {
+  const standalone = commodityOf(text);
+  const selected = procedureReferenceIn(text);
+  const correction = /\b(actually|instead|change|correct|same shipment|same case)\b/i.test(text);
+  const request = /\b(?:(?:i|we)\s*(?:want|need|plan|would like)\s*(?:to\s*)?)?(?:export|import|ship|send|move|transport)\b/i.test(text);
+  const restart = /\b(start over|start again|new shipment|another shipment|different shipment|forget (?:that|this)|reset)\b/i.test(text);
+  const namedGoods = standalone.kind !== "none";
+  const fullRequest = /\b(?:i|we)\s*(?:want|need|plan|would like)\s*(?:to\s*)?(?:export|import|ship|send|move|transport)\b|^\s*(?:export|import|ship|send|move|transport)\s+\S/i.test(text);
+  const changedGoods = standalone.kind === "known"
+    ? Boolean(draft.commodity && (standalone.category !== draft.commodity.category || standalone.term !== draft.commodity.term))
+    : standalone.kind !== "none" && Boolean(draft.commodity);
+  // A fresh request replaces the shipment. Short answers and explicit
+  // corrections keep context; changing goods clears all shipment facts.
+  if (restart || changedGoods || ((fullRequest || (request && namedGoods)) && !correction)
+    || (selected && selected.id !== draft.procedureId)) {
+    draft = { ...EMPTY_DRAFT };
+    expecting = null;
+  }
   const next: IntakeDraft = { ...draft };
   let understood = false;
   let unsupportedGoods: string | null = null;
@@ -186,6 +203,32 @@ export function mergeReply(draft: IntakeDraft, text: string, expecting: Slot | n
     understood = true;
   } else if (expecting === "route" && !understood && (draft.origin?.assumed || draft.destination?.assumed) && /^[\p{L}][\p{L}\s'.-]{1,39}$/u.test(text.trim())) {
     // A bare name answering "which city in …?" that the gazetteer doesn't know: name it, keep the question.
+    unknownPlace = text.trim();
+    understood = true;
+  }
+
+  // Check each explicitly supplied endpoint, even when the other end is known.
+  // Never let a known country hide an unknown city or reuse an old endpoint.
+  const supplied: Partial<Record<"origin" | "destination", string>> = {};
+  for (const match of text.matchAll(/\b(from|to|into)\s+(?!export\b|import\b|move\b|ship\b|send\b|bring\b|transport\b|arrange\b|start\b|take\b|get\b|deliver\b)(.+?)(?=\s+(?:from|to|into|by|via|with|using)\s|[;!?]|$)/gi)) {
+    const name = match[2].trim().replace(/[.,]+$/, "");
+    supplied[match[1].toLowerCase() === "from" ? "origin" : "destination"] = name;
+  }
+  const missing: string[] = [];
+  for (const key of ["origin", "destination"] as const) {
+    const name = supplied[key];
+    if (!name) continue;
+    const pieces = name.split(/\s*,\s*|\s+in\s+/i);
+    const unknown = pieces.filter((piece) => !findExactPlace(piece));
+    if (unknown.length) {
+      missing.push(...unknown);
+      next[key] = null;
+    }
+  }
+  if (missing.length) {
+    unknownPlace = [...new Set(missing)].join("”, “");
+    understood = true;
+  } else if (!Object.keys(supplied).length && expecting === "route" && !places.length && !understood && /^[\p{L}][\p{L}\s'.-]{1,59}$/u.test(text.trim())) {
     unknownPlace = text.trim();
     understood = true;
   }

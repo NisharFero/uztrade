@@ -213,7 +213,7 @@
   },
   {
    "id": "agreement-with-technological-center-2",
-   "template": "letter",
+   "template": "reference",
    "title": "Agreement with Technological center (single window) — step 2",
    "docType": "service_contract",
    "labels": [
@@ -223,12 +223,25 @@
     2
    ],
    "output": true,
-   "fields": {},
-   "file": "325-05-agreement-with-technological-center-step-2.png"
+   "fields": {
+    "contract_no": "SRV-325-2",
+    "date": "02.09.2026",
+    "provider": "JSC Uzbekistan Temir Yo'llari",
+    "client": "OOO \"Fergana Uzum Eksport\"",
+    "valid_until": "31.12.2027"
+   },
+   "file": "325-05-agreement-with-technological-center-step-2.png",
+   "fieldLabels": {
+    "contract_no": "Contract number",
+    "date": "Date",
+    "provider": "Service provider",
+    "client": "Client",
+    "valid_until": "Valid until"
+   }
   },
   {
    "id": "agreement-on-railway-transportation-services-8",
-   "template": "letter",
+   "template": "reference",
    "title": "Agreement on railway transportation services — step 8",
    "docType": "service_contract",
    "labels": [
@@ -238,8 +251,21 @@
     8
    ],
    "output": true,
-   "fields": {},
-   "file": "325-06-agreement-on-railway-transportation-services-ste.png"
+   "fields": {
+    "contract_no": "SRV-325-8",
+    "date": "05.09.2026",
+    "provider": "OOO \"Demo Forwarding\"",
+    "client": "OOO \"Fergana Uzum Eksport\"",
+    "valid_until": "31.12.2027"
+   },
+   "file": "325-06-agreement-on-railway-transportation-services-ste.png",
+   "fieldLabels": {
+    "contract_no": "Contract number",
+    "date": "Date",
+    "provider": "Service provider",
+    "client": "Client",
+    "valid_until": "Valid until"
+   }
   },
   {
    "template": "invoice_for_payment",
@@ -593,7 +619,7 @@
    "file": "325-24-phytosanitary-certificate-step-36.png"
   },
   {
-   "template": "letter",
+   "template": "reference",
    "title": "Certificate on availability of funds at client's account",
    "docType": "funds_certificate",
    "labels": [
@@ -603,9 +629,20 @@
     37
    ],
    "output": false,
-   "fields": {},
+   "fields": {
+    "bank": "NBU Uzbekistan",
+    "account_holder": "OOO \"Fergana Uzum Eksport\"",
+    "amount": "100 000 000.00",
+    "date": "20.09.2026"
+   },
    "id": "certificate-on-availability-of-funds-at-client-s",
-   "file": "325-25-certificate-on-availability-of-funds-at-client-s.png"
+   "file": "325-25-certificate-on-availability-of-funds-at-client-s.png",
+   "fieldLabels": {
+    "bank": "Bank",
+    "account_holder": "Account holder",
+    "amount": "Amount available",
+    "date": "Date"
+   }
   },
   {
    "template": "letter",

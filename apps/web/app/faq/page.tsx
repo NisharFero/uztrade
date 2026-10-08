@@ -20,7 +20,7 @@ export default async function FaqPage({ searchParams }: { searchParams: Promise<
     <>
       <header className="page-head">
         <p data-tint="fuchsia">
-          <Link href="/" className="crumb">
+          <Link href="/dashboard" className="crumb">
             Dashboard
           </Link>{" "}
           · FAQ
@@ -41,7 +41,7 @@ export default async function FaqPage({ searchParams }: { searchParams: Promise<
       <FaqList entries={entries} matched={[...matched]} />
 
       <p className="faq-back">
-        <Link className="crumb" href="/">
+        <Link className="crumb" href="/dashboard">
           ← Back to the chat
         </Link>
       </p>

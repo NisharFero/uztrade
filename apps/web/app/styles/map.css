@@ -1,0 +1,1510 @@
+/* --------------------------------- Live map ------------------------------
+   Hand-drawn SVG, so the geography takes the same tokens as everything else
+   and dark mode is a token swap rather than a second basemap. Nothing here
+   depends on a tile server.
+
+   Every marker is labelled with its milestone and every row repeats it in
+   words, because a dot on a line is not a claim anyone can read. */
+
+.map-wrap {
+  display: grid;
+  grid-template-columns: minmax(0, 1.9fr) minmax(280px, 1fr);
+  gap: 14px;
+  align-items: start;
+  margin-bottom: 26px;
+}
+
+.map-figure {
+  /* The list is long and the map short; without this the map scrolls away
+     from the cases it belongs to. Sticky also makes it the containing block
+     for the zoom buttons. */
+  position: sticky;
+  top: 16px;
+  margin: 0;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+}
+
+.map-figure svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.map-figure figcaption {
+  border-top: 1px solid var(--line);
+  padding: 8px 12px;
+  color: var(--faint);
+  font-size: 10.5px;
+  line-height: 1.5;
+}
+
+/* ------------------------------------ geography --- */
+
+/* Land and sea were both drawn from the surface ramp, which put a near-white
+   continent on a near-white ocean. Their own pair, dark mode included, so the
+   geography reads before any route is drawn over it. */
+.map-figure {
+  --sea: #cfe0ec;
+  --land: #e8efdc;
+  --water: #a9cbe3;
+  --coast: #9fb8aa;
+  --border-line: #b9c3ae;
+}
+
+:root[data-theme="dark"] .map-figure {
+  --sea: #0c1822;
+  --land: #17231c;
+  --water: #16384d;
+  --coast: #2c4335;
+  --border-line: #2d3a30;
+}
+
+.map-sea {
+  fill: var(--sea);
+}
+
+.map-land path {
+  fill: var(--land);
+  stroke: var(--coast);
+  stroke-width: 0.7;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+
+.map-lakes path {
+  fill: var(--water);
+  stroke: var(--coast);
+  stroke-width: 0.4;
+  vector-effect: non-scaling-stroke;
+}
+
+.map-rivers path {
+  fill: none;
+  stroke: var(--water);
+  stroke-width: 0.8;
+  stroke-linecap: round;
+  opacity: 0.85;
+  vector-effect: non-scaling-stroke;
+}
+
+.map-borders path {
+  fill: none;
+  stroke: var(--border-line);
+  stroke-width: 0.6;
+  stroke-dasharray: 3 2.5;
+  vector-effect: non-scaling-stroke;
+}
+
+/* ------------------------------- inspection stops --- */
+
+.map-check-ring {
+  fill: var(--surface);
+  stroke: var(--text-amber);
+  stroke-width: 2;
+  vector-effect: non-scaling-stroke;
+}
+
+.map-check-tick {
+  fill: none;
+  stroke: var(--text-amber);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+
+.map-check-n {
+  fill: var(--text-amber);
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
+  font-size: 9.5px;
+  font-weight: 700;
+  paint-order: stroke;
+  stroke: var(--land);
+  stroke-width: 2.6;
+  stroke-linejoin: round;
+}
+
+/* ------------------------------- the checks list --- */
+
+.map-checks-head {
+  margin: 0 0 5px;
+  color: var(--text-amber);
+  font-size: 10px;
+  font-weight: 650;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.map-checks ol {
+  display: grid;
+  gap: 5px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.map-checks li {
+  display: grid;
+  grid-template-columns: 62px minmax(0, 1fr);
+  gap: 8px;
+  align-items: baseline;
+}
+
+.map-check-at {
+  border-radius: 999px;
+  background: var(--surface-2);
+  color: var(--muted);
+  padding: 1px 6px;
+  font-size: 9px;
+  font-weight: 650;
+  letter-spacing: 0.03em;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.map-checks li[data-anchor="border"] .map-check-at {
+  background: var(--hue-amber-wash);
+  color: var(--text-amber);
+}
+
+.map-checks li strong {
+  display: block;
+  color: var(--ink);
+  font-size: 11.5px;
+  font-weight: 550;
+}
+
+.map-checks li small {
+  color: var(--muted);
+  font-size: 10.5px;
+}
+
+/* ------------------------------------ corridors --- */
+
+.map-route .map-leg {
+  fill: none;
+  stroke: var(--hue-slate-ink);
+  stroke-width: 1.4;
+  stroke-linecap: round;
+  opacity: 0.45;
+  vector-effect: non-scaling-stroke;
+  transition: opacity 160ms ease, stroke-width 160ms ease;
+}
+
+.map-route[data-on="true"] .map-leg {
+  stroke-width: 3;
+  opacity: 1;
+}
+
+/* The leg's own mode, so a ferry never looks like a railway. */
+.map-route[data-on="true"] .map-leg[data-kind="rail"] { stroke: var(--hue-blue-ink); }
+.map-route[data-on="true"] .map-leg[data-kind="road"] { stroke: var(--hue-amber-ink); }
+.map-route[data-on="true"] .map-leg[data-kind="air"] { stroke: var(--hue-fuchsia-ink); }
+
+.map-route[data-on="true"] .map-leg[data-kind="sea"] {
+  stroke: var(--hue-cyan-ink);
+}
+
+/* Line patterns per mode, on selected and unselected routes alike: rail runs
+   solid like track, road is dashed like a carriageway, sea is dotted like a
+   ferry crossing and air is a long dash. Readable with colour removed. */
+.map-leg[data-kind="rail"] {
+  stroke-dasharray: none;
+}
+
+.map-leg[data-kind="road"] {
+  stroke-dasharray: 7 5;
+}
+
+.map-leg[data-kind="sea"] {
+  stroke-dasharray: 1.5 5;
+  stroke-linecap: round;
+}
+
+.map-leg[data-kind="air"] {
+  stroke-dasharray: 12 6;
+}
+
+/* A shipment under way pulls its line along: the dashes march towards the
+   destination. Only the selected, moving case animates, so motion on screen
+   always means motion in the case. */
+.map-route[data-on="true"][data-moving="true"] .map-leg[data-kind="road"],
+.map-route[data-on="true"][data-moving="true"] .map-leg[data-kind="sea"],
+.map-route[data-on="true"][data-moving="true"] .map-leg[data-kind="air"] {
+  animation: map-flow 1.1s linear infinite;
+}
+
+/* Rail has no dashes to march, so it gets a travelling highlight instead. */
+.map-route[data-on="true"][data-moving="true"] .map-leg[data-kind="rail"] {
+  stroke-dasharray: 16 10;
+  animation: map-flow 1.1s linear infinite;
+}
+
+@keyframes map-flow {
+  to {
+    stroke-dashoffset: -26;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .map-route .map-leg {
+    animation: none !important;
+  }
+}
+
+/* ------------------------------------ city layer --- */
+
+.map-cities circle {
+  fill: var(--coast);
+}
+
+.map-cities text {
+  fill: var(--ink-2);
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
+  font-size: 8px;
+  paint-order: stroke;
+  stroke: var(--land);
+  stroke-width: 2.4;
+  stroke-linejoin: round;
+  opacity: 0.75;
+  pointer-events: none;
+}
+
+/* ------------------------------------ legend --- */
+
+.map-legend {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  border-top: 1px solid var(--line);
+  padding: 8px 12px;
+}
+
+.map-legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--muted);
+  font-size: 10.5px;
+}
+
+.map-legend-item svg {
+  width: 34px;
+  height: 10px;
+  overflow: visible;
+}
+
+.map-legend-item .map-leg {
+  fill: none;
+  stroke-width: 2;
+  opacity: 1;
+}
+
+.map-legend-item .map-leg[data-kind="rail"] { stroke: var(--hue-blue-ink); }
+.map-legend-item .map-leg[data-kind="road"] { stroke: var(--hue-amber-ink); }
+.map-legend-item .map-leg[data-kind="sea"] { stroke: var(--hue-cyan-ink); }
+.map-legend-item .map-leg[data-kind="air"] { stroke: var(--hue-fuchsia-ink); }
+
+.map-stop {
+  fill: var(--surface);
+  stroke: var(--hue-slate-ink);
+  stroke-width: 1.4;
+  opacity: 0.4;
+  vector-effect: non-scaling-stroke;
+}
+
+.map-route[data-on="true"] .map-stop {
+  stroke: var(--ink-2);
+  opacity: 1;
+}
+
+.map-route[data-on="true"] .map-stop[data-edge="true"] {
+  fill: var(--ink);
+  stroke: var(--surface);
+  stroke-width: 2;
+}
+
+/* ------------------------------------ markers --- */
+
+.map-mark {
+  cursor: pointer;
+}
+
+.map-mark-halo {
+  fill: var(--accent);
+  opacity: 0.14;
+}
+
+.map-mark-dot {
+  fill: var(--accent);
+  stroke: var(--surface);
+  stroke-width: 2;
+  vector-effect: non-scaling-stroke;
+}
+
+.map-mark[data-on="false"] .map-mark-dot {
+  fill: var(--hue-slate-ink);
+}
+
+.map-mark[data-on="false"] .map-mark-halo {
+  opacity: 0;
+}
+
+/* Stationary at a border or a terminal; only a shipment actually under way
+   pulses, so the animation means something. */
+.map-mark[data-on="true"][data-moving="true"] .map-mark-halo {
+  animation: map-pulse 1.9s ease-in-out infinite;
+}
+
+@keyframes map-pulse {
+  50% {
+    opacity: 0.34;
+    r: 17;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .map-mark[data-on="true"][data-moving="true"] .map-mark-halo {
+    animation: none;
+  }
+}
+
+.map-mark-label {
+  fill: var(--ink);
+  pointer-events: none;
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  paint-order: stroke;
+  stroke: var(--surface);
+  stroke-width: 3.5;
+  stroke-linejoin: round;
+}
+
+/* ------------------------------------ the list --- */
+
+.map-list {
+  display: grid;
+  gap: 6px;
+  align-content: start;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.map-row,
+.map-row:hover {
+  display: grid;
+  grid-template-columns: 28px minmax(0, 1fr) auto;
+  gap: 9px;
+  align-items: center;
+  width: 100%;
+  min-height: 0;
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  background: var(--surface);
+  box-shadow: none;
+  color: var(--ink);
+  padding: 9px 11px;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.map-row:hover {
+  border-color: var(--accent-line);
+}
+
+.map-row[data-on="true"] {
+  border-color: var(--accent);
+  background: var(--accent-wash);
+}
+
+.map-row-glyph {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: var(--r-sm);
+  background: var(--surface-2);
+  color: var(--glyph, var(--accent));
+}
+
+.map-row-glyph[data-glyph="train"] { --glyph: var(--text-blue); }
+.map-row-glyph[data-glyph="truck"] { --glyph: var(--text-amber); }
+.map-row-glyph[data-glyph="ship"] { --glyph: var(--text-cyan); }
+.map-row-glyph[data-glyph="plane"] { --glyph: var(--text-fuchsia); }
+
+.map-row-glyph svg {
+  width: 15px;
+  height: 15px;
+}
+
+.map-row-main {
+  display: grid;
+  gap: 1px;
+  min-width: 0;
+}
+
+.map-row-main strong {
+  overflow: hidden;
+  color: var(--ink);
+  font-size: 12.5px;
+  font-weight: 550;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.map-row-main small {
+  color: var(--muted);
+  font-size: 10.5px;
+}
+
+.map-row-state {
+  flex: none;
+  border: 1px solid var(--line-2);
+  border-radius: 999px;
+  background: var(--surface-2);
+  color: var(--muted);
+  padding: 1px 8px;
+  font-size: 10px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.map-row-state[data-moving="true"] {
+  border-color: var(--accent-line);
+  background: var(--surface);
+  color: var(--accent-press);
+}
+
+/* ------------------------------------ detail --- */
+
+.map-detail {
+  margin: 4px 0 2px;
+  border-left: 2px solid var(--accent-line);
+  padding: 2px 0 2px 11px;
+}
+
+.map-detail dl {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(92px, 1fr));
+  gap: 6px 12px;
+  margin: 0;
+}
+
+.map-detail dt {
+  color: var(--muted);
+  font-size: 10px;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.map-detail dd {
+  margin: 0;
+  color: var(--ink);
+  font-size: 12px;
+  font-weight: 550;
+  font-variant-numeric: tabular-nums;
+}
+
+.map-note {
+  margin: 8px 0 0;
+  color: var(--note, var(--muted));
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.map-note[data-kind="sea"] { --note: var(--text-cyan); }
+.map-note[data-kind="road"] { --note: var(--text-amber); }
+.map-note[data-kind="gauge"] { --note: var(--text-blue); }
+
+/* ------------------------------------ not on the map --- */
+
+.map-unplaced {
+  border: 1px dashed var(--line-2);
+  border-radius: var(--r-md);
+  background: var(--surface-2);
+  padding: 12px 14px;
+}
+
+.map-unplaced ul {
+  display: grid;
+  gap: 3px;
+  margin: 7px 0 0;
+  padding: 0;
+  list-style: none;
+  color: var(--muted);
+  font-size: 11.5px;
+}
+
+.map-unplaced strong {
+  margin-right: 5px;
+  color: var(--ink-2);
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 11px;
+}
+
+@media (max-width: 1100px) {
+  .map-wrap {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  /* Stacked, a sticky map would cover the list it belongs to. */
+  .map-figure {
+    position: static;
+  }
+}
+
+/* Several cases on the same corridor land on the same dot; the number says
+   how many, rather than stacking markers nobody can separate. */
+.map-mark-count {
+  fill: var(--surface);
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
+  font-size: 8.5px;
+  font-weight: 700;
+  pointer-events: none;
+}
+
+/* ------------------------------ places, vehicles, preview ---------------
+   A dot nobody can name is not a location, so the selected corridor labels
+   its own stops. The marker is the vehicle itself, turned to the heading it
+   is travelling on. */
+
+.map-place {
+  fill: var(--ink);
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
+  font-size: 9.5px;
+  font-weight: 600;
+  paint-order: stroke;
+  stroke: var(--land);
+  stroke-width: 3;
+  stroke-linejoin: round;
+  pointer-events: none;
+}
+
+.map-place[data-edge="true"] {
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.map-mark-plate {
+  fill: var(--accent);
+  stroke: var(--surface);
+  stroke-width: 2;
+  vector-effect: non-scaling-stroke;
+}
+
+.map-vehicle path {
+  fill: none;
+  stroke: var(--surface);
+  stroke-width: 2.1;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+
+.map-vehicle {
+  pointer-events: none;
+}
+
+/* Only a shipment actually under way creeps forward; at a border or a
+   terminal it sits still, because that is what the milestone says. */
+.map-mark[data-on="true"][data-moving="true"] .map-vehicle {
+  animation: map-nudge 2.4s ease-in-out infinite;
+}
+
+@keyframes map-nudge {
+  50% {
+    transform: translateX(3px);
+  }
+}
+
+.map-route[data-on="true"] .map-leg {
+  stroke-dasharray: 1 0;
+}
+
+/* The travelled line flows while the cargo is moving. */
+.map-mark[data-on="true"][data-moving="true"] ~ g .map-leg {
+  animation: none;
+}
+
+.map-preview-plate {
+  fill: var(--hue-amber-ink);
+  stroke: var(--surface);
+  stroke-width: 2;
+  vector-effect: non-scaling-stroke;
+}
+
+.map-preview {
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .map-mark[data-on="true"][data-moving="true"] .map-vehicle {
+    animation: none;
+  }
+}
+
+/* --------------------------------- controls --- */
+
+.map-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  border-top: 1px solid var(--line);
+  padding: 9px 12px;
+}
+
+.map-play,
+.map-play:hover {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex: none;
+  min-height: 0;
+  border: 1px solid var(--accent-line);
+  border-radius: 999px;
+  background: var(--accent-wash);
+  box-shadow: none;
+  color: var(--accent-press);
+  padding: 4px 12px 4px 9px;
+  font: inherit;
+  font-size: 11.5px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.map-play:hover:not(:disabled) {
+  border-color: var(--accent);
+  background: var(--surface);
+}
+
+.map-play:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.map-play span {
+  display: grid;
+  place-items: center;
+}
+
+.map-play svg {
+  width: 13px;
+  height: 13px;
+}
+
+.map-controls-note {
+  color: var(--muted);
+  font-size: 10.5px;
+  line-height: 1.5;
+}
+
+/* ------------------------------- cargo units --- */
+
+.map-row-right {
+  display: grid;
+  gap: 3px;
+  justify-items: end;
+}
+
+.map-units {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  color: var(--muted);
+  font-size: 10.5px;
+  font-variant-numeric: tabular-nums;
+}
+
+.map-units[data-source="declared"] .map-units-icon {
+  color: var(--text-blue);
+}
+
+.map-units-icon {
+  display: grid;
+  place-items: center;
+  color: var(--ink-2);
+}
+
+.map-units-icon svg {
+  width: 13px;
+  height: 13px;
+}
+
+.map-reefer {
+  display: grid;
+  place-items: center;
+  color: var(--text-cyan);
+}
+
+.map-reefer svg {
+  width: 11px;
+  height: 11px;
+}
+
+.map-assumed {
+  color: var(--muted);
+  font-size: 10.5px;
+  font-style: normal;
+  font-weight: 400;
+}
+
+/* ------------------------------ pan, zoom, direction -------------------
+   The map is draggable and zoomable. `--k` is the current scale, written by
+   the component, so text and hairlines divide by it and keep their size
+   however far in you go — otherwise a city name at 8x is a billboard. */
+
+.map-figure svg {
+  cursor: grab;
+  touch-action: none;
+}
+
+.map-figure svg[data-grabbing="true"] {
+  cursor: grabbing;
+}
+
+.map-cities text {
+  font-size: calc(8px / var(--k, 1));
+  stroke-width: calc(2.4px / var(--k, 1));
+}
+
+.map-cities circle {
+  r: calc(1.8px / var(--k, 1));
+}
+
+.map-place {
+  font-size: calc(9.5px / var(--k, 1));
+  stroke-width: calc(3px / var(--k, 1));
+}
+
+.map-place[data-edge="true"] {
+  font-size: calc(11px / var(--k, 1));
+}
+
+.map-mark-label {
+  font-size: calc(11px / var(--k, 1));
+  stroke-width: calc(3.5px / var(--k, 1));
+}
+
+.map-mark,
+.map-check,
+.map-arrow {
+  /* Markers keep their size; only the geography grows. */
+  transform-box: fill-box;
+}
+
+/* Which way the cargo runs, on the line rather than by turning the vehicle. */
+.map-arrow {
+  fill: var(--hue-slate-ink);
+  opacity: 0;
+  transition: opacity 160ms ease;
+}
+
+.map-route[data-on="true"] .map-arrow {
+  fill: var(--ink-2);
+  opacity: 0.75;
+}
+
+.map-zoom {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: grid;
+  gap: 4px;
+}
+
+.map-zoom button,
+.map-zoom button:hover {
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  min-height: 0;
+  border: 1px solid var(--line);
+  border-radius: var(--r-sm);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+  color: var(--ink-2);
+  padding: 0;
+  font: inherit;
+  font-size: 14px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.map-zoom button:hover:not(:disabled) {
+  border-color: var(--accent);
+  color: var(--accent-press);
+}
+
+.map-zoom button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+/* ------------------------------ the checks disclosure --- */
+
+.map-checks {
+  margin-top: 9px;
+  border-top: 1px solid var(--line);
+  padding-top: 8px;
+}
+
+.map-checks summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  color: var(--text-amber);
+  font-size: 11px;
+  font-weight: 650;
+  cursor: pointer;
+  list-style: none;
+}
+
+.map-checks summary::-webkit-details-marker {
+  display: none;
+}
+
+.map-checks-chevron {
+  display: grid;
+  place-items: center;
+  color: var(--muted);
+  transition: transform 160ms ease;
+}
+
+.map-checks-chevron svg {
+  width: 14px;
+  height: 14px;
+}
+
+.map-checks[open] .map-checks-chevron {
+  transform: rotate(180deg);
+}
+
+.map-checks ol {
+  margin-top: 8px;
+}
+
+/* ------------------------------ what you clicked ------------------------
+   A click on the map says what the thing is in words. Anchored inside the
+   figure, so it has no window edge to run off, and dismissed with Escape or
+   by clicking open water. */
+
+.map-told {
+  position: absolute;
+  left: 12px;
+  bottom: 12px;
+  z-index: 5;
+  max-width: min(330px, calc(100% - 24px));
+  display: grid;
+  gap: 3px;
+  border: 1px solid var(--line-2);
+  border-radius: var(--r-md);
+  background: var(--surface);
+  box-shadow: var(--shadow-lift);
+  padding: 11px 12px;
+}
+
+.map-told-kind {
+  margin: 0;
+  color: var(--accent-press);
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.map-told-title {
+  margin: 0;
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.map-told ul {
+  display: grid;
+  gap: 4px;
+  margin: 4px 0 0;
+  padding: 0;
+  list-style: none;
+  color: var(--ink-2);
+  font-size: 11.5px;
+  line-height: 1.5;
+}
+
+.map-told button,
+.map-told button:hover {
+  justify-self: start;
+  min-height: 0;
+  margin-top: 7px;
+  border: 1px solid var(--line-2);
+  border-radius: var(--r-sm);
+  background: var(--surface-2);
+  box-shadow: none;
+  color: var(--ink-2);
+  padding: 3px 10px;
+  font: inherit;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.map-told button:hover {
+  border-color: var(--accent);
+  color: var(--accent-press);
+}
+
+/* A white plate with a coloured glyph: white-on-colour lost the detail of a
+   19px icon, and the vehicle is the thing that has to be recognisable. */
+.map-mark-plate {
+  fill: var(--surface);
+  stroke: var(--accent);
+  stroke-width: 2.5;
+}
+
+.map-vehicle path,
+.map-vehicle circle,
+.map-vehicle rect {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 1.9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+
+/* Anything clickable on the map says so. */
+.map-mark,
+.map-check,
+.map-stop-hit {
+  cursor: pointer;
+}
+
+.map-stop-hit {
+  fill: transparent;
+}
+
+/* ------------------------------ filters over the list ------------------
+   Tabs carry their own counts, from the same classifier the filter uses, so
+   a tab can never promise a number it then fails to produce. A mode with no
+   cases is disabled rather than hidden, which keeps the row from reflowing
+   as cases come and go. */
+
+.map-side {
+  display: grid;
+  gap: 10px;
+  align-content: start;
+  min-width: 0;
+}
+
+.map-filters {
+  display: grid;
+  gap: 7px;
+}
+
+.map-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.map-tabs button,
+.map-tabs button:hover {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  min-height: 0;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--surface);
+  box-shadow: none;
+  color: var(--ink-2);
+  padding: 3px 10px;
+  font: inherit;
+  font-size: 11.5px;
+  font-weight: 550;
+  cursor: pointer;
+}
+
+.map-tabs button:hover:not(:disabled) {
+  border-color: var(--accent-line);
+}
+
+.map-tabs button[data-on="true"] {
+  border-color: var(--accent);
+  background: var(--accent-wash);
+  color: var(--accent-press);
+}
+
+.map-tabs button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.map-tabs em {
+  color: var(--muted);
+  font-size: 10px;
+  font-style: normal;
+  font-variant-numeric: tabular-nums;
+}
+
+.map-tabs button[data-on="true"] em {
+  color: var(--accent-press);
+}
+
+.map-search input {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  background: var(--surface);
+  color: var(--ink);
+  padding: 7px 10px;
+  font: inherit;
+  font-size: 12.5px;
+}
+
+.map-search input:focus-visible {
+  border-color: var(--accent);
+  outline: none;
+}
+
+.map-none {
+  margin: 0;
+  border: 1px dashed var(--line-2);
+  border-radius: var(--r-md);
+  background: var(--surface-2);
+  padding: 14px;
+  color: var(--muted);
+  font-size: 12.5px;
+}
+
+/* ------------------------------ one case, opened ------------------------
+   Four views of the same shipment. The map view reuses the overview's own
+   figure, so pan, zoom and selection survive the switch. */
+
+.cd {
+  display: grid;
+  gap: 14px;
+}
+
+.cd-head {
+  display: grid;
+  gap: 11px;
+}
+
+.cd-back,
+.cd-back:hover {
+  justify-self: start;
+  min-height: 0;
+  border: 0;
+  border-radius: var(--r-sm);
+  background: transparent;
+  box-shadow: none;
+  color: var(--accent-press);
+  padding: 2px 0;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 550;
+  cursor: pointer;
+}
+
+.cd-back:hover {
+  text-decoration: underline;
+}
+
+.cd-title {
+  display: grid;
+  grid-template-columns: 38px minmax(0, 1fr) auto;
+  gap: 11px;
+  align-items: center;
+}
+
+.cd-glyph {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border: 1px solid var(--accent-line);
+  border-radius: var(--r-md);
+  background: var(--accent-wash);
+  color: var(--accent-press);
+}
+
+.cd-glyph svg {
+  width: 19px;
+  height: 19px;
+}
+
+.cd-title h2 {
+  margin: 0;
+  color: var(--ink);
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+}
+
+.cd-title p {
+  margin: 1px 0 0;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.cd-state {
+  flex: none;
+  border: 1px solid var(--accent-line);
+  border-radius: 999px;
+  background: var(--accent-wash);
+  color: var(--accent-press);
+  padding: 3px 11px;
+  font-size: 11.5px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.cd-tabs {
+  display: flex;
+  gap: 2px;
+  flex-wrap: wrap;
+  border-bottom: 1px solid var(--line);
+}
+
+.cd-tabs button,
+.cd-tabs button:hover {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 0;
+  margin-bottom: -1px;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  color: var(--muted);
+  padding: 7px 12px;
+  font: inherit;
+  font-size: 12.5px;
+  font-weight: 550;
+  cursor: pointer;
+}
+
+.cd-tabs button:hover {
+  color: var(--ink);
+}
+
+.cd-tabs button[data-on="true"] {
+  border-bottom-color: var(--accent);
+  color: var(--accent-press);
+}
+
+.cd-tabs em {
+  border-radius: 999px;
+  background: var(--surface-2);
+  color: var(--muted);
+  padding: 0 6px;
+  font-size: 10px;
+  font-style: normal;
+  font-variant-numeric: tabular-nums;
+}
+
+.cd-map .map-figure {
+  position: static;
+}
+
+.cd-lede {
+  display: flex;
+  align-items: flex-start;
+  gap: 7px;
+  margin: 0 0 10px;
+  color: var(--ink-2);
+  font-size: 12.5px;
+  line-height: 1.55;
+}
+
+.cd-lede .head-icon {
+  flex: none;
+  color: var(--accent);
+}
+
+.cd-empty {
+  margin: 0;
+  color: var(--muted);
+  font-size: 12.5px;
+}
+
+/* ------------------------------ milestones, blocks, charges --- */
+
+.cd-miles,
+.cd-blocks,
+.cd-charges {
+  display: grid;
+  gap: 2px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cd-miles li,
+.cd-blocks li,
+.cd-charges li {
+  display: grid;
+  grid-template-columns: 22px minmax(0, 1fr) auto;
+  gap: 10px;
+  align-items: center;
+  border-radius: var(--r-md);
+  padding: 8px 10px;
+}
+
+.cd-blocks li,
+.cd-charges li {
+  border: 1px solid var(--line);
+  background: var(--surface);
+  margin-bottom: 4px;
+}
+
+/* The spine of the milestone list. */
+.cd-dot {
+  position: relative;
+  display: block;
+  justify-self: center;
+  width: 10px;
+  height: 10px;
+  border: 2px solid var(--line-2);
+  border-radius: 999px;
+  background: var(--surface);
+}
+
+li[data-state="done"] .cd-dot {
+  border-color: var(--ok);
+  background: var(--ok);
+}
+
+li[data-state="now"] .cd-dot {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-wash);
+}
+
+li[data-state="running"] .cd-dot {
+  border-color: var(--accent);
+}
+
+.cd-mile-body,
+.cd-block-body {
+  display: grid;
+  gap: 1px;
+  min-width: 0;
+}
+
+.cd-mile-body strong,
+.cd-block-body strong {
+  color: var(--ink);
+  font-size: 12.5px;
+  font-weight: 550;
+}
+
+li[data-state="ahead"] .cd-mile-body strong {
+  color: var(--muted);
+  font-weight: 450;
+}
+
+.cd-mile-body small,
+.cd-block-body small {
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.cd-note {
+  grid-template-columns: minmax(0, 1fr) !important;
+  margin-top: 6px;
+  border-top: 1px solid var(--line);
+  padding-top: 10px !important;
+  color: var(--muted);
+  font-size: 11.5px;
+  line-height: 1.5;
+}
+
+.cd-pill {
+  flex: none;
+  border: 1px solid var(--line-2);
+  border-radius: 999px;
+  background: var(--surface-2);
+  color: var(--muted);
+  padding: 1px 8px;
+  font-size: 10.5px;
+  font-weight: 600;
+  text-transform: capitalize;
+  white-space: nowrap;
+}
+
+.cd-pill[data-state="done"] {
+  border-color: var(--ok-line);
+  background: var(--ok-wash);
+  color: var(--ok);
+}
+
+.cd-pill[data-state="running"] {
+  border-color: var(--accent-line);
+  background: var(--accent-wash);
+  color: var(--accent-press);
+}
+
+.cd-charge-step {
+  justify-self: center;
+  color: var(--muted);
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 11px;
+}
+
+/* Opening a case is its own action on the row. */
+.map-open {
+  border: 1px solid var(--line-2);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--ink-2);
+  padding: 1px 9px;
+  font-size: 10.5px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.map-open:hover,
+.map-open:focus-visible {
+  border-color: var(--accent);
+  background: var(--accent-wash);
+  color: var(--accent-press);
+  outline: none;
+}
+
+/* ------------------------------ the two overviews ----------------------- */
+
+.map-main-tabs {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 14px;
+}
+
+.map-main-tabs button,
+.map-main-tabs button:hover {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 0;
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  background: var(--surface);
+  box-shadow: none;
+  color: var(--ink-2);
+  padding: 7px 13px;
+  font: inherit;
+  font-size: 12.5px;
+  font-weight: 550;
+  cursor: pointer;
+}
+
+.map-main-tabs button:hover {
+  border-color: var(--accent-line);
+}
+
+.map-main-tabs button[data-on="true"] {
+  border-color: var(--accent);
+  background: var(--accent-wash);
+  color: var(--accent-press);
+}
+
+.map-main-tabs span {
+  display: grid;
+  place-items: center;
+}
+
+.map-main-tabs svg {
+  width: 15px;
+  height: 15px;
+}
+
+.map-main-tabs em {
+  border-radius: 999px;
+  background: var(--surface-2);
+  color: var(--muted);
+  padding: 0 6px;
+  font-size: 10px;
+  font-style: normal;
+  font-variant-numeric: tabular-nums;
+}
+
+/* --------------------------------- the globe --- */
+
+.globe {
+  display: grid;
+  gap: 12px;
+  justify-items: center;
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+  padding: 18px;
+}
+
+.globe-stage {
+  position: relative;
+  max-width: 100%;
+}
+
+.globe canvas {
+  display: block;
+  max-width: 100%;
+  height: auto !important;
+  cursor: grab;
+  touch-action: none;
+}
+
+.globe canvas[data-grabbing="true"] {
+  cursor: grabbing;
+}
+
+.globe-tip {
+  position: absolute;
+  z-index: 3;
+  display: grid;
+  gap: 2px;
+  max-width: 250px;
+  border: 1px solid var(--line-2);
+  border-radius: var(--r-md);
+  background: var(--surface);
+  box-shadow: var(--shadow-lift);
+  padding: 8px 10px;
+  pointer-events: none;
+}
+
+.globe-tip strong {
+  color: var(--ink);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.globe-tip small {
+  color: var(--muted);
+  font-size: 10.5px;
+  line-height: 1.45;
+}
+
+.globe-note {
+  max-width: 560px;
+  margin: 0;
+  color: var(--muted);
+  font-size: 11.5px;
+  line-height: 1.55;
+  text-align: center;
+}
+
+.globe-note strong {
+  color: var(--ink-2);
+  font-weight: 600;
+}

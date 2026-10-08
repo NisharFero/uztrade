@@ -1710,6 +1710,26 @@ def letter(doc, c: Ctx) -> Sheet:
     return application_letter(doc, c)
 
 
+def reference(doc, c: Ctx) -> Sheet:
+    """Clear field-based demo for reference types without published forms."""
+    rows = [(doc.get("fieldLabels", {}).get(key, key.replace("_", " ").title()), value)
+            for key, value in doc["fields"].items() if value]
+    per_page = 9
+    pages = max(1, (len(rows) + per_page - 1) // per_page)
+    p = Sheet(pages=pages, seed=doc["file"])
+    for page in range(pages):
+        top = p.top(page)
+        y = p.para(L, top + TOP + 15, R - L, title_of(doc), 28, bold=True)
+        y = p.para(L, y + 16, R - L, c.case_line, 19, color=LABEL)
+        y = p.para(L, y + 12, R - L, "Fictional reference specimen. All values below are supplied by the demo scenario.", 18, color=LABEL)
+        y += 24
+        for label, value in rows[page * per_page:(page + 1) * per_page]:
+            # Large values, separate label lines, and generous white space for OCR.
+            p.cell(L, y, R - L, 120, label, str(value), ls=18, vs=25)
+            y += 130
+    return p
+
+
 TEMPLATES = {
     "commercial_invoice": commercial_invoice,
     "contract": contract,
@@ -1732,6 +1752,7 @@ TEMPLATES = {
     "conformity": conformity,
     "quarantine_permit": quarantine_permit,
     "letter": letter,
+    "reference": reference,
 }
 
 
@@ -1739,7 +1760,7 @@ def render_pack(scenario: dict, out: Path, only: set[str] | None = None) -> int:
     c = Ctx(scenario, out)
     count = 0
     for doc in scenario["documents"]:
-        if only and doc["file"] not in only:
+        if only is not None and doc["file"] not in only:
             continue
         TEMPLATES[doc["template"]](doc, c).save(out / doc["file"])
         count += 1

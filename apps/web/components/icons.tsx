@@ -70,14 +70,6 @@ export const Icon: Record<string, ReactNode> = {
       <path d="M12 6.5v14" />
     </svg>
   ),
-  truck: (
-    <svg {...s}>
-      <path d="M2.5 6.5h11v10h-11z" />
-      <path d="M13.5 9.5h4.2l3.3 3.6v3.4h-7.5" />
-      <circle cx="6.5" cy="17.5" r="1.9" />
-      <circle cx="17" cy="17.5" r="1.9" />
-    </svg>
-  ),
   receipt: (
     <svg {...s}>
       <path d="M5.5 3h13v18l-2.6-1.6-2.3 1.6-2.3-1.6L9 21l-2-1.4-1.5 1.1Z" />
@@ -197,6 +189,118 @@ export const Icon: Record<string, ReactNode> = {
     <svg {...s}>
       <path d="M9 6h11M9 12h11M9 18h11" />
       <path d="M4.2 6h.01M4.2 12h.01M4.2 18h.01" />
+    </svg>
+  ),
+  weight: (
+    <svg {...s}>
+      <path d="M7.5 8h9l2.2 11.5a1.4 1.4 0 0 1-1.4 1.7H6.7a1.4 1.4 0 0 1-1.4-1.7Z" />
+      <circle cx="12" cy="5.4" r="2.6" />
+    </svg>
+  ),
+  snowflake: (
+    <svg {...s}>
+      <path d="M12 2.8v18.4M4 7.4l16 9.2M20 7.4 4 16.6" />
+      <path d="M12 6.2 9.8 4.4M12 6.2l2.2-1.8M12 17.8l-2.2 1.8M12 17.8l2.2 1.8" />
+    </svg>
+  ),
+  play: (
+    <svg {...s}>
+      <path d="M8 5.4 19 12 8 18.6Z" />
+    </svg>
+  ),
+  pause: (
+    <svg {...s}>
+      <path d="M9 5.5v13M15 5.5v13" />
+    </svg>
+  ),
+  /* Transport and cargo glyphs from Lucide (ISC licence), which are drawn to
+     one grid and read at 13px — the hand-drawn ones did not. */
+  train: (
+    <svg {...s}>
+      <path d="M8 3.1V7a4 4 0 0 0 8 0V3.1" />
+      <path d="m9 15-1-1" />
+      <path d="m15 15 1-1" />
+      <path d="M9 19c-2.8 0-5-2.2-5-5v-4a8 8 0 0 1 16 0v4c0 2.8-2.2 5-5 5Z" />
+      <path d="m8 19-2 3" />
+      <path d="m16 19 2 3" />
+    </svg>
+  ),
+  truck: (
+    <svg {...s}>
+      <path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2" />
+      <path d="M15 18H9" />
+      <path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.624l-3.48-4.35A1 1 0 0 0 17.52 8H14" />
+      <circle cx="17" cy="18" r="2" />
+      <circle cx="7" cy="18" r="2" />
+    </svg>
+  ),
+  ship: (
+    <svg {...s}>
+      <path d="M12 2v2" />
+      <path d="M12 9.189V13" />
+      <path d="M19 12V6a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v6" />
+      <path d="M19.38 19A11.6 11.6 0 0 0 21 13l-8.188-3.639a2 2 0 0 0-1.624 0L3 13.001a11.6 11.6 0 0 0 2.81 7.76" />
+      <path d="M2 20c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1s1.2 1 2.5 1c2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1" />
+    </svg>
+  ),
+  plane: (
+    <svg {...s}>
+      <path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z" />
+    </svg>
+  ),
+  container: (
+    <svg {...s}>
+      <path d="M22 7.7c0-.6-.4-1.2-.8-1.5l-6.3-3.9a1.72 1.72 0 0 0-1.7 0l-10.3 6c-.5.2-.9.8-.9 1.4v6.6c0 .5.4 1.2.8 1.5l6.3 3.9a1.72 1.72 0 0 0 1.7 0l10.3-6c.5-.3.9-1 .9-1.5Z" />
+      <path d="M10 21.9V14L2.1 9.1" />
+      <path d="m10 14 11.9-6.9" />
+      <path d="M14 19.8v-8.1" />
+      <path d="M18 17.5V9.4" />
+    </svg>
+  ),
+  crate: (
+    <svg {...s}>
+      <path d="M11 21.73a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73z" />
+      <path d="M12 22V12" />
+      <path d="m3.29 7 8.71 5 8.71-5" />
+      <path d="m7.5 4.27 9 5.15" />
+    </svg>
+  ),
+  pallet: (
+    <svg {...s}>
+      <path d="M2.97 12.92A2 2 0 0 0 2 14.63v3.24a2 2 0 0 0 .97 1.71l3 1.8a2 2 0 0 0 2.06 0L12 19v-5.5l-5-3-4.03 2.42Z" />
+      <path d="m7 16.5-4.74-2.85" />
+      <path d="m7 16.5 5-3" />
+      <path d="M7 16.5v5.17" />
+      <path d="M12 13.5V19l3.97 2.38a2 2 0 0 0 2.06 0l3-1.8a2 2 0 0 0 .97-1.71v-3.24a2 2 0 0 0-.97-1.71L17 10.5l-5 3Z" />
+      <path d="m17 16.5-5-3" />
+      <path d="m17 16.5 4.74-2.85" />
+      <path d="M17 16.5v5.17" />
+    </svg>
+  ),
+  wagon: (
+    <svg {...s}>
+      <path d="M4 5.5h16a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-8a1 1 0 0 1 1-1Z" />
+      <path d="M3 10h18" />
+      <circle cx="7.5" cy="18.5" r="1.8" />
+      <circle cx="16.5" cy="18.5" r="1.8" />
+      <path d="M2 18.5h3.7M9.3 18.5h5.4M18.3 18.5H22" />
+    </svg>
+  ),
+  /* Two stops joined by a path — what the tracking page actually draws. A
+     radar or satellite glyph would imply a live feed this platform does not
+     have. From Lucide (ISC). */
+  route: (
+    <svg {...s}>
+      <circle cx="6" cy="19" r="3" />
+      <path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15" />
+      <circle cx="18" cy="5" r="3" />
+    </svg>
+  ),
+  globe: (
+    <svg {...s}>
+      <circle cx="12" cy="12" r="8.8" />
+      <path d="M3.2 12h17.6" />
+      <path d="M12 3.2c2.3 2.4 3.5 5.4 3.5 8.8S14.3 18.4 12 20.8c-2.3-2.4-3.5-5.4-3.5-8.8S9.7 5.6 12 3.2Z" />
     </svg>
   ),
   /* Points down when closed; CSS rotates it when the disclosure is open. */

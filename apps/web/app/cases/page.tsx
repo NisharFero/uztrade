@@ -68,7 +68,7 @@ export default async function CasesPage() {
         <section className="empty-panel">
           <h2>No cases yet</h2>
           <p>Ask a question on the dashboard — &ldquo;I want to export tea by train&rdquo; — and a case will be opened against the matching procedure.</p>
-          <Link className="empty-cta" href="/">
+          <Link className="empty-cta" href="/dashboard">
             Open the assistant
           </Link>
         </section>

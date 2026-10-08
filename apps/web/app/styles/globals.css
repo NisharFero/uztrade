@@ -8,6 +8,8 @@
 @import "./cards.css";
 @import "./configuration.css";
 @import "./entities.css";
+@import "./map.css";
+@import "./landing.css";
 
 /* ---------------------------------------------------------------------------
    UzTrade — modern product dashboard on a white ground.
@@ -2327,4 +2329,59 @@ mark[data-tone="info"] {
     animation: none !important;
     transition: none !important;
   }
+}
+
+/* Sidebar identity and disclosure. */
+.brand > .sidebar-logo {
+  display: grid; place-items: center; flex: none; width: 34px; height: 34px;
+  min-height: 0; padding: 0; border: 0; border-radius: var(--r-md);
+  background: #fff; color: var(--rail-ink); font-family: var(--font-geist-mono), monospace;
+  font-size: 12px; font-weight: 600; cursor: pointer;
+}
+.brand > .sidebar-logo:hover { background: #e8f0f5; }
+.sidebar-account {
+  display: flex; align-items: center; flex-shrink: 0; gap: 10px; margin-top: auto;
+  padding: 12px 6px 2px; border-top: 1px solid var(--rail-line);
+  color: var(--rail-text-strong); text-decoration: none; border-radius: 0 0 8px 8px;
+}
+.sidebar-account:hover { background: var(--rail-hover); }
+.sidebar-account-avatar {
+  display: grid; place-items: center; flex: none; width: 32px; height: 32px;
+  border-radius: 50%; background: #e7eef4; color: var(--rail-ink); font-size: 11px; font-weight: 600;
+}
+.sidebar-account-details { display: grid; gap: 3px; min-width: 0; }
+.sidebar-account-details strong { font-size: 12px; font-weight: 600; }
+.sidebar-account-details small { font-size: 11px; color: var(--rail-text); }
+.sidebar-account-details .sidebar-account-mock { font-size: 10px; opacity: .7; }
+.sidebar-logo:focus-visible, .sidebar-account:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
+@media (min-width: 901px) {
+  .sidebar.is-collapsed .sidebar-account-details { display: none; }
+  .sidebar.is-collapsed .sidebar-account { padding: 12px 0 2px; }
+}
+
+/* ------------------------------------------------------------- selects --- */
+
+/* Every select in the app was already given a border, a radius and a surface,
+   but none of them turned the native control off — so Chrome kept drawing its
+   own chevron and inner chrome on top, and the result read as an unstyled
+   browser widget next to controls that were styled.
+   
+   One rule, here rather than in each component: `select:not([multiple])` has
+   the same specificity as the four `.x select` rules in the imported files and
+   comes after them in source order, so it wins without having to touch any of
+   them. The chevron is drawn as a background image in --muted. */
+select:not([multiple]) {
+  appearance: none;
+  -webkit-appearance: none;
+  background-color: var(--surface);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2366727f' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 15px;
+  padding-right: 32px;
+  cursor: pointer;
+}
+
+select:not([multiple]):hover {
+  border-color: var(--line-2);
 }

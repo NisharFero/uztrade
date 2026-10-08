@@ -318,7 +318,7 @@
   },
   {
    "id": "agreement-with-technological-center-10",
-   "template": "letter",
+   "template": "reference",
    "title": "Agreement with Technological center (single window) — step 10",
    "docType": "service_contract",
    "labels": [
@@ -328,8 +328,21 @@
     10
    ],
    "output": true,
-   "fields": {},
-   "file": "707-09-agreement-with-technological-center-step-10.png"
+   "fields": {
+    "contract_no": "SRV-707-10",
+    "date": "06.09.2026",
+    "provider": "JSC Uzbekistan Temir Yo'llari",
+    "client": "OOO \"Bogdorchilik Resurs\"",
+    "valid_until": "31.12.2027"
+   },
+   "file": "707-09-agreement-with-technological-center-step-10.png",
+   "fieldLabels": {
+    "contract_no": "Contract number",
+    "date": "Date",
+    "provider": "Service provider",
+    "client": "Client",
+    "valid_until": "Valid until"
+   }
   },
   {
    "template": "letter",
@@ -389,7 +402,7 @@
    "file": "707-12-letter-to-railway-station.png"
   },
   {
-   "template": "letter",
+   "template": "reference",
    "title": "Certificate on availability of funds at client's account",
    "docType": "funds_certificate",
    "labels": [
@@ -399,9 +412,20 @@
     20
    ],
    "output": false,
-   "fields": {},
+   "fields": {
+    "bank": "NBU Uzbekistan",
+    "account_holder": "OOO \"Bogdorchilik Resurs\"",
+    "amount": "100 000 000.00",
+    "date": "11.09.2026"
+   },
    "id": "certificate-on-availability-of-funds-at-client-s",
-   "file": "707-13-certificate-on-availability-of-funds-at-client-s.png"
+   "file": "707-13-certificate-on-availability-of-funds-at-client-s.png",
+   "fieldLabels": {
+    "bank": "Bank",
+    "account_holder": "Account holder",
+    "amount": "Amount available",
+    "date": "Date"
+   }
   },
   {
    "id": "import-railway-bill-20",
@@ -467,7 +491,7 @@
    "file": "707-16-electronic-application-for-preliminary-visual-in.png"
   },
   {
-   "template": "letter",
+   "template": "reference",
    "title": "Contract for customs warehouse services",
    "docType": "service_contract",
    "labels": [
@@ -477,9 +501,22 @@
     24
    ],
    "output": false,
-   "fields": {},
+   "fields": {
+    "contract_no": "SRV-707-24",
+    "date": "13.09.2026",
+    "provider": "Demo Customs Warehouse LLC",
+    "client": "OOO \"Bogdorchilik Resurs\"",
+    "valid_until": "31.12.2027"
+   },
    "id": "contract-for-customs-warehouse-services",
-   "file": "707-17-contract-for-customs-warehouse-services.png"
+   "file": "707-17-contract-for-customs-warehouse-services.png",
+   "fieldLabels": {
+    "contract_no": "Contract number",
+    "date": "Date",
+    "provider": "Service provider",
+    "client": "Client",
+    "valid_until": "Valid until"
+   }
   },
   {
    "template": "declaration",
@@ -510,7 +547,7 @@
    "file": "707-18-cargo-customs-declaration.png"
   },
   {
-   "template": "letter",
+   "template": "reference",
    "title": "Cargo delivery control book (railway)",
    "docType": "cargo_control_book",
    "labels": [
@@ -520,9 +557,20 @@
     30
    ],
    "output": false,
-   "fields": {},
+   "fields": {
+    "book_no": "CCB-707-30",
+    "issue_date": "16.09.2026",
+    "destination_office": "Tashkent customs",
+    "transport": "54410087"
+   },
    "id": "cargo-delivery-control-book",
-   "file": "707-19-cargo-delivery-control-book.png"
+   "file": "707-19-cargo-delivery-control-book.png",
+   "fieldLabels": {
+    "book_no": "Control book number",
+    "issue_date": "Date of issue",
+    "destination_office": "Customs office of destination",
+    "transport": "Vehicle or wagon number"
+   }
   },
   {
    "id": "offer-agreement-31",
@@ -747,7 +795,7 @@
    "file": "707-29-online-application-for-veterinary-certificate.png"
   },
   {
-   "template": "letter",
+   "template": "reference",
    "title": "Certificate of analysis for fertilizers",
    "docType": "quality_certificate",
    "labels": [
@@ -757,12 +805,25 @@
     47
    ],
    "output": false,
-   "fields": {},
+   "fields": {
+    "certificate_no": "QC-707-47",
+    "issue_date": "25.09.2026",
+    "product": "Granulated poultry manure, organic fertilizer",
+    "batch": "LOT-707-2026",
+    "issuer": "OOO \"Podmoskovnye Udobreniya\""
+   },
    "id": "certificate-of-analysis-for-fertilizers",
-   "file": "707-30-certificate-of-analysis-for-fertilizers.png"
+   "file": "707-30-certificate-of-analysis-for-fertilizers.png",
+   "fieldLabels": {
+    "certificate_no": "Certificate number",
+    "issue_date": "Date of issue",
+    "product": "Product",
+    "batch": "Batch / lot",
+    "issuer": "Issued by"
+   }
   },
   {
-   "template": "letter",
+   "template": "reference",
    "title": "Quality certificate",
    "docType": "quality_certificate",
    "labels": [
@@ -772,9 +833,22 @@
     47
    ],
    "output": false,
-   "fields": {},
+   "fields": {
+    "certificate_no": "QC-707-47",
+    "issue_date": "25.09.2026",
+    "product": "Granulated poultry manure, organic fertilizer",
+    "batch": "LOT-707-2026",
+    "issuer": "OOO \"Podmoskovnye Udobreniya\""
+   },
    "id": "quality-certificate",
-   "file": "707-31-quality-certificate.png"
+   "file": "707-31-quality-certificate.png",
+   "fieldLabels": {
+    "certificate_no": "Certificate number",
+    "issue_date": "Date of issue",
+    "product": "Product",
+    "batch": "Batch / lot",
+    "issuer": "Issued by"
+   }
   },
   {
    "template": "letter",
@@ -793,7 +867,7 @@
    "file": "707-32-normative-documents-on-standardization.png"
   },
   {
-   "template": "letter",
+   "template": "reference",
    "title": "Registration certificate",
    "docType": "registration_certificate",
    "labels": [
@@ -803,9 +877,20 @@
     47
    ],
    "output": false,
-   "fields": {},
+   "fields": {
+    "certificate_no": "REG-707-2026",
+    "product": "Granulated poultry manure, organic fertilizer",
+    "holder": "OOO \"Bogdorchilik Resurs\"",
+    "valid_until": "31.12.2027"
+   },
    "id": "registration-certificate",
-   "file": "707-33-registration-certificate.png"
+   "file": "707-33-registration-certificate.png",
+   "fieldLabels": {
+    "certificate_no": "Registration number",
+    "product": "Product",
+    "holder": "Registration holder",
+    "valid_until": "Valid until"
+   }
   },
   {
    "template": "invoice_for_payment",

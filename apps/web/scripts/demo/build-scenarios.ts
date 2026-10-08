@@ -266,6 +266,7 @@ type Doc = {
   fields: Record<string, string>;
   body?: string;
   stamp?: string;
+  fieldLabels?: Record<string, string>;
 };
 
 const slug = (s: string) =>
@@ -340,7 +341,7 @@ function build(p: Profile) {
       case "packing_list":
         return { list_no: `PL-${p.id}/2026-031`, list_date: date(3), seller: seller.name, consignee: buyer.name, goods: p.goods, packaging: p.packaging, packages: String(p.packages), net_weight: `${kg(p.netKg)} kg`, gross_weight: `${kg(gross)} kg`, hs_code: p.hs, seller_inn: seller.tin };
       case "cmr_note":
-        return { cmr_no: `${p.id}-2026/014`, sender: seller.name, consignee: buyer.name, delivery_place: `${p.to}, ${p.toCountry}`, loading_place: `${p.from}, ${p.fromCountry}, ${date(4)}`, goods: p.goods, places: String(p.packages), weight: `${kg(gross)} kg`, carrier: p.carrier, vehicle: p.units[0], issue_date: date(4) };
+        return { cmr_no: `${p.id}-2026/014`, sender: seller.name, consignee: buyer.name, delivery_place: `${p.to}, ${p.toCountry}`, loading_place: `${p.from}, ${p.fromCountry}, ${date(4)}`, goods: p.goods, places: String(p.packages), weight: `${kg(gross)} kg`, carrier: p.carrier.replace(/\s*\(TIR carrier\)/i, ""), vehicle: p.units[0], issue_date: date(4) };
       case "air_waybill":
         return { awb_no: `250-${p.id}88213`, shipper: seller.name, consignee: buyer.name, departure_airport: p.departure, destination_airport: p.destination, flight_date: `HY 7021 / ${date(10)}`, pieces: String(p.packages), gross_weight: `${kg(gross)} kg`, goods: p.goods, declared_customs: "NCV", executed_on: date(10) };
       case "railway_bill":
@@ -367,6 +368,28 @@ function build(p: Profile) {
         return { cert_no: `UZ.SMT.${p.id}.2026`, issue_date: d, valid_until: "31.12.2027", applicant: p.trader.name, product: p.goods, hs_code: p.hs, standard: "O'z DSt 3182 (demo)", body: "Certification body of fertilizers (demo)" };
       case "quarantine_permit":
         return { permit_no: `QP-${p.id}-2026`, issued_date: date(2), valid_until: "31.12.2026", issued_to: p.trader.name, exporter: seller.name, product: p.goods, hs_code: p.hs, origin: p.fromCountry, entry_post: p.border };
+      case "vehicle_registration":
+        return { reg_number: p.units[0], vin: `XW8ZZZ61ZKG${p.id.padStart(6, "0")}`, owner: p.carrier.replace(/\s*\(TIR carrier\)/i, ""), make: "MAN", valid_until: "31.12.2027" };
+      case "drivers_licence":
+        return { holder: p.representative.name, licence_no: `DL-${p.id}-2026`, categories: "B, C, CE", valid_until: "31.12.2031" };
+      case "carriage_permit":
+        return { permit_no: `CP-${p.id}-2026`, country: p.toCountry, vehicle: p.units[0], valid_until: "31.12.2027" };
+      case "tir_carnet":
+        return { carnet_no: `TX${p.id}202601`, holder: p.carrier.replace(/\s*\(TIR carrier\)/i, ""), valid_until: "31.12.2027", departure_office: `${p.from} customs`, vehicle: p.units[0] };
+      case "atp_certificate":
+        return { certificate_no: `ATP-${p.id}-2026`, vehicle: p.units[0], valid_until: "31.12.2027", class: "FRC" };
+      case "service_contract":
+        return { contract_no: `SRV-${p.id}-${step}`, date: d, provider: recipientOf(label, step).replace("Service provider (demo)", "OOO Demo Cargo Services"), client: p.trader.name, valid_until: "31.12.2027" };
+      case "cargo_control_book":
+        return { book_no: `CCB-${p.id}-${step}`, issue_date: d, destination_office: `${p.to} customs`, transport: p.units.join(", ") };
+      case "transit_declaration":
+        return { declaration_no: `TR-${p.id}-${step}`, date: d, departure_office: `${p.from} customs`, destination_office: `${p.to} customs`, hs_code: p.hs, gross_weight: `${kg(gross)} kg` };
+      case "funds_certificate":
+        return { bank: "NBU Uzbekistan", account_holder: p.trader.name, amount: "100 000 000.00", date: d };
+      case "quality_certificate":
+        return { certificate_no: `QC-${p.id}-${step}`, issue_date: d, product: p.goods, batch: `LOT-${p.id}-2026`, issuer: seller.name };
+      case "registration_certificate":
+        return { certificate_no: `REG-${p.id}-2026`, product: p.goods, holder: p.trader.name, valid_until: "31.12.2027" };
       default:
         return {};
     }
@@ -474,6 +497,13 @@ function build(p: Profile) {
     return `${label} for the shipment ${shipment}, contract ${contractNo} of ${date(0)}.`;
   }
 
+  const referenceTypes = new Set<DocType>(["vehicle_registration", "drivers_licence", "carriage_permit", "tir_carnet", "atp_certificate", "service_contract", "cargo_control_book", "transit_declaration", "funds_certificate", "quality_certificate", "registration_certificate"]);
+  for (const doc of docs) {
+    if (doc.docType && referenceTypes.has(doc.docType)) {
+      doc.template = "reference";
+      doc.fieldLabels = Object.fromEntries(specFor(doc.docType).fields.map((field) => [field.key, field.name]));
+    }
+  }
   return {
     procedureId: p.id,
     title: `${procedure.title} — demo scenario`,

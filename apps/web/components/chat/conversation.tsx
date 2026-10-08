@@ -15,6 +15,7 @@ import { rememberCase } from "../../modules/cases/last-case";
 import { AGENTS, agentStatuses, riskSummary, type AgentId } from "../../modules/chat/agents";
 import type { RiskReport } from "../../modules/compliance/risk";
 import type { IntakeTurn } from "../../modules/intake/conversation";
+import { confirmsShipment } from "../../modules/intake/confirmation";
 import { restoreIntake, saveIntake } from "../../modules/intake/checkpoint";
 import { brief } from "../../modules/assistant/say";
 import { briefDocumentUpload } from "../../modules/steps/briefing";
@@ -68,7 +69,6 @@ const CORRECT: Record<string, string> = {
 };
 
 /** "yes", "go ahead", "open it": the trader agreeing, in their own words. */
-const AGREES = /^\s*(go|yes|yep|yeah|ok(ay)?|sure|start|begin|do it|go ahead|open it|let'?s go|please do)\b/i;
 const CHUNK_MS = 14;
 const seconds = (ms: number) => (ms < 1000 ? "under a second" : `${Math.round(ms / 100) / 10}s`);
 
@@ -116,6 +116,7 @@ export default function Conversation() {
   const nextId = () => `m${(seq.current += 1)}`;
   /** The case this thread belongs to; another case starts a fresh thread. */
   const threadCase = useRef<string | null>(null);
+  const openingCase = useRef(false);
   /** Risk said something about this case already. */
   const riskSpoke = useRef<string | null>(null);
 
@@ -128,7 +129,13 @@ export default function Conversation() {
     if (intakeRestored) return;
     try {
       if (!caseId && param !== "new") {
-        const restored = restoreIntake(window.localStorage);
+        const activeCase = window.sessionStorage.getItem("uztrade.session.case.v1");
+        if (activeCase && /^UZ-\d{4}-\d{4}$/i.test(activeCase)) {
+          router.replace(`/dashboard?case=${encodeURIComponent(activeCase)}`);
+          setIntakeRestored(true);
+          return;
+        }
+        const restored = restoreIntake(window.sessionStorage);
         if (restored) {
           const result: ChatResult = { kind: "intake", turn: restored };
           const spoken = brief(result);
@@ -138,21 +145,28 @@ export default function Conversation() {
       }
     } catch { /* Browser storage may be disabled. */ }
     setIntakeRestored(true);
-  }, [intakeRestored, caseId, param]);
+  }, [intakeRestored, caseId, param, router]);
 
   useEffect(() => {
     if (!intakeRestored || caseId || param === "new") return;
-    try { saveIntake(window.localStorage, turn); } catch { /* Storage is optional. */ }
+    try { saveIntake(window.sessionStorage, turn); } catch { /* Storage is optional. */ }
   }, [turn, intakeRestored, caseId, param]);
 
   useEffect(() => {
     if (param === "new") {
-      try { saveIntake(window.localStorage, null); } catch { /* Storage is optional. */ }
+      try {
+        saveIntake(window.sessionStorage, null);
+        window.sessionStorage.removeItem("uztrade.session.case.v1");
+      } catch { /* Storage is optional. */ }
       setMessages([]);
       setTurn(null);
       threadCase.current = null;
-      router.replace("/");
+      router.replace("/dashboard");
       input.current?.focus();
+      return;
+    }
+    if (!caseId && threadCase.current) {
+      router.replace(`/dashboard?case=${encodeURIComponent(threadCase.current)}`);
       return;
     }
     // A case opened from this very thread set threadCase first, so it keeps
@@ -174,6 +188,7 @@ export default function Conversation() {
 
   useEffect(() => {
     if (!caseId) return;
+    try { window.sessionStorage.setItem("uztrade.session.case.v1", caseId); } catch { /* Storage is optional. */ }
     rememberCase(caseId);
     let live = true;
     fetch(`/api/cases/${caseId}/assistant`)
@@ -344,36 +359,39 @@ export default function Conversation() {
 
   /** The matched shipment becomes a case, and the thread carries on in it. */
   const openCase = async () => {
-    if (!turn || busy) return;
+    if (!turn || turn.status !== "confirm" || busy || caseId || threadCase.current || openingCase.current) return;
+    openingCase.current = true;
     setBusy("open");
     try {
       const opened = await readJson<{ status: string; caseId?: string; message?: string }>(
-        await fetch("/api/intake", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ draft: turn.draft, confirm: true }) }),
+        await fetch("/api/intake", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ draft: turn.draft, confirm: true, caseId: threadCase.current }) }),
         "Could not open the case",
       );
       if (opened.status !== "opened" || !opened.caseId) throw new Error(opened.message || "A detail no longer holds. Tell me the shipment again.");
-      try { saveIntake(window.localStorage, null); } catch { /* Storage is optional. */ }
+      try { saveIntake(window.sessionStorage, null); } catch { /* Storage is optional. */ }
       setTurn(null);
       setMessages((all) => all.map((m) => ({ ...m, confirm: undefined, options: undefined, followUps: undefined })));
       threadCase.current = opened.caseId;
+      try { window.sessionStorage.setItem("uztrade.session.case.v1", opened.caseId); } catch { /* Storage is optional. */ }
       rememberCase(opened.caseId);
-      router.replace(`/?case=${encodeURIComponent(opened.caseId)}`);
+      router.replace(`/dashboard?case=${encodeURIComponent(opened.caseId)}`);
     } catch (error) {
       add({ who: "assistant", text: "", error: error instanceof Error ? error.message : "Could not open the case" });
     }
+    openingCase.current = false;
     setBusy(null);
   };
 
   const send = async (text?: string) => {
     const message = (text ?? query).trim();
-    if (!message || pending) return;
+    if (!message || pending || openingCase.current) return;
     setQuery("");
     following.current = true;
     const last = messages.at(-1);
     add({ who: "user", text: message });
     setMessages((all) => all.map((m) => (m.options || m.followUps ? { ...m, options: undefined, followUps: undefined } : m)));
 
-    if (!caseId && last?.confirm && turn?.status === "confirm" && AGREES.test(message)) {
+    if (!caseId && last?.confirm && turn?.status === "confirm" && confirmsShipment(message)) {
       await openCase();
       return;
     }
@@ -687,7 +705,7 @@ export default function Conversation() {
           <nav className="convo-links" aria-label="Case">
             {caseId ? <Link href={`/cases/${caseId}`}>Whole workflow</Link> : null}
             {caseId ? <Link href={`/ledger?case=${caseId}`}>Ledger</Link> : null}
-            <Link href="/?case=new" className="convo-new">
+            <Link href="/dashboard?case=new" className="convo-new">
               {Icon.plus} <span>New shipment</span>
             </Link>
           </nav>

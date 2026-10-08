@@ -1,4 +1,4 @@
-# Uzbekistan Trade Platform
+# UzOne Trade Platform
 
 A trader describes a shipment in chat; agents match it to one of 243 published
 Uzbek trade procedures, open a case and take it through step by step, filing

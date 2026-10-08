@@ -263,7 +263,7 @@
   },
   {
    "id": "agreement-with-technological-center-6",
-   "template": "letter",
+   "template": "reference",
    "title": "Agreement with Technological center (single window) — step 6",
    "docType": "service_contract",
    "labels": [
@@ -273,8 +273,21 @@
     6
    ],
    "output": true,
-   "fields": {},
-   "file": "477-07-agreement-with-technological-center-step-6.png"
+   "fields": {
+    "contract_no": "SRV-477-6",
+    "date": "04.09.2026",
+    "provider": "JSC Uzbekistan Temir Yo'llari",
+    "client": "OOO \"Toshkent Choy Savdo\"",
+    "valid_until": "31.12.2027"
+   },
+   "file": "477-07-agreement-with-technological-center-step-6.png",
+   "fieldLabels": {
+    "contract_no": "Contract number",
+    "date": "Date",
+    "provider": "Service provider",
+    "client": "Client",
+    "valid_until": "Valid until"
+   }
   },
   {
    "template": "letter",
@@ -334,7 +347,7 @@
    "file": "477-10-letter-to-railway-station.png"
   },
   {
-   "template": "letter",
+   "template": "reference",
    "title": "Certificate on availability of funds at client's account",
    "docType": "funds_certificate",
    "labels": [
@@ -344,9 +357,20 @@
     16
    ],
    "output": false,
-   "fields": {},
+   "fields": {
+    "bank": "NBU Uzbekistan",
+    "account_holder": "OOO \"Toshkent Choy Savdo\"",
+    "amount": "100 000 000.00",
+    "date": "09.09.2026"
+   },
    "id": "certificate-on-availability-of-funds-at-client-s",
-   "file": "477-11-certificate-on-availability-of-funds-at-client-s.png"
+   "file": "477-11-certificate-on-availability-of-funds-at-client-s.png",
+   "fieldLabels": {
+    "bank": "Bank",
+    "account_holder": "Account holder",
+    "amount": "Amount available",
+    "date": "Date"
+   }
   },
   {
    "id": "import-railway-bill-16",
@@ -412,7 +436,7 @@
    "file": "477-14-electronic-application-for-preliminary-visual-in.png"
   },
   {
-   "template": "letter",
+   "template": "reference",
    "title": "Contract for customs warehouse services",
    "docType": "service_contract",
    "labels": [
@@ -422,9 +446,22 @@
     20
    ],
    "output": false,
-   "fields": {},
+   "fields": {
+    "contract_no": "SRV-477-20",
+    "date": "11.09.2026",
+    "provider": "Demo Customs Warehouse LLC",
+    "client": "OOO \"Toshkent Choy Savdo\"",
+    "valid_until": "31.12.2027"
+   },
    "id": "contract-for-customs-warehouse-services",
-   "file": "477-15-contract-for-customs-warehouse-services.png"
+   "file": "477-15-contract-for-customs-warehouse-services.png",
+   "fieldLabels": {
+    "contract_no": "Contract number",
+    "date": "Date",
+    "provider": "Service provider",
+    "client": "Client",
+    "valid_until": "Valid until"
+   }
   },
   {
    "template": "declaration",
@@ -455,7 +492,7 @@
    "file": "477-16-cargo-customs-declaration.png"
   },
   {
-   "template": "letter",
+   "template": "reference",
    "title": "Cargo delivery control book (railway)",
    "docType": "cargo_control_book",
    "labels": [
@@ -465,9 +502,20 @@
     26
    ],
    "output": false,
-   "fields": {},
+   "fields": {
+    "book_no": "CCB-477-26",
+    "issue_date": "14.09.2026",
+    "destination_office": "Tashkent customs",
+    "transport": "52917340"
+   },
    "id": "cargo-delivery-control-book",
-   "file": "477-17-cargo-delivery-control-book.png"
+   "file": "477-17-cargo-delivery-control-book.png",
+   "fieldLabels": {
+    "book_no": "Control book number",
+    "issue_date": "Date of issue",
+    "destination_office": "Customs office of destination",
+    "transport": "Vehicle or wagon number"
+   }
   },
   {
    "id": "offer-agreement-27",

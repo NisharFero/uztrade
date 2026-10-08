@@ -26,17 +26,20 @@ DATA = APPS / "web" / "modules" / "demo" / "data"
 PUBLIC = APPS / "web" / "public" / "demo"
 
 
-def render(procedure_id: str) -> int:
+def render(procedure_id: str, reference_only: bool = False) -> int:
     scenario = json.loads((DATA / f"scenario-{procedure_id}.json").read_text(encoding="utf-8"))
     scenario.setdefault("procedureId", procedure_id)
-    return render_pack(scenario, PUBLIC / procedure_id)
+    only = {doc["file"] for doc in scenario["documents"] if doc["template"] == "reference" or doc["docType"] == "cmr_note"} if reference_only else None
+    return render_pack(scenario, PUBLIC / procedure_id, only=only)
 
 
 def main(ids: list[str]) -> None:
+    reference_only = "--reference-only" in ids
+    ids = [arg for arg in ids if arg != "--reference-only"]
     if not ids:
         ids = sorted(p.stem.split("-")[1] for p in DATA.glob("scenario-*.json"))
     for procedure_id in ids:
-        count = render(procedure_id)
+        count = render(procedure_id, reference_only=reference_only)
         print(f"{procedure_id}: {count} documents in {PUBLIC / procedure_id}")
 
 

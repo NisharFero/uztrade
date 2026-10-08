@@ -117,7 +117,14 @@ export function converse(draft: IntakeDraft, reply: string, options: { expecting
 
   const prefix: string[] = [];
   if (merged.unsupportedGoods) prefix.push(`No published procedure covers ${merged.unsupportedGoods}.`);
-  if (merged.unknownPlace) prefix.push(`I don't know “${merged.unknownPlace}”.`);
+  if (merged.unknownPlace) {
+    const current = evaluate(merged.draft);
+    return {
+      status: "asking", draft: merged.draft, slot: "route",
+      options: current.slot === "route" ? current.options : [], notes: current.notes, progress: current.progress,
+      message: `“${merged.unknownPlace}” is not added to the platform’s country or city data. ${current.slot === "route" ? current.message : "Please provide an origin and destination that are in the data."}`,
+    };
+  }
   if (!merged.understood) prefix.push("I didn't catch that.");
   // Asked for a city in one country, given a city in another: say the country changed.
   for (const key of ["origin", "destination"] as const) {

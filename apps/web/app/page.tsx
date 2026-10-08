@@ -1,19 +1,12 @@
-import type { Metadata } from "next";
 import { Suspense } from "react";
 import Conversation from "../components/chat/conversation";
+import Landing from "../components/layout/landing";
 
-export const metadata: Metadata = {
-  title: "UzOne Trade Platform",
-  description: "Say what you are moving; the agents match the published procedure and take the case through it one step at a time.",
-};
-
-export const dynamic = "force-dynamic";
-
-export default function Home() {
-  // The conversation reads ?case= to know which case it is in, so it renders on the client.
-  return (
-    <Suspense fallback={null}>
-      <Conversation />
-    </Suspense>
-  );
+export default async function Home({ searchParams }: {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}) {
+  const params = await searchParams;
+  // Keep bookmarked case and chat URLs opening their original workspace.
+  if (params.case || params.chat) return <Suspense fallback={null}><Conversation /></Suspense>;
+  return <Landing />;
 }

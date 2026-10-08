@@ -40,7 +40,7 @@ export default function FaqList({ entries, matched }: { entries: FaqEntry[]; mat
       ) : (
         <p className="needs-empty">
           Nothing here mentions &ldquo;{query.trim()}&rdquo;.{" "}
-          <Link className="crumb" href="/">
+          <Link className="crumb" href="/dashboard">
             Ask the assistant instead →
           </Link>
         </p>

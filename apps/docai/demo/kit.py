@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import hashlib
 import math
+import os
 import random
 from pathlib import Path
 
@@ -49,7 +50,19 @@ _fonts: dict[tuple[str, int, bool], ImageFont.FreeTypeFont] = {}
 def font(size: int, bold: bool = False, face: str = "sans") -> ImageFont.FreeTypeFont:
     key = (face, size, bold)
     if key not in _fonts:
-        _fonts[key] = ImageFont.truetype(FONTS + FACES[(face, bold)], size)
+        mac_names = {
+            ("sans", False): "Arial.ttf", ("sans", True): "Arial Bold.ttf",
+            ("narrow", False): "Arial Narrow.ttf", ("narrow", True): "Arial Narrow Bold.ttf",
+            ("serif", False): "Times New Roman.ttf", ("serif", True): "Times New Roman Bold.ttf",
+            ("italic", False): "Times New Roman Italic.ttf", ("italic", True): "Times New Roman Bold Italic.ttf",
+            ("mono", False): "Courier New.ttf", ("mono", True): "Courier New Bold.ttf",
+        }
+        candidates = [Path(os.environ.get("DEMO_FONT_DIR", FONTS)) / FACES[(face, bold)],
+                      Path("/System/Library/Fonts/Supplemental") / mac_names[(face, bold)]]
+        path = next((p for p in candidates if p.exists()), None)
+        if path is None:
+            raise FileNotFoundError("Set DEMO_FONT_DIR to a directory containing the demo fonts")
+        _fonts[key] = ImageFont.truetype(str(path), size)
     return _fonts[key]
 
 

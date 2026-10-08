@@ -242,3 +242,10 @@ test("a title set into a sentence keeps its acronyms", () => {
   assert.equal(inSentence("Pay the fee"), "pay the fee");
   assert.equal(startsSentence("pay the fee"), "Pay the fee");
 });
+
+test("an active-case session cannot produce intake for another shipment", async () => {
+  const events: ChatEvent[] = [];
+  await runChat({ message: "I want to export tomatoes to Germany", draft: parseDraft(null), expecting: null, caseId: "UZ-2609-0002" }, { listCases: async () => ROWS, projection: async () => projection }, (event) => events.push(event));
+  assert.equal(events.some((event) => event.type === "result" && event.result.kind === "intake"), false);
+  assert.ok(events.some((event) => event.type === "result" && event.result.kind === "other" && /new shipment session/i.test(event.result.message)));
+});

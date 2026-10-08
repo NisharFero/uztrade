@@ -180,7 +180,7 @@
     "goods": "Apple juice, not concentrated",
     "places": "20",
     "weight": "20 400 kg",
-    "carrier": "OOO \"Demo Trans Logistic\" (TIR carrier)",
+    "carrier": "OOO \"Demo Trans Logistic\"",
     "vehicle": "01 A 777 BA / trailer 01 1234 XA",
     "issue_date": "05.09.2026"
    },
@@ -259,7 +259,7 @@
    "file": "161-07-certificate-of-origin.png"
   },
   {
-   "template": "letter",
+   "template": "reference",
    "title": "TIR Carnet - \"Transport International Routier\"",
    "docType": "tir_carnet",
    "labels": [
@@ -270,12 +270,25 @@
     11
    ],
    "output": false,
-   "fields": {},
+   "fields": {
+    "carnet_no": "TX161202601",
+    "holder": "OOO \"Demo Trans Logistic\"",
+    "valid_until": "31.12.2027",
+    "departure_office": "Namangan customs",
+    "vehicle": "01 A 777 BA / trailer 01 1234 XA"
+   },
    "id": "tir-carnet-transport-international-routier",
-   "file": "161-08-tir-carnet-transport-international-routier.png"
+   "file": "161-08-tir-carnet-transport-international-routier.png",
+   "fieldLabels": {
+    "carnet_no": "Carnet number",
+    "holder": "Holder",
+    "valid_until": "Valid until",
+    "departure_office": "Customs office of departure",
+    "vehicle": "Vehicle registration number"
+   }
   },
   {
-   "template": "letter",
+   "template": "reference",
    "title": "Driver's license",
    "docType": "drivers_licence",
    "labels": [
@@ -285,12 +298,23 @@
     6
    ],
    "output": false,
-   "fields": {},
+   "fields": {
+    "holder": "Ilhom Nazarov",
+    "licence_no": "DL-161-2026",
+    "categories": "B, C, CE",
+    "valid_until": "31.12.2031"
+   },
    "id": "driver-s-license",
-   "file": "161-09-driver-s-license.png"
+   "file": "161-09-driver-s-license.png",
+   "fieldLabels": {
+    "holder": "Holder",
+    "licence_no": "Licence number",
+    "categories": "Categories",
+    "valid_until": "Valid until"
+   }
   },
   {
-   "template": "letter",
+   "template": "reference",
    "title": "Vehicle registration certificate",
    "docType": "vehicle_registration",
    "labels": [
@@ -301,13 +325,26 @@
     11
    ],
    "output": false,
-   "fields": {},
+   "fields": {
+    "reg_number": "01 A 777 BA / trailer 01 1234 XA",
+    "vin": "XW8ZZZ61ZKG000161",
+    "owner": "OOO \"Demo Trans Logistic\"",
+    "make": "MAN",
+    "valid_until": "31.12.2027"
+   },
    "id": "vehicle-registration-certificate",
-   "file": "161-10-vehicle-registration-certificate.png"
+   "file": "161-10-vehicle-registration-certificate.png",
+   "fieldLabels": {
+    "reg_number": "Registration number (plate)",
+    "vin": "VIN / chassis number",
+    "owner": "Owner",
+    "make_model": "Make and model",
+    "issue_date": "Date of issue"
+   }
   },
   {
    "id": "tir-carnet-stamped-6",
-   "template": "letter",
+   "template": "reference",
    "title": "TIR carnet stamped — step 6",
    "docType": "tir_carnet",
    "labels": [
@@ -317,11 +354,24 @@
     6
    ],
    "output": true,
-   "fields": {},
-   "file": "161-11-tir-carnet-stamped-step-6.png"
+   "fields": {
+    "carnet_no": "TX161202601",
+    "holder": "OOO \"Demo Trans Logistic\"",
+    "valid_until": "31.12.2027",
+    "departure_office": "Namangan customs",
+    "vehicle": "01 A 777 BA / trailer 01 1234 XA"
+   },
+   "file": "161-11-tir-carnet-stamped-step-6.png",
+   "fieldLabels": {
+    "carnet_no": "Carnet number",
+    "holder": "Holder",
+    "valid_until": "Valid until",
+    "departure_office": "Customs office of departure",
+    "vehicle": "Vehicle registration number"
+   }
   },
   {
-   "template": "letter",
+   "template": "reference",
    "title": "Cargo delivery control book",
    "docType": "cargo_control_book",
    "labels": [
@@ -331,12 +381,23 @@
     11
    ],
    "output": false,
-   "fields": {},
+   "fields": {
+    "book_no": "CCB-161-11",
+    "issue_date": "07.09.2026",
+    "destination_office": "Almaty customs",
+    "transport": "01 A 777 BA / trailer 01 1234 XA"
+   },
    "id": "cargo-delivery-control-book",
-   "file": "161-12-cargo-delivery-control-book.png"
+   "file": "161-12-cargo-delivery-control-book.png",
+   "fieldLabels": {
+    "book_no": "Control book number",
+    "issue_date": "Date of issue",
+    "destination_office": "Customs office of destination",
+    "transport": "Vehicle or wagon number"
+   }
   },
   {
-   "template": "letter",
+   "template": "reference",
    "title": "ATP certificate",
    "docType": "atp_certificate",
    "labels": [
@@ -346,12 +407,23 @@
     11
    ],
    "output": false,
-   "fields": {},
+   "fields": {
+    "certificate_no": "ATP-161-2026",
+    "vehicle": "01 A 777 BA / trailer 01 1234 XA",
+    "valid_until": "31.12.2027",
+    "class": "FRC"
+   },
    "id": "atp-certificate",
-   "file": "161-13-atp-certificate.png"
+   "file": "161-13-atp-certificate.png",
+   "fieldLabels": {
+    "certificate_no": "Certificate number",
+    "vehicle": "Vehicle registration number",
+    "equipment_class": "Class of equipment",
+    "valid_until": "Valid until"
+   }
   },
   {
-   "template": "letter",
+   "template": "reference",
    "title": "Authorization for international carriage of goods",
    "docType": "carriage_permit",
    "labels": [
@@ -361,9 +433,20 @@
     11
    ],
    "output": false,
-   "fields": {},
+   "fields": {
+    "permit_no": "CP-161-2026",
+    "country": "Kazakhstan",
+    "vehicle": "01 A 777 BA / trailer 01 1234 XA",
+    "valid_until": "31.12.2027"
+   },
    "id": "authorization-for-international-carriage-of-good",
-   "file": "161-14-authorization-for-international-carriage-of-good.png"
+   "file": "161-14-authorization-for-international-carriage-of-good.png",
+   "fieldLabels": {
+    "permit_no": "Permit number",
+    "country": "Country it is valid for",
+    "vehicle": "Vehicle registration number",
+    "valid_until": "Valid until"
+   }
   }
  ]
 }

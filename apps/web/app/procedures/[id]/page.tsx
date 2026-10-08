@@ -60,7 +60,7 @@ export default async function ProcedurePage({ params }: { params: Promise<{ id: 
             </Link>{" "}
             — {live.status === "complete" ? "complete" : "in progress"} · opened from &ldquo;{live.query}&rdquo;.{" "}
             {live.status === "complete" ? null : (
-              <Link className="crumb" href="/">
+              <Link className="crumb" href="/dashboard">
                 Current step in the chat →
               </Link>
             )}

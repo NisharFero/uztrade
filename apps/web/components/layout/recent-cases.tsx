@@ -41,7 +41,7 @@ export default function RecentCases() {
 
   return (
     <div className="recents">
-      <Link className="recents-new" href="/?case=new">
+      <Link className="recents-new" href="/dashboard?case=new">
         <span className="nav-icon">{Icon.plus}</span>
         <span>New shipment</span>
       </Link>
@@ -68,7 +68,7 @@ export default function RecentCases() {
             <ul className="recents-list" id="recents-list">
               {rows.map((c) => (
                 <li key={c.id}>
-                  <Link className={c.id === current ? "recents-item is-current" : "recents-item"} href={`/?case=${encodeURIComponent(c.id)}`} title={c.title}>
+                  <Link className={c.id === current ? "recents-item is-current" : "recents-item"} href={`/dashboard?case=${encodeURIComponent(c.id)}`} title={c.title}>
                     <span className="recents-title">{c.title}</span>
                     <span className="recents-when">{c.id.slice(-4)}</span>
                   </Link>

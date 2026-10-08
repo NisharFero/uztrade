@@ -333,7 +333,7 @@
   },
   {
    "id": "contract-for-handling-and-storage-of-cargo-7",
-   "template": "letter",
+   "template": "reference",
    "title": "Contract for handling and storage of cargo — step 7",
    "docType": "service_contract",
    "labels": [
@@ -343,8 +343,21 @@
     7
    ],
    "output": true,
-   "fields": {},
-   "file": "540-11-contract-for-handling-and-storage-of-cargo-step-.png"
+   "fields": {
+    "contract_no": "SRV-540-7",
+    "date": "05.09.2026",
+    "provider": "OOO Demo Cargo Services",
+    "client": "OOO \"Silk Road Tea\"",
+    "valid_until": "31.12.2027"
+   },
+   "file": "540-11-contract-for-handling-and-storage-of-cargo-step-.png",
+   "fieldLabels": {
+    "contract_no": "Contract number",
+    "date": "Date",
+    "provider": "Service provider",
+    "client": "Client",
+    "valid_until": "Valid until"
+   }
   },
   {
    "id": "invoice-for-prepayment-for-cargo-handling-8",
@@ -594,7 +607,7 @@
    "file": "540-23-certificate-of-origin-step-30.png"
   },
   {
-   "template": "letter",
+   "template": "reference",
    "title": "Vehicle registration certificate",
    "docType": "vehicle_registration",
    "labels": [
@@ -605,12 +618,25 @@
     34
    ],
    "output": false,
-   "fields": {},
+   "fields": {
+    "reg_number": "PMC 40211 TK",
+    "vin": "XW8ZZZ61ZKG000540",
+    "owner": "Uzbekistan Airways (demo)",
+    "make": "MAN",
+    "valid_until": "31.12.2027"
+   },
    "id": "vehicle-registration-certificate",
-   "file": "540-24-vehicle-registration-certificate.png"
+   "file": "540-24-vehicle-registration-certificate.png",
+   "fieldLabels": {
+    "reg_number": "Registration number (plate)",
+    "vin": "VIN / chassis number",
+    "owner": "Owner",
+    "make_model": "Make and model",
+    "issue_date": "Date of issue"
+   }
   },
   {
-   "template": "letter",
+   "template": "reference",
    "title": "Vehicle entrance permit",
    "docType": "carriage_permit",
    "labels": [
@@ -620,9 +646,20 @@
     35
    ],
    "output": false,
-   "fields": {},
+   "fields": {
+    "permit_no": "CP-540-2026",
+    "country": "Türkiye",
+    "vehicle": "PMC 40211 TK",
+    "valid_until": "31.12.2027"
+   },
    "id": "vehicle-entrance-permit",
-   "file": "540-25-vehicle-entrance-permit.png"
+   "file": "540-25-vehicle-entrance-permit.png",
+   "fieldLabels": {
+    "permit_no": "Permit number",
+    "country": "Country it is valid for",
+    "vehicle": "Vehicle registration number",
+    "valid_until": "Valid until"
+   }
   },
   {
    "id": "notes-or-stamps-in-the-air-waybill-38",

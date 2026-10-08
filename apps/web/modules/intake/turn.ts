@@ -11,8 +11,8 @@ import { CATEGORIES, CATEGORY_LABEL } from "./taxonomy";
 import { procedureTitleCandidates } from "./reference";
 import { CATALOGUE } from "../procedures/data/procedures.generated";
 
-const YES = /^\s*(y|yes|yep|yeah|ok(ay)?|sure|go ahead|do it|use it|correct|that'?s right)\b/i;
-const NO = /^\s*(n|no|nope|not really|something else|another)\b/i;
+const YES = /^\s*(y|yes|yep|yeah|ok(ay)?|sure|go ahead|do it|use it|correct|that'?s right)[.!\s]*$/i;
+const NO = /^\s*(n|no|nope|not really|something else|another)[.!\s]*$/i;
 
 /** "yes" or "no" to the goods intake proposed ("Did you mean banana, published
  *  under fresh fruits and vegetables?"). The router reads this before any
@@ -55,6 +55,8 @@ export async function intakeTurn(
   }
 
   const turn = converse(draft, message, { expecting });
+  // Unknown locations are a data gap, not text for a model to reinterpret.
+  if (mergeReply(draft, message, expecting).unknownPlace) return turn;
   if (needsModel(message, mergeReply(draft, message, expecting).understood, turn.status === "declined")) {
     const read = await understandWithModel(message, expecting, llm);
     if (read) {

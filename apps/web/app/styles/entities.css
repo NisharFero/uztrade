@@ -8,11 +8,23 @@
 
 .ent-types {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(216px, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 10px;
   margin: 0 0 26px;
   padding: 0;
   list-style: none;
+}
+
+@media (max-width: 1080px) {
+  .ent-types {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 620px) {
+  .ent-types {
+    grid-template-columns: minmax(0, 1fr);
+  }
 }
 
 .ent-type {
@@ -22,7 +34,9 @@
     "icon name"
     "icon family"
     "counts counts"
-    "blurb blurb";
+    "blurb blurb"
+    "go    go";
+  grid-template-rows: auto auto auto 1fr auto;
   gap: 1px 10px;
   height: 100%;
   border: 1px solid var(--line);
@@ -414,4 +428,173 @@
     grid-column: 2;
     justify-self: start;
   }
+}
+
+/* ------------------------------ a kind, on its own page ------------------
+   The directory used to unfold a kind in place. A kind worth reading about
+   deserves a URL, so the card links out and the explanation lives there. */
+
+.ent-type-go {
+  grid-area: go;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 10px;
+  padding-top: 9px;
+  border-top: 1px solid var(--line);
+  color: var(--fam);
+  font-size: 11.5px;
+  font-weight: 600;
+}
+
+/* The blurb is always open now: there is nothing to disclose, the card just
+   describes the kind it opens. */
+.ent-types .ent-type-blurb {
+  grid-template-rows: 1fr;
+  margin-top: 8px;
+}
+
+.ent-kind-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid var(--line-2);
+  border-radius: 999px;
+  background: var(--surface-2);
+  color: var(--kind, var(--accent));
+  padding: 2px 10px 2px 8px;
+  font-size: 11px;
+  font-weight: 650;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.ent-kind-badge[data-hue="cyan"] { --kind: var(--text-cyan); }
+.ent-kind-badge[data-hue="blue"] { --kind: var(--text-blue); }
+.ent-kind-badge[data-hue="amber"] { --kind: var(--text-amber); }
+.ent-kind-badge[data-hue="green"] { --kind: var(--text-green); }
+.ent-kind-badge[data-hue="fuchsia"] { --kind: var(--text-fuchsia); }
+
+.ent-kind-badge span {
+  display: grid;
+  place-items: center;
+}
+
+.ent-kind-badge svg {
+  width: 14px;
+  height: 14px;
+}
+
+/* ------------------------------ an entity, explained --- */
+
+.ent-card {
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr) 150px;
+  align-items: center;
+  gap: 4px 14px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  background: var(--surface);
+  padding: 11px 14px;
+}
+
+@media (max-width: 760px) {
+  .ent-card {
+    grid-template-columns: 34px minmax(0, 1fr);
+  }
+
+  .ent-reach {
+    grid-column: 2;
+    align-items: flex-start;
+  }
+}
+
+/* How much of the corpus runs through this one counterparty. The bar is a
+   share of every published procedure, never of the busiest row on the page,
+   so the same length means the same thing on all nine kinds. */
+.ent-reach {
+  display: grid;
+  justify-items: end;
+  gap: 4px;
+  --reach: var(--text-blue);
+}
+
+.ent-reach[data-hue="cyan"] { --reach: var(--text-cyan); }
+.ent-reach[data-hue="blue"] { --reach: var(--text-blue); }
+.ent-reach[data-hue="amber"] { --reach: var(--text-amber); }
+.ent-reach[data-hue="green"] { --reach: var(--text-green); }
+.ent-reach[data-hue="fuchsia"] { --reach: var(--text-fuchsia); }
+
+.ent-reach-n {
+  color: var(--muted);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+}
+
+.ent-reach-n strong {
+  color: var(--ink);
+  font-size: 13.5px;
+  font-weight: 650;
+}
+
+.ent-reach-bar {
+  display: block;
+  width: 100%;
+  height: 5px;
+  border-radius: 999px;
+  background: var(--surface-3, var(--surface-2));
+  overflow: hidden;
+}
+
+.ent-reach-bar > span {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: var(--reach);
+}
+
+.ent-reach-key {
+  margin: 0;
+  color: var(--muted);
+  font-size: 11.5px;
+}
+
+.ent-card .ent-row-icon {
+  width: 34px;
+  height: 34px;
+}
+
+.ent-card .ent-row-icon svg {
+  width: 17px;
+  height: 17px;
+}
+
+.ent-card-body {
+  display: grid;
+  gap: 5px;
+  min-width: 0;
+}
+
+.ent-card-body > strong {
+  color: var(--ink);
+  font-size: 14px;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.ent-card-does {
+  margin: 0;
+  color: var(--ink-2);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+/* Inline, so the row stays one line deep: the label reads into the value
+   rather than sitting on a line of its own. */
+.ent-card-does em {
+  color: var(--muted);
+  font-size: 10px;
+  font-style: normal;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
 }

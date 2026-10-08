@@ -6,7 +6,7 @@ import test from "node:test";
 /** Renders a route through the built worker. Routes that touch D1 are not
  *  covered here - the harness supplies no database binding - so these tests
  *  stay on the static pages and the generated dataset. */
-async function render(path = "/") {
+async function render(path = "/dashboard") {
   const workerUrl = new URL("../../dist/server/index.js", import.meta.url);
   workerUrl.searchParams.set("test", `${process.pid}-${Date.now()}`);
   const { default: worker } = await import(workerUrl.href);
@@ -45,6 +45,22 @@ const workflows = () =>
     .map((f) => JSON.parse(readFileSync(WORKFLOW_DIR + f, "utf8")));
 const CORPUS = workflows();
 
+test("home offers direct access to every workspace", async () => {
+  const response = await render("/");
+  assert.equal(response.status, 200);
+  const html = await response.text();
+  assert.match(html, /Continue as/);
+  for (const route of ["dashboard", "configuration", "agents", "entities", "procedures"]) {
+    assert.ok(html.includes(`href="/${route}"`), `direct link to ${route}`);
+  }
+  assert.doesNotMatch(html, /id="trade-query"/);
+});
+
+test("legacy case links still open the conversation", async () => {
+  const html = await (await render("/?case=new")).text();
+  assert.match(html, /id="trade-query"/);
+});
+
 test("server-renders the conversation the dashboard opens with", async () => {
   const response = await render();
   assert.equal(response.status, 200);
@@ -72,6 +88,10 @@ test("sidebar links to the real destinations", async () => {
   assert.match(html, /href="\/entities"/);
   assert.match(html, /href="\/configuration"/);
   assert.match(html, /AI Agent Center/);
+  assert.match(html, /class="sidebar-account"/);
+  assert.match(html, /href="\/" class="sidebar-account"/);
+  assert.match(html, /Bekzod Rakhimov/);
+  assert.match(html, /Bekzod Trade LLC/);
   assert.match(html, /Configuration/);
   // Sub-labels were dropped: each row names one destination and nothing else.
   assert.doesNotMatch(html, /All Agents/);

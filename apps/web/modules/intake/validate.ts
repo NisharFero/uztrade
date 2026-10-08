@@ -117,7 +117,7 @@ export function checkRoute(origin: DraftEnd | null, destination: DraftEnd | null
         ...none,
         level: "reject",
         missing: which,
-        message: `${end.name} (${countryName(end.country)}) isn't in the supported country list. The other end of a shipment can be ${supportedCountries()}.`,
+        message: `${countryName(end.country)} is not added to the platform’s supported country data (${end.name}). The other end of a shipment can be ${supportedCountries()}.`,
       };
     }
   }

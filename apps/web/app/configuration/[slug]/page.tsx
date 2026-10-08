@@ -27,7 +27,7 @@ export default async function RegistryPage({ params }: { params: Promise<{ slug:
     <>
       <header className="page-head">
         <p>
-          <Link href="/" className="crumb">
+          <Link href="/dashboard" className="crumb">
             Dashboard
           </Link>{" "}
           ·{" "}

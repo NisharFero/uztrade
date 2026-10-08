@@ -156,7 +156,7 @@
   },
   {
    "id": "agreement-with-technological-center-1",
-   "template": "letter",
+   "template": "reference",
    "title": "Agreement with Technological center — step 1",
    "docType": "service_contract",
    "labels": [
@@ -166,8 +166,21 @@
     1
    ],
    "output": true,
-   "fields": {},
-   "file": "924-04-agreement-with-technological-center-step-1.png"
+   "fields": {
+    "contract_no": "SRV-924-1",
+    "date": "02.09.2026",
+    "provider": "OOO Demo Cargo Services",
+    "client": "OOO \"Quvur Qurilish Ta'minot\"",
+    "valid_until": "31.12.2027"
+   },
+   "file": "924-04-agreement-with-technological-center-step-1.png",
+   "fieldLabels": {
+    "contract_no": "Contract number",
+    "date": "Date",
+    "provider": "Service provider",
+    "client": "Client",
+    "valid_until": "Valid until"
+   }
   },
   {
    "template": "letter",
@@ -204,7 +217,7 @@
   },
   {
    "id": "certificate-on-availability-of-funds-at-client-s-5",
-   "template": "letter",
+   "template": "reference",
    "title": "Certificate on availability of funds at client's account — step 5",
    "docType": "funds_certificate",
    "labels": [
@@ -214,8 +227,19 @@
     5
    ],
    "output": true,
-   "fields": {},
-   "file": "924-07-certificate-on-availability-of-funds-at-client-s.png"
+   "fields": {
+    "bank": "NBU Uzbekistan",
+    "account_holder": "OOO \"Quvur Qurilish Ta'minot\"",
+    "amount": "100 000 000.00",
+    "date": "04.09.2026"
+   },
+   "file": "924-07-certificate-on-availability-of-funds-at-client-s.png",
+   "fieldLabels": {
+    "bank": "Bank",
+    "account_holder": "Account holder",
+    "amount": "Amount available",
+    "date": "Date"
+   }
   },
   {
    "id": "invoice-for-payment-8",

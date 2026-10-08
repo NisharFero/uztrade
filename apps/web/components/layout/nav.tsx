@@ -7,9 +7,10 @@ import { Icon } from "../icons";
 import RecentCases from "./recent-cases";
 
 const items = [
-  { href: "/", label: "Dashboard", icon: Icon.home, tint: "cyan", exact: true },
+  { href: "/dashboard", label: "Dashboard", icon: Icon.dashboard, tint: "cyan", exact: true },
   { href: "/procedures", label: "Procedures", icon: Icon.book, tint: "blue" },
   { href: "/cases", label: "Cases & Shipments", icon: Icon.truck, tint: "cyan" },
+  { href: "/map", label: "Tracking", icon: Icon.route, tint: "green" },
   { href: "/ledger", label: "Ledger", icon: Icon.receipt, tint: "amber" },
   { href: "/faq", label: "FAQ", icon: Icon.help, tint: "fuchsia" },
   { href: "/entities", label: "Entities", icon: Icon.landmark, tint: "green" },
@@ -38,7 +39,7 @@ export default function Nav() {
      however they left it until the next conversation. */
   const [folded, setCollapsed] = useState(false);
   // Every other page is read with the full navigation.
-  const collapsed = folded && pathname === "/";
+  const collapsed = folded && (pathname === "/dashboard" || pathname === "/");
 
   useEffect(() => {
     const onRail = (event: Event) => setCollapsed((event as CustomEvent<string>).detail === "collapse");
@@ -60,7 +61,7 @@ export default function Nav() {
           {Icon.menu}
         </button>
         <span className="mobile-bar-title">UzOne Trade Platform</span>
-        <Link className="mobile-bar-button" href="/?case=new" aria-label="New shipment" title="New shipment">
+        <Link className="mobile-bar-button" href="/dashboard?case=new" aria-label="New shipment" title="New shipment">
           {Icon.compose}
         </Link>
       </header>
@@ -69,7 +70,7 @@ export default function Nav() {
 
       <aside className={["sidebar", open ? "is-open" : "", collapsed ? "is-collapsed" : ""].filter(Boolean).join(" ")} aria-label="Main navigation">
         <div className="brand">
-          <span aria-hidden="true">UZ</span>
+          <button type="button" className="sidebar-logo" aria-label="Expand navigation" title="Expand navigation" aria-expanded={!collapsed} onClick={() => { setCollapsed(false); setOpen(true); }}>UZ</button>
           <div>
             <strong>UzOne</strong>
             <small>Trade Platform</small>
@@ -113,6 +114,14 @@ export default function Nav() {
           <RecentCases />
           <CloseOnNavigate onChange={close} />
         </Suspense>
+        <Link href="/" className="sidebar-account" aria-label="Choose your role — Bekzod Rakhimov, Bekzod Trade LLC" title="Bekzod Rakhimov · Bekzod Trade LLC">
+          <span className="sidebar-account-avatar" aria-hidden="true">BR</span>
+          <span className="sidebar-account-details">
+            <strong>Bekzod Rakhimov</strong>
+            <small>Bekzod Trade LLC</small>
+            <small className="sidebar-account-mock">Demo account</small>
+          </span>
+        </Link>
       </aside>
     </>
   );

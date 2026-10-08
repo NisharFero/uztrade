@@ -110,7 +110,7 @@ export function crossCheck(docType: DocType, fields: ExtractedField[], ctx: Chec
     const diff = Math.abs(weight.tonnes - ctx.intakeTonnes) / ctx.intakeTonnes;
     checks.push({
       check: "Quantity vs intake",
-      status: diff <= TOLERANCE ? "ok" : "mismatch",
+      status: diff <= TOLERANCE + Number.EPSILON ? "ok" : "mismatch",
       detail: `${fmtTonnes(weight.tonnes)} on the ${weight.label.toLowerCase()} vs ${fmtTonnes(ctx.intakeTonnes)} declared at intake`,
       compared: { fieldKey: weight.key, here: fmtTonnes(weight.tonnes), there: fmtTonnes(ctx.intakeTonnes), thereLabel: "declared at intake" },
     });

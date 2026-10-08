@@ -1,0 +1,315 @@
+/* ---------------------------------------------------------------------------
+   The entry page.
+
+   This file used to carry its own palette — thirty hardcoded zinc greys and a
+   violet/fuchsia/sky/amber card set that belonged to no other screen. It now
+   draws entirely from the tokens in globals.css, so the first page a person
+   sees is the same product as the rest of the app: warm paper, customs-stamp
+   navy for ink, and the Rishtan blue accent.
+
+   The five destination hues are the app's own, in an order checked for
+   colour-vision separation (worst adjacent pair ΔE 15.4 deutan, 8.7 tritan);
+   Dashboard carries the brand navy instead of a fifth hue, so the primary
+   destination reads as primary rather than as one more colour.
+--------------------------------------------------------------------------- */
+
+.trade-home {
+  min-height: 100dvh;
+  background: var(--canvas);
+  color: var(--ink);
+}
+
+.trade-entry {
+  margin: 0 auto;
+  max-width: 1120px;
+  padding: 48px 32px;
+}
+
+/* ------------------------------------------------- header --- */
+
+.trade-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.trade-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--ink);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+/* The same mark the navigation rail wears, so the entry page and the app
+   behind it are visibly one product. */
+.trade-brand > span {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: var(--r-sm);
+  background: var(--rail);
+  color: #fff;
+}
+
+.trade-brand > span svg {
+  width: 16px;
+  height: 16px;
+}
+
+.trade-header-label {
+  border: 1px solid var(--accent-line);
+  border-radius: 999px;
+  background: var(--accent-wash);
+  padding: 3px 10px;
+  color: var(--accent);
+  font-size: 10.5px;
+  font-weight: 550;
+  letter-spacing: 0.03em;
+}
+
+/* -------------------------------------------------- intro --- */
+
+.trade-intro {
+  margin-top: 40px;
+}
+
+.trade-intro h1 {
+  margin: 0;
+  color: var(--ink);
+  font-family: var(--font-read);
+  font-size: 38px;
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+
+.trade-intro p {
+  margin: 14px 0 0;
+  max-width: 560px;
+  color: var(--ink-2);
+  font-size: 14px;
+  line-height: 1.65;
+}
+
+/* --------------------------------------------- workspaces --- */
+
+.trade-workspaces {
+  margin-top: 40px;
+}
+
+.trade-workspaces h2 {
+  margin: 0 0 14px;
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.trade-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+/* Five cards in a three-column grid otherwise leave a hole in the second
+   row. Widening the first one fills the grid and gives the destination most
+   people want a weight the other four do not have. */
+.trade-grid > :first-child {
+  grid-column: span 2;
+}
+
+.trade-grid > :first-child p {
+  max-width: 62ch;
+}
+
+.trade-card {
+  --entry: var(--rail);
+  --entry-wash: var(--surface-3);
+  --entry-line: var(--line-2);
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  background: var(--surface);
+  padding: 18px;
+  color: var(--ink);
+  text-decoration: none;
+  box-shadow: var(--shadow-sm);
+  transition:
+    border-color 0.15s,
+    box-shadow 0.15s,
+    transform 0.15s;
+}
+
+.trade-card[data-tone="amber"] {
+  --entry: var(--text-amber);
+  --entry-wash: var(--hue-amber-wash);
+  --entry-line: var(--hue-amber-line);
+}
+
+.trade-card[data-tone="blue"] {
+  --entry: var(--text-blue);
+  --entry-wash: var(--hue-blue-wash);
+  --entry-line: var(--hue-blue-line);
+}
+
+.trade-card[data-tone="fuchsia"] {
+  --entry: var(--text-fuchsia);
+  --entry-wash: var(--hue-fuchsia-wash);
+  --entry-line: var(--hue-fuchsia-line);
+}
+
+.trade-card[data-tone="green"] {
+  --entry: var(--text-green);
+  --entry-wash: var(--hue-green-wash);
+  --entry-line: var(--hue-green-line);
+}
+
+.trade-card:hover {
+  border-color: var(--entry-line);
+  box-shadow: var(--shadow-lift);
+  transform: translateY(-1px);
+}
+
+.trade-role-label {
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 550;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.trade-person {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.trade-person h3 {
+  margin: 0;
+  color: var(--ink);
+  font-size: 15px;
+  font-weight: 600;
+}
+
+/* A washed tile rather than a saturated disc: the hue identifies the
+   destination without five filled circles shouting at each other. */
+.trade-card-icon {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--entry-line);
+  border-radius: var(--r-sm);
+  background: var(--entry-wash);
+  color: var(--entry);
+}
+
+.trade-card-icon svg {
+  width: 16px;
+  height: 16px;
+}
+
+.trade-card p {
+  flex: 1;
+  margin: 11px 0 0;
+  color: var(--ink-2);
+  font-size: 12.5px;
+  line-height: 1.65;
+}
+
+.trade-card-open {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 15px;
+  border-top: 1px solid var(--line);
+  padding-top: 12px;
+  color: var(--entry);
+  font-size: 12.5px;
+  font-weight: 600;
+}
+
+.trade-card-open span {
+  transition: transform 0.15s;
+}
+
+.trade-card:hover .trade-card-open span {
+  transform: translateX(3px);
+}
+
+/* ------------------------------------------------- footer --- */
+
+.trade-footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  margin-top: 36px;
+  border-top: 1px solid var(--line);
+  padding-top: 18px;
+  color: var(--muted);
+  font-size: 11.5px;
+}
+
+.trade-footer a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.trade-footer a:hover {
+  text-decoration: underline;
+}
+
+.trade-home a:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: var(--r-sm);
+}
+
+/* ------------------------------------------------ narrower --- */
+
+@media (min-width: 1024px) {
+  .trade-entry {
+    padding-top: 64px;
+    padding-bottom: 64px;
+  }
+}
+
+@media (max-width: 850px) {
+  .trade-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 560px) {
+  .trade-grid > :first-child {
+    grid-column: span 1;
+  }
+
+  .trade-entry {
+    padding: 32px 20px;
+  }
+
+  .trade-header {
+    flex-wrap: wrap;
+  }
+
+  .trade-intro h1 {
+    font-size: 28px;
+  }
+
+  .trade-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .trade-footer {
+    flex-direction: column;
+    gap: 12px;
+  }
+}
