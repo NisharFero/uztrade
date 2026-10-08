@@ -1,0 +1,1032 @@
+/* ----------------------------- Configuration ----------------------------
+   The master-data reference page. Tables and tiles only: nothing here is a
+   chart, so nothing here needs a plot. Status is always carried by its word -
+   the tint behind it only repeats what the label already says, so the page
+   still reads with colour removed. */
+
+.cfg-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 12px;
+  margin-bottom: 26px;
+}
+
+.cfg-stat {
+  display: grid;
+  gap: 2px;
+  align-content: start;
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+  padding: 14px 15px;
+}
+
+.cfg-stat strong {
+  color: var(--ink);
+  font-size: 26px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+.cfg-stat span {
+  color: var(--ink-2);
+  font-size: 12.5px;
+  font-weight: 550;
+}
+
+.cfg-stat small {
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.cfg-section {
+  margin-bottom: 30px;
+}
+
+.cfg-section > h2 {
+  margin: 0 0 10px;
+  color: var(--ink);
+  font-size: 14.5px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.cfg-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 7px;
+  margin: 0 0 12px;
+  border-left: 2px solid var(--accent-line);
+  padding-left: 10px;
+  color: var(--ink-2);
+  font-size: 12.5px;
+  line-height: 1.5;
+}
+
+.cfg-note .head-icon {
+  flex: none;
+  margin-top: 1px;
+  color: var(--accent);
+}
+
+/* ------------------------------- tier cards --- */
+
+.cfg-tiers {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 12px;
+}
+
+.cfg-tier {
+  display: grid;
+  gap: 6px;
+  align-content: start;
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  background: var(--surface);
+  padding: 13px 14px;
+}
+
+.cfg-tier > p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.cfg-tier-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.cfg-tier-head strong {
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.cfg-pill {
+  flex: none;
+  border: 1px solid var(--line-2);
+  border-radius: 999px;
+  background: var(--surface-2);
+  color: var(--muted);
+  padding: 1px 8px;
+  font-size: 10.5px;
+  font-weight: 550;
+  font-variant-numeric: tabular-nums;
+}
+
+.cfg-pill[data-tone="accent"] {
+  border-color: var(--accent-line);
+  background: var(--accent-wash);
+  color: var(--accent-press);
+}
+
+.cfg-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cfg-chips li {
+  border: 1px solid var(--line-2);
+  border-radius: var(--r-sm);
+  background: var(--surface-2);
+  color: var(--ink-2);
+  padding: 2px 7px;
+  font-size: 11.5px;
+}
+
+/* ---------------------------------- tables --- */
+
+.cfg-table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  background: var(--surface);
+}
+
+.cfg-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12.5px;
+}
+
+.cfg-table th,
+.cfg-table td {
+  border-bottom: 1px solid var(--line);
+  padding: 9px 13px;
+  text-align: left;
+  vertical-align: top;
+}
+
+.cfg-table tbody tr:last-child th,
+.cfg-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.cfg-table thead th {
+  background: var(--surface-2);
+  color: var(--muted);
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.cfg-table tbody th {
+  color: var(--ink);
+  font-weight: 550;
+}
+
+.cfg-table tbody tr:hover {
+  background: var(--surface-2);
+}
+
+.cfg-num {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.cfg-muted {
+  color: var(--muted);
+}
+
+/* ---------------------------------- status --- */
+
+.cfg-status {
+  display: inline-block;
+  border: 1px solid var(--line-2);
+  border-radius: 999px;
+  background: var(--surface-2);
+  color: var(--ink-2);
+  padding: 1px 8px;
+  font-size: 11px;
+  font-weight: 550;
+  white-space: nowrap;
+}
+
+.cfg-status[data-kind="author"] {
+  border-color: var(--accent-line);
+  background: var(--accent-wash);
+  color: var(--accent-press);
+}
+
+.cfg-status[data-kind="current"] {
+  border-color: var(--accent-line);
+  background: var(--accent-wash);
+  color: var(--accent-press);
+}
+
+/* --------------------------------- phases --- */
+
+.cfg-phases {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: none;
+}
+
+.cfg-phases li {
+  display: grid;
+  grid-template-columns: 24px minmax(0, 1fr) auto;
+  gap: 10px;
+  align-items: center;
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  background: var(--surface);
+  padding: 10px 13px;
+}
+
+.cfg-phases li[data-state="planned"] {
+  opacity: 0.72;
+}
+
+.cfg-phases li[data-state="current"] {
+  border-color: var(--accent-line);
+  background: var(--accent-wash);
+}
+
+.cfg-phase-mark {
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 999px;
+  background: var(--surface-2);
+  color: var(--muted);
+}
+
+.cfg-phases li[data-state="done"] .cfg-phase-mark {
+  color: var(--ok);
+}
+
+.cfg-phases li[data-state="current"] .cfg-phase-mark {
+  background: var(--surface);
+  color: var(--accent);
+}
+
+.cfg-phase-mark svg {
+  width: 14px;
+  height: 14px;
+}
+
+.cfg-phase-body {
+  display: grid;
+  gap: 1px;
+  min-width: 0;
+}
+
+.cfg-phase-body small {
+  color: var(--muted);
+  font-size: 10.5px;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.cfg-phase-body strong {
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 550;
+}
+
+/* --------------------------------- models --- */
+
+.cfg-models {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 12px;
+}
+
+.cfg-model {
+  display: grid;
+  gap: 6px;
+  align-content: start;
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  background: var(--surface);
+  padding: 13px 14px;
+}
+
+.cfg-model[data-recommended="true"] {
+  border-color: var(--accent-line);
+  box-shadow: var(--shadow-sm);
+}
+
+.cfg-model > p:last-child {
+  margin: 0;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+@media (max-width: 640px) {
+  .cfg-phases li {
+    grid-template-columns: 24px minmax(0, 1fr);
+  }
+
+  .cfg-phases li .cfg-status {
+    grid-column: 2;
+    justify-self: start;
+  }
+}
+
+/* ------------------------------ registry pages ---------------------------
+   A registry is somewhere you go, so its name on the index is a link. */
+
+.cfg-link {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 5px;
+  color: var(--accent-press);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.cfg-link span {
+  color: var(--accent);
+  transition: transform 140ms ease;
+}
+
+.cfg-link:hover {
+  text-decoration: underline;
+}
+
+.cfg-link:hover span {
+  transform: translateX(2px);
+}
+
+.cfg-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+
+.cfg-bar-note {
+  color: var(--muted);
+  font-size: 11.5px;
+}
+
+.cfg-key {
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.cfg-table th[data-numeric="true"],
+.cfg-table td[data-numeric="true"] {
+  text-align: right;
+}
+
+/* A categorical hue per regulatory regime, assigned in fixed order and never
+   cycled: the colour always means the same regime, and the word is always
+   there beside it, so nothing is carried by colour alone. */
+.cfg-tag {
+  display: inline-block;
+  border: 1px solid var(--tag-line, var(--line-2));
+  border-radius: 999px;
+  background: var(--tag-wash, var(--surface-2));
+  color: var(--tag-ink, var(--ink-2));
+  padding: 1px 8px;
+  font-size: 11px;
+  font-weight: 550;
+  white-space: nowrap;
+}
+
+.cfg-tag[data-hue="0"] {
+  --tag-ink: var(--hue-green-ink);
+  --tag-wash: var(--hue-green-wash);
+  --tag-line: var(--hue-green-line);
+}
+
+.cfg-tag[data-hue="1"] {
+  --tag-ink: var(--hue-cyan-ink);
+  --tag-wash: var(--hue-cyan-wash);
+  --tag-line: var(--hue-cyan-line);
+}
+
+.cfg-tag[data-hue="2"] {
+  --tag-ink: var(--hue-slate-ink);
+  --tag-wash: var(--hue-slate-wash);
+  --tag-line: var(--hue-slate-line);
+}
+
+.cfg-tag[data-hue="3"] {
+  --tag-ink: var(--hue-amber-ink);
+  --tag-wash: var(--hue-amber-wash);
+  --tag-line: var(--hue-amber-line);
+}
+
+.cfg-tag[data-hue="4"] {
+  --tag-ink: var(--hue-blue-ink);
+  --tag-wash: var(--hue-blue-wash);
+  --tag-line: var(--hue-blue-line);
+}
+
+/* Each tier card takes the next hue in the same fixed order. */
+.cfg-tier[data-hue] {
+  border-top: 2px solid var(--tier-line, var(--accent));
+}
+
+.cfg-tier[data-hue="0"] { --tier-line: var(--hue-cyan-ink); }
+.cfg-tier[data-hue="1"] { --tier-line: var(--hue-blue-ink); }
+.cfg-tier[data-hue="2"] { --tier-line: var(--hue-amber-ink); }
+.cfg-tier[data-hue="3"] { --tier-line: var(--hue-green-ink); }
+
+.cfg-stat[data-hue] strong {
+  color: var(--stat-ink, var(--ink));
+}
+
+.cfg-stat[data-hue="0"] { --stat-ink: var(--hue-cyan-ink); }
+.cfg-stat[data-hue="1"] { --stat-ink: var(--hue-blue-ink); }
+.cfg-stat[data-hue="2"] { --stat-ink: var(--hue-amber-ink); }
+.cfg-stat[data-hue="3"] { --stat-ink: var(--hue-green-ink); }
+
+/* ------------------------------- other registries --- */
+
+.cfg-next {
+  margin-top: 26px;
+  border-top: 1px solid var(--line);
+  padding-top: 14px;
+}
+
+.cfg-next ul {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 8px;
+  margin: 8px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cfg-next a {
+  display: grid;
+  gap: 1px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  background: var(--surface);
+  padding: 9px 11px;
+  text-decoration: none;
+}
+
+.cfg-next a:hover {
+  border-color: var(--accent-line);
+  background: var(--accent-wash);
+}
+
+.cfg-next strong {
+  color: var(--ink);
+  font-size: 12.5px;
+  font-weight: 550;
+}
+
+.cfg-next em {
+  color: var(--muted);
+  font-size: 11px;
+  font-style: normal;
+}
+
+/* --------------------------- agent remit split --------------------------
+   One bar and its key. Each band is labelled with its own number, so the
+   proportion is readable without relying on the colour at all. */
+
+.agent-split {
+  margin-bottom: 26px;
+}
+
+.agent-split-bar {
+  display: flex;
+  gap: 2px;
+  overflow: hidden;
+  height: 10px;
+  margin: 8px 0 9px;
+  border-radius: 999px;
+  background: var(--surface-2);
+}
+
+.agent-split-bar span {
+  min-width: 3px;
+  border-radius: 3px;
+  background: var(--band, var(--accent));
+}
+
+.agent-split-bar span[data-hue="0"],
+.agent-split-key i[data-hue="0"] {
+  --band: var(--hue-cyan-ink);
+}
+
+.agent-split-bar span[data-hue="2"],
+.agent-split-key i[data-hue="2"] {
+  --band: var(--hue-amber-ink);
+}
+
+.agent-split-key {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 18px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.agent-split-key li {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--ink-2);
+  font-size: 12px;
+}
+
+.agent-split-key i {
+  flex: none;
+  width: 9px;
+  height: 9px;
+  border-radius: 3px;
+  background: var(--band, var(--accent));
+}
+
+/* ------------------------------- role agents ----------------------------
+   The five agents of the specification. Each card takes the next hue in the
+   same fixed order used everywhere else, as a top rule only — the role word
+   and the name carry the identity, so the colour is never the only signal. */
+
+.role-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 10px;
+  margin-bottom: 30px;
+}
+
+/* Below the width where five columns would squeeze the names, fall back in
+   steps rather than letting one card strand itself on its own row. */
+@media (max-width: 1340px) {
+  .role-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 900px) {
+  .role-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 560px) {
+  .role-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.role-card {
+  display: grid;
+  gap: 9px;
+  align-content: start;
+  min-width: 0;
+  border: 1px solid var(--line);
+  border-top: 2px solid var(--role-line, var(--accent));
+  border-radius: var(--r-md);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+  padding: 12px;
+}
+
+.role-card[data-hue="0"] { --role-line: var(--hue-cyan-ink); }
+.role-card[data-hue="1"] { --role-line: var(--hue-blue-ink); }
+.role-card[data-hue="2"] { --role-line: var(--hue-amber-ink); }
+.role-card[data-hue="3"] { --role-line: var(--hue-green-ink); }
+
+.role-card > header {
+  display: grid;
+  gap: 3px;
+}
+
+.role-role {
+  color: var(--role-line, var(--accent));
+  font-size: 10.5px;
+  font-weight: 650;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.role-card h3 {
+  margin: 0;
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  overflow-wrap: anywhere;
+}
+
+.role-card header p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.role-scale {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin: 0;
+  border-top: 1px solid var(--line);
+  padding-top: 9px;
+  color: var(--ink-2);
+  font-size: 12px;
+}
+
+.role-scale strong {
+  color: var(--ink);
+  font-size: 17px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.role-scale em {
+  color: var(--muted);
+  font-size: 11px;
+  font-style: normal;
+}
+
+.role-before {
+  margin: 0;
+  border-top: 1px solid var(--line);
+  padding-top: 9px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+/* Every bar is labelled with its own number, so the lengths are a convenience
+   and never the only way to read the split. */
+.role-split {
+  display: grid;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.role-split li {
+  display: grid;
+  grid-template-columns: 48px minmax(0, 1fr) 40px;
+  gap: 6px;
+  align-items: center;
+}
+
+.role-split-label {
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.role-split-track {
+  height: 6px;
+  border-radius: 999px;
+  background: var(--surface-2);
+}
+
+.role-split-track i {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: var(--role-line, var(--accent));
+}
+
+.role-split-n {
+  color: var(--ink-2);
+  font-size: 11.5px;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+/* -------------------------------- stop rules --- */
+
+.stop-rules {
+  display: grid;
+  gap: 6px;
+  margin: 0 0 30px;
+  padding: 0;
+  list-style: none;
+}
+
+.stop-rules li {
+  display: grid;
+  grid-template-columns: 62px minmax(0, 1fr);
+  gap: 12px;
+  align-items: center;
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  background: var(--surface);
+  padding: 10px 13px;
+}
+
+/* The one rule where nothing stands in the way reads as the good case. */
+.stop-rules li[data-hue="alone"] {
+  border-color: var(--ok-line);
+  background: var(--ok-wash);
+}
+
+.stop-n {
+  color: var(--ink);
+  font-size: 15px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+.stop-rules li[data-hue="alone"] .stop-n {
+  color: var(--ok);
+}
+
+.stop-body {
+  display: grid;
+  gap: 1px;
+  min-width: 0;
+}
+
+.stop-body strong {
+  color: var(--ink);
+  font-size: 12.5px;
+  font-weight: 550;
+}
+
+.stop-body small {
+  color: var(--muted);
+  font-size: 11.5px;
+}
+
+@media (max-width: 560px) {
+  .role-split li {
+    grid-template-columns: 52px minmax(0, 1fr) 42px;
+  }
+}
+
+/* --------------------------------- eyebrows -----------------------------
+   A coloured label over a grey heading: the hue identifies the section and
+   the words say the same thing, so the colour is never load-bearing. The
+   values come from the text ramps, which are measured for small text at
+   4.5:1 rather than the 3:1 the fills are tuned for. */
+
+.cfg-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  margin: 0 0 3px;
+  color: var(--tint, var(--accent));
+  font-size: 10.5px;
+  font-weight: 650;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+/* The registry's own name is the link, so it wears the link colour; the row
+   it sits in stays grey. */
+.cfg-link {
+  color: var(--text-blue);
+}
+
+.cfg-link span {
+  color: var(--text-blue);
+}
+
+/* Each tier's hue reaches its heading, not only its top rule. */
+.cfg-tier[data-hue="0"] .cfg-tier-head strong { color: var(--text-cyan); }
+.cfg-tier[data-hue="1"] .cfg-tier-head strong { color: var(--text-blue); }
+.cfg-tier[data-hue="2"] .cfg-tier-head strong { color: var(--text-amber); }
+.cfg-tier[data-hue="3"] .cfg-tier-head strong { color: var(--text-green); }
+
+/* Stat values wear the text step, which clears 4.5:1 - the fill steps used
+   on the rules above do not. */
+.cfg-stat[data-hue="0"] { --stat-ink: var(--text-cyan); }
+.cfg-stat[data-hue="1"] { --stat-ink: var(--text-blue); }
+.cfg-stat[data-hue="2"] { --stat-ink: var(--text-amber); }
+.cfg-stat[data-hue="3"] { --stat-ink: var(--text-green); }
+
+.role-card[data-hue="0"] .role-role,
+.role-card[data-hue="0"] .role-scale strong { color: var(--text-cyan); }
+.role-card[data-hue="1"] .role-role,
+.role-card[data-hue="1"] .role-scale strong { color: var(--text-blue); }
+.role-card[data-hue="2"] .role-role,
+.role-card[data-hue="2"] .role-scale strong { color: var(--text-amber); }
+.role-card[data-hue="3"] .role-role,
+.role-card[data-hue="3"] .role-scale strong { color: var(--text-green); }
+
+/* The regime word takes the deeper text step inside its wash. */
+.cfg-tag[data-hue="0"] { --tag-ink: var(--text-green); }
+.cfg-tag[data-hue="1"] { --tag-ink: var(--text-cyan); }
+.cfg-tag[data-hue="2"] { --tag-ink: var(--hue-slate-ink); }
+.cfg-tag[data-hue="3"] { --tag-ink: var(--text-amber); }
+.cfg-tag[data-hue="4"] { --tag-ink: var(--text-fuchsia); }
+
+.cfg-tag[data-hue="4"] {
+  --tag-wash: var(--hue-fuchsia-wash);
+  --tag-line: var(--hue-fuchsia-line);
+}
+
+/* ------------------------- adding a row to a registry -------------------
+   The control sits at the right end of the status bar, so it reads as an
+   action on the registry rather than on the page. Both selectors carry the
+   reset: the global `button` rule would otherwise paint it as a primary
+   action (the same trap `.chip` guards against). */
+
+.cfg-bar {
+  /* The add control is pushed to the end of the bar. */
+  justify-content: flex-start;
+}
+
+.cfg-add,
+.cfg-add:hover {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  min-height: 0;
+  margin-left: auto;
+  border: 1px solid var(--accent-line);
+  border-radius: 999px;
+  background: var(--accent-wash);
+  box-shadow: none;
+  color: var(--accent-press);
+  padding: 3px 11px 3px 8px;
+  font: inherit;
+  font-size: 11.5px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.cfg-add:hover {
+  border-color: var(--accent);
+  background: var(--surface);
+}
+
+.cfg-add span {
+  display: grid;
+  place-items: center;
+}
+
+.cfg-add svg {
+  width: 14px;
+  height: 14px;
+}
+
+.cfg-pill em {
+  color: var(--text-amber);
+  font-style: normal;
+  font-weight: 600;
+}
+
+.cfg-source {
+  margin: -6px 0 12px;
+}
+
+/* -------------------------------- the form --- */
+
+.cfg-form {
+  display: grid;
+  gap: 10px;
+  margin-bottom: 12px;
+  border: 1px solid var(--accent-line);
+  border-radius: var(--r-md);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+  padding: 13px 14px;
+}
+
+.cfg-form-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 7px;
+  margin: 0;
+  color: var(--ink-2);
+  font-size: 11.5px;
+  line-height: 1.5;
+}
+
+.cfg-form-note .head-icon {
+  flex: none;
+  color: var(--accent);
+}
+
+.cfg-form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 8px 12px;
+}
+
+.cfg-form-grid label {
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+}
+
+.cfg-form-grid label[data-wide="true"] {
+  grid-column: 1 / -1;
+}
+
+.cfg-form-grid span {
+  color: var(--muted);
+  font-size: 10.5px;
+  font-weight: 550;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.cfg-form-grid i {
+  color: var(--warn);
+  font-style: normal;
+}
+
+.cfg-form-grid input {
+  width: 100%;
+  border: 1px solid var(--line-2);
+  border-radius: var(--r-sm);
+  background: var(--surface-2);
+  color: var(--ink);
+  padding: 6px 8px;
+  font: inherit;
+  font-size: 12.5px;
+}
+
+.cfg-form-grid input:focus-visible {
+  border-color: var(--accent);
+  background: var(--surface);
+  outline: none;
+}
+
+.cfg-form-problem {
+  margin: 0;
+  color: var(--warn);
+  font-size: 11.5px;
+}
+
+.cfg-form-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* ------------------------------ a local row --- */
+
+.cfg-table tr[data-local="true"] {
+  background: var(--accent-wash);
+}
+
+.cfg-local {
+  display: inline-block;
+  margin-left: 6px;
+  border-radius: 999px;
+  background: var(--accent);
+  color: #fff;
+  padding: 0 6px;
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
+  font-size: 9.5px;
+  font-weight: 650;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  vertical-align: 1px;
+}
+
+.cfg-row-action {
+  width: 34px;
+  text-align: right;
+}
+
+.cfg-row-action button,
+.cfg-row-action button:hover {
+  display: grid;
+  place-items: center;
+  min-height: 0;
+  width: 22px;
+  height: 22px;
+  border: 0;
+  border-radius: var(--r-sm);
+  background: transparent;
+  box-shadow: none;
+  color: var(--muted);
+  padding: 0;
+  cursor: pointer;
+}
+
+.cfg-row-action button:hover {
+  background: var(--surface-3, var(--surface-2));
+  color: var(--warn);
+}
+
+.cfg-row-action svg {
+  width: 13px;
+  height: 13px;
+}

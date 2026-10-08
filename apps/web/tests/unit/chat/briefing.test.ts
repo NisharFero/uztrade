@@ -192,3 +192,22 @@ test("the answer is streamed as words, and reassembles exactly", () => {
   assert.ok(chunks.length > 3, "a sentence arrives in several pieces");
   assert.equal(chunks.join(""), text, "nothing is lost or added in the splitting");
 });
+
+test("the brief says who does the step, not just which body it goes to", () => {
+  // Channel decides the doer, entity decides who it is transacted with: an
+  // online filing is the agent's to make even though a ministry receives it.
+  const filing = briefStep(step({ lane: "user", channel: "Online: apply", needs: [], entity: "Single window" }));
+  assert.ok(
+    filing.paragraphs.some((p) => /agent does this one for you, filing it with Single window/i.test(p)),
+    `expected an agent line, got: ${filing.paragraphs.join(" | ")}`,
+  );
+
+  const payment = briefStep(step({ lane: "user", channel: "Online: pay", needs: [], entity: "Bank" }));
+  assert.ok(payment.paragraphs.some((p) => /Your bank moves the money/i.test(p)), payment.paragraphs.join(" | "));
+
+  const inPerson = briefStep(step({ lane: "user", channel: "In person", needs: [], entity: "Customs warehouse" }));
+  assert.ok(inPerson.paragraphs.some((p) => /Customs warehouse does this one/i.test(p)), inPerson.paragraphs.join(" | "));
+
+  const own = briefStep(step({ lane: "user", channel: "In person", needs: [], entity: "Customs broker" }));
+  assert.ok(own.paragraphs.some((p) => /You do this one yourself, dealing with Customs broker/i.test(p)), own.paragraphs.join(" | "));
+});

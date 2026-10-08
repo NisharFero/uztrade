@@ -199,6 +199,19 @@ export const Icon: Record<string, ReactNode> = {
       <path d="M4.2 6h.01M4.2 12h.01M4.2 18h.01" />
     </svg>
   ),
+  /* Points down when closed; CSS rotates it when the disclosure is open. */
+  chevron: (
+    <svg {...s}>
+      <path d="M6 9.5l6 6 6-6" />
+    </svg>
+  ),
+  sliders: (
+    <svg {...s}>
+      <path d="M4 7h10M18 7h2M4 17h2M10 17h10" />
+      <circle cx="16" cy="7" r="2.2" />
+      <circle cx="8" cy="17" r="2.2" />
+    </svg>
+  ),
   flow: (
     <svg {...s}>
       <rect x="8.5" y="2.8" width="7" height="5" rx="1.5" />

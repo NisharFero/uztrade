@@ -10,7 +10,7 @@ import { getProcedure } from "../../modules/procedures/registry";
 import type { ShipmentFacts } from "../../modules/workflow/domain";
 
 export const metadata: Metadata = {
-  title: "Ledger · Uzbekistan Trade Platform",
+  title: "Ledger · UzOne Trade Platform",
   description: "Ledger and entity API records for each case.",
 };
 
@@ -38,7 +38,7 @@ export default async function LedgerPage({ searchParams }: { searchParams: Promi
   return (
     <>
       <header className="page-head">
-        <p>
+        <p data-tint="amber">
           <span className="head-icon">{Icon.list}</span>
           Ledger
         </p>

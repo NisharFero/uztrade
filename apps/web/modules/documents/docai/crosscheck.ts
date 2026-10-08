@@ -5,7 +5,7 @@
 import type { DocType } from "../specs";
 import { fmtTonnes } from "../../intake/shipment-plan";
 import type { ExtractedField } from "./compose";
-import { countryOf, parseTonnes } from "./validate";
+import { countryLabel, countryOf, parseTonnes } from "./validate";
 import { partyChecks } from "./names";
 
 export type CrossCheck = {
@@ -14,7 +14,15 @@ export type CrossCheck = {
   detail: string;
   /** The two company names a party check compared (names.ts). */
   names?: [string, string];
+  /** The two values a mismatch compared. Set only when both are values that
+   *  can be written back to `fieldKey`, so the trader can resolve the
+   *  disagreement by picking one instead of re-uploading the document. */
+  compared?: Compared;
 };
+
+/** `here` is what this document says, `there` what the case or another
+ *  document says; `thereLabel` names that other source. */
+export type Compared = { fieldKey: string; here: string; there: string; thereLabel: string };
 
 export type LedgerDocument = { docType: DocType; label: string; fields: ExtractedField[]; stepNum?: number };
 
@@ -104,6 +112,7 @@ export function crossCheck(docType: DocType, fields: ExtractedField[], ctx: Chec
       check: "Quantity vs intake",
       status: diff <= TOLERANCE ? "ok" : "mismatch",
       detail: `${fmtTonnes(weight.tonnes)} on the ${weight.label.toLowerCase()} vs ${fmtTonnes(ctx.intakeTonnes)} declared at intake`,
+      compared: { fieldKey: weight.key, here: fmtTonnes(weight.tonnes), there: fmtTonnes(ctx.intakeTonnes), thereLabel: "declared at intake" },
     });
   }
 
@@ -118,6 +127,7 @@ export function crossCheck(docType: DocType, fields: ExtractedField[], ctx: Chec
         check: `HS code vs ${doc.label}`,
         status: a === b ? "ok" : "mismatch",
         detail: `${hs.normalized} here vs ${other.normalized} on the ${doc.label.toLowerCase()}`,
+        compared: { fieldKey: "hs_code", here: String(hs.normalized), there: String(other.normalized), thereLabel: `on the ${doc.label.toLowerCase()}` },
       });
     }
   }
@@ -130,7 +140,8 @@ export function crossCheck(docType: DocType, fields: ExtractedField[], ctx: Chec
       checks.push({
         check: "Destination country vs route",
         status: code === ctx.partnerCountry ? "ok" : "mismatch",
-        detail: `${f.label}: ${code} vs route destination ${ctx.partnerCountry}`,
+        detail: `${f.label}: ${countryLabel(code)} vs route destination ${countryLabel(ctx.partnerCountry)}`,
+        compared: { fieldKey: key, here: countryLabel(code), there: countryLabel(ctx.partnerCountry), thereLabel: "the route this case was opened with" },
       });
       break;
     }
@@ -154,6 +165,7 @@ export function crossCheck(docType: DocType, fields: ExtractedField[], ctx: Chec
         check: "Receipt amount vs bill",
         status: Number(amount.normalized) === Number(billed.normalized) ? "ok" : "mismatch",
         detail: `${amount.normalized} paid vs ${billed.normalized} billed`,
+        compared: { fieldKey: "amount", here: String(amount.normalized), there: String(billed.normalized), thereLabel: "billed" },
       });
     }
   }
@@ -167,6 +179,7 @@ export function crossCheck(docType: DocType, fields: ExtractedField[], ctx: Chec
         check: `Currency vs ${doc.label}`,
         status: other.normalized === currency.normalized ? "ok" : "mismatch",
         detail: `${currency.normalized} here vs ${other.normalized}`,
+        compared: { fieldKey: "currency", here: String(currency.normalized), there: String(other.normalized), thereLabel: `on the ${doc.label.toLowerCase()}` },
       });
     }
   }

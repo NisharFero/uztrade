@@ -9,7 +9,7 @@ import type { ShipmentFacts } from "../../modules/workflow/domain";
 import { tailorProcedure } from "../../modules/workflow/tailor";
 
 export const metadata: Metadata = {
-  title: "Cases & Shipments · Uzbekistan Trade Platform",
+  title: "Cases & Shipments · UzOne Trade Platform",
   description: "Open cases and their progress through each procedure.",
 };
 
@@ -46,7 +46,7 @@ export default async function CasesPage() {
   return (
     <>
       <header className="page-head">
-        <p>
+        <p data-tint="cyan">
           <span className="head-icon">{Icon.shipments}</span>
           Cases &amp; Shipments
         </p>

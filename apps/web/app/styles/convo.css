@@ -634,18 +634,18 @@
 }
 
 .sidebar-fold {
-  display: flex;
-  align-items: center;
-  gap: 11px;
-  margin: -14px 0 -12px;
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 28px;
+  height: 28px;
+  margin: 0 0 0 auto;
   border: 0;
   border-radius: var(--r-sm);
   background: transparent;
   color: var(--rail-text);
-  justify-content: flex-start;
-  padding: 7px 10px;
+  padding: 0;
   font: inherit;
-  font-size: 12.5px;
   cursor: pointer;
 }
 
@@ -680,10 +680,10 @@
   .sidebar.is-collapsed .brand > div,
   .sidebar.is-collapsed .recents,
   .sidebar.is-collapsed .sub-nav,
-  .sidebar.is-collapsed .nav-item > span:last-of-type,
-  .sidebar.is-collapsed .sidebar-fold span {
+  .sidebar.is-collapsed .nav-item > span:last-of-type {
     display: none;
   }
+
 
   .sidebar.is-collapsed .nav-item {
     grid-template-columns: 20px;

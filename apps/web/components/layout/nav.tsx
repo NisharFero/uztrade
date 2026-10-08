@@ -7,13 +7,14 @@ import { Icon } from "../icons";
 import RecentCases from "./recent-cases";
 
 const items = [
-  { href: "/", label: "Dashboard", icon: Icon.home, exact: true },
-  { href: "/procedures", label: "Procedures", icon: Icon.book },
-  { href: "/cases", label: "Cases & Shipments", icon: Icon.truck },
-  { href: "/ledger", label: "Ledger", icon: Icon.receipt, children: ["Entity API records"] },
-  { href: "/faq", label: "FAQ", icon: Icon.help },
-  { href: "/entities", label: "Entities", icon: Icon.landmark },
-  { href: "/agents", label: "AI Agent Center", icon: Icon.bot, children: ["All Agents"] },
+  { href: "/", label: "Dashboard", icon: Icon.home, tint: "cyan", exact: true },
+  { href: "/procedures", label: "Procedures", icon: Icon.book, tint: "blue" },
+  { href: "/cases", label: "Cases & Shipments", icon: Icon.truck, tint: "cyan" },
+  { href: "/ledger", label: "Ledger", icon: Icon.receipt, tint: "amber" },
+  { href: "/faq", label: "FAQ", icon: Icon.help, tint: "fuchsia" },
+  { href: "/entities", label: "Entities", icon: Icon.landmark, tint: "green" },
+  { href: "/configuration", label: "Configuration", icon: Icon.sliders, tint: "blue" },
+  { href: "/agents", label: "AI Agent Center", icon: Icon.bot, tint: "fuchsia" },
 ];
 
 /** Closes the drawer whenever the page or the open chat changes. Reading the
@@ -58,7 +59,7 @@ export default function Nav() {
         <button type="button" className="mobile-bar-button" aria-label="Open menu" aria-expanded={open} onClick={() => setOpen(true)}>
           {Icon.menu}
         </button>
-        <span className="mobile-bar-title">Uzbekistan Trade Platform</span>
+        <span className="mobile-bar-title">UzOne Trade Platform</span>
         <Link className="mobile-bar-button" href="/?case=new" aria-label="New shipment" title="New shipment">
           {Icon.compose}
         </Link>
@@ -70,25 +71,25 @@ export default function Nav() {
         <div className="brand">
           <span aria-hidden="true">UZ</span>
           <div>
-            <strong>Uzbekistan</strong>
+            <strong>UzOne</strong>
             <small>Trade Platform</small>
           </div>
+          {collapsed ? null : (
+            <button
+              type="button"
+              className="sidebar-fold"
+              aria-label="Hide navigation"
+              title="Hide navigation"
+              aria-expanded
+              onClick={() => setCollapsed(true)}
+            >
+              {Icon.close}
+            </button>
+          )}
           <button type="button" className="sidebar-close" aria-label="Close menu" onClick={close}>
             {Icon.close}
           </button>
         </div>
-
-        <button
-          type="button"
-          className="sidebar-fold"
-          aria-label={collapsed ? "Show navigation" : "Hide navigation"}
-          title={collapsed ? "Show navigation" : "Hide navigation"}
-          aria-expanded={!collapsed}
-          onClick={() => setCollapsed(!collapsed)}
-        >
-          {Icon.menu}
-          <span>{collapsed ? "" : "Hide"}</span>
-        </button>
 
         <nav>
           {items.map((item) => {
@@ -96,9 +97,10 @@ export default function Nav() {
 
             return (
               <Link className={active ? "nav-item active" : "nav-item"} href={item.href} key={item.label} title={collapsed ? item.label : undefined}>
-                <span className="nav-icon">{item.icon}</span>
+                <span className="nav-icon" data-tint={item.tint}>
+                  {item.icon}
+                </span>
                 <span>{item.label}</span>
-                {item.children ? <small className="sub-nav">{item.children.join(", ")}</small> : null}
               </Link>
             );
           })}

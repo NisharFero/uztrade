@@ -27,7 +27,7 @@ const byKind = (kind: string) => PROCEDURE_IDS.filter((id) => CATALOGUE[id].kind
 export const FAQ: FaqEntry[] = [
   {
     id: "what",
-    question: "What does the Uzbekistan Trade Platform do?",
+    question: "What does the UzOne Trade Platform do?",
     answer: [
       "You describe a shipment in the chat. It checks what you're moving, export or import, how, how much and the route against the published procedures, then opens one case and walks you through it one step at a time.",
       "Agent steps run by themselves; your steps show exactly what's needed and wait for you.",

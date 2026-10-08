@@ -8,6 +8,7 @@ import { buildStepPlan, type StepPlan } from "./plan";
 import { isProcedureQuestion, isTradeQuery } from "./relevance";
 import { CATEGORIES, CATEGORY_LABEL, commodityOf, type Category, type CommodityHit } from "./taxonomy";
 import { countryName, greatCircleKm, mentionedRoute, recommendMode, resolveRoute, toTonnes, planningDirection, planningMode } from "./shipment-plan";
+import { routeGap, withPlace, type RouteGap } from "./coverage";
 
 /* Intake agent.
  *
@@ -86,6 +87,8 @@ function directMatch(query: string): Match | null {
   const p = PROCEDURE_CATALOGUE[referenced.id];
   const facts = extractShipmentFacts(query);
   const slots = slotsOf(query, facts);
+  const gap = routeGap(facts, slots.mode);
+  if (gap) return declinedRoute({ matchedBy: "rules", shipmentFacts: facts, slots, rationale: [] }, query, gap);
   const conflict = (slots.category && p.goods !== "any cargo" && slots.category !== p.goods)
     || (slots.mode && p.mode !== "any" && slots.mode !== p.mode)
     || (slots.direction && p.direction !== "transit" && slots.direction !== p.direction);
@@ -295,6 +298,24 @@ function declined(base: Base, reason: string): Match {
   return { ...base, status: "declined", procedureId: null, confidence: 0, reason, rationale: [...base.rationale, reason] };
 }
 
+/** Declined because master data cannot plan the route, with the countries it
+ *  can plan offered as answers: picking one re-runs the trader's own sentence
+ *  with that place in it. */
+function declinedRoute(base: Base, query: string, gap: RouteGap): Match {
+  return {
+    ...base,
+    status: "declined",
+    procedureId: null,
+    confidence: 0,
+    reason: gap.reason,
+    rationale: [...base.rationale, gap.reason],
+    clarify: {
+      question: gap.question,
+      options: gap.suggestions.map((country) => ({ label: country, query: withPlace(query, gap.named, country) })),
+    },
+  };
+}
+
 /** Ask for the one missing slot - or, once the trader has already answered
  *  twice, stop asking and show the candidate procedures by title. */
 function ask(base: Base, missing: Slot, clarify: Clarification, pool: string[], followUps: number): Match {
@@ -341,6 +362,12 @@ export function settleMatch(match: Match, query: string, options: IntakeOptions 
   if (hit.kind === "none" && !match.procedureId && !isTradeQuery(query)) {
     return declined(base, "That doesn't read as a shipment. Tell me the goods, whether they leave or enter Uzbekistan, and how they travel.");
   }
+
+  // 1b. Route coverage. A place the gazetteer does not know, or a country
+  //     with no corridor, cannot be planned - say so rather than quietly
+  //     planning the shipment without that leg.
+  const gap = routeGap(facts, slots.mode);
+  if (gap) return declinedRoute(base, query, gap);
 
   // 2-3. Commodity.
   if (hit.kind === "unsupported") {

@@ -290,6 +290,21 @@ const RAIL_CORRIDORS: Record<string, Corridor> = {
   JP: { via: ["KZ", "CN"], gaugeBreak: "1520 → 1435 mm at Dostyk / Khorgos", sea: "Sea leg from a Chinese port" },
 };
 
+/** Whether master data models a surface corridor out of Uzbekistan to this
+ *  country. Air is flown point to point, so it needs no corridor. */
+export function hasCorridor(country: string): boolean {
+  return Object.hasOwn(RAIL_CORRIDORS, country);
+}
+
+/** The countries master data covers, for telling a trader what is in range.
+ *  By surface that is the corridor table; by air, every country we can place. */
+export function coveredCountryNames(surface: boolean): string[] {
+  return Object.entries(COUNTRY_NAMES)
+    .filter(([code]) => code !== "UZ" && (!surface || hasCorridor(code)))
+    .map(([, c]) => c.name)
+    .sort((a, b) => a.localeCompare(b));
+}
+
 /* Planning allowances, in hours. */
 const RAIL = {
   routeFactor: 1.25, // rail track vs great-circle

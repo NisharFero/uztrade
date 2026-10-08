@@ -3,7 +3,7 @@ import { Suspense } from "react";
 import Conversation from "../components/chat/conversation";
 
 export const metadata: Metadata = {
-  title: "Uzbekistan Trade Platform",
+  title: "UzOne Trade Platform",
   description: "Say what you are moving; the agents match the published procedure and take the case through it one step at a time.",
 };
 

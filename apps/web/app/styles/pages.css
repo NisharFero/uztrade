@@ -712,6 +712,12 @@ a.case-row:hover {
   position: fixed;
   z-index: 60;
   width: 268px;
+  /* The placement keeps a 16px gap on every side; these stop the card itself
+     being bigger than the room that leaves, on a narrow or a short window.
+     It cannot be scrolled (pointer-events: none), so it must always fit. */
+  max-width: calc(100vw - 32px);
+  max-height: calc(100vh - 32px);
+  overflow: hidden;
   border: 1px solid var(--line-2);
   border-radius: var(--r-md);
   background: var(--surface);
@@ -1884,9 +1890,39 @@ a.case-row:hover {
 
 .doc-where small,
 .doc-alt {
-  display: block;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 3px 5px;
+  margin-top: 3px;
   color: var(--muted);
   font-size: 10.5px;
+}
+
+/* A reading the trader can take, not a note they have to retype. */
+.doc-alt button {
+  border: 1px solid var(--line);
+  border-radius: var(--r-sm);
+  background: var(--surface);
+  padding: 1px 5px;
+  color: var(--ink);
+  font: inherit;
+  cursor: pointer;
+}
+
+.doc-alt button:hover {
+  border-color: var(--accent-line);
+  background: var(--accent-wash);
+}
+
+.doc-alt button[aria-pressed="true"] {
+  border-color: var(--accent-line);
+  background: var(--accent-wash);
+  font-weight: 600;
+}
+
+.doc-opts {
+  margin-top: 2px;
 }
 
 .doc-value {
@@ -1937,6 +1973,55 @@ a.case-row:hover {
 
 .doc-checks li[data-status="mismatch"] {
   color: var(--warn);
+}
+
+/* Two documents disagree: pick the one that is right. */
+.doc-resolve {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 6px;
+  margin-top: 4px;
+}
+
+.doc-resolve-ask {
+  color: var(--ink);
+  font-weight: 550;
+}
+
+.doc-resolve button {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 4px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-sm);
+  background: var(--surface);
+  padding: 2px 7px;
+  color: var(--ink);
+  font: inherit;
+  cursor: pointer;
+}
+
+.doc-resolve button small {
+  color: var(--muted);
+  font-size: 10.5px;
+}
+
+.doc-resolve button:hover {
+  border-color: var(--accent-line);
+  background: var(--accent-wash);
+}
+
+.doc-resolve button[aria-pressed="true"] {
+  border-color: var(--accent-line);
+  background: var(--accent-wash);
+  font-weight: 600;
+}
+
+.doc-pending {
+  margin: 6px 0 0;
+  color: var(--warn);
+  font-size: 11.5px;
 }
 
 /* ------------------------------ Demo pack ------------------------------- */
@@ -2001,7 +2086,7 @@ a.case-row:hover {
 .faq-asked { border-left: 3px solid var(--amber, #d97706); padding-left: 0.75rem; }
 .faq-list { display: grid; gap: 0.5rem; margin-block: 1rem; }
 .faq-item { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 0.75rem 1rem; }
-.faq-item[data-match] { border-color: var(--violet, #7c3aed); box-shadow: 0 0 0 1px var(--violet, #7c3aed) inset; }
+.faq-item[data-match] { border-color: var(--text-blue); box-shadow: 0 0 0 1px var(--text-blue) inset; }
 .faq-item summary { cursor: pointer; font-weight: 600; }
 .faq-item p { margin: 0.5rem 0 0; line-height: 1.5; }
 .faq-item .crumb { display: inline-block; margin-top: 0.5rem; }
@@ -3316,4 +3401,83 @@ a.case-row:hover {
   color: var(--faint);
   font-size: 12.5px;
   font-variant-numeric: tabular-nums;
+}
+
+/* ------------------------ Who does the work, per procedure ---------------
+   A three-band bar on each catalogue card: you / the agent / the goods.
+   Validated as a categorical trio in both themes, and every band is labelled
+   with its own percentage, so the split reads with the colour removed. The
+   DAG's swimlanes use an older palette whose own pairs sit below the
+   separation floor; these are the section hues, which pass. */
+
+.proc-lanes {
+  display: grid;
+  gap: 5px;
+  margin-top: 2px;
+}
+
+.proc-lane-bar {
+  display: flex;
+  gap: 2px;
+  overflow: hidden;
+  height: 7px;
+  border-radius: 999px;
+  background: var(--surface-3, var(--surface-2));
+}
+
+.proc-lane-bar span {
+  min-width: 2px;
+  border-radius: 2px;
+  background: var(--band);
+}
+
+.proc-lane-bar span[data-hue="blue"],
+.proc-lane-key i[data-hue="blue"] {
+  --band: var(--hue-blue-ink);
+}
+
+.proc-lane-bar span[data-hue="cyan"],
+.proc-lane-key i[data-hue="cyan"] {
+  --band: var(--hue-cyan-ink);
+}
+
+.proc-lane-bar span[data-hue="amber"],
+.proc-lane-key i[data-hue="amber"] {
+  --band: var(--hue-amber-ink);
+}
+
+.proc-lane-key {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px 11px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.proc-lane-key li {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--muted);
+  font-size: 10.5px;
+}
+
+/* A lane with no steps stays listed - "0%" is information - but recedes. */
+.proc-lane-key li[data-zero="true"] {
+  opacity: 0.5;
+}
+
+.proc-lane-key i {
+  flex: none;
+  width: 7px;
+  height: 7px;
+  border-radius: 2px;
+  background: var(--band);
+}
+
+.proc-lane-key strong {
+  color: var(--ink-2);
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
 }

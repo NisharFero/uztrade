@@ -85,19 +85,63 @@ const CURRENCIES: [RegExp, string][] = [
   [/\btry\b|\b949\b|лир/i, "TRY"],
 ];
 
-const COUNTRY_WORDS: [RegExp, string][] = [
-  [/uzbekistan|o'zbekiston|узбекистан|ўзбекистон/i, "UZ"],
-  [/kazakhstan|казахстан|қазақстан/i, "KZ"],
-  [/kyrgyz|кыргыз|киргиз/i, "KG"],
-  [/russia|росси/i, "RU"],
-  [/china|китай/i, "CN"],
-  [/turkey|t[üu]rkiye|турци/i, "TR"],
-  [/afghanistan|афганистан/i, "AF"],
+/* [pattern, ISO code, English name]. The name is what the trader is offered
+   when a country field has to be filled by hand, so every option here is one
+   countryOf can read back. The corpus is bilingual - an invoice says
+   "Германия", not "Germany" - so each entry carries the Russian form too.
+   Only seven countries used to be listed, which quietly disabled the
+   destination-country cross-check for every other partner. */
+const COUNTRY_WORDS: [RegExp, string, string][] = [
+  [/uzbekistan|o'zbekiston|узбекистан|ўзбекистон/i, "UZ", "Uzbekistan"],
+  [/kazakhstan|казахстан|қазақстан/i, "KZ", "Kazakhstan"],
+  [/kyrgyz|кыргыз|киргиз/i, "KG", "Kyrgyzstan"],
+  [/tajikistan|таджикистан/i, "TJ", "Tajikistan"],
+  [/turkmenistan|туркменистан/i, "TM", "Turkmenistan"],
+  [/afghanistan|афганистан/i, "AF", "Afghanistan"],
+  [/russia|росси|рф/i, "RU", "Russia"],
+  [/belarus|беларус|белорус/i, "BY", "Belarus"],
+  [/ukraine|украин/i, "UA", "Ukraine"],
+  [/latvia|латви/i, "LV", "Latvia"],
+  [/lithuania|литв|литов/i, "LT", "Lithuania"],
+  [/poland|польш|польск/i, "PL", "Poland"],
+  [/germany|deutschland|герман/i, "DE", "Germany"],
+  [/netherlands|holland|нидерланд|голланд/i, "NL", "Netherlands"],
+  [/united kingdom|\bu\.?k\.?\b|england|britain|великобритан|англи/i, "GB", "United Kingdom"],
+  [/china|китай|китая/i, "CN", "China"],
+  [/iran|иран/i, "IR", "Iran"],
+  [/turkey|t[üu]rkiye|турци|турецк/i, "TR", "Turkey"],
+  [/azerbaijan|азербайджан/i, "AZ", "Azerbaijan"],
+  [/georgia|грузи/i, "GE", "Georgia"],
+  [/united arab emirates|\buae\b|emirates|эмират|оаэ/i, "AE", "United Arab Emirates"],
+  [/saudi|саудов/i, "SA", "Saudi Arabia"],
+  [/pakistan|пакистан/i, "PK", "Pakistan"],
+  [/\bindia\b|индия|индии/i, "IN", "India"],
+  [/south korea|\bkorea\b|коре/i, "KR", "South Korea"],
+  [/japan|япон/i, "JP", "Japan"],
 ];
 
 export function countryOf(raw: string): string | null {
   return COUNTRY_WORDS.find(([re]) => re.test(raw))?.[1] ?? null;
 }
+
+/** The English name behind an ISO code, for showing a country as a choice. */
+export function countryLabel(code: string): string {
+  return COUNTRY_WORDS.find(([, c]) => c === code)?.[2] ?? code;
+}
+
+/* Incoterms 2020, the only values an incoterm field may hold. */
+const INCOTERMS = ["EXW", "FCA", "FAS", "FOB", "CFR", "CIF", "CPT", "CIP", "DAP", "DPU", "DDP", "DAT"] as const;
+const INCOTERM_RE = new RegExp(`\\b(${INCOTERMS.join("|")})\\b`);
+
+/** The values a field of this kind may take, for offering as choices when one
+ *  has to be filled by hand. Derived from the validators above, so what is
+ *  offered is always what will be accepted. Kinds absent from this map are
+ *  free text (a company name, an address) and get no options. */
+export const FIELD_OPTIONS: Partial<Record<FieldKind, string[]>> = {
+  currency: CURRENCIES.map(([, code]) => code),
+  incoterm: [...INCOTERMS],
+  country: COUNTRY_WORDS.map(([, , name]) => name),
+};
 
 export function normalizeValue(kind: FieldKind, raw: string): Normalized {
   const value = raw.trim();
@@ -131,7 +175,7 @@ export function normalizeValue(kind: FieldKind, raw: string): Normalized {
       return { ok: Boolean(c), normalized: c };
     }
     case "incoterm": {
-      const m = value.toUpperCase().match(/\b(EXW|FCA|FAS|FOB|CFR|CIF|CPT|CIP|DAP|DPU|DDP|DAT)\b/);
+      const m = value.toUpperCase().match(INCOTERM_RE);
       return { ok: Boolean(m), normalized: m?.[1] ?? null };
     }
     case "country": {

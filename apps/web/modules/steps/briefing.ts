@@ -13,6 +13,7 @@
 
 import type { StepView, Need } from "./next";
 import type { AssistantView } from "./assistant";
+import { actorOfStep } from "../procedures/actors";
 import { inSentence } from "../shared/text";
 
 export type Briefing = {
@@ -52,6 +53,23 @@ function where(step: StepView): string {
   if (/^online/i.test(step.channel)) return at ? `online at ${at}` : "online";
   if (/in person/i.test(step.channel)) return at ? `in person at ${at}` : "in person";
   return at;
+}
+
+/** Who is involved. Who performs a step and who it is transacted with are
+ *  different questions (modules/procedures/actors.ts): an online filing at
+ *  Single Window is done by our agent but goes to a government body. Saying
+ *  only the entity left the trader unsure whether it was theirs to do. */
+function who(step: StepView): string {
+  switch (actorOfStep(step)) {
+    case "trader":
+      return step.entity ? `You do this one yourself, dealing with ${step.entity}` : "You do this one yourself";
+    case "agent":
+      return `The agent does this one for you${step.entity ? `, filing it with ${step.entity}` : ""}`;
+    case "bank":
+      return `Your bank moves the money${step.entity ? `, to ${step.entity}` : ""}`;
+    default:
+      return step.entity ? `${step.entity} does this one` : "The authority handling it does this one";
+  }
 }
 
 /** Why this step exists: what it produces, and what that unlocks. */
@@ -122,6 +140,7 @@ export function briefStep(step: StepView): Briefing {
     if (!step.paused) paragraphs.push("I will come back when the entity answers.");
   } else {
     paragraphs.push(sentence(whatToDo(step)));
+    paragraphs.push(sentence(who(step)));
     paragraphs.push(sentence(why(step)));
   }
 

@@ -18,7 +18,7 @@ export const dynamic = "force-dynamic";
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const p = CATALOGUE[id];
-  return { title: p ? `${p.title} · Uzbekistan Trade Platform` : "Procedure · Uzbekistan Trade Platform" };
+  return { title: p ? `${p.title} · UzOne Trade Platform` : "Procedure · UzOne Trade Platform" };
 }
 
 /** The procedure, and - when a case runs on it - that case's whole workflow:

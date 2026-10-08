@@ -6,6 +6,8 @@
 @import "./panels.css";
 @import "./convo.css";
 @import "./cards.css";
+@import "./configuration.css";
+@import "./entities.css";
 
 /* ---------------------------------------------------------------------------
    UzTrade — modern product dashboard on a white ground.
@@ -36,7 +38,7 @@
      here" - the same contrast trick enterprise consoles use. */
   --rail: #16304a;
   --rail-2: #0f2235;
-  --rail-hover: #ffffff;
+  --rail-hover: rgba(255, 255, 255, 0.1);
   --rail-active: #ffffff;
   --rail-ink: #14283c;
   --rail-text: rgba(255, 255, 255, 0.78);
@@ -85,6 +87,31 @@
   --accent-wash: #e9f3f5;
   --accent-line: #b9dbe2;
 
+  --hue-cyan-ink: #0092b5;
+  --hue-cyan-wash: #ecfeff;
+  --hue-cyan-line: #a2f4fd;
+  --hue-blue-ink: #1447e6;
+  --hue-blue-wash: #eff6ff;
+  --hue-blue-line: #bedbff;
+  --hue-amber-ink: #b75000;
+  --hue-amber-wash: #fffbeb;
+  --hue-amber-line: #fee685;
+  --hue-green-ink: #009767;
+  --hue-green-wash: #ecfdf5;
+  --hue-green-line: #a4f4cf;
+  --hue-slate-ink: #52525b;
+  --hue-slate-wash: #f5f5f5;
+  --hue-slate-line: #e5e5e5;
+  --hue-fuchsia-ink: #c600db;
+  --hue-fuchsia-wash: #fdf4ff;
+  --hue-fuchsia-line: #f6cfff;
+
+  --text-cyan: #007492;
+  --text-blue: #1447e6;
+  --text-amber: #b75000;
+  --text-green: #007956;
+  --text-fuchsia: #a600b5;
+
   --ok: #047857;
   --ok-wash: #e6f6ef;
   --ok-line: #a7ddc6;
@@ -123,7 +150,7 @@
 
   --rail: #12224d;
   --rail-2: #0d1936;
-  --rail-hover: #ffffff;
+  --rail-hover: rgba(255, 255, 255, 0.1);
   --rail-active: #ffffff;
   --rail-ink: #1b3576;
   --rail-text: rgba(255, 255, 255, 0.74);
@@ -162,6 +189,31 @@
   --accent-press: #4a86e8;
   --accent-wash: #16233a;
   --accent-line: #2c4470;
+
+  --hue-cyan-ink: #0092b5;
+  --hue-cyan-wash: #0b2630;
+  --hue-cyan-line: #1b4a5a;
+  --hue-blue-ink: #2563eb;
+  --hue-blue-wash: #0d1b3a;
+  --hue-blue-line: #1e3a6e;
+  --hue-amber-ink: #dd7400;
+  --hue-amber-wash: #2a1f05;
+  --hue-amber-line: #5a4211;
+  --hue-green-ink: #009767;
+  --hue-green-wash: #0a2620;
+  --hue-green-line: #15543f;
+  --hue-slate-ink: #a1a1a1;
+  --hue-slate-wash: #1f1f23;
+  --hue-slate-line: #343438;
+  --hue-fuchsia-ink: #c600db;
+  --hue-fuchsia-wash: #2a0b2e;
+  --hue-fuchsia-line: #5a1a60;
+
+  --text-cyan: #53eafd;
+  --text-blue: #60a5fa;
+  --text-amber: #ffd236;
+  --text-green: #00d294;
+  --text-fuchsia: #f2a9ff;
 
   --ok: #4ade9f;
   --ok-wash: #10261e;
@@ -320,12 +372,27 @@ a:focus-visible {
 
 /* Eyebrow icons carry a tint so the sections are colour-coded, not just the
    workflow. */
+:root,
+:root[data-theme="dark"] {
+  --rail-cyan: #53eafd;
+  --rail-blue: #7dabff;
+  --rail-amber: #ffd236;
+  --rail-green: #00d294;
+  --rail-fuchsia: #f2a9ff;
+
+  --pill-cyan: #007492;
+  --pill-blue: #1447e6;
+  --pill-amber: #b75000;
+  --pill-green: #007956;
+  --pill-fuchsia: #a600b5;
+}
+
 .head-icon {
   color: var(--accent);
 }
 
-.head-icon[data-tint="violet"] {
-  color: var(--lane-user);
+.head-icon[data-tint="blue"] {
+  color: var(--text-blue);
 }
 
 .head-icon[data-tint="teal"] {
@@ -336,9 +403,34 @@ a:focus-visible {
   color: var(--lane-government);
 }
 
+/* A tint on the eyebrow itself colours the label and the icon inside it, so a
+   section is identified by its colour AND its words, never by colour alone. */
+.page-head > p:first-child[data-tint],
+.section-head p[data-tint] {
+  color: var(--tint, var(--accent));
+}
+
+.page-head > p:first-child[data-tint] .head-icon,
+.section-head p[data-tint] .head-icon {
+  color: inherit;
+}
+
+[data-tint="cyan"] { --tint: var(--text-cyan); }
+[data-tint="blue"] { --tint: var(--text-blue); }
+[data-tint="amber"] { --tint: var(--text-amber); }
+[data-tint="green"] { --tint: var(--text-green); }
+[data-tint="fuchsia"] { --tint: var(--text-fuchsia); }
+
+.head-icon[data-tint="cyan"],
+.head-icon[data-tint="amber"],
+.head-icon[data-tint="green"],
+.head-icon[data-tint="fuchsia"] {
+  color: var(--tint);
+}
+
 .shell {
   display: grid;
-  grid-template-columns: 244px minmax(0, 1fr);
+  grid-template-columns: 216px minmax(0, 1fr);
   min-height: 100vh;
 }
 
@@ -351,14 +443,21 @@ a:focus-visible {
 .sidebar {
   display: flex;
   flex-direction: column;
-  gap: 26px;
+  gap: 24px;
   position: sticky;
-  top: 0;
-  height: 100vh;
-  border-right: 1px solid var(--rail-line);
+  top: 10px;
+  height: calc(100vh - 20px);
+  /* Inset, so the top and bottom borders and the curve have somewhere to be
+     read against; flush to the viewport they would have no edge to sit on. */
+  margin: 10px 0 10px 10px;
+  border: 1px solid var(--rail-line);
+  /* One radius on all four corners. A percentage here is read per axis, so
+     it scaled with the rail's height and gave a lozenge; a length keeps the
+     corners square to each other and the panel rectangular between them. */
+  border-radius: var(--r-xl);
   background: linear-gradient(180deg, var(--rail), var(--rail-2));
   color: var(--rail-text);
-  padding: 18px 12px;
+  padding: 18px 10px;
 }
 
 .sidebar nav {
@@ -408,14 +507,62 @@ a:focus-visible {
   border-color: rgba(255, 255, 255, 0.28);
 }
 
-.recents-head {
-  margin: 8px 6px 2px;
+/* One line that opens the history. Both selectors carry the reset because the
+   global `button` rule would otherwise paint it as a primary action - the same
+   trap `.chip` guards against. */
+.recents-toggle,
+.recents-toggle:hover {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  min-height: 0;
+  margin: 8px 0 0;
+  border: 0;
+  border-radius: var(--r-md);
+  background: transparent;
+  box-shadow: none;
   color: var(--rail-text);
+  padding: 7px 8px;
+  font: inherit;
   font-size: 11px;
   font-weight: 600;
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  opacity: 0.7;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.recents-toggle:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--rail-text-strong);
+}
+
+.recents-count {
+  flex: none;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+  padding: 1px 6px;
+  font-size: 10px;
+  letter-spacing: 0;
+}
+
+.recents-chevron {
+  display: grid;
+  place-items: center;
+  flex: none;
+  margin-left: auto;
+  transition: transform 160ms ease;
+}
+
+.recents-chevron svg {
+  width: 15px;
+  height: 15px;
+}
+
+.recents-chevron[data-open="true"] {
+  transform: rotate(180deg);
 }
 
 .recents-empty {
@@ -564,12 +711,11 @@ nav {
 
 .nav-item:hover {
   background: var(--rail-hover);
-  color: var(--rail-ink);
 }
 
-.nav-item:hover .nav-icon {
-  color: var(--accent);
-}
+/* The hover wash is dark, so the icon lightens with the label. Only the
+   selected item sits on a white pill, where the accent reads. */
+
 
 .nav-item.active {
   background: var(--rail-active);
@@ -612,9 +758,28 @@ nav {
   height: 17px;
 }
 
+.nav-item .nav-icon {
+  color: var(--rail-text);
+  transition: color 130ms ease;
+}
+
 .nav-item.active .nav-icon {
   color: var(--accent);
 }
+
+.nav-item.active .nav-icon[data-tint="cyan"] { color: var(--pill-cyan); }
+.nav-item.active .nav-icon[data-tint="blue"] { color: var(--pill-blue); }
+.nav-item.active .nav-icon[data-tint="amber"] { color: var(--pill-amber); }
+.nav-item.active .nav-icon[data-tint="green"] { color: var(--pill-green); }
+.nav-item.active .nav-icon[data-tint="fuchsia"] { color: var(--pill-fuchsia); }
+
+/* The one thing hover changes. The rail steps are the light ones, measured
+   against the darker rail stop, so they read on the hover wash. */
+.nav-item:not(.active):hover .nav-icon[data-tint="cyan"] { color: var(--rail-cyan); }
+.nav-item:not(.active):hover .nav-icon[data-tint="blue"] { color: var(--rail-blue); }
+.nav-item:not(.active):hover .nav-icon[data-tint="amber"] { color: var(--rail-amber); }
+.nav-item:not(.active):hover .nav-icon[data-tint="green"] { color: var(--rail-green); }
+.nav-item:not(.active):hover .nav-icon[data-tint="fuchsia"] { color: var(--rail-fuchsia); }
 
 .sub-nav {
   grid-column: 2;
@@ -623,10 +788,14 @@ nav {
   opacity: 0.8;
 }
 
-/* Inside a white pill the sub-label has to darken too. */
-.nav-item:hover .sub-nav,
+/* Inside the white pill of the selected item the sub-label has to darken too.
+   On hover the rail stays dark, so the label stays light. */
 .nav-item.active .sub-nav {
   color: var(--muted);
+  opacity: 1;
+}
+
+.nav-item:hover .sub-nav {
   opacity: 1;
 }
 
@@ -875,7 +1044,11 @@ textarea:focus {
   display: grid;
   gap: 16px;
   padding: 20px;
-  animation: wf-in 260ms ease both;
+  /* `backwards`, not `both`: these keyframes animate a transform, and a
+     forwards fill leaves the final one applied for good — an identity
+     transform is still a transform, and it makes .wf the containing block for
+     every `position: fixed` descendant. */
+  animation: wf-in 260ms ease backwards;
 }
 
 @keyframes wf-in {
@@ -1297,6 +1470,9 @@ textarea:focus {
 }
 
 .wf-node:hover {
+  border-color: var(--accent-line);
+  background: var(--surface);
+  color: inherit;
   box-shadow: var(--shadow);
   transform: translateY(-1px);
 }
@@ -2074,6 +2250,11 @@ mark[data-tone="info"] {
     z-index: 50;
     width: min(290px, 84vw);
     height: 100dvh;
+    margin: 0;
+    border: 0;
+    border-right: 1px solid var(--rail-line);
+    border-radius: 0;
+    padding: 18px 12px;
     overflow-y: auto;
     transform: translateX(-102%);
     visibility: hidden;

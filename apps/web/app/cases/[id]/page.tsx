@@ -13,7 +13,7 @@ export const dynamic = "force-dynamic";
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  return { title: `${id} · Uzbekistan Trade Platform` };
+  return { title: `${id} · UzOne Trade Platform` };
 }
 
 export default async function CasePage({ params }: { params: Promise<{ id: string }> }) {

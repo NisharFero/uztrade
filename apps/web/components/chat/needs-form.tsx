@@ -2,8 +2,9 @@
 
 import { useState, type ReactNode } from "react";
 import { demoForNeed } from "../../modules/demo/demo";
-import { GATE } from "../../modules/documents/docai/compose";
+import { GATE, type ExtractedField } from "../../modules/documents/docai/compose";
 import { describeEvidence } from "../../modules/documents/docai/evidence";
+import { FIELD_OPTIONS } from "../../modules/documents/docai/validate";
 import type { FormFieldView } from "../../modules/steps/application-forms";
 import type { DocumentRecord } from "../../modules/steps/ledger";
 import type { Need } from "../../modules/steps/next";
@@ -409,9 +410,59 @@ const pct = (n: number) => `${Math.round(n * 100)}%`;
 
 /** What was read from a document, field by field: the value, how sure the
  *  reading is, and where on the page it came from. Editable until confirmed. */
+/** One document field's value.
+ *
+ * A field the reader could not find, or read two ways, is the commonest thing
+ * to go wrong with a demo document - so neither is left for the trader to
+ * guess at. The values the field may hold are offered (as a dropdown, and as
+ * buttons when the list is short enough to show), and every other reading OCR
+ * produced is a button that fills the box, instead of the note it used to be.
+ * Free text still goes in: a country outside the fixture is a real country. */
+function ValueCell({ field, docId, value, onPick }: { field: ExtractedField; docId: string; value: string; onPick: (v: string) => void }) {
+  const options = FIELD_OPTIONS[field.kind] ?? [];
+  const listId = options.length ? `doc-opts-${docId}-${field.key}` : undefined;
+  // Worth showing a closed list of twelve; a country list belongs in the dropdown.
+  const chips = !value && options.length && options.length <= 12 ? options : [];
+  return (
+    <>
+      <input aria-label={field.label} list={listId} value={value} onChange={(event) => onPick(event.target.value)} />
+      {listId ? (
+        <datalist id={listId}>
+          {options.map((option) => (
+            <option key={option} value={option} />
+          ))}
+        </datalist>
+      ) : null}
+      {field.alternatives.length ? (
+        <span className="doc-alt">
+          <span>Also read:</span>
+          {field.alternatives.map((alt) => (
+            <button key={alt} type="button" aria-pressed={value === alt} onClick={() => onPick(alt)}>
+              {alt}
+            </button>
+          ))}
+        </span>
+      ) : null}
+      {chips.length ? (
+        <span className="doc-alt doc-opts">
+          {chips.map((option) => (
+            <button key={option} type="button" onClick={() => onPick(option)}>
+              {option}
+            </button>
+          ))}
+        </span>
+      ) : null}
+    </>
+  );
+}
+
 function DocumentReview({ doc, caseId, busy, onAct, readOnly = false }: { doc: DocumentRecord; caseId: string; busy: string | null; onAct: Act; readOnly?: boolean }) {
   const [edits, setEdits] = useState<Record<string, string>>({});
   const key = `doc:${doc.docId}`;
+  /** The value shown for a field: the trader's pending edit, else what was read. */
+  const shown = (fieldKey: string, read: string | null) => edits[fieldKey] ?? read ?? "";
+  const put = (fieldKey: string, value: string) => setEdits((prev) => ({ ...prev, [fieldKey]: value }));
+  const pending = Object.entries(edits).filter(([k, v]) => v !== (doc.fields.find((f) => f.key === k)?.value ?? "")).length;
   const read = doc.fields.filter((f) => f.value);
   const accepted = doc.fields.filter((f) => f.status === "accepted").length;
   const confirmed = doc.fields.filter((f) => f.status === "confirmed").length;
@@ -472,9 +523,8 @@ function DocumentReview({ doc, caseId, busy, onAct, readOnly = false }: { doc: D
                         {readOnly ? (
                           <span className="doc-value">{f.value ?? "—"}</span>
                         ) : (
-                          <input aria-label={f.label} defaultValue={f.value ?? ""} onChange={(event) => setEdits((prev) => ({ ...prev, [f.key]: event.target.value }))} />
+                          <ValueCell field={f} docId={doc.docId} value={shown(f.key, f.value)} onPick={(v) => put(f.key, v)} />
                         )}
-                        {f.alternatives.length && !readOnly ? <small className="doc-alt">Also read: {f.alternatives.join(" · ")}</small> : null}
                       </td>
                       <td>
                         <span className="doc-conf" data-status={f.status}>
@@ -503,12 +553,34 @@ function DocumentReview({ doc, caseId, busy, onAct, readOnly = false }: { doc: D
       ) : null}
       {doc.checks.length ? (
         <ul className="doc-checks">
-          {doc.checks.map((c) => (
-            <li key={c.check} data-status={c.status}>
-              <strong>{c.check}:</strong> {c.detail}
-            </li>
-          ))}
+          {doc.checks.map((c) => {
+            const pick = c.status === "mismatch" && c.compared && !readOnly ? c.compared : null;
+            // "Keep" writes the document's own words back, so confirming does
+            // not quietly replace them with the formatted comparison value.
+            const asRead = pick ? doc.fields.find((f) => f.key === pick.fieldKey)?.value ?? pick.here : "";
+            return (
+              <li key={c.check} data-status={c.status}>
+                <strong>{c.check}:</strong> {c.detail}
+                {pick ? (
+                  <span className="doc-resolve">
+                    <span className="doc-resolve-ask">Which is right?</span>
+                    <button type="button" aria-pressed={shown(pick.fieldKey, asRead) === asRead} onClick={() => put(pick.fieldKey, asRead)}>
+                      {pick.here} <small>this document</small>
+                    </button>
+                    <button type="button" aria-pressed={shown(pick.fieldKey, asRead) === pick.there} onClick={() => put(pick.fieldKey, pick.there)}>
+                      {pick.there} <small>{pick.thereLabel}</small>
+                    </button>
+                  </span>
+                ) : null}
+              </li>
+            );
+          })}
         </ul>
+      ) : null}
+      {pending && !readOnly ? (
+        <p className="doc-pending">
+          {pending} {pending === 1 ? "field has" : "fields have"} an unsaved change — confirm below to save {pending === 1 ? "it" : "them"}.
+        </p>
       ) : null}
       {readOnly ? null : (
         <button

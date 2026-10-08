@@ -1,0 +1,417 @@
+/* ------------------------------- Entities -------------------------------
+   Kinds first, then the entities in the kind you picked.
+
+   Both explanations open on :hover AND :focus-visible/:focus-within, so the
+   keyboard reaches everything the mouse does. Nothing that matters is
+   hover-only: the counts a trader needs are printed in the row itself, and
+   the explanation adds detail rather than carrying it. */
+
+.ent-types {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(216px, 1fr));
+  gap: 10px;
+  margin: 0 0 26px;
+  padding: 0;
+  list-style: none;
+}
+
+.ent-type {
+  display: grid;
+  grid-template-columns: 30px minmax(0, 1fr);
+  grid-template-areas:
+    "icon name"
+    "icon family"
+    "counts counts"
+    "blurb blurb";
+  gap: 1px 10px;
+  height: 100%;
+  border: 1px solid var(--line);
+  border-left: 2px solid var(--fam, var(--accent));
+  border-radius: var(--r-md);
+  background: var(--surface);
+  padding: 12px 13px;
+  text-decoration: none;
+  transition: border-color 140ms ease, box-shadow 140ms ease, background 140ms ease;
+}
+
+.ent-type[data-hue="cyan"] { --fam: var(--text-cyan); }
+.ent-type[data-hue="blue"] { --fam: var(--text-blue); }
+.ent-type[data-hue="amber"] { --fam: var(--text-amber); }
+.ent-type[data-hue="green"] { --fam: var(--text-green); }
+.ent-type[data-hue="fuchsia"] { --fam: var(--text-fuchsia); }
+
+.ent-type:hover,
+.ent-type:focus-visible {
+  border-color: var(--fam);
+  box-shadow: var(--shadow);
+  outline: none;
+}
+
+.ent-type[data-on="true"] {
+  border-color: var(--fam);
+  background: var(--surface-2);
+  box-shadow: var(--shadow-sm);
+}
+
+.ent-type-icon {
+  grid-area: icon;
+  display: grid;
+  place-items: center;
+  align-self: start;
+  width: 30px;
+  height: 30px;
+  border-radius: var(--r-sm);
+  background: var(--surface-2);
+  color: var(--fam);
+}
+
+.ent-type-icon svg {
+  width: 16px;
+  height: 16px;
+}
+
+.ent-type-name {
+  grid-area: name;
+  color: var(--ink);
+  font-size: 13.5px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.ent-type-family {
+  grid-area: family;
+  color: var(--fam);
+  font-size: 10px;
+  font-weight: 650;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.ent-type-counts {
+  grid-area: counts;
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-top: 8px;
+  color: var(--muted);
+  font-size: 11.5px;
+}
+
+.ent-type-counts strong {
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+
+.ent-type-counts em {
+  border-radius: 999px;
+  background: var(--accent-wash);
+  color: var(--accent-press);
+  padding: 1px 7px;
+  font-size: 10.5px;
+  font-style: normal;
+  font-weight: 550;
+}
+
+/* Closed by default; opens on hover, on keyboard focus, and permanently on
+   the card you are already reading.
+   The 0fr/1fr row animates to the text's own height with no hardcoded
+   max-height - but only over a real child, so the text is wrapped in one;
+   bare text becomes an anonymous grid item that keeps its min-content height
+   and never collapses. */
+.ent-type-blurb {
+  grid-area: blurb;
+  display: grid;
+  grid-template-rows: 0fr;
+  overflow: hidden;
+  transition: grid-template-rows 180ms ease, margin-top 180ms ease;
+}
+
+.ent-type-blurb > span {
+  min-height: 0;
+  overflow: hidden;
+  color: var(--muted);
+  font-size: 11.5px;
+  line-height: 1.5;
+}
+
+.ent-type:hover .ent-type-blurb,
+.ent-type:focus-visible .ent-type-blurb,
+.ent-type[data-on="true"] .ent-type-blurb {
+  grid-template-rows: 1fr;
+  margin-top: 8px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ent-type-blurb {
+    transition: none;
+  }
+}
+
+/* ------------------------------- the chosen kind --- */
+
+.ent-panel {
+  display: grid;
+  gap: 14px;
+}
+
+.ent-list {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ent-row {
+  display: grid;
+  grid-template-columns: 30px minmax(0, 1fr) auto;
+  gap: 10px;
+  align-items: center;
+  /* The popover is anchored to the row, inside the content column, so it has
+     no window edge to overflow. */
+  position: relative;
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  background: var(--surface);
+  padding: 11px 13px;
+  outline: none;
+}
+
+.ent-row:hover,
+.ent-row:focus-visible {
+  border-color: var(--accent-line);
+  box-shadow: var(--shadow-sm);
+}
+
+.ent-row-icon {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: var(--r-sm);
+  background: var(--surface-2);
+  color: var(--row-hue, var(--accent));
+}
+
+.ent-row-icon[data-hue="cyan"] { --row-hue: var(--text-cyan); }
+.ent-row-icon[data-hue="blue"] { --row-hue: var(--text-blue); }
+.ent-row-icon[data-hue="amber"] { --row-hue: var(--text-amber); }
+.ent-row-icon[data-hue="green"] { --row-hue: var(--text-green); }
+.ent-row-icon[data-hue="fuchsia"] { --row-hue: var(--text-fuchsia); }
+
+.ent-row-icon svg {
+  width: 16px;
+  height: 16px;
+}
+
+.ent-row-main {
+  display: grid;
+  gap: 1px;
+  min-width: 0;
+}
+
+.ent-row-main strong {
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 550;
+  overflow-wrap: anywhere;
+}
+
+.ent-row-main small {
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.ent-row-state {
+  flex: none;
+  border: 1px solid var(--line-2);
+  border-radius: 999px;
+  background: var(--surface-2);
+  color: var(--muted);
+  padding: 1px 8px;
+  font-size: 10.5px;
+  font-weight: 550;
+  white-space: nowrap;
+}
+
+.ent-row-state[data-sim="false"] {
+  border-color: var(--ok-line);
+  background: var(--ok-wash);
+  color: var(--ok);
+}
+
+/* ------------------------------- the explanation --- */
+
+.ent-pop {
+  position: absolute;
+  z-index: 30;
+  top: calc(100% + 6px);
+  left: 10px;
+  right: 10px;
+  display: grid;
+  gap: 6px;
+  visibility: hidden;
+  opacity: 0;
+  border: 1px solid var(--line-2);
+  border-radius: var(--r-md);
+  background: var(--surface);
+  box-shadow: var(--shadow-lift);
+  padding: 12px 13px;
+  pointer-events: none;
+  transition: opacity 140ms ease, visibility 140ms ease;
+}
+
+.ent-row:hover .ent-pop,
+.ent-row:focus-visible .ent-pop,
+.ent-row:focus-within .ent-pop {
+  visibility: visible;
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ent-pop {
+    transition: none;
+  }
+}
+
+.ent-pop > strong {
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.ent-pop-kind {
+  margin: 0;
+  color: var(--muted);
+  font-size: 10.5px;
+  font-weight: 650;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.ent-pop-does {
+  margin: 0;
+  border-left: 2px solid var(--accent-line);
+  padding-left: 9px;
+  color: var(--ink-2);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.ent-pop-does em {
+  display: block;
+  color: var(--muted);
+  font-size: 10.5px;
+  font-style: normal;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.ent-pop-facts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(104px, 1fr));
+  gap: 6px 12px;
+  margin: 2px 0 0;
+}
+
+.ent-pop-facts dt {
+  color: var(--muted);
+  font-size: 10.5px;
+}
+
+.ent-pop-facts dd {
+  margin: 0;
+  color: var(--ink);
+  font-size: 12px;
+  font-weight: 550;
+  font-variant-numeric: tabular-nums;
+}
+
+.ent-pop-caps {
+  margin: 2px 0 0;
+  border-top: 1px solid var(--line);
+  padding-top: 7px;
+  color: var(--muted);
+  font-size: 11px;
+}
+
+/* ------------------------------- tasks and empties --- */
+
+.ent-tasks {
+  grid-column: 1 / -1;
+  display: grid;
+  gap: 6px;
+  margin: 4px 0 0;
+  border-top: 1px solid var(--line);
+  padding: 9px 0 0;
+  list-style: none;
+}
+
+.ent-tasks li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.ent-tasks div {
+  display: grid;
+  gap: 1px;
+  min-width: 0;
+}
+
+.ent-tasks a {
+  color: var(--accent);
+  font-size: 11px;
+  text-decoration: none;
+}
+
+.ent-tasks a:hover {
+  text-decoration: underline;
+}
+
+.ent-tasks strong {
+  color: var(--ink);
+  font-size: 12.5px;
+  font-weight: 550;
+}
+
+.ent-tasks small {
+  color: var(--muted);
+  font-size: 10.5px;
+}
+
+.ent-hint,
+.ent-empty {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin: 0;
+  border: 1px dashed var(--line-2);
+  border-radius: var(--r-md);
+  background: var(--surface-2);
+  padding: 14px 15px;
+  color: var(--muted);
+  font-size: 12.5px;
+}
+
+.ent-hint .head-icon {
+  color: var(--accent);
+}
+
+.ent-back {
+  margin: 4px 0 0;
+  font-size: 12px;
+}
+
+@media (max-width: 560px) {
+  .ent-row {
+    grid-template-columns: 30px minmax(0, 1fr);
+  }
+
+  .ent-row-state {
+    grid-column: 2;
+    justify-self: start;
+  }
+}

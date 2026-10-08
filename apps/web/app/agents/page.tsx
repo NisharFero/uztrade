@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Icon } from "../../components/icons";
+import { ROLE_AGENTS, STOP_RULES, SPEC_ATTENDED, SPEC_PROCEDURES, SPEC_STEPS } from "./agent-center";
 import { delegationOfStep } from "../../modules/procedures/delegation";
-import { PROCEDURE_IDS, type Procedure, type ProcedureBlock } from "../../modules/procedures/data/procedures.generated";
+import { CATALOGUE, PROCEDURE_IDS, type Procedure, type ProcedureBlock } from "../../modules/procedures/data/procedures.generated";
 import { getProcedures } from "../../modules/procedures/registry";
 import type { ShipmentFacts } from "../../modules/workflow/domain";
 import { listCases } from "../../modules/cases/store";
@@ -40,7 +41,7 @@ const RISK_NEEDS = [
 ];
 
 export const metadata: Metadata = {
-  title: "AI Agent Center · Uzbekistan Trade Platform",
+  title: "AI Agent Center · UzOne Trade Platform",
   description: "Agents, what they are handling now, and what they have completed.",
 };
 
@@ -206,12 +207,26 @@ export default async function AgentsPage() {
     },
   ] as const;
 
+  const corpus = PROCEDURE_IDS.map((id) => CATALOGUE[id]);
+  const steps = corpus.reduce((n, p) => n + p.stepsCount, 0);
+  const online = corpus.reduce((n, p) => n + p.onlineCount, 0);
+  const share = (n: number) => `${Math.round((n / steps) * 1000) / 10}%`;
+  /* Filed online is what an agent can reach at all; it is not the same as
+     "runs unattended" - a signature or a payment inside an online filing is
+     still yours. The split below says only what the catalogue states. */
+  const remit = [
+    { label: "Agents on duty", value: AGENTS.length + analysis.length, detail: `${analysis.length} analysis · ${AGENTS.length} filing` },
+    { label: "Steps under their remit", value: steps.toLocaleString("en-US"), detail: `across ${corpus.length} published procedures` },
+    { label: "Reachable online", value: share(online), detail: `${online.toLocaleString("en-US")} steps an agent can file` },
+    { label: "Need you in person", value: share(steps - online), detail: `${(steps - online).toLocaleString("en-US")} steps at a counter or the goods` },
+  ];
+
   return (
     <>
       <header className="page-head">
-        <p>
+        <p data-tint="blue">
           <span className="head-icon">{Icon.agents}</span>
-          AI Agent Center · All Agents
+          AI Agent Center
         </p>
         <h1>Agents</h1>
         <p className="page-lede">
@@ -229,10 +244,139 @@ export default async function AgentsPage() {
       ) : null}
 
       <div className="section-head">
-        <p>
-          <span className="head-icon" data-tint="violet">
-            {Icon.sparkle}
-          </span>
+        <p data-tint="blue">
+          <span className="head-icon">{Icon.bot}</span>
+          The five agents
+        </p>
+        <h2>Who does what, and where each one stops</h2>
+      </div>
+
+      <section className="cfg-stats" aria-label="The five agents at a glance">
+        <article className="cfg-stat" data-hue={0}>
+          <strong>{ROLE_AGENTS.length}</strong>
+          <span>Agents on duty</span>
+          <small>intake, documents, sequencing, assurance, movement</small>
+        </article>
+        <article className="cfg-stat" data-hue={1}>
+          <strong>{SPEC_STEPS.toLocaleString("en-US")}</strong>
+          <span>Steps under their remit</span>
+          <small>across {SPEC_PROCEDURES} published procedures</small>
+        </article>
+        <article className="cfg-stat" data-hue={3}>
+          <strong>{`${Math.round((STOP_RULES[4].steps / SPEC_STEPS) * 1000) / 10}%`}</strong>
+          <span>Runs with nobody watching</span>
+          <small>{STOP_RULES[4].steps} of {SPEC_STEPS.toLocaleString("en-US")} steps</small>
+        </article>
+        <article className="cfg-stat" data-hue={2}>
+          <strong>{SPEC_ATTENDED.toLocaleString("en-US")}</strong>
+          <span>Steps that need a person</span>
+          <small>a signature, a payment, a choice or an attendance</small>
+        </article>
+      </section>
+
+      <p className="cfg-note">
+        <span className="head-icon">{Icon.sparkle}</span>
+        These five and their figures are the specification&rsquo;s, quoted from a {SPEC_PROCEDURES}-procedure snapshot of{" "}
+        {SPEC_STEPS.toLocaleString("en-US")} steps. This build holds {corpus.length} procedures and{" "}
+        {steps.toLocaleString("en-US")}, so they will not reconcile with the live figures below — and
+        &ldquo;runs alone&rdquo; here is a stricter test than the delegated filing right the lanes use.
+      </p>
+
+      <div className="role-grid">
+        {ROLE_AGENTS.map((a, i) => {
+          const widest = Math.max(1, ...a.split.map((s) => s.count));
+          return (
+            <section className="role-card" key={a.id} data-hue={i % 4} aria-label={a.name}>
+              <header>
+                <span className="role-role">{a.role}</span>
+                <h3>{a.name}</h3>
+                <p>{a.blurb}</p>
+              </header>
+              {a.steps == null ? (
+                <p className="role-before">Acts before a case has any steps.</p>
+              ) : (
+                <>
+                  <p className="role-scale">
+                    <strong>{a.steps.toLocaleString("en-US")}</strong> steps
+                    <em>across {a.procedures} procedures</em>
+                  </p>
+                  <ul className="role-split">
+                    {a.split.map((s) => (
+                      <li key={s.label}>
+                        <span className="role-split-label">{s.label}</span>
+                        <span className="role-split-track" aria-hidden="true">
+                          <i style={{ width: `${Math.max(3, (s.count / widest) * 100)}%` }} />
+                        </span>
+                        <span className="role-split-n">{s.count.toLocaleString("en-US")}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </>
+              )}
+            </section>
+          );
+        })}
+      </div>
+
+      <div className="section-head">
+        <p data-tint="amber">
+          <span className="head-icon">{Icon.lock}</span>
+          Stop rules
+        </p>
+        <h2>Where an agent hands back, and why it must</h2>
+      </div>
+
+      <ul className="stop-rules">
+        {STOP_RULES.map((r, i) => (
+          <li key={r.id} data-hue={i === 4 ? "alone" : undefined}>
+            <span className="stop-n">{r.steps.toLocaleString("en-US")}</span>
+            <span className="stop-body">
+              <strong>{r.rule}</strong>
+              <small>{r.why}</small>
+            </span>
+          </li>
+        ))}
+      </ul>
+
+      <div className="section-head">
+        <p data-tint="cyan">
+          <span className="head-icon">{Icon.flow}</span>
+          This build
+        </p>
+        <h2>Remit computed from the corpus here</h2>
+      </div>
+
+      <section className="cfg-stats" aria-label="Remit">
+        {remit.map((m, i) => (
+          <article className="cfg-stat" key={m.label} data-hue={i}>
+            <strong>{m.value}</strong>
+            <span>{m.label}</span>
+            <small>{m.detail}</small>
+          </article>
+        ))}
+      </section>
+
+      <section className="agent-split" aria-label="How the remit divides">
+        <p className="wf-detail-h">How the remit divides</p>
+        <div className="agent-split-bar">
+          <span data-hue="0" style={{ flexGrow: online }} aria-hidden="true" />
+          <span data-hue="2" style={{ flexGrow: steps - online }} aria-hidden="true" />
+        </div>
+        <ul className="agent-split-key">
+          <li>
+            <i data-hue="0" aria-hidden="true" />
+            Reachable online — {online.toLocaleString("en-US")} steps ({share(online)})
+          </li>
+          <li>
+            <i data-hue="2" aria-hidden="true" />
+            In person — {(steps - online).toLocaleString("en-US")} steps ({share(steps - online)})
+          </li>
+        </ul>
+      </section>
+
+      <div className="section-head">
+        <p data-tint="green">
+          <span className="head-icon">{Icon.sparkle}</span>
           Analysis agents
         </p>
         <h2>Intake, documents and risk</h2>
@@ -272,7 +416,7 @@ export default async function AgentsPage() {
       </div>
 
       <div className="section-head">
-        <p>
+        <p data-tint="fuchsia">
           <span className="head-icon">{Icon.agents}</span>
           Filing agents
         </p>

@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { Icon } from "../icons";
 import { ACTORS, actorOfStep } from "../../modules/procedures/actors";
 import { ACTIONS, actionOfStep, blockColumn, blockDelegation, blockDelegationReason, delegationOfStep, LANES, physicalTouchpoints, requiresPhysical, type Lane } from "../../modules/procedures/delegation";
@@ -504,8 +505,49 @@ function CurrentStep({
 /* Hover: expected versus actual, why the orchestrator delegated it here, and
    why the dependency exists - the three questions someone looking at a
    stalled case actually has. */
+/** Clear of the cursor, and clear of the window edge. */
+const TIP_CURSOR_GAP = 16;
+const TIP_EDGE_GAP = 16;
+
+/* Place the hover card against its own measured size.
+ *
+ * It used to be clamped against two constants - a width of 292 and a height of
+ * 290 - and the height was simply wrong: the card grows with the steps it
+ * previews and the reason it prints, so a tall one ran off the bottom, and a
+ * node near the right edge pushed it under the scrollbar because
+ * `window.innerWidth` counts that too.
+ *
+ * Measuring instead means the card can also FLIP to the left of the cursor
+ * when the right has no room, which is what a tooltip should do rather than
+ * creep along the edge and cover the node being pointed at. Written straight
+ * to the style so a mousemove costs no re-render. */
+function useTipPlacement(x: number, y: number) {
+  const ref = useRef<HTMLDivElement>(null);
+  useLayoutEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const { width, height } = el.getBoundingClientRect();
+    // clientWidth excludes a classic scrollbar; innerWidth does not.
+    const vw = document.documentElement.clientWidth;
+    const vh = document.documentElement.clientHeight;
+
+    let left = x + TIP_CURSOR_GAP;
+    if (left + width > vw - TIP_EDGE_GAP) left = x - TIP_CURSOR_GAP - width;
+    left = Math.max(TIP_EDGE_GAP, Math.min(left, vw - TIP_EDGE_GAP - width));
+
+    let top = y + TIP_CURSOR_GAP;
+    if (top + height > vh - TIP_EDGE_GAP) top = y - TIP_CURSOR_GAP - height;
+    top = Math.max(TIP_EDGE_GAP, Math.min(top, vh - TIP_EDGE_GAP - height));
+
+    el.style.left = `${Math.round(left)}px`;
+    el.style.top = `${Math.round(top)}px`;
+  });
+  return ref;
+}
+
 function HoverCard({ hover, actual, workflow }: { hover: NonNullable<Hover>; actual: number | null; workflow?: WorkflowDag }) {
   const b = hover.block;
+  const tip = useTipPlacement(hover.x, hover.y);
   // Must be the COLUMN, not the majority lane: they disagree on 32 of the 54
   // blocks, and labelling by majority contradicts where the node is drawn.
   const column = blockColumn(b);
@@ -517,13 +559,15 @@ function HoverCard({ hover, actual, workflow }: { hover: NonNullable<Hover>; act
     : 0;
   const preview = b.steps.slice(currentIndex, currentIndex + 3);
 
-  return (
+  if (typeof document === "undefined") return null;
+
+  return createPortal(
     <div
+      ref={tip}
       className="dag-tip"
-      style={{
-        left: Math.max(12, Math.min(hover.x + 16, window.innerWidth - 292)),
-        top: Math.max(12, Math.min(hover.y + 16, window.innerHeight - 290)),
-      }}
+      /* A first guess so nothing is painted at 0,0; the layout effect corrects
+         it against the real size before the browser shows this frame. */
+      style={{ left: hover.x + TIP_CURSOR_GAP, top: hover.y + TIP_CURSOR_GAP }}
       role="tooltip"
     >
       <strong>{b.name}</strong>
@@ -567,7 +611,8 @@ function HoverCard({ hover, actual, workflow }: { hover: NonNullable<Hover>; act
         {reason}
       </p>
       <p className="dag-tip-why">{b.dependencyReason}</p>
-    </div>
+    </div>,
+    document.body,
   );
 }
 
