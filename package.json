@@ -12,5 +12,8 @@
     "stop": "node scripts/local.mjs stop",
     "status": "node scripts/local.mjs status",
     "test": "npm --prefix apps/web run test:unit && npm --prefix apps/portals test"
+  },
+  "devDependencies": {
+    "shadcn": "^4.21.4"
   }
 }
