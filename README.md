@@ -82,3 +82,9 @@ machine needs its own; copy your `GROQ_API_KEY` across by hand.
 
 Production runs the web app on Vercel with a Neon database and the entity APIs
 on Render. See `apps/web/README.md` ("Going live: Vercel + Render") and `render.yaml`.
+
+To stand up a **second, separate** instance without disturbing one that is
+already deployed, follow `Docs/DEPLOYMENT.md` — it sequences the steps and
+covers the three things that break a first deployment: the database must be
+Neon, migrations never run themselves, and the first request seeds 243
+procedures.
